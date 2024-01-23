@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "33391475109",
+    "project_id": "promigrateb12",
+    "storage_bucket": "promigrateb12.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33391475109:android:a05f6832b0c0a38409d04c",
+        "android_client_info": {
+          "package_name": "com.example.promigrate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvohZfL7dUIUTLYzOmxC8nSpBIwUMC6fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
