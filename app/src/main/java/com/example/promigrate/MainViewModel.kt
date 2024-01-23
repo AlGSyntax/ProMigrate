@@ -30,7 +30,9 @@ class MainViewModel:ViewModel() {
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
             if(it.isSuccessful){
 
-            }else
+            }else{
+
+            }
         }
     }
 }
