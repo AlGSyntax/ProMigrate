@@ -1,62 +1,80 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LogInFragment">
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <EditText
-        android:id="@+id/editTextTextEmailAddress"
+    <TextView
+        android:id="@+id/text_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="280dp"
-        android:layout_marginEnd="49dp"
-        android:layout_marginBottom="406dp"
-        android:ems="10"
+        android:text="@string/welcome_text"
+        android:textColor="@color/titles"
+
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="127dp"
+        tools:layout_editor_absoluteY="35dp" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="379dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/your_edit_text_background"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="150dp" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
-        android:layout_width="wrap_content"
+        android:id="@+id/password"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="429dp"
-        android:layout_marginEnd="49dp"
-        android:layout_marginBottom="257dp"
-        android:ems="10"
+        android:background="@drawable/your_edit_text_background"
+        android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="198dp" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="182dp"
-        android:layout_marginEnd="179dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/login_button"
+        android:layout_width="112dp"
+        android:layout_height="35dp"
+        android:background="@drawable/your_button_background"
+        android:text="@string/log_in"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="260dp" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="541dp"
-        android:text="Button"
+    <LinearLayout
+        android:id="@+id/social_media_container"
+        android:layout_width="347dp"
+        android:layout_height="307dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="337dp">
+
+        <ImageView
+            android:id="@+id/google_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/google_login"
+            android:src="@drawable/ic_google" />
+
+        <!-- Weitere Social Media Buttons hier -->
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/register_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/do_not_have_account"
+        android:textColor="@color/your_text_color"
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="660dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

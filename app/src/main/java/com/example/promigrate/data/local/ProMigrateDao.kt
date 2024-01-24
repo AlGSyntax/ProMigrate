@@ -1,4 +1,8 @@
 package com.example.promigrate.data.local
 
-class ProMigrateDao {
+import androidx.room.Dao
+
+@Dao
+interface ProMigrateDao{
+
 }
