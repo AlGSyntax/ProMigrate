@@ -58,40 +58,4 @@ class MainViewmodel : ViewModel() {
 
     }
 
-    fun register(email: String, password: String) {
-
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                //User wurde erstellt
-                setupUserEnv()
-
-                val newProfile = Profile()
-                profileRef.set(newProfile)
-
-            } else {
-                //Fehler aufgetreten
-            }
-        }
-
-    }
-
-    fun login(email: String, password: String) {
-
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                //User wurde eingeloggt
-                setupUserEnv()
-            } else {
-                //Fehler aufgetreten
-            }
-        }
-    }
-
-    fun logout() {
-
-        auth.signOut()
-        setupUserEnv()
-
-    }
-
 }
