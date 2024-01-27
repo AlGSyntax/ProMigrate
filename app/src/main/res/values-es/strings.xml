@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ProMigrate</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_text">Bienvenido</string>
+    <string name="email">Correo Electronico</string>
+    <string name="password">Contraseña</string>
+    <string name="languageselectionmessage">¡Te ayudamos a emigrar a Alemania!</string>
+</resources>

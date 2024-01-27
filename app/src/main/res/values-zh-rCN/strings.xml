@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ProMigrate</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">你好，空白片段</string>
+    <string name="welcome_text">欢迎</string>
+    <string name="email">电子邮件</string>
+    <string name="password">密码</string>
+    <string name="languageselectionmessage">我们帮助您移民到德国！</string>
+</resources>
