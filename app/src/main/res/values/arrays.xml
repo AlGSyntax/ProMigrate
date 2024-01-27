@@ -1,0 +1,12 @@
+<resources>
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Deutsch</item>
+        <item>日本語</item>
+        <item>中文</item>
+        <item>Español</item>
+        <item>Русский</item>
+        <item>Українська</item>
+        <!-- Weitere Sprachen -->
+    </string-array>
+</resources>
