@@ -1,60 +1,91 @@
 package com.example.promigrate.ui
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Spinner
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.promigrate.R
+import java.util.Locale
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LanguageSelectionFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LanguageSelectionFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var welcomeTextView: TextView
+    private lateinit var languageSpinner: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_language_selection, container, false)
+        val view = inflater.inflate(R.layout.fragment_language_selection, container, false)
+        welcomeTextView = view.findViewById(R.id.tv_welcome_message)
+        languageSpinner = view.findViewById(R.id.spinner_language_selection)
+
+        setupLanguageSpinner()
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LanguageSelectionFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LanguageSelectionFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun setupLanguageSpinner() {
+        languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                // Hier die Sprache ändern basierend auf der Auswahl
+                val languageCode = when (position) {
+                    0 -> "en" // Englisch
+                    1 -> "de" // Deutsch
+                    2 -> "ja" // Japanisch
+                    3 -> "zh" // Chinesisch
+                    4 -> "es" // Spanisch
+                    5 -> "uk"//Ukrainisch
+                    6 -> "ru"// Russisch
+                    else -> "en"
                 }
+                changeLanguage(languageCode)
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+    }
+
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+
+        context?.let { context ->
+            context.createConfigurationContext(config)
+            context.resources.updateConfiguration(config, context.resources.displayMetrics)
+        }
+    }
+
+
+    private fun saveLanguageSetting(languageCode: String) {
+        val sharedPrefs = activity?.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
+        sharedPrefs?.edit()?.putString("SelectedLanguage", languageCode)?.apply()
+    }
+
+    private fun loadLanguageSetting(): String? {
+        val sharedPrefs = activity?.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
+        return sharedPrefs?.getString("SelectedLanguage", Locale.getDefault().language)
+    }
+
+    private fun updateTextViews() {
+        // Aktualisiere die Willkommensnachricht, nachdem die Spracheinstellung geändert wurde
+        welcomeTextView.text = getString(R.string.languageselectionmessage)
+        // Aktualisiere hier weitere Textansichten, falls erforderlich
+    }
+
+    // Rufe diese Methode auf, wenn eine Sprache ausgewählt wurde
+    fun changeLanguage(languageCode: String) {
+        setLocale(languageCode)
+        saveLanguageSetting(languageCode)
+        updateTextViews()
     }
 }

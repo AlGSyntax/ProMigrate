@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LanguageSelectionFragment">
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TextView zur Anzeige der Willkommensnachricht -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tv_welcome_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/languageselectionmessage"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true" />
 
-</FrameLayout>
+    <!-- Spinner zur Auswahl der Sprache -->
+    <Spinner
+        android:id="@+id/spinner_language_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_welcome_message"
+        android:layout_marginTop="24dp"
+        android:entries="@array/language_options" />
+
+</RelativeLayout>
