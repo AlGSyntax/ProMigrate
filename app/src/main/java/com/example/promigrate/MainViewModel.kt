@@ -1,61 +1,85 @@
 package com.example.promigrate
 
-
-
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.promigrate.data.model.UserProfile
+import com.example.promigrate.data.repository.Repository
+import kotlinx.coroutines.Dispatchers
 
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.auth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.storage
-
-class MainViewmodel : ViewModel() {
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
-    val auth = Firebase.auth
-    val firestore = Firebase.firestore
-    val storage = Firebase.storage
+const val TAG = "MainViewModel"
 
-    private val _user: MutableLiveData<FirebaseUser?> = MutableLiveData()
-    val user: LiveData<FirebaseUser?>
-        get() = _user
+class MainViewModel : ViewModel() {
 
-    //Das profile Document enthält ein einzelnes Profil(das des eingeloggten Users)
-    //Document ist wie ein Objekt
-    lateinit var profileRef: DocumentReference
+    lateinit var repository:Repository
+    private val _locale = MutableLiveData<Locale>()
+    val locale: LiveData<Locale> = _locale
 
-    //Die note Collection enthält beliebig viele Notes(alle notes des eingeloggten Users
-    //Collection ist wie eine Liste
-    lateinit var notesRef: CollectionReference
-
-    init {
-
-        setupUserEnv()
-    }
-
-    //region FirebaseUserManagement
-
-
-    //Richtet die Variablen ein die erst eingerichtet werden können
-    //wenn der User eingeloggt ist
-    fun setupUserEnv() {
-
-        _user.value = auth.currentUser
-
-        //Alternative Schreibweise um auf null Werte zu überprüfen
-        auth.currentUser?.let { firebaseUser ->
-
-            profileRef = firestore.collection("user").document(firebaseUser.uid)
-            notesRef = firestore.collection("user").document(firebaseUser.uid).collection("notes")
-//            notesRef = profileRef.collection("notes")
-
+    fun saveUserProfile(userId: String, languageCode: String) {
+        viewModelScope.launch {
+            try {
+                repository.saveUserProfile(UserProfile(userId, languageCode))
+                Log.d(TAG, "Benutzerprofil erfolgreich gespeichert: $userId")
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
+            }
         }
-
     }
 
+    fun loadUserProfile(userId: String): LiveData<UserProfile> {
+        return try {
+            val userProfile = repository.getUserProfile(userId)
+            Log.d(TAG, "Benutzerprofil erfolgreich geladen: $userId")
+            userProfile
+        } catch (e: Exception) {
+            Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
+            MutableLiveData() // Rückgabe eines leeren LiveData-Objekts im Fehlerfall
+        }
+    }
+
+
+    fun loadLanguageSetting() {
+        viewModelScope.launch {
+            try {
+                val languageSetting = withContext(Dispatchers.IO) {
+                    repository.loadLanguageSetting()
+                }
+                setLocale(languageSetting)
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Laden der Spracheinstellung", e)
+            }
+        }
+    }
+
+    fun changeLanguage(languageCode: String) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    repository.saveLanguageSetting(languageCode)
+                }
+                setLocale(languageCode)
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Ändern der Sprache", e)
+            }
+        }
+    }
+
+    private fun setLocale(languageCode: String) {
+        try {
+            val newLocale = Locale(languageCode)
+            Locale.setDefault(newLocale)
+            _locale.value = newLocale
+        } catch (e: Exception) {
+            Log.e(TAG, "Fehler beim Setzen der Sprache", e)
+        }
+    }
 }
+
+

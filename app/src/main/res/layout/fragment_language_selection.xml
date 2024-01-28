@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/languageselectionbackground">
 
     <!-- TextView zur Anzeige der Willkommensnachricht -->
     <TextView
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_welcome_message"
         android:layout_marginTop="24dp"
-        android:entries="@array/language_options" />
+        android:entries="@array/language_options"
+        android:minHeight="48dp" />
 
 </RelativeLayout>
