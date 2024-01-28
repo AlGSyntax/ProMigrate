@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@drawable/languageselectionbackground">
+    android:background="@drawable/languageselectionbackground"
+    android:padding="16dp">
 
     <!-- TextView zur Anzeige der Willkommensnachricht -->
+
+    <!-- Spinner zur Auswahl der Sprache -->
+
     <TextView
         android:id="@+id/tv_welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:fontFamily="@font/quicksandvariablefontwght"
         android:text="@string/languageselectionmessage"
-        android:textSize="24sp"
-        android:layout_centerHorizontal="true" />
+        android:textAlignment="center"
+        android:textColor="@color/titles"
+        android:textSize="41sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Spinner zur Auswahl der Sprache -->
     <Spinner
         android:id="@+id/spinner_language_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_welcome_message"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="476dp"
         android:entries="@array/language_options"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
