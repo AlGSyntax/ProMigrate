@@ -51,7 +51,7 @@ class LanguageSelectionFragment : Fragment() {
 
     private fun setupLanguageSpinner() {
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val languageCode = when (position) {
                     0 -> "en"
                     1 -> "de"
