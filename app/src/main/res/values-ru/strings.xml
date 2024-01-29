@@ -6,4 +6,6 @@
     <string name="email">Электронная почта</string>
     <string name="password">пароль</string>
     <string name="languageselectionmessage">Мы помогаем вам переехать в Германию!</string>
+    <string name="registrationinvitation">У вас нет аккаунта? Нажмите здесь, чтобы зарегистрироваться!
+    </string>
 </resources>

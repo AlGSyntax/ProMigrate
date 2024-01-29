@@ -6,5 +6,7 @@
     <string name="password">Passwort</string>
     <string name="languageselectionmessage">Wir helfen Ihnen bei der Auswanderung nach Deutschland!
     </string>
+    <string name="registrationinvitation">Haben Sie kein Konto? Klicken Sie hier, um sich anzumelden!
+    </string>
 
 </resources>

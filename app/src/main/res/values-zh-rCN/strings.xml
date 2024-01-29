@@ -6,4 +6,6 @@
     <string name="email">电子邮件</string>
     <string name="password">密码</string>
     <string name="languageselectionmessage">我们帮助您移民到德国！</string>
+    <string name="registrationinvitation">没有帐户？点击这里注册！ </string>
+
 </resources>
