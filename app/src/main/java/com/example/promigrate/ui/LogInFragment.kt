@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
@@ -27,6 +28,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
 
         binding.loginBTN.setOnClickListener {
             viewmodel.login(
@@ -42,14 +44,14 @@ class LoginFragment : Fragment() {
             )
         }
 
-
+        /**
         viewmodel.user.observe(viewLifecycleOwner){
             if(it != null){
                 //User ist eingeloggt
-                findNavController().navigate(R.id.profileFragment)
+                findNavController().navigate(R.id.loginBTN)
             }
         }
-
+**/
 
 
     }

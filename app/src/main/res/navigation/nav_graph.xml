@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/languageSelectionFragment">
 
     <fragment
         android:id="@+id/languageSelectionFragment"
         android:name="com.example.promigrate.ui.LanguageSelectionFragment"
-        android:label="LanguageSelectionFragment" />
+        android:label="LanguageSelectionFragment" >
+        <action
+            android:id="@+id/action_languageSelectionFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.promigrate.ui.LoginFragment"
+        android:label="fragment_log_in"
+        tools:layout="@layout/fragment_log_in" />
 </navigation>
