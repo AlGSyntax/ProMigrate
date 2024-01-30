@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class UserProfile(
     @PrimaryKey
     val userId:String,
-    val languageCode: String
+    val languageCode: String// Languagecode sauber managen in Firebase !
 )
 

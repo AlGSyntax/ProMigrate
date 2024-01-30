@@ -7,4 +7,6 @@
     <string name="languageselectionmessage">ドイツへの移住をお手伝いします！</string>
     <string name="registrationinvitation">アカウントをお持ちでないですか？
         ここをクリックしてサインアップしてください！</string>
+    <string name="login">ログイン</string>
+    <string name="register">登録する</string>
 </resources>

@@ -1,10 +1,16 @@
 package com.example.promigrate
 
+import android.app.Application
+import android.os.LocaleList
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.UserProfile
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
@@ -23,8 +29,8 @@ import java.util.Locale
 
 const val TAG = "MainViewModel"
 
-class MainViewModel : ViewModel() {
-
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    var repository = Repository.getInstance(application)
 
     private val auth = Firebase.auth
     private val firestore = Firebase.firestore
@@ -34,17 +40,58 @@ class MainViewModel : ViewModel() {
         get() = _user
     //Das profile Document enthält ein einzelnes Profil(das des eingeloggten Users)
     //Document ist wie ein Objekt
-    lateinit var profileRef: DocumentReference
+    private lateinit var profileRef: DocumentReference
     //Die note Collection enthält beliebig viele Notes(alle notes des eingeloggten Users
     //Collection ist wie eine Liste
-    lateinit var notesRef: CollectionReference
-    lateinit var repository:Repository
-    private val _locale = MutableLiveData<Locale>()
-    val locale: LiveData<Locale> = _locale
+    private lateinit var notesRef: CollectionReference
+
+    private val _localeList = MutableLiveData<LocaleListCompat>()
+    val localeList: LiveData<LocaleListCompat> = _localeList
+
+
 
     init {
-
+        loadLanguageSetting()
         setupUserEnv()
+    }
+
+
+
+    fun changeLanguage(languageCode: String) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    // Speichere die Spracheinstellung
+                    repository.saveLanguageSetting(languageCode)
+                    Log.d(TAG, "Spracheinstellung gespeichert: $languageCode")
+                }
+                val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
+                AppCompatDelegate.setApplicationLocales(localeListCompat)
+                _localeList.postValue(localeListCompat)
+                Log.d(TAG, "Sprache geändert zu: $languageCode")
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Ändern der Sprache", e)
+            }
+        }
+    }
+
+    private fun loadLanguageSetting() {
+        viewModelScope.launch {
+            try {
+                val languageCode = withContext(Dispatchers.IO) {
+                    // Lade die gespeicherte Spracheinstellung
+                    repository.loadLanguageSetting().also {
+                        Log.d(TAG, "Geladene Spracheinstellung: $it")
+                    }
+                }
+                val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
+                AppCompatDelegate.setApplicationLocales(localeListCompat)
+                _localeList.postValue(localeListCompat)
+                Log.d(TAG, "Sprache geladen: $languageCode")
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Laden der Spracheinstellung", e)
+            }
+        }
     }
 
     fun saveUserProfile(userId: String, languageCode: String) {
@@ -70,35 +117,7 @@ class MainViewModel : ViewModel() {
     }
 
 
-    fun loadLanguageSetting() {
-        viewModelScope.launch {
-            try {
-                val languageSetting = withContext(Dispatchers.IO) {
-                    repository.loadLanguageSetting()
-                }
-                setLocale(languageSetting)
-                Log.d(TAG, "Spracheinstellung erfolgreich geladen")
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Laden der Spracheinstellung", e)
-            }
-        }
-    }
-
-    fun changeLanguage(languageCode: String) {
-        viewModelScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    repository.saveLanguageSetting(languageCode)
-                }
-                setLocale(languageCode)
-                Log.d(TAG, "Sprache erfolgreich geändert zu $languageCode")
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Ändern der Sprache", e)
-            }
-        }
-    }
-
-    fun setupUserEnv() {
+    private fun setupUserEnv() {
         try {
             _user.value = auth.currentUser
 
@@ -161,16 +180,7 @@ class MainViewModel : ViewModel() {
     }
 
 
-    private fun setLocale(languageCode: String) {
-        try {
-            val newLocale = Locale(languageCode)
-            Locale.setDefault(newLocale)
-            _locale.value = newLocale
-            Log.d(TAG, "Sprache erfolgreich gesetzt zu $languageCode")
-        } catch (e: Exception) {
-            Log.e(TAG, "Fehler beim Setzen der Sprache", e)
-        }
-    }
+
 }
 
 

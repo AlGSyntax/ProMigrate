@@ -7,4 +7,6 @@
     <string name="password">Password</string>
     <string name="languageselectionmessage">We help you to migrate to Germany!</string>
     <string name="registrationinvitation">Don\'t have an account? Click here to Sign Up!</string>
+    <string name="login">LogIn</string>
+    <string name="register">Register</string>
 </resources>

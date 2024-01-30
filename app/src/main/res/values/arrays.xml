@@ -2,11 +2,11 @@
     <string-array name="language_options">
         <item>English</item>
         <item>Deutsch</item>
-        <item>日本語</item>
-        <item>中文</item>
         <item>Español</item>
+        <item>日本語</item>
         <item>Русский</item>
-        <item>Українська</item>
+        <item>українська</item>
+
         <!-- Weitere Sprachen -->
     </string-array>
 </resources>
