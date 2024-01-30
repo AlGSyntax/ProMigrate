@@ -1,14 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.RegisterFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <!-- E-Mail Eingabefeld -->
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <!-- Passwort Eingabefeld -->
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@id/emailEditText"
+        app:layout_constraintStart_toStartOf="@id/emailEditText"
+        app:layout_constraintTop_toBottomOf="@id/emailEditText" />
+
+    <!-- Passwortbestätigung Eingabefeld -->
+    <EditText
+        android:id="@+id/confirmPasswordEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/confirmpassword"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@id/passwordEditText"
+        app:layout_constraintStart_toStartOf="@id/passwordEditText"
+        app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
+
+    <!-- Registrierungsbutton -->
+    <Button
+        android:id="@+id/registerBTN"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        app:layout_constraintTop_toBottomOf="@id/confirmPasswordEditText"
+        app:layout_constraintStart_toStartOf="@id/confirmPasswordEditText"
+        app:layout_constraintEnd_toEndOf="@id/confirmPasswordEditText"
+        android:layout_marginTop="24dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

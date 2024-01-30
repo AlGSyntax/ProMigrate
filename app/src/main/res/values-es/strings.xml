@@ -5,6 +5,7 @@
     <string name="welcome_text">Bienvenido</string>
     <string name="email">Correo Electronico</string>
     <string name="password">Contraseña</string>
+    <string name="confirmpassword">Confirmar contraseña</string>
     <string name="languageselectionmessage">¡Te ayudamos a emigrar a Alemania!</string>
     <string name="registrationinvitation">¿No tienes una cuenta? ¡Haz clic aquí para registrarte!</string>
     <string name="login">Iniciar sesión</string>

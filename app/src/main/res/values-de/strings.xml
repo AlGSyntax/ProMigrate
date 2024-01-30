@@ -4,6 +4,7 @@
     <string name="welcome_text">Willkommen</string>
     <string name="email">E-Mail</string>
     <string name="password">Passwort</string>
+    <string name="confirmpassword">Passwort bestätigen</string>
     <string name="languageselectionmessage">Wir helfen Ihnen bei der Auswanderung nach Deutschland!
     </string>
     <string name="registrationinvitation">Haben Sie kein Konto? Klicken Sie hier, um sich anzumelden!

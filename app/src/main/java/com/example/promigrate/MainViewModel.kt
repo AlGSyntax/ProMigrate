@@ -132,7 +132,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun register(email: String, password: String) {
+    fun register(email: String, password: String, confirmPassword: String) {
+        if (password != confirmPassword) {
+            // Handle mismatch of passwords
+            Log.e("register", "Passwörter stimmen nicht überein")
+            return
+        }
+
         try {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -144,13 +150,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     Log.d("register", "Benutzer erfolgreich registriert")
                 } else {
                     // Fehler aufgetreten
-                    Log.e("register", "Fehler beim registrieren des Benutzers,")
+                    Log.e("register", "Fehler beim Registrieren des Benutzers", it.exception)
                 }
             }
         } catch (e: Exception) {
             Log.e("register", "Fehler in der Registrationsmethode", e)
         }
     }
+
 
     fun login(email: String, password: String) {
         try {

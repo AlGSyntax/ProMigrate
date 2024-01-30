@@ -64,14 +64,19 @@
         app:layout_constraintStart_toStartOf="@+id/passwordET"
         app:layout_constraintTop_toBottomOf="@+id/passwordET" />
 
-    <Button
-        android:id="@+id/registerBTN"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/toregister"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/register"
-        app:layout_constraintEnd_toEndOf="@+id/loginBTN"
-        app:layout_constraintStart_toStartOf="@+id/loginBTN"
-        app:layout_constraintTop_toBottomOf="@+id/loginBTN" />
+        android:layout_marginStart="167dp"
+        android:layout_marginTop="531dp"
+        android:layout_marginEnd="186dp"
+        android:layout_marginBottom="181dp"
+        android:text="@string/registrationinvitation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

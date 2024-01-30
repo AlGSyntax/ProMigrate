@@ -4,6 +4,7 @@
     <string name="welcome_text">ようこそ</string>
     <string name="email">メール</string>
     <string name="password">パスワード</string>
+    <string name="confirmpassword">パスワードの確認入力</string>
     <string name="languageselectionmessage">ドイツへの移住をお手伝いします！</string>
     <string name="registrationinvitation">アカウントをお持ちでないですか？
         ここをクリックしてサインアップしてください！</string>
