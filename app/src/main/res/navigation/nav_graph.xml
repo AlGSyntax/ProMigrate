@@ -21,9 +21,21 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_createYourProfileFragment"
+            app:destination="@id/createYourProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.promigrate.ui.RegisterFragment"
-        android:label="RegisterFragment" />
+        android:label="RegisterFragment" >
+        <action
+            android:id="@+id/action_registerFragment_to_createYourProfileFragment"
+            app:destination="@id/createYourProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createYourProfileFragment"
+        android:name="com.example.promigrate.ui.CreateYourProfileFragment"
+        android:label="fragment_create_your_profile"
+        tools:layout="@layout/fragment_create_your_profile" />
 </navigation>
