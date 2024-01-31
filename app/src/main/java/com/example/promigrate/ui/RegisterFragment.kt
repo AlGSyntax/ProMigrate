@@ -44,12 +44,16 @@ class RegisterFragment : Fragment() {
             updateUI(localeListCompat.unwrap() as LocaleList)
         }
 
-        binding.registerBTN.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
-            val confirmPassword = binding.confirmPasswordEditText.text.toString()
-            if (isValidInput(email, password, confirmPassword)) {
-                viewModel.register(email, password, confirmPassword)
+        viewModel.selectedLanguageCode.observe(viewLifecycleOwner) { selectedLanguageCode ->
+            binding.registerBTN.setOnClickListener {
+                val email = binding.emailEditText.text.toString()
+                val password = binding.passwordEditText.text.toString()
+                val confirmPassword = binding.confirmPasswordEditText.text.toString()
+
+                // Überprüfung der Eingaben und Registrierung mit dem ausgewählten Sprachcode
+                if (isValidInput(email, password, confirmPassword)) {
+                    viewModel.register(email, password, confirmPassword, selectedLanguageCode)
+                }
             }
         }
     }

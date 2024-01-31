@@ -1,40 +1,45 @@
 package com.example.promigrate
 
 import android.app.Application
-import android.os.LocaleList
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.promigrate.data.model.Profile
-import com.example.promigrate.data.model.UserProfile
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
-
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
 
 
 const val TAG = "MainViewModel"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    var repository = Repository.getInstance(application)
+    private var repository = Repository.getInstance(application, FirebaseAuth.getInstance(),
+        FirebaseFirestore.getInstance())
 
 
     private val _localeList = MutableLiveData<LocaleListCompat>()
     val localeList: LiveData<LocaleListCompat> = _localeList
+
+    private val _selectedLanguageCode = MutableLiveData<String>()
+    val selectedLanguageCode: LiveData<String> = _selectedLanguageCode
+
+
+
+
 
     private val _registrationStatus = MutableLiveData<Boolean>()
     val registrationStatus: LiveData<Boolean> = _registrationStatus
@@ -65,8 +70,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         setupUserEnv()
     }
 
+    /**
+    fun loadUserProfile(userId: String): MutableLiveData<UserProfile?> {
+        return repository.getUserProfile(userId)
+    }
+    */
 
-
+    fun setSelectedLanguageCode(languageCode: String) {
+        _selectedLanguageCode.value = languageCode
+    }
     fun changeLanguage(languageCode: String) {
         viewModelScope.launch {
             try {
@@ -119,7 +131,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun register(email: String, password: String, confirmPassword: String) {
+    fun register(email: String, password: String, confirmPassword: String,languageCode: String) {
         if (password != confirmPassword) {
             _registrationStatus.value = false
             Log.e("RegisterViewModel", "Passwörter stimmen nicht überein")
@@ -132,7 +144,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (task.isSuccessful) {
                     Log.d(TAG, "Benutzer erfolgreich registriert mit E-Mail: $email")
                     setupUserEnv()
-                    val newProfile = Profile()
+                    val newProfile = Profile(isPremium = false, username = email, languageCode = languageCode)
                     profileRef.set(newProfile).addOnSuccessListener {
                         Log.d(TAG, "Profil für $email erstellt.")
                         _registrationStatus.value = true
@@ -162,6 +174,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (task.isSuccessful) {
                     Log.d(TAG, "Benutzer erfolgreich eingeloggt mit E-Mail: $email")
                     setupUserEnv()
+                    loadUserLanguageSetting(auth.currentUser?.uid)
                     _loginStatus.value = true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
                 } else {
                     task.exception?.let {
@@ -175,6 +188,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _loginStatus.value = false
         }
     }
+
+    private fun loadUserLanguageSetting(userId: String?) {
+        userId?.let { uid ->
+            viewModelScope.launch {
+                try {
+                    val userProfile = repository.getUserProfile(uid).value
+                    userProfile?.let { profile ->
+                        updateAppLocale(profile.languageCode)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Fehler beim Laden der Spracheinstellung", e)
+                }
+            }
+        }
+    }
+
+    private fun updateAppLocale(languageCode: String) {
+        val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
+        AppCompatDelegate.setApplicationLocales(localeListCompat)
+        Log.d(TAG, "Sprache geändert zu: $languageCode")
+    }
+
+
+    /**
     fun saveUserProfile(userId: String, languageCode: String) {
         viewModelScope.launch {
             try {
@@ -197,7 +234,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+*/
 
 
 

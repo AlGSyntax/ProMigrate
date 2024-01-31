@@ -26,7 +26,7 @@ class LanguageSelectionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentLanguageSelectionBinding.inflate(inflater, container, false)
-        viewModel.repository = Repository.getInstance(requireContext())
+
 
         setupLanguageSpinner()
         setupConfirmButton()
@@ -48,6 +48,7 @@ class LanguageSelectionFragment : Fragment() {
         binding.spinnerLanguageSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val languageCode = getLanguageCode(position)
+                viewModel.setSelectedLanguageCode(languageCode)
                 viewModel.changeLanguage(languageCode)
             }
 

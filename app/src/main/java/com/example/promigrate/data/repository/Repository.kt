@@ -7,53 +7,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
 import com.example.promigrate.data.model.UserProfile
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
 const val TAG = "Repository"
-class Repository (context: Context) {
+class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
+                  private val firestore: FirebaseFirestore
+) {
+
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
 
     companion object {
         private var INSTANCE: Repository? = null
 
-        fun getInstance(context: Context): Repository {
-            if (INSTANCE == null) {
-                synchronized(this) {
-                    INSTANCE = Repository(context)
-                }
+        fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore):
+                Repository {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: Repository(context, firebaseAuth, firestore).also { INSTANCE = it }
             }
-            return INSTANCE!!
-        }
-    }
-
-    private val db = UserDatabase.getDatabase(context)
-    private val userProfileDao = db.userProfileDao()
-
-    suspend fun saveUserProfile(userProfile: UserProfile) {
-        try {
-            userProfileDao.insertOrUpdateUserProfile(userProfile)
-            Log.d(
-                TAG, "Benutzerprofil erfolgreich gespeichert:" +
-                    " ${userProfile.userId}")
-        } catch (e: Exception) {
-            Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
-        }
-    }
-
-    fun getUserProfile(userId: String): LiveData<UserProfile> {
-        return try {
-            val userProfile = userProfileDao.getUserProfile(userId)
-            Log.d(TAG, "Benutzerprofil erfolgreich geladen: $userId")
-            userProfile
-        } catch (e: Exception) {
-            Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
-            MutableLiveData()
         }
     }
 
 
-
-    private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
 
     fun saveLanguageSetting(languageCode: String) {
         try {
@@ -75,4 +52,46 @@ class Repository (context: Context) {
             Locale.getDefault().language
         }
     }
+
+    fun getUserProfile(userId: String): MutableLiveData<UserProfile?> {
+        val userProfileLiveData = MutableLiveData<UserProfile?>()
+
+        firestore.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val userProfile = document.toObject(UserProfile::class.java)
+                    userProfileLiveData.postValue(userProfile)
+                } else {
+                    Log.d(TAG, "Benutzerprofil nicht gefunden")
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
+            }
+
+        return userProfileLiveData
+    }
+
+
+    private val db = UserDatabase.getDatabase(context)
+    private val userProfileDao = db.userProfileDao()
+
+    suspend fun saveUserProfile(userProfile: UserProfile) {
+        try {
+            userProfileDao.insertOrUpdateUserProfile(userProfile)
+            Log.d(
+                TAG, "Benutzerprofil erfolgreich gespeichert:" +
+                    " ${userProfile.userId}")
+        } catch (e: Exception) {
+            Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
+        }
+    }
+
+
+
+
+
+
+
+
 }
