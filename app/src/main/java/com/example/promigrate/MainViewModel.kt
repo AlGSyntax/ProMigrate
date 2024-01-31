@@ -49,7 +49,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val auth = Firebase.auth
     private val firestore = Firebase.firestore
-    private val storage = Firebase.storage
+    private val storage = Firebase.storage// Alle Firestore-Methoden ins Repository verschieben
     private val _user: MutableLiveData<FirebaseUser?> = MutableLiveData()
     val user: LiveData<FirebaseUser?>
         get() = _user
@@ -115,12 +115,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun setupUserEnv() {
+    private fun setupUserEnv() {// Repository verschieben !
         try {
             _user.value = auth.currentUser
 
             // Alternative Schreibweise um auf null Werte zu überprüfen
-            auth.currentUser?.let { firebaseUser ->
+            auth.currentUser?.let { firebaseUser ->// repo verschieben
                 profileRef = firestore.collection("user").document(firebaseUser.uid)
                 notesRef =
                     firestore.collection("user").document(firebaseUser.uid).collection("notes")

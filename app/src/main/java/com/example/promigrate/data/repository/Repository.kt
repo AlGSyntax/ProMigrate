@@ -16,7 +16,7 @@ class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
 ) {
 
     private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
+        context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)//
 
     companion object {
         private var INSTANCE: Repository? = null

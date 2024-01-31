@@ -64,7 +64,7 @@ class LanguageSelectionFragment : Fragment() {
             5 -> "uk"
             else -> "en"
         }
-    }
+    }// Nachdenken , wie Ich diese Logik in den SetupLanguageSpinner verschieben kann .
 
     private fun setupConfirmButton() {
         binding.btnConfirmLanguage.setOnClickListener {
@@ -75,10 +75,11 @@ class LanguageSelectionFragment : Fragment() {
     private fun navigateToLoginFragment() {
         val action = LanguageSelectionFragmentDirections.actionLanguageSelectionFragmentToLoginFragment()
         findNavController().navigate(action)
-    }
+    }// Sollte ich die Logik verschieben in die obere Funktion "set"
 
     private fun updateUI(context: Context) {
         binding.tvWelcomeMessage.text = context.resources.getString(R.string.languageselectionmessage)
         // Aktualisiere weitere UI-Elemente hier
     }
 }
+// Wann macht es sinn sachen in funktionen auszulagern ? Wann nicht ?
