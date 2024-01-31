@@ -27,8 +27,10 @@ import kotlinx.coroutines.withContext
 const val TAG = "MainViewModel"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private var repository = Repository.getInstance(application, FirebaseAuth.getInstance(),
-        FirebaseFirestore.getInstance())
+    private var repository = Repository.getInstance(
+        application, FirebaseAuth.getInstance(),
+        FirebaseFirestore.getInstance()
+    )
 
 
     private val _localeList = MutableLiveData<LocaleListCompat>()
@@ -36,9 +38,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _selectedLanguageCode = MutableLiveData<String>()
     val selectedLanguageCode: LiveData<String> = _selectedLanguageCode
-
-
-
 
 
     private val _registrationStatus = MutableLiveData<Boolean>()
@@ -54,15 +53,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _user: MutableLiveData<FirebaseUser?> = MutableLiveData()
     val user: LiveData<FirebaseUser?>
         get() = _user
+
     //Das profile Document enthält ein einzelnes Profil(das des eingeloggten Users)
     //Document ist wie ein Objekt
     private lateinit var profileRef: DocumentReference
+
     //Die note Collection enthält beliebig viele Notes(alle notes des eingeloggten Users
     //Collection ist wie eine Liste
     private lateinit var notesRef: CollectionReference
-
-
-
 
 
     init {
@@ -72,13 +70,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
     fun loadUserProfile(userId: String): MutableLiveData<UserProfile?> {
-        return repository.getUserProfile(userId)
+    return repository.getUserProfile(userId)
     }
-    */
+     */
 
     fun setSelectedLanguageCode(languageCode: String) {
         _selectedLanguageCode.value = languageCode
     }
+
     fun changeLanguage(languageCode: String) {
         viewModelScope.launch {
             try {
@@ -123,7 +122,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             // Alternative Schreibweise um auf null Werte zu überprüfen
             auth.currentUser?.let { firebaseUser ->
                 profileRef = firestore.collection("user").document(firebaseUser.uid)
-                notesRef = firestore.collection("user").document(firebaseUser.uid).collection("notes")
+                notesRef =
+                    firestore.collection("user").document(firebaseUser.uid).collection("notes")
             }
             Log.d("setupUserEnv", "Benutzerumgebungseinrichtung erfolgreich")
         } catch (e: Exception) {
@@ -131,20 +131,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun register(email: String, password: String, confirmPassword: String,languageCode: String) {
+    fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
         if (password != confirmPassword) {
             _registrationStatus.value = false
             Log.e("RegisterViewModel", "Passwörter stimmen nicht überein")
             return
         }
-
         Log.d(TAG, "Versuche, den Benutzer zu registrieren mit E-Mail: $email")
         try {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Benutzer erfolgreich registriert mit E-Mail: $email")
                     setupUserEnv()
-                    val newProfile = Profile(isPremium = false, username = email, languageCode = languageCode)
+                    val newProfile =
+                        Profile(isPremium = false, username = email, languageCode = languageCode)
                     profileRef.set(newProfile).addOnSuccessListener {
                         Log.d(TAG, "Profil für $email erstellt.")
                         _registrationStatus.value = true
@@ -166,7 +166,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
     fun login(email: String, password: String) {
         Log.d(TAG, "Versuche, Benutzer einzuloggen mit E-Mail: $email")
         try {
@@ -175,7 +174,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     Log.d(TAG, "Benutzer erfolgreich eingeloggt mit E-Mail: $email")
                     setupUserEnv()
                     loadUserLanguageSetting(auth.currentUser?.uid)
-                    _loginStatus.value = true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
+                    _loginStatus.value =
+                        true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
                 } else {
                     task.exception?.let {
                         Log.e(TAG, "Fehler beim Einloggen des Benutzers", it)
@@ -213,29 +213,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
     fun saveUserProfile(userId: String, languageCode: String) {
-        viewModelScope.launch {
-            try {
-                repository.saveUserProfile(UserProfile(userId, languageCode))
-                Log.d(TAG, "Benutzerprofil erfolgreich gespeichert: $userId")
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
-            }
-        }
+    viewModelScope.launch {
+    try {
+    repository.saveUserProfile(UserProfile(userId, languageCode))
+    Log.d(TAG, "Benutzerprofil erfolgreich gespeichert: $userId")
+    } catch (e: Exception) {
+    Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
+    }
+    }
     }
 
     fun loadUserProfile(userId: String): LiveData<UserProfile> {
-        return try {
-            val userProfile = repository.getUserProfile(userId)
-            Log.d(TAG, "Benutzerprofil erfolgreich geladen: $userId")
-            userProfile
-        } catch (e: Exception) {
-            Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
-            MutableLiveData() // Rückgabe eines leeren LiveData-Objekts im Fehlerfall
-        }
+    return try {
+    val userProfile = repository.getUserProfile(userId)
+    Log.d(TAG, "Benutzerprofil erfolgreich geladen: $userId")
+    userProfile
+    } catch (e: Exception) {
+    Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
+    MutableLiveData() // Rückgabe eines leeren LiveData-Objekts im Fehlerfall
+    }
     }
 
-*/
-
+     */
 
 
     fun logout() {
@@ -247,7 +246,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Log.e("logout", "Fehler in der LogOut-Methode", e)
         }
     }
-
 
 
 }
