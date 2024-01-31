@@ -48,7 +48,7 @@ class LogInFragment : Fragment() {
         // User-Navigation
         viewModel.user.observe(viewLifecycleOwner) {
             it?.let {
-                // Navigiere zum nächsten Screen
+                findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
             }
         }
     }

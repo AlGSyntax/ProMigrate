@@ -36,6 +36,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _localeList = MutableLiveData<LocaleListCompat>()
     val localeList: LiveData<LocaleListCompat> = _localeList
 
+    private val _registrationStatus = MutableLiveData<Boolean>()
+    val registrationStatus: LiveData<Boolean> = _registrationStatus
+
+
     private val auth = Firebase.auth
     private val firestore = Firebase.firestore
     private val storage = Firebase.storage
@@ -137,11 +141,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun register(email: String, password: String, confirmPassword: String) {
         if (password != confirmPassword) {
-            // Handle mismatch of passwords
+            _registrationStatus.value = false
             Log.e("register", "Passwörter stimmen nicht überein")
             return
         }
-
         try {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -151,8 +154,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val newProfile = Profile()
                     profileRef.set(newProfile)
                     Log.d("register", "Benutzer erfolgreich registriert")
+                    _registrationStatus.value = true
                 } else {
-                    // Fehler aufgetreten
+                    _registrationStatus.value = false
                     Log.e("register", "Fehler beim Registrieren des Benutzers", it.exception)
                 }
             }

@@ -24,6 +24,7 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,6 +42,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
 
     private fun isValidInput(email: String, password: String, confirmPassword: String): Boolean {
         // Hier kannst du die Validierung implementieren (z.B. überprüfen, ob die Felder nicht leer sind und ob die Passwörter übereinstimmen)
