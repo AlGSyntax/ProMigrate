@@ -7,6 +7,7 @@ import android.os.LocaleList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -46,11 +47,15 @@ class LogInFragment : Fragment() {
         }
 
         // User-Navigation
-        viewModel.user.observe(viewLifecycleOwner) {
-            it?.let {
+
+        viewModel.loginStatus.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
                 findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
+            } else {
+                Toast.makeText(context, "Login fehlgeschlagen. Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show()
             }
         }
+
     }
 
     private fun isValidInput(): Boolean {

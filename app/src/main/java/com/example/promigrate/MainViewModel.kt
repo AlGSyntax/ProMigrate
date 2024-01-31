@@ -39,6 +39,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _registrationStatus = MutableLiveData<Boolean>()
     val registrationStatus: LiveData<Boolean> = _registrationStatus
 
+    private val _loginStatus = MutableLiveData<Boolean>()
+    val loginStatus: LiveData<Boolean> = _loginStatus
+
 
     private val auth = Firebase.auth
     private val firestore = Firebase.firestore
@@ -142,46 +145,60 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun register(email: String, password: String, confirmPassword: String) {
         if (password != confirmPassword) {
             _registrationStatus.value = false
-            Log.e("register", "Passwörter stimmen nicht überein")
+            Log.e("RegisterViewModel", "Passwörter stimmen nicht überein")
             return
         }
-        try {
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    // User wurde erstellt
-                    setupUserEnv()
 
+        Log.d(TAG, "Versuche, den Benutzer zu registrieren mit E-Mail: $email")
+        try {
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "Benutzer erfolgreich registriert mit E-Mail: $email")
+                    setupUserEnv()
                     val newProfile = Profile()
-                    profileRef.set(newProfile)
-                    Log.d("register", "Benutzer erfolgreich registriert")
-                    _registrationStatus.value = true
+                    profileRef.set(newProfile).addOnSuccessListener {
+                        Log.d(TAG, "Profil für $email erstellt.")
+                        _registrationStatus.value = true
+                    }.addOnFailureListener { e ->
+                        Log.e(TAG, "Fehler beim Speichern des Profils", e)
+                        _registrationStatus.value = false
+                    }
                 } else {
+                    task.exception?.let {
+                        Log.e(TAG, "Fehler beim Registrieren des Benutzers", it)
+                    }
                     _registrationStatus.value = false
-                    Log.e("register", "Fehler beim Registrieren des Benutzers", it.exception)
                 }
             }
         } catch (e: Exception) {
-            Log.e("register", "Fehler in der Registrationsmethode", e)
+            Log.e("RegisterViewModel", "Ausnahme in der Registrationsmethode", e)
+            _registrationStatus.value = false
         }
     }
+
 
 
     fun login(email: String, password: String) {
+        Log.d(TAG, "Versuche, Benutzer einzuloggen mit E-Mail: $email")
         try {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    // User wurde eingeloggt
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "Benutzer erfolgreich eingeloggt mit E-Mail: $email")
                     setupUserEnv()
-                    Log.d("login", "Benutzer erfolgreich eingeloggt")
+                    _loginStatus.value = true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
                 } else {
-                    // Fehler aufgetreten
-                    Log.e("login", "Fehler beim einloggen des Benutzers")
+                    task.exception?.let {
+                        Log.e(TAG, "Fehler beim Einloggen des Benutzers", it)
+                    }
+                    _loginStatus.value = false // Setze den Status entsprechend
                 }
             }
         } catch (e: Exception) {
-            Log.e("login", "Fehler in der LogIn-Methode", e)
+            Log.e(TAG, "Ausnahme in der LogIn-Methode", e)
+            _loginStatus.value = false
         }
     }
+
 
     fun logout() {
         try {
