@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
-import com.example.promigrate.data.repository.Repository
 import com.example.promigrate.databinding.FragmentLanguageSelectionBinding
 
 class LanguageSelectionFragment : Fragment() {
