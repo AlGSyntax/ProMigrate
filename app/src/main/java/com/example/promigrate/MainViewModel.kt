@@ -104,29 +104,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun saveUserProfile(userId: String, languageCode: String) {
-        viewModelScope.launch {
-            try {
-                repository.saveUserProfile(UserProfile(userId, languageCode))
-                Log.d(TAG, "Benutzerprofil erfolgreich gespeichert: $userId")
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
-            }
-        }
-    }
-
-    fun loadUserProfile(userId: String): LiveData<UserProfile> {
-        return try {
-            val userProfile = repository.getUserProfile(userId)
-            Log.d(TAG, "Benutzerprofil erfolgreich geladen: $userId")
-            userProfile
-        } catch (e: Exception) {
-            Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
-            MutableLiveData() // Rückgabe eines leeren LiveData-Objekts im Fehlerfall
-        }
-    }
-
-
     private fun setupUserEnv() {
         try {
             _user.value = auth.currentUser
@@ -198,6 +175,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _loginStatus.value = false
         }
     }
+    fun saveUserProfile(userId: String, languageCode: String) {
+        viewModelScope.launch {
+            try {
+                repository.saveUserProfile(UserProfile(userId, languageCode))
+                Log.d(TAG, "Benutzerprofil erfolgreich gespeichert: $userId")
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
+            }
+        }
+    }
+
+    fun loadUserProfile(userId: String): LiveData<UserProfile> {
+        return try {
+            val userProfile = repository.getUserProfile(userId)
+            Log.d(TAG, "Benutzerprofil erfolgreich geladen: $userId")
+            userProfile
+        } catch (e: Exception) {
+            Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
+            MutableLiveData() // Rückgabe eines leeren LiveData-Objekts im Fehlerfall
+        }
+    }
+
+
+
 
 
     fun logout() {
