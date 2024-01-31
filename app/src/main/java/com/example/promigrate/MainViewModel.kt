@@ -32,6 +32,10 @@ const val TAG = "MainViewModel"
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     var repository = Repository.getInstance(application)
 
+
+    private val _localeList = MutableLiveData<LocaleListCompat>()
+    val localeList: LiveData<LocaleListCompat> = _localeList
+
     private val auth = Firebase.auth
     private val firestore = Firebase.firestore
     private val storage = Firebase.storage
@@ -45,8 +49,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //Collection ist wie eine Liste
     private lateinit var notesRef: CollectionReference
 
-    private val _localeList = MutableLiveData<LocaleListCompat>()
-    val localeList: LiveData<LocaleListCompat> = _localeList
+
 
 
 

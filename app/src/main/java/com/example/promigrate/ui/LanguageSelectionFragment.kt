@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.promigrate.MainViewModel
@@ -18,14 +19,13 @@ import com.example.promigrate.databinding.FragmentLanguageSelectionBinding
 
 class LanguageSelectionFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
+    private val  viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentLanguageSelectionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentLanguageSelectionBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         viewModel.repository = Repository.getInstance(requireContext())
 
         setupLanguageSpinner()
