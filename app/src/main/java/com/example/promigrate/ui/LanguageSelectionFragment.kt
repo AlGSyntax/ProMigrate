@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -45,6 +46,9 @@ class LanguageSelectionFragment : Fragment() {
     private fun setupLanguageSpinner() {
         binding.spinnerLanguageSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (view is TextView) {
+                    view.setTextColor(resources.getColor(R.color.titles, null)) // Farbe für den ausgewählten Item-Text
+                }
                 val languageCode = when (position) {
                     0 -> "en"
                     1 -> "de"

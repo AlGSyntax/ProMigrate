@@ -16,5 +16,8 @@
     <color name="todolist2">#1D2B35</color>
     <color name="todolist3">#699BF7</color>
 
+    <color name="colorError">#B00020</color>
+
+
 
 </resources>
