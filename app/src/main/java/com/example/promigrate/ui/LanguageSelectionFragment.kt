@@ -45,7 +45,15 @@ class LanguageSelectionFragment : Fragment() {
     private fun setupLanguageSpinner() {
         binding.spinnerLanguageSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val languageCode = getLanguageCode(position)
+                val languageCode = when (position) {
+                    0 -> "en"
+                    1 -> "de"
+                    2 -> "es"
+                    3 -> "ja"
+                    4 -> "ru"
+                    5 -> "uk"
+                    else -> "en"
+                }
                 viewModel.setSelectedLanguageCode(languageCode)
                 viewModel.changeLanguage(languageCode)
             }
@@ -54,17 +62,6 @@ class LanguageSelectionFragment : Fragment() {
         }
     }
 
-    private fun getLanguageCode(position: Int): String {
-        return when (position) {
-            0 -> "en"
-            1 -> "de"
-            2 -> "es"
-            3 -> "ja"
-            4 -> "ru"
-            5 -> "uk"
-            else -> "en"
-        }
-    }// Nachdenken , wie Ich diese Logik in den SetupLanguageSpinner verschieben kann .
 
     private fun setupConfirmButton() {
         binding.btnConfirmLanguage.setOnClickListener {
