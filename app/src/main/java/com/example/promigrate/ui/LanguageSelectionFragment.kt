@@ -65,14 +65,11 @@ class LanguageSelectionFragment : Fragment() {
 
     private fun setupConfirmButton() {
         binding.btnConfirmLanguage.setOnClickListener {
-            navigateToLoginFragment()
+            val action = LanguageSelectionFragmentDirections.actionLanguageSelectionFragmentToLoginFragment()
+            findNavController().navigate(action)
         }
     }
 
-    private fun navigateToLoginFragment() {
-        val action = LanguageSelectionFragmentDirections.actionLanguageSelectionFragmentToLoginFragment()
-        findNavController().navigate(action)
-    }// Sollte ich die Logik verschieben in die obere Funktion "set"
 
     private fun updateUI(context: Context) {
         binding.tvWelcomeMessage.text = context.resources.getString(R.string.languageselectionmessage)
