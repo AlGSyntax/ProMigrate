@@ -11,5 +11,12 @@
     </string>
     <string name="login">Einloggen</string>
     <string name="register">Registrieren</string>
+    <string name="cypheader">Erstelle dein Profil</string>
+    <string name="name">Name</string>
+    <string name="age">Alter</string>
+    <string name="currentoccupation">Ihre derzeitige Beschäftigung</string>
+    <string name="addcontactinfo">Kontaktinformationen hinzufügen</string>
+    <string name="datapolicy">Datenschutzrichtlinie</string>
+    <string name="saveandgo">Speichern &amp; Weiter</string>
 
 </resources>

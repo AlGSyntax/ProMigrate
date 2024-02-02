@@ -10,4 +10,11 @@
     <string name="registrationinvitation">Не маєте облікового запису? Натисніть тут, щоб зареєструватися!</string>
     <string name="login">Увійти</string>
     <string name="register">Зареєструватися</string>
+    <string name="cypheader">Створіть свій профіль</string>
+    <string name="name">Ім\'я</string>
+    <string name="age">Вік</string>
+    <string name="currentoccupation">Ваша поточна професія</string>
+    <string name="addcontactinfo">Додати контактну інформацію</string>
+    <string name="datapolicy">DПолітика захисту даних </string>
+    <string name="saveandgo">Зберегти та продовжити</string>
 </resources>

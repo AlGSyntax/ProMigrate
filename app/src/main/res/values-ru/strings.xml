@@ -11,4 +11,12 @@
     </string>
     <string name="login">Войти</string>
     <string name="register">Зарегистрироваться</string>
+    <string name="cypheader">Создайте свой профиль</string>
+    <string name="name">Имя</string>
+    <string name="age">Возраст</string>
+    <string name="currentoccupation">Ваша текущая профессия</string>
+    <string name="addcontactinfo">Добавить контактную информацию</string>
+    <string name="datapolicy">Политика защиты данных </string>
+    <string name="saveandgo">Сохранить и продолжить</string>
+
 </resources>

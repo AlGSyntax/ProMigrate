@@ -10,4 +10,11 @@
     <string name="registrationinvitation">Don\'t have an account? Click here to Sign Up!</string>
     <string name="login">LogIn</string>
     <string name="register">Register</string>
+    <string name="cypheader">Create your Profile</string>
+    <string name="name">Name</string>
+    <string name="age">Age</string>
+    <string name="currentoccupation">Your current Occupation</string>
+    <string name="addcontactinfo">Add Contact Information</string>
+    <string name="datapolicy">Data Protection Policy</string>
+    <string name="saveandgo">Save &amp; Go</string>
 </resources>
