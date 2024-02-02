@@ -29,6 +29,7 @@ class CreateYourProfileFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+//TODO Auswahl des Sprachlevels über eine einzelne Funktion mit einer Indexierung regeln.Und der
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

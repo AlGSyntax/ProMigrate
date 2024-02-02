@@ -62,6 +62,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //Collection ist wie eine Liste
     private lateinit var notesRef: CollectionReference
 
+    //TODO LiveData = UI-Aktualisierungen ,Berechnungen = lokale Variablen, slider Int lokal speichern
+
 
     init {
         loadLanguageSetting()

@@ -71,6 +71,7 @@ class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
         return userProfileLiveData
     }
 
+    //TODO ALLE FIRESTORE METHODEN INS REPOSITORY!!!!
 
     private val db = UserDatabase.getDatabase(context)
     private val userProfileDao = db.userProfileDao()
