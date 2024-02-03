@@ -59,9 +59,23 @@ class LogInFragment : Fragment() {
     }
 
     private fun isValidInput(): Boolean {
-        // Implementiere die Überprüfung der Benutzereingaben
-        return true
+        var isValid = true
+
+        // Überprüfung, ob die E-Mail-Adresse gültig ist
+        if (binding.emailET.text.toString().isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailET.text.toString()).matches()) {
+            binding.emailET.error = getString(R.string.invalid_email_error)
+            isValid = false
+        }
+
+        // Überprüfung, ob das Passwortfeld nicht leer ist
+        if (binding.passwordET.text.toString().isEmpty()) {
+            binding.passwordET.error = getString(R.string.invalid_password_error_login) // Nutze eine angepasste Fehlermeldung
+            isValid = false
+        }
+
+        return isValid
     }
+
 
     private fun updateUI(localeList: LocaleList) {
         val configuration = Configuration()

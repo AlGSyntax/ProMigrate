@@ -20,5 +20,6 @@
     <string name="invalid_email_error">Invalid email address</string>
     <string name="invalid_password_error">Password must be at least 8 characters long</string>
     <string name="password_mismatch_error">Passwords do not match</string>
+    <string name="invalid_password_error_login">Password cannot be empty</string>
     <string name="confirm">Confirm</string>
 </resources>
