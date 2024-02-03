@@ -51,8 +51,8 @@
         android:id="@+id/btn_confirm_language"
         android:layout_width="129dp"
         android:layout_height="48dp"
-        android:layout_marginTop="503dp"
-        android:layout_marginBottom="164dp"
+        android:layout_marginTop="566dp"
+        android:layout_marginBottom="101dp"
         android:background="@drawable/spinner_background"
         android:fontFamily="@font/quicksandbold"
         android:text="@string/confirm"
@@ -70,8 +70,8 @@
         android:id="@+id/chooselanguage"
         android:layout_width="257dp"
         android:layout_height="30dp"
-        android:layout_marginTop="389dp"
-        android:layout_marginBottom="296dp"
+        android:layout_marginTop="491dp"
+        android:layout_marginBottom="194dp"
         android:fontFamily="@font/quicksandbold"
         android:text="@string/choose_your_language"
         android:textAlignment="center"
@@ -85,8 +85,21 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="82dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="420dp"
+        android:layout_marginBottom="228dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/baseline_arrow_circle_up_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
