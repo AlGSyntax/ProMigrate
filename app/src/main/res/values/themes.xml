@@ -11,7 +11,19 @@
         <item name="colorOnSecondary">@color/titles</item>
         <item name="colorError">@color/colorError</item>
         <item name="colorOnError">@color/colorError</item>
+        <item name="colorSurface">@color/background</item>
+        <item name="colorOnSurface">@color/titles</item>
     </style>
+
+    <style name="SpinnerTextStyle">
+        <item name="android:fontFamily">@font/quicksandbold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontWeight">900</item>
+    </style>
+
+
+
+
 
     <style name="Theme.ProMigrate" parent="Base.Theme.ProMigrate" />
 

@@ -24,7 +24,6 @@
     <string name="password_criteria_error">Password must be at least 8 characters long and
         include a mix of upper and lower case letters, numbers, and special
         characters (@#$%^&amp;+=!).</string>
-
     <string name="confirm">Confirm</string>
     <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
 </resources>

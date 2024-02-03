@@ -12,16 +12,20 @@
 
     <!-- Spinner zur Auswahl der Sprache -->
 
+
+    <!-- In deiner fragment_language_selection.xml -->
+
     <TextView
         android:id="@+id/tv_welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="184dp"
-        android:fontFamily="@font/quicksandvariablefontwght"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/quicksandbold"
         android:text="@string/languageselectionmessage"
         android:textAlignment="center"
         android:textColor="@color/titles"
         android:textSize="41sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,29 +35,34 @@
         android:id="@+id/spinner_language_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="404dp"
+        android:layout_marginTop="340dp"
         android:background="@drawable/spinner_background"
         android:entries="@array/language_options"
         android:minHeight="48dp"
         android:textAlignment="center"
+        android:theme="@style/SpinnerTextStyle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <!-- In deiner fragment_language_selection.xml -->
     <Button
         android:id="@+id/btn_confirm_language"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginTop="580dp"
-        android:layout_marginEnd="139dp"
-        android:layout_marginBottom="87dp"
-        android:text="confirm"
+        android:layout_width="129dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="503dp"
+        android:layout_marginBottom="164dp"
+        android:background="@drawable/spinner_background"
+        android:fontFamily="@font/quicksandbold"
+        android:text="@string/confirm"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

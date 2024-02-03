@@ -47,7 +47,8 @@ class LanguageSelectionFragment : Fragment() {
         binding.spinnerLanguageSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 if (view is TextView) {
-                    view.setTextColor(resources.getColor(R.color.titles, null)) // Farbe für den ausgewählten Item-Text
+                    view.setTextColor(resources.getColor(R.color.white, null))
+                    view.textSize = 22f
                 }
                 val languageCode = when (position) {
                     0 -> "en"
