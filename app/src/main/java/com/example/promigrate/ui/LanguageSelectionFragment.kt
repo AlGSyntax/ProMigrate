@@ -80,6 +80,7 @@ class LanguageSelectionFragment : Fragment() {
         binding.tvWelcomeMessage.text = context.resources.getString(R.string.languageselectionmessage)
         // Aktualisiere weitere UI-Elemente hier
         binding.btnConfirmLanguage.text =context.resources.getString(R.string.confirm)
+        binding.chooselanguage.text = context.resources.getString(R.string.choose_your_language)
     }
 }
 // Wann macht es sinn sachen in funktionen auszulagern ? Wann nicht ?

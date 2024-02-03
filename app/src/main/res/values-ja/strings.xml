@@ -25,5 +25,6 @@
         （@#$%^&amp;+=!）を含む必要があります。</string>
     <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">確認</string>
+    <string name="choose_your_language">言語を選択してください</string>
 
 </resources>

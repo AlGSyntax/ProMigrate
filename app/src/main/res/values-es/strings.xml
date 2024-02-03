@@ -26,5 +26,6 @@
         (@#$%^&amp;+=!).</string>
     <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Confirmar</string>
+    <string name="choose_your_language">Elige tu idioma</string>
 
 </resources>

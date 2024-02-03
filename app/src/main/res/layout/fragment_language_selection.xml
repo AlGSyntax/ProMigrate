@@ -66,4 +66,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/chooselanguage"
+        android:layout_width="257dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="389dp"
+        android:layout_marginBottom="296dp"
+        android:fontFamily="@font/quicksandbold"
+        android:text="@string/choose_your_language"
+        android:textAlignment="center"
+        android:textColor="@color/titles"
+        android:textColorHighlight="@color/white"
+        android:textColorHint="@color/white"
+        android:textColorLink="@color/white"
+        android:textDirection="firstStrong"
+        android:textFontWeight="700"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
