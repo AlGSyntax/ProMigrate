@@ -14,11 +14,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -48,19 +44,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private val auth = Firebase.auth
-    private val firestore = Firebase.firestore
-    private val storage = Firebase.storage// Alle Firestore-Methoden ins Repository verschieben
+
     private val _user: MutableLiveData<FirebaseUser?> = MutableLiveData()
     val user: LiveData<FirebaseUser?>
         get() = _user
 
-    //Das profile Document enthält ein einzelnes Profil(das des eingeloggten Users)
-    //Document ist wie ein Objekt
-    private lateinit var profileRef: DocumentReference
 
-    //Die note Collection enthält beliebig viele Notes(alle notes des eingeloggten Users
-    //Collection ist wie eine Liste
-    private lateinit var notesRef: CollectionReference
 
     //TODO LiveData = UI-Aktualisierungen ,Berechnungen = lokale Variablen, slider Int lokal speichern
 
@@ -68,6 +57,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         loadLanguageSetting()
         setupUserEnv()
+
     }
 
     /**
@@ -117,21 +107,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun setupUserEnv() {// Repository verschieben !
+    private fun setupUserEnv() {
         try {
             _user.value = auth.currentUser
-
-            // Alternative Schreibweise um auf null Werte zu überprüfen
-            auth.currentUser?.let { firebaseUser ->// repo verschieben
-                profileRef = firestore.collection("user").document(firebaseUser.uid)
-                notesRef =
-                    firestore.collection("user").document(firebaseUser.uid).collection("notes")
+            auth.currentUser?.let { firebaseUser ->
+                // Rufe die Methode aus dem Repository auf, um die Umgebung einzurichten
+                repository.setupUserEnvironment(firebaseUser)
             }
             Log.d("setupUserEnv", "Benutzerumgebungseinrichtung erfolgreich")
         } catch (e: Exception) {
             Log.e("setupUserEnv", "Fehler beim Einrichten der Benutzerumgebung", e)
         }
     }
+
 
     fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
         if (password != confirmPassword) {
@@ -144,16 +132,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Benutzer erfolgreich registriert mit E-Mail: $email")
-                    setupUserEnv()
-                    val newProfile =
-                        Profile(isPremium = false, username = email, languageCode = languageCode)
-                    profileRef.set(newProfile).addOnSuccessListener {
-                        Log.d(TAG, "Profil für $email erstellt.")
-                        _registrationStatus.value = true
-                    }.addOnFailureListener { e ->
-                        Log.e(TAG, "Fehler beim Speichern des Profils", e)
-                        _registrationStatus.value = false
+                    val firebaseUser = auth.currentUser
+                    firebaseUser?.let { user ->
+                        // Erstelle das Benutzerprofil mit der User-ID und dem Profilobjekt
+                        val userId = user.uid
+                        val userProfile = Profile(isPremium = false, username = email, languageCode = languageCode)
+                        repository.createUserProfile(userId, userProfile) // Rufe die Methode aus dem Repository auf
                     }
+                    _registrationStatus.value = true
                 } else {
                     task.exception?.let {
                         Log.e(TAG, "Fehler beim Registrieren des Benutzers", it)
@@ -166,6 +152,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _registrationStatus.value = false
         }
     }
+
+
 
 
     fun login(email: String, password: String) {

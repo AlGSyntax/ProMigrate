@@ -5,8 +5,10 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
+import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.UserProfile
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
@@ -28,6 +30,21 @@ class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
             }
         }
     }
+
+    fun setupUserEnvironment(firebaseUser: FirebaseUser) {
+        val profileRef = FirebaseFirestore.getInstance().collection("user").document(firebaseUser.uid)
+        val notesRef = profileRef.collection("notes")
+        // Hier könntest du weitere Setup-Aktionen durchführen oder die Referenzen bei Bedarf zurückgeben
+        Log.d("Repository", "Benutzerumgebungseinrichtung erfolgreich für ${firebaseUser.uid}")
+    }
+
+    fun createUserProfile(userId: String, profile: Profile) {
+        val profileRef = firestore.collection("user").document(userId)
+        profileRef.set(profile)
+            .addOnSuccessListener { Log.d(TAG, "Profil erfolgreich erstellt.") }
+            .addOnFailureListener { e -> Log.e(TAG, "Fehler beim Erstellen des Profils", e) }
+    }
+
 
 
 
