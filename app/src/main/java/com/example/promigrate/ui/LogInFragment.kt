@@ -72,7 +72,7 @@ class LogInFragment : Fragment() {
 
         // Passwortkriterien
         val password = binding.passwordET.text.toString()
-        val passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$"
+        val passwordPattern = getString(R.string.passwordpattern)
 
         // Überprüfung der Passwortkriterien
         if (password.isEmpty()) {

@@ -24,7 +24,7 @@
     <string name="password_criteria_error">La contraseña debe tener al menos 8 caracteres e
         incluir una mezcla de letras mayúsculas y minúsculas, números y caracteres especiales
         (@#$%^&amp;+=!).</string>
-
+    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Confirmar</string>
 
 </resources>

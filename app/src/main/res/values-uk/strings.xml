@@ -23,6 +23,6 @@
     <string name="invalid_password_error_login">Пароль не може бути порожнім</string>
     <string name="password_criteria_error">Пароль має бути не менше 8 символів і включати комбінацію
         великих і малих літер, цифр та спеціальних символів (@#$%^&amp;+=!).</string>
-
+    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Підтвердити</string>
 </resources>

@@ -26,4 +26,5 @@
         characters (@#$%^&amp;+=!).</string>
 
     <string name="confirm">Confirm</string>
+    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
 </resources>

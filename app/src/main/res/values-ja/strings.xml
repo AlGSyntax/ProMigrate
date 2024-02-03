@@ -23,6 +23,7 @@
     <string name="invalid_password_error_login">パスワードを空にすることはできません</string>
     <string name="password_criteria_error">パスワードは8文字以上で、大文字と小文字、数字、特殊文字
         （@#$%^&amp;+=!）を含む必要があります。</string>
+    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">確認</string>
 
 </resources>

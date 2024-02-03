@@ -25,7 +25,7 @@
     <string name="password_criteria_error">Пароль должен быть не менее 8 символов и
         содержать сочетание заглавных и строчных букв, цифр и специальных символов
         (@#$%^&amp;+=!).</string>
-
+    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Подтвердить</string>
 
 </resources>
