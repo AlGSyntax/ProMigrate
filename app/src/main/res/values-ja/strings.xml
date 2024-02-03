@@ -17,4 +17,9 @@
     <string name="addcontactinfo">連絡先情報を追加</string>
     <string name="datapolicy">データ保護方針</string>
     <string name="saveandgo">保存して進む</string>
+    <string name="invalid_email_error">無効なメールアドレスです</string>
+    <string name="invalid_password_error">パスワードは8文字以上である必要があります</string>
+    <string name="password_mismatch_error">パスワードが一致しません</string>
+    <string name="confirm">確認</string>
+
 </resources>

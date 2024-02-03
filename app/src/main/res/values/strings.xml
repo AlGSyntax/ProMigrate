@@ -17,4 +17,8 @@
     <string name="addcontactinfo">Add Contact Information</string>
     <string name="datapolicy">Data Protection Policy</string>
     <string name="saveandgo">Save &amp; Go</string>
+    <string name="invalid_email_error">Invalid email address</string>
+    <string name="invalid_password_error">Password must be at least 8 characters long</string>
+    <string name="password_mismatch_error">Passwords do not match</string>
+    <string name="confirm">Confirm</string>
 </resources>

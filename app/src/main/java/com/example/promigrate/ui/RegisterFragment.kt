@@ -59,9 +59,35 @@ class RegisterFragment : Fragment() {
 
 
     private fun isValidInput(email: String, password: String, confirmPassword: String): Boolean {
-        // Hier kannst du die Validierung implementieren (z.B. überprüfen, ob die Felder nicht leer sind und ob die Passwörter übereinstimmen)
-        return true
+        var isValid = true
+
+        // Reset errors
+        binding.emailTextInputLayout.error = null
+        binding.passwordTextInputLayout.error = null
+        binding.confirmPasswordTextInputLayout.error = null
+
+        // E-Mail Validierung
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.emailTextInputLayout.error = getString(R.string.invalid_email_error)
+            isValid = false
+        }
+
+        // Passwort Validierung
+        if (password.isEmpty() || password.length < 8) {
+            binding.passwordTextInputLayout.error = getString(R.string.invalid_password_error)
+            isValid = false
+        }
+
+        // Überprüfung, ob die Passwörter übereinstimmen
+        if (confirmPassword != password) {
+            binding.confirmPasswordTextInputLayout.error = getString(R.string.password_mismatch_error)
+            isValid = false
+        }
+
+        return isValid
     }
+
+
 
 
     private fun updateUI(localeList: LocaleList) {
@@ -71,7 +97,5 @@ class RegisterFragment : Fragment() {
         val resources = context.resources
 
         binding.registerBTN.text = resources?.getString(R.string.register)
-
-        // Weitere UI-Elemente aktualisieren
     }
 }

@@ -17,4 +17,8 @@
     <string name="addcontactinfo">Додати контактну інформацію</string>
     <string name="datapolicy">DПолітика захисту даних </string>
     <string name="saveandgo">Зберегти та продовжити</string>
+    <string name="invalid_email_error">Недійсна адреса електронної пошти</string>
+    <string name="invalid_password_error">Пароль має бути не менше 8 символів</string>
+    <string name="password_mismatch_error">Паролі не співпадають</string>
+    <string name="confirm">Підтвердити</string>
 </resources>

@@ -18,5 +18,9 @@
     <string name="addcontactinfo">Добавить контактную информацию</string>
     <string name="datapolicy">Политика защиты данных </string>
     <string name="saveandgo">Сохранить и продолжить</string>
+    <string name="invalid_email_error">Неверный адрес электронной почты</string>
+    <string name="invalid_password_error">Пароль должен быть не менее 8 символов</string>
+    <string name="password_mismatch_error">Пароли не совпадают</string>
+    <string name="confirm">Подтвердить</string>
 
 </resources>
