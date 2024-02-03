@@ -21,5 +21,9 @@
     <string name="invalid_password_error">Password must be at least 8 characters long</string>
     <string name="password_mismatch_error">Passwords do not match</string>
     <string name="invalid_password_error_login">Password cannot be empty</string>
+    <string name="password_criteria_error">Password must be at least 8 characters long and
+        include a mix of upper and lower case letters, numbers, and special
+        characters (@#$%^&amp;+=!).</string>
+
     <string name="confirm">Confirm</string>
 </resources>

@@ -22,6 +22,10 @@
     <string name="invalid_password_error">Пароль должен быть не менее 8 символов</string>
     <string name="password_mismatch_error">Пароли не совпадают</string>
     <string name="invalid_password_error_login">Пароль не может быть пустым</string>
+    <string name="password_criteria_error">Пароль должен быть не менее 8 символов и
+        содержать сочетание заглавных и строчных букв, цифр и специальных символов
+        (@#$%^&amp;+=!).</string>
+
     <string name="confirm">Подтвердить</string>
 
 </resources>

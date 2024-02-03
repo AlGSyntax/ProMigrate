@@ -61,20 +61,31 @@ class LogInFragment : Fragment() {
     private fun isValidInput(): Boolean {
         var isValid = true
 
+        binding.emailInputLayout.error = null
+        binding.passwordInputLayout.error = null
+
         // Überprüfung, ob die E-Mail-Adresse gültig ist
         if (binding.emailET.text.toString().isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailET.text.toString()).matches()) {
-            binding.emailET.error = getString(R.string.invalid_email_error)
+            binding.emailInputLayout.error = getString(R.string.invalid_email_error)
             isValid = false
         }
 
-        // Überprüfung, ob das Passwortfeld nicht leer ist
-        if (binding.passwordET.text.toString().isEmpty()) {
-            binding.passwordET.error = getString(R.string.invalid_password_error_login) // Nutze eine angepasste Fehlermeldung
+        // Passwortkriterien
+        val password = binding.passwordET.text.toString()
+        val passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$"
+
+        // Überprüfung der Passwortkriterien
+        if (password.isEmpty()) {
+            binding.passwordInputLayout.error = getString(R.string.invalid_password_error_login) // Nutze eine angepasste Fehlermeldung
+            isValid = false
+        } else if (!password.matches(passwordPattern.toRegex())) {
+            binding.passwordInputLayout.error = getString(R.string.password_criteria_error)
             isValid = false
         }
 
         return isValid
     }
+
 
 
     private fun updateUI(localeList: LocaleList) {

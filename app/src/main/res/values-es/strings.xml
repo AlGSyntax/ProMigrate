@@ -21,6 +21,10 @@
     <string name="invalid_password_error">La contraseña debe tener al menos 8 caracteres</string>
     <string name="password_mismatch_error">Las contraseñas no coinciden</string>
     <string name="invalid_password_error_login">La contraseña no puede estar vacía</string>
+    <string name="password_criteria_error">La contraseña debe tener al menos 8 caracteres e
+        incluir una mezcla de letras mayúsculas y minúsculas, números y caracteres especiales
+        (@#$%^&amp;+=!).</string>
+
     <string name="confirm">Confirmar</string>
 
 </resources>
