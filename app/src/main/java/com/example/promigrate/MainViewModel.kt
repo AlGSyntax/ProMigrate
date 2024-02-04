@@ -125,7 +125,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
         if (password != confirmPassword) {
             _registrationStatus.value = false
-            Log.e("RegisterViewModel", "Passwörter stimmen nicht überein")
+            Log.e(TAG, "Passwörter stimmen nicht überein")
             return
         }
         Log.d(TAG, "Versuche, den Benutzer zu registrieren mit E-Mail: $email")
@@ -149,7 +149,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         } catch (e: Exception) {
-            Log.e("RegisterViewModel", "Ausnahme in der Registrationsmethode", e)
+            Log.e(TAG, "Ausnahme in der Registrationsmethode", e)
             _registrationStatus.value = false
         }
     }
