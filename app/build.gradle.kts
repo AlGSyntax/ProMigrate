@@ -86,4 +86,8 @@ dependencies {
 
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+
+    //Google Sign In
+    implementation ("com.google.android.gms:play-services-auth:20.7.0")
+
 }

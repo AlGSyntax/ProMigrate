@@ -1,6 +1,7 @@
 package com.example.promigrate.ui
 
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
@@ -14,15 +15,23 @@ import androidx.navigation.fragment.findNavController
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.databinding.FragmentLogInBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 
 
 class LogInFragment : Fragment() {
 
     private  val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentLogInBinding
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentLogInBinding.inflate(inflater, container, false)
+        configureGoogleSignIn()
         return binding.root
     }
 
@@ -40,6 +49,12 @@ class LogInFragment : Fragment() {
                 viewModel.login(binding.emailET.text.toString(), binding.passwordET.text.toString())
             }
         }
+
+        binding.loginButton.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+
 
         binding.toregister.setOnClickListener {
             // Hier führst du die Navigation zum RegisterFragment durch
@@ -97,5 +112,38 @@ class LogInFragment : Fragment() {
         binding.loginBTN.text = resources?.getString(R.string.login)
         binding.toregister.text =resources?.getString(R.string.registrationinvitation)
         // Weitere UI-Elemente aktualisieren
+    }
+
+
+    private fun configureGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id)) // Ersetze dies durch deine Web Client ID
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+            viewModel.onGoogleLoginClicked(account.idToken!!)
+        } catch (e: ApiException) {
+            // Der Google Sign-In ist fehlgeschlagen, handle den Fehler
+            Toast.makeText(context, "Google Sign-In fehlgeschlagen: ${e.statusCode}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    companion object {
+        private const val RC_SIGN_IN = 1001 // Request code for sign-in
     }
 }

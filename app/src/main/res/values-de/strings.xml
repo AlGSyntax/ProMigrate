@@ -28,5 +28,7 @@
     <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Bestätigen</string>
     <string name="choose_your_language">Wähle deine Sprache</string>
+    <string name="GoogleSignUp">GoogleSignup</string>
+    <string name="default_web_client_id">default_web_client_id</string>
 
 </resources>

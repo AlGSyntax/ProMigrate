@@ -26,4 +26,6 @@
     <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Підтвердити</string>
     <string name="choose_your_language">Оберіть свою мову</string>
+    <string name="GoogleSignUp">GoogleSignup</string>
+    <string name="default_web_client_id">default_web_client_id</string>
 </resources>

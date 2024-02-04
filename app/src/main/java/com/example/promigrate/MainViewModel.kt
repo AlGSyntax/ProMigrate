@@ -13,6 +13,7 @@ import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -178,6 +179,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _loginStatus.value = false
         }
     }
+
+    fun onGoogleLoginClicked(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Anmeldung erfolgreich
+                    _loginStatus.value = true
+                    loadUserLanguageSetting(auth.currentUser?.uid)
+                } else {
+                    // Anmeldung fehlgeschlagen
+                    _loginStatus.value = false
+                }
+            }
+    }
+
 
     private fun loadUserLanguageSetting(userId: String?) {
         userId?.let { uid ->
