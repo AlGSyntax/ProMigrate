@@ -90,8 +90,6 @@ dependencies {
     //Google Sign In
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
 
-    //ImagePicker Library
-    implementation ("com.github.Drjacky:ImagePicker:2.3.22")
 
 
 
