@@ -2,7 +2,6 @@ package com.example.promigrate.ui
 
 
 import android.app.Activity
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
@@ -152,5 +151,4 @@ class LogInFragment : Fragment() {
             Toast.makeText(context, "Google Sign-In fehlgeschlagen: ${e.statusCode}", Toast.LENGTH_LONG).show()
         }
     }
-
 }

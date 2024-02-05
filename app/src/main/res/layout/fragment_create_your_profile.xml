@@ -67,21 +67,23 @@
         android:id="@+id/btnAddContact"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="@string/addcontactinfo"
-        app:layout_constraintTop_toBottomOf="@id/etWork"
-        app:layout_constraintStart_toStartOf="@id/etWork"
         app:layout_constraintEnd_toEndOf="@id/etWork"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/etWork"
+        app:layout_constraintTop_toBottomOf="@id/etWork" />
 
     <CheckBox
         android:id="@+id/cbDataProtection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
         android:text="@string/datapolicy"
-        app:layout_constraintTop_toBottomOf="@id/btnAddContact"
-        app:layout_constraintStart_toStartOf="@id/btnAddContact"
         app:layout_constraintEnd_toEndOf="@id/btnAddContact"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/btnAddContact"
+        app:layout_constraintTop_toBottomOf="@id/btnAddContact" />
 
     <Button
         android:id="@+id/btnSave"
