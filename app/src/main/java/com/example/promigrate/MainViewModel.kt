@@ -193,7 +193,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     _loginStatus.value = false
                 }
             }
-    }
+    }// TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
 
 
     private fun loadUserLanguageSetting(userId: String?) {
