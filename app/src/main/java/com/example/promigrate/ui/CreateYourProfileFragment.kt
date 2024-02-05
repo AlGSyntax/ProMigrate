@@ -1,61 +1,62 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
+import com.example.promigrate.databinding.FragmentCreateYourProfileBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateYourProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CreateYourProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-//TODO Auswahl des Sprachlevels über eine einzelne Funktion mit einer Indexierung regeln.Und der
+    private val viewModel: MainViewModel by activityViewModels()
+    private lateinit var binding: FragmentCreateYourProfileBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_your_profile, container, false)
+    ): View {
+        // Initialisierung des View Bindings
+        binding = FragmentCreateYourProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CreateYourProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CreateYourProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Implementierung der Logik für das Erstellen des Profils
+        binding.btnSave.setOnClickListener {
+            val name = binding.etName.text.toString()
+            val age = binding.etAge.text.toString()
+            val work = binding.etWork.text.toString()
+            val isDataProtected = binding.cbDataProtection.isChecked
+
+            // Überprüfe die Eingaben
+            if (validateInput(name, age, work, isDataProtected)) {
+                // Speichere die Daten und navigiere weiter
+                saveProfileData(name, age, work)
+                findNavController().navigate(R.id.jobsForYouFragment)
+            } else {
+                // Zeige eine Fehlermeldung, wenn die Validierung fehlschlägt
+                Toast.makeText(context, "Bitte überprüfe deine Eingaben", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Weitere Logik, z.B. zum Laden von Daten oder für weitere Interaktionen
+    }
+
+    private fun validateInput(name: String, age: String, work: String, isDataProtected: Boolean): Boolean {
+        // Implementiere Validierungslogik
+        return name.isNotEmpty() && age.isNotEmpty() && work.isNotEmpty() && isDataProtected
+    }
+
+    private fun saveProfileData(name: String, age: String, work: String) {
+        // Speichere die Profildaten
+        // Diese Methode könnte beispielsweise Daten in ViewModel speichern oder eine Datenbankabfrage ausführen
     }
 }
