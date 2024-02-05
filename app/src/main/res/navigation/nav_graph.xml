@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_loginFragment_to_createYourProfileFragment"
             app:destination="@id/createYourProfileFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_jobsForYouFragment"
+            app:destination="@id/jobsForYouFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -37,5 +40,14 @@
         android:id="@+id/createYourProfileFragment"
         android:name="com.example.promigrate.ui.CreateYourProfileFragment"
         android:label="fragment_create_your_profile"
-        tools:layout="@layout/fragment_create_your_profile" />
+        tools:layout="@layout/fragment_create_your_profile" >
+        <action
+            android:id="@+id/action_createYourProfileFragment_to_jobsForYouFragment"
+            app:destination="@id/jobsForYouFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/jobsForYouFragment"
+        android:name="com.example.promigrate.ui.JobsForYouFragment"
+        android:label="fragment_jobs_for_you"
+        tools:layout="@layout/fragment_jobs_for_you" />
 </navigation>
