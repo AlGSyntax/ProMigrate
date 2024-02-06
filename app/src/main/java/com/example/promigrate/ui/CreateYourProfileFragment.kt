@@ -71,7 +71,8 @@ class CreateYourProfileFragment : Fragment() {
 
     private fun validateInput(name: String, age: String, work: String, isDataProtected: Boolean): Boolean {
         // Implementiere Validierungslogik
-        return name.isNotEmpty() && age.isNotEmpty() && work.isNotEmpty()
+        return name.isNotEmpty() && age.isNotEmpty() && work.isNotEmpty() && isDataProtected
     }
+
 }
 
