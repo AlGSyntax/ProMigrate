@@ -17,5 +17,6 @@ data class Profile(
     val profileImageUrl: String? = null, // URL des Profilbilds
     val name: String = "",
     val age: Int = 0, // Alter als Int, da es normalerweise als Zahl gespeichert wird
-    val work: String = ""
+    val work: String = "",
+    val languageLevel : String = ""
 )

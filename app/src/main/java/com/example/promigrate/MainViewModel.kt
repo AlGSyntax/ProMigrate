@@ -220,32 +220,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    fun saveProfileWithImage(uri: Uri, name: String, age: String, work: String, isDataProtected: Boolean) {
+    fun saveProfileWithImage(uri: Uri, name: String, age: String, work: String, isDataProtected: Boolean, languageLevel: Int) {
         viewModelScope.launch {
             try {
                 val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
                 val imageUrl = repository.uploadAndUpdateProfilePicture(uri, userId)
                 Log.d(TAG, "Profilbild erfolgreich aktualisiert: $imageUrl")
 
-                // Stelle sicher, dass 'age' korrekt als Int behandelt wird
-                val ageInt = age.toIntOrNull() ?: 0 // Konvertiere in Int, handle mögliche Formatfehler
+                val ageInt = age.toIntOrNull() ?: 0
 
                 val profileData = mapOf(
                     "name" to name,
-                    "age" to ageInt, // Stelle sicher, dass dies als Int gespeichert wird
+                    "age" to ageInt,
                     "work" to work,
-                    "profilePicture" to imageUrl, // Nutze die neue Bild-URL
-                    "dataProtection" to isDataProtected
+                    "profilePicture" to imageUrl,
+                    "dataProtection" to isDataProtected,
+                    "languageLevel" to languageLevel // Füge das Sprachniveau hinzu
                 )
 
                 repository.updateUserProfile(userId, profileData)
-                // LiveData oder einen anderen Mechanismus aktualisieren, um den Erfolg zu signalisieren
             } catch (e: Exception) {
                 Log.e(TAG, "Fehler beim Speichern des Profils", e)
-                // Behandle den Fehler, z.B. durch Anzeigen einer Fehlermeldung
             }
         }
     }
+
 
 
 

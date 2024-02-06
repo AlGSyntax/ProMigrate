@@ -10,23 +10,23 @@
         android:id="@+id/tvCreateProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/cypheader"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivProfilePicture"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginTop="32dp"
         android:src="@drawable/baseline_add_a_photo_24"
-        app:layout_constraintTop_toBottomOf="@id/tvCreateProfile"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCreateProfile" />
 
     <EditText
         android:id="@+id/etName"
@@ -73,6 +73,33 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/etWork"
         app:layout_constraintTop_toBottomOf="@id/etWork" />
+
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/languageLevelSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="1"
+        android:valueTo="6"
+        android:stepSize="1"
+        app:labelBehavior="withinBounds"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.801" />
+
+    <TextView
+        android:id="@+id/languageLevelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sprachniveau_1"
+        app:layout_constraintTop_toBottomOf="@id/languageLevelSlider"
+        app:layout_constraintStart_toStartOf="@id/languageLevelSlider"
+        app:layout_constraintEnd_toEndOf="@id/languageLevelSlider"
+        app:layout_constraintVertical_bias="0.1"
+        android:layout_marginTop="16dp" />
+
 
     <CheckBox
         android:id="@+id/cbDataProtection"

@@ -58,13 +58,29 @@ class CreateYourProfileFragment : Fragment() {
             val age = binding.etAge.text.toString()
             val work = binding.etWork.text.toString()
             val isDataProtected = binding.cbDataProtection.isChecked
+            val languageLevel = binding.languageLevelSlider.value.toInt() // Erfasse den Wert des Sliders
 
             if (validateInput(name, age, work, isDataProtected) && selectedImageUri != null) {
-                viewModel.saveProfileWithImage(selectedImageUri!!, name, age, work, isDataProtected)
+                viewModel.saveProfileWithImage(selectedImageUri!!, name, age, work, isDataProtected, languageLevel)
                 findNavController().navigate(R.id.action_createYourProfileFragment_to_jobsForYouFragment)
             } else {
                 // Zeige eine Fehlermeldung an
             }
+        }
+
+        binding.languageLevelSlider.addOnChangeListener { _, value, _ ->
+            // Aktualisiere die TextView mit dem ausgewählten Sprachniveau
+            // Angenommen, du hast eine TextView mit der ID tvLanguageLevel
+            val languageLevel = when (value.toInt()) {
+                1 -> "A1: Anfänger"
+                2 -> "A2: Grundlegende Kenntnisse"
+                3 -> "B1: Fortgeschrittene Sprachverwendung"
+                4 -> "B2: Selbstständige Sprachverwendung"
+                5 -> "C1: Fachkundige Sprachkenntnisse"
+                6 -> "C2: Annähernd muttersprachliche Kenntnisse"
+                else -> "Nicht definiert"
+            }
+            binding.languageLevelText.text = languageLevel
         }
     }
 
