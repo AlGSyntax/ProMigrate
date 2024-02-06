@@ -2,6 +2,7 @@ package com.example.promigrate.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.databinding.FragmentCreateYourProfileBinding
@@ -39,8 +42,17 @@ class CreateYourProfileFragment : Fragment() {
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 selectedImageUri = uri
-                // Zeige das ausgewählte Bild in der ImageView an
-                binding.ivProfilePicture.setImageURI(uri)
+                // Anzeigen des ausgewählten Bildes in der ImageView mit Glide und Anwendung des CircleCrop
+                context?.let { context ->
+                    Glide.with(context)
+                        .load(uri)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(binding.ivProfilePicture)
+                }
+                // Korrekt platzierte Log-Anweisung
+                Log.d(TAG, "Selected URI: $uri")
+            } else {
+                Log.d(TAG, "No media selected")
             }
         }
 
