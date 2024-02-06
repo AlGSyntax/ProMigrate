@@ -1,6 +1,7 @@
 package com.example.promigrate
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
@@ -216,6 +217,39 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         AppCompatDelegate.setApplicationLocales(localeListCompat)
         Log.d(TAG, "Sprache geändert zu: $languageCode")
     }
+
+
+
+    fun saveProfileWithImage(uri: Uri, name: String, age: String, work: String, isDataProtected: Boolean) {
+        viewModelScope.launch {
+            try {
+                val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                val imageUrl = repository.uploadAndUpdateProfilePicture(uri, userId)
+                Log.d(TAG, "Profilbild erfolgreich aktualisiert: $imageUrl")
+
+                // Stelle sicher, dass 'age' korrekt als Int behandelt wird
+                val ageInt = age.toIntOrNull() ?: 0 // Konvertiere in Int, handle mögliche Formatfehler
+
+                val profileData = mapOf(
+                    "name" to name,
+                    "age" to ageInt, // Stelle sicher, dass dies als Int gespeichert wird
+                    "work" to work,
+                    "profilePicture" to imageUrl, // Nutze die neue Bild-URL
+                    "dataProtection" to isDataProtected
+                )
+
+                repository.updateUserProfile(userId, profileData)
+                // LiveData oder einen anderen Mechanismus aktualisieren, um den Erfolg zu signalisieren
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern des Profils", e)
+                // Behandle den Fehler, z.B. durch Anzeigen einer Fehlermeldung
+            }
+        }
+    }
+
+
+
+
 
 
     /**

@@ -2,6 +2,7 @@ package com.example.promigrate.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
@@ -10,12 +11,16 @@ import com.example.promigrate.data.model.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 import java.util.Locale
 
 const val TAG = "Repository"
-class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
+class Repository (context: Context, val firebaseAuth: FirebaseAuth,
                   private val firestore: FirebaseFirestore
 ) {
+
+    private val storage = FirebaseStorage.getInstance()
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)//
@@ -31,12 +36,14 @@ class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
         }
     }
 
+
+
     fun setupUserEnvironment(firebaseUser: FirebaseUser) {
         val profileRef = FirebaseFirestore.getInstance().collection("user").document(firebaseUser.uid)
-        val notesRef = profileRef.collection("notes")
         // Hier könntest du weitere Setup-Aktionen durchführen oder die Referenzen bei Bedarf zurückgeben
-        Log.d("Repository", "Benutzerumgebungseinrichtung erfolgreich für ${firebaseUser.uid}")
+        Log.d(TAG, "Benutzerumgebungseinrichtung erfolgreich für ${firebaseUser.uid}")
     }
+
 
     fun createUserProfile(userId: String, profile: Profile) {
         val profileRef = firestore.collection("user").document(userId)
@@ -72,7 +79,7 @@ class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
     fun getUserProfile(userId: String): MutableLiveData<UserProfile?> {
         val userProfileLiveData = MutableLiveData<UserProfile?>()
 
-        firestore.collection("users").document(userId).get()
+        firestore.collection("user").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val userProfile = document.toObject(UserProfile::class.java)
@@ -87,6 +94,38 @@ class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
 
         return userProfileLiveData
     }
+
+
+    suspend fun uploadAndUpdateProfilePicture(uri: Uri, userId: String): String {
+        val imageRef = storage.reference.child("images/$userId/profilePicture")
+        try {
+            val uploadTask = imageRef.putFile(uri).await()
+            if (uploadTask.task.isSuccessful) {
+                val imageUrl = imageRef.downloadUrl.await().toString()
+                firestore.collection("user").document(userId).update("profilePicture", imageUrl).await()
+                return imageUrl // Gibt die URL des hochgeladenen und aktualisierten Bildes zurück
+            } else {
+                throw Exception("Upload fehlgeschlagen")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Fehler beim Hochladen und Aktualisieren des Profilbildes", e)
+            throw e
+        }
+    }
+
+    suspend fun updateUserProfile(userId: String, profileData: Map<String, Any>) {
+        try {
+            firestore.collection("user").document(userId).update(profileData).await()
+            Log.d(TAG, "Profil erfolgreich aktualisiert")
+        } catch (e: Exception) {
+            Log.e(TAG, "Fehler beim Aktualisieren des Profils", e)
+            throw e
+        }
+    }
+
+
+
+
 
     //TODO ALLE FIRESTORE METHODEN INS REPOSITORY!!!!
 
@@ -103,12 +142,5 @@ class Repository (context: Context, private val firebaseAuth: FirebaseAuth,
             Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
         }
     }
-
-
-
-
-
-
-
 
 }
