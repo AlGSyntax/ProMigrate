@@ -11,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.databinding.FragmentCreateYourProfileBinding
@@ -35,13 +37,22 @@ class CreateYourProfileFragment : Fragment() {
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
             if (uri != null) {
+                val imageView = binding.ivProfilePicture
+                context?.let {
+                    Glide.with(it)
+                        .load(uri)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageView)
+                }
+                // Korrekt platzierte Log-Anweisung
                 Log.d("PhotoPicker", "Selected URI: $uri")
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }
         }
 
-        binding.ivProfilePicture.setOnClickListener {
+
+    binding.ivProfilePicture.setOnClickListener {
             // Implementiere Logik zum Auswählen eines Profilbilds
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
