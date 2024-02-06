@@ -109,15 +109,15 @@ class CreateYourProfileFragment : Fragment() {
             // Aktualisiere die TextView mit dem ausgewählten Sprachniveau
             // Angenommen, du hast eine TextView mit der ID tvLanguageLevel
             val languageLevel = when (value.toInt()) {
-                1 -> "A1: Anfänger"
-                2 -> "A2: Grundlegende Kenntnisse"
-                3 -> "B1: Fortgeschrittene Sprachverwendung"
-                4 -> "B2: Selbstständige Sprachverwendung"
-                5 -> "C1: Fachkundige Sprachkenntnisse"
-                6 -> "C2: Annähernd muttersprachliche Kenntnisse"
-                else -> "Nicht definiert"
+                1 -> R.string.beginner
+                2 -> R.string.basic_knowledge
+                3 -> R.string.intermediate
+                4 -> R.string.independent
+                5 -> R.string.proficient
+                6 -> R.string.near_native
+                else -> R.string.undefined
             }
-            binding.languageLevelText.text = languageLevel
+            binding.languageLevelText.text = getString(languageLevel)
         }
 
     }

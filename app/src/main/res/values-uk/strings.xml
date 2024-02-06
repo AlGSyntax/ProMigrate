@@ -26,10 +26,18 @@
     <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Підтвердити</string>
     <string name="choose_your_language">Оберіть свою мову</string>
-    <string name="GoogleSignUp">GoogleSignup</string>
+    <string name="GoogleSignUp">Реєстрація через Google</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
     <string name="sprachniveau_1">Sprachniveau: 1</string>
+    <string name="beginner">A1: Початковий</string>
+    <string name="basic_knowledge">A2: Основні знання</string>
+    <string name="intermediate">B1: Середній рівень</string>
+    <string name="independent">B2: Самостійне використання</string>
+    <string name="proficient">C1: Високий рівень володіння</string>
+    <string name="near_native">C2: Майже як у носія мови</string>
+    <string name="undefined">Не визначено</string>
     <string name="desired_location_hint">desired location</string>
     <string name="hint_street">Street</string>
+    <string name="hint_birth_place">BirthPlace</string>
     <string name="hint_maiden_name">Maiden Name</string>
 </resources>
