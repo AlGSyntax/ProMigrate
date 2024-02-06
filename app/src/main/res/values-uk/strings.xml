@@ -29,4 +29,5 @@
     <string name="GoogleSignUp">GoogleSignup</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
     <string name="sprachniveau_1">Sprachniveau: 1</string>
+    <string name="desired_location_hint">desired location</string>
 </resources>

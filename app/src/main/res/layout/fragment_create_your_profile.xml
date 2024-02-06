@@ -63,25 +63,40 @@
         app:layout_constraintStart_toStartOf="@id/etAge"
         app:layout_constraintTop_toBottomOf="@id/etAge" />
 
+
+    <EditText
+        android:id="@+id/etDesiredLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="343dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginBottom="344dp"
+        android:hint="@string/desired_location_hint"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/btnAddContact"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="60dp"
         android:text="@string/addcontactinfo"
         app:layout_constraintEnd_toEndOf="@id/etWork"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/etWork"
         app:layout_constraintTop_toBottomOf="@id/etWork" />
 
-
     <com.google.android.material.slider.Slider
         android:id="@+id/languageLevelSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:stepSize="1"
         android:valueFrom="1"
         android:valueTo="6"
-        android:stepSize="1"
         app:labelBehavior="withinBounds"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,34 +108,39 @@
         android:id="@+id/languageLevelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/sprachniveau_1"
-        app:layout_constraintTop_toBottomOf="@id/languageLevelSlider"
-        app:layout_constraintStart_toStartOf="@id/languageLevelSlider"
         app:layout_constraintEnd_toEndOf="@id/languageLevelSlider"
-        app:layout_constraintVertical_bias="0.1"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="@id/languageLevelSlider"
+        app:layout_constraintTop_toBottomOf="@id/languageLevelSlider"
+        app:layout_constraintVertical_bias="0.1" />
 
 
     <CheckBox
         android:id="@+id/cbDataProtection"
-        android:layout_width="0dp"
+        android:layout_width="347dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="458dp"
+        android:layout_marginBottom="226dp"
         android:text="@string/datapolicy"
-        app:layout_constraintEnd_toEndOf="@id/btnAddContact"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/btnAddContact"
-        app:layout_constraintTop_toBottomOf="@id/btnAddContact" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnSave"
-        android:layout_width="0dp"
+        android:layout_width="347dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="172dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="667dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/saveandgo"
-        app:layout_constraintEnd_toEndOf="@id/cbDataProtection"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/cbDataProtection"
-        app:layout_constraintTop_toBottomOf="@id/cbDataProtection" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

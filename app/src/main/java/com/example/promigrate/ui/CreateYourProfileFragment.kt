@@ -59,9 +59,11 @@ class CreateYourProfileFragment : Fragment() {
             val work = binding.etWork.text.toString()
             val isDataProtected = binding.cbDataProtection.isChecked
             val languageLevel = binding.languageLevelSlider.value.toInt() // Erfasse den Wert des Sliders
+            val desiredLocation = binding.etDesiredLocation.text.toString()
+
 
             if (validateInput(name, age, work, isDataProtected) && selectedImageUri != null) {
-                viewModel.saveProfileWithImage(selectedImageUri!!, name, age, work, isDataProtected, languageLevel)
+                viewModel.saveProfileWithImage(selectedImageUri!!, name, age, work, isDataProtected, languageLevel,desiredLocation)
                 findNavController().navigate(R.id.action_createYourProfileFragment_to_jobsForYouFragment)
             } else {
                 // Zeige eine Fehlermeldung an
@@ -89,6 +91,5 @@ class CreateYourProfileFragment : Fragment() {
         // Implementiere Validierungslogik
         return name.isNotEmpty() && age.isNotEmpty() && work.isNotEmpty() && isDataProtected
     }
-
 }
 
