@@ -1,11 +1,13 @@
 package com.example.promigrate.ui
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -25,6 +27,11 @@ class CreateYourProfileFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
 
     private var selectedImageUri: Uri? = null
+    private var additionalStreet: String? = null
+    private var additionalBirthPlace: String? = null
+    private var additionalMaidenName: String? = null
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentCreateYourProfileBinding.inflate(inflater, container, false)
@@ -58,17 +65,45 @@ class CreateYourProfileFragment : Fragment() {
             val age = binding.etAge.text.toString()
             val work = binding.etWork.text.toString()
             val isDataProtected = binding.cbDataProtection.isChecked
-            val languageLevel = binding.languageLevelSlider.value.toInt() // Erfasse den Wert des Sliders
+            // Erfasse den Wert des Sprachniveaus und den gewünschten Ort
+            val languageLevel = binding.languageLevelSlider.value.toInt()
             val desiredLocation = binding.etDesiredLocation.text.toString()
 
-
+            // Prüfe, ob alle notwendigen Informationen vorhanden sind
             if (validateInput(name, age, work, isDataProtected) && selectedImageUri != null) {
-                viewModel.saveProfileWithImage(selectedImageUri!!, name, age, work, isDataProtected, languageLevel,desiredLocation)
+                viewModel.saveProfileWithImage(
+                    uri = selectedImageUri!!, name = name, age = age, work = work,
+                    isDataProtected = isDataProtected, languageLevel = languageLevel,
+                    desiredLocation = desiredLocation, street = additionalStreet.toString(),
+                    birthplace = additionalBirthPlace.toString(), maidenname = additionalMaidenName.toString()
+                )
+                // Navigiere zum nächsten Fragment
                 findNavController().navigate(R.id.action_createYourProfileFragment_to_jobsForYouFragment)
             } else {
                 // Zeige eine Fehlermeldung an
             }
         }
+
+        binding.btnAddContact.setOnClickListener {
+            val dialogView = LayoutInflater.from(it.context).inflate(R.layout.additional_contact_info, null)
+            val streetEditText = dialogView.findViewById<EditText>(R.id.etStreet)
+            val birthPlaceEditText = dialogView.findViewById<EditText>(R.id.etBirthPlace)
+            val maidenNameEditText = dialogView.findViewById<EditText>(R.id.etMaidenName)
+
+            AlertDialog.Builder(it.context)
+                .setView(dialogView)
+                .setPositiveButton("Speichern") { _, _ ->
+                    additionalStreet = streetEditText.text.toString()
+                    additionalBirthPlace = birthPlaceEditText.text.toString()
+                    additionalMaidenName = maidenNameEditText.text.toString()
+                }
+                .setNegativeButton("Abbrechen", null)
+                .show()
+        }
+
+
+
+//TODO: Material outline für Buttons
 
         binding.languageLevelSlider.addOnChangeListener { _, value, _ ->
             // Aktualisiere die TextView mit dem ausgewählten Sprachniveau
@@ -84,6 +119,7 @@ class CreateYourProfileFragment : Fragment() {
             }
             binding.languageLevelText.text = languageLevel
         }
+
     }
 
 
