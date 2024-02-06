@@ -34,22 +34,15 @@ class CreateYourProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupImagePicker()
-        setupSaveButton()
-    }
-
-    private fun setupImagePicker() {
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 selectedImageUri = uri
-                // Anzeigen des ausgewählten Bildes in der ImageView mit Glide und Anwendung des CircleCrop
                 context?.let { context ->
                     Glide.with(context)
                         .load(uri)
                         .apply(RequestOptions.circleCropTransform())
                         .into(binding.ivProfilePicture)
                 }
-                // Korrekt platzierte Log-Anweisung
                 Log.d(TAG, "Selected URI: $uri")
             } else {
                 Log.d(TAG, "No media selected")
@@ -59,9 +52,7 @@ class CreateYourProfileFragment : Fragment() {
         binding.ivProfilePicture.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-    }
 
-    private fun setupSaveButton() {
         binding.btnSave.setOnClickListener {
             val name = binding.etName.text.toString()
             val age = binding.etAge.text.toString()
@@ -76,6 +67,7 @@ class CreateYourProfileFragment : Fragment() {
             }
         }
     }
+
 
     private fun validateInput(name: String, age: String, work: String, isDataProtected: Boolean): Boolean {
         // Implementiere Validierungslogik
