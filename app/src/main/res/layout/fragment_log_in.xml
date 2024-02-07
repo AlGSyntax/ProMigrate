@@ -60,7 +60,7 @@
             android:textColor="@color/titles" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/loginBTN"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -68,12 +68,14 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:text="@string/login"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:textColor="@color/titles"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -47,19 +47,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_confirm_language"
         android:layout_width="129dp"
         android:layout_height="48dp"
         android:layout_marginTop="583dp"
         android:layout_marginBottom="84dp"
-        android:background="@drawable/spinner_background"
+        android:background="@drawable/confirm_btn_background"
         android:fontFamily="@font/quicksandbold"
         android:text="@string/confirm"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:cornerRadius="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
