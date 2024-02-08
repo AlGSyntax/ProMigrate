@@ -6,8 +6,10 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
+import com.example.promigrate.data.model.JobResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.UserProfile
+import com.example.promigrate.data.remote.ProMigrateAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,7 +19,7 @@ import java.util.Locale
 
 const val TAG = "Repository"
 class Repository (context: Context, val firebaseAuth: FirebaseAuth,
-                  private val firestore: FirebaseFirestore
+                  private val firestore: FirebaseFirestore,private val apiService: ProMigrateAPIService
 ) {
 
     private val storage = FirebaseStorage.getInstance()
@@ -28,10 +30,10 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     companion object {
         private var INSTANCE: Repository? = null
 
-        fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore):
+        fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore,apiService: ProMigrateAPIService):
                 Repository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Repository(context, firebaseAuth, firestore).also { INSTANCE = it }
+                INSTANCE ?: Repository(context, firebaseAuth, firestore,apiService).also { INSTANCE = it }
             }
         }
     }
@@ -123,6 +125,42 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
+
+    suspend fun getJobs(was: String?, wo: String?, berufsfeld: String?): Result<JobResponse> {
+        return try {
+            val response = apiService.getJobs(was, wo, berufsfeld)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(RuntimeException("response error: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getBerufsfelder(): Result<List<String>> {
+        return try {
+            Log.d(TAG, "Starte Abruf der Berufsfelder.")
+            val response = apiService.getBerufsfelder()
+            if (response.isSuccessful && response.body() != null) {
+                // Hier wird angenommen, dass du nur die Berufsfelder extrahieren möchtest.
+                val berufsfelderListe = response.body()!!.facetten.berufsfeld.counts.keys.toList()
+                Log.d(TAG, "Berufsfelder erfolgreich abgerufen: ${response.body()}")
+                Result.success(berufsfelderListe)
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${response.message()}")
+                Result.failure(Exception("Fehler beim Abrufen der Berufsfelder: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ausnahme beim Abrufen der Berufsfelder: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+
+
+//TODO
 
 
 

@@ -5,7 +5,7 @@ buildscript {
 
     }
     dependencies {
-        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.20-1.0.14")
+        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.22-1.0.17")
         classpath("com.google.gms:google-services:4.4.0")
         classpath ("com.google.firebase:firebase-crashlytics-gradle:2.9.9")
         classpath ("com.google.firebase:perf-plugin:1.4.2")

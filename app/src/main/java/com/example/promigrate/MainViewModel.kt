@@ -9,7 +9,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.promigrate.data.model.JobResponse
 import com.example.promigrate.data.model.Profile
+import com.example.promigrate.data.remote.ProMigrateAPI
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +29,7 @@ const val TAG = "MainViewModel"
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository = Repository.getInstance(
         application, FirebaseAuth.getInstance(),
-        FirebaseFirestore.getInstance()
+        FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService
     )
 
 
@@ -50,6 +52,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _user: MutableLiveData<FirebaseUser?> = MutableLiveData()
     val user: LiveData<FirebaseUser?>
         get() = _user
+
+    private val _jobs = MutableLiveData<Result<JobResponse>>()
+    val jobs: LiveData<Result<JobResponse>> = _jobs
+
+    private val _berufsfelder = MutableLiveData<List<String>>()
+    val berufsfelder: LiveData<List<String>> = _berufsfelder
+
 
 
 
@@ -252,6 +261,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    fun getJobs(was: String?, wo: String?, berufsfeld: String?) {
+        viewModelScope.launch {
+            try {
+                _jobs.value = repository.getJobs(was, wo, berufsfeld)
+            } catch (e: Exception) {
+                Log.e("JobFetch", "Fehler beim Abrufen der Jobs: ${e.message}")
+            }
+        }
+    }
+
+    fun fetchBerufsfelder() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getBerufsfelder()
+                if (response.isSuccess) {
+                    Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
+                    _berufsfelder.value = response.getOrNull()
+                } else {
+                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
+                    _berufsfelder.value = listOf()
+                    Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${response.exceptionOrNull()?.message}")
+                }
+            } catch (e: Exception) {
+                _berufsfelder.value = listOf()
+                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${e.message}")
+            }
+        }
+    }
 
 
 

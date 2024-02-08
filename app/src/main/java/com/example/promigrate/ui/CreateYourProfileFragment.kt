@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -63,7 +64,7 @@ class CreateYourProfileFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             val name = binding.etName.text.toString()
             val age = binding.etAge.text.toString()
-            val work = binding.etWork.text.toString()
+            val work = binding.autoCompleteTextView.text.toString()
             val isDataProtected = binding.cbDataProtection.isChecked
             // Erfasse den Wert des Sprachniveaus und den gewünschten Ort
             val languageLevel = binding.languageLevelSlider.value.toInt()
@@ -120,6 +121,18 @@ class CreateYourProfileFragment : Fragment() {
             binding.languageLevelText.text = getString(languageLevel)
         }
 
+        viewModel.berufsfelder.observe(viewLifecycleOwner) { berufsfelder ->
+            if (berufsfelder != null) {
+                Log.d(TAG, "Berufsfelder erfolgreich abgerufen und Adapter gesetzt.")
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, berufsfelder)
+                binding.autoCompleteTextView.setAdapter(adapter)
+            }else{
+                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder.")
+            }
+
+        }
+        viewModel.fetchBerufsfelder()
+
     }
 
 
@@ -127,5 +140,7 @@ class CreateYourProfileFragment : Fragment() {
         // Implementiere Validierungslogik
         return name.isNotEmpty() && age.isNotEmpty() && work.isNotEmpty() && isDataProtected
     }
+
+
 }
 
