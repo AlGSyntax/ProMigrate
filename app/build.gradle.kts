@@ -67,10 +67,12 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
+    implementation( "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    //Retrofit und Moshi
+    //Retrofit,Gson und Moshi
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
+
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
 
     // Coil
@@ -81,8 +83,10 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
 
-    //HttpLoggingInterceptor
+    //Okhttp3/HttpLoggingInterceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+
 
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.16.0")
