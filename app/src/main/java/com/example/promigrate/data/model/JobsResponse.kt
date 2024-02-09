@@ -6,7 +6,7 @@ data class JobResponse(
 )
 
 data class Job(
-    val beruf: String,
+    val beruf: String?,
     val titel: String,
     val refnr: String,
     val arbeitsort: Arbeitsort,
@@ -33,13 +33,16 @@ data class Koordinaten(
     val lon: Double
 )
 
-
+data class ArbeitsortList(
+    val counts:Map<String,Int>
+)
 
 data class Berufsfeld(
     val counts:Map<String,Int>
 )
 
 data class Facetten(
-    val berufsfeld: Berufsfeld
+    val berufsfeld: Berufsfeld,
+    val arbeitsort: ArbeitsortList
 )
 

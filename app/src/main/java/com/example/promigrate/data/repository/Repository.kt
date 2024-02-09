@@ -130,7 +130,9 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         return try {
             val response = apiService.getJobs(was, wo, berufsfeld)
             if (response.isSuccessful && response.body() != null) {
+                Log.d(TAG, "Jobs erfolgreich abgerufen: ${response.body()}")
                 Result.success(response.body()!!)
+
             } else {
                 Result.failure(RuntimeException("response error: ${response.code()} ${response.message()}"))
             }
@@ -154,6 +156,25 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             }
         } catch (e: Exception) {
             Log.e(TAG, "Ausnahme beim Abrufen der Berufsfelder: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getArbeitsorte(): Result<List<String>> {
+        return try {
+            Log.d(TAG, "Starte Abruf der Arbeitsorte.")
+            val response = apiService.getArbeitsorte()
+            if (response.isSuccessful && response.body() != null) {
+                // Hier wird angenommen, dass du nur die Arbeitsorte extrahieren möchtest.
+                val arbeitsorteListe = response.body()!!.facetten.arbeitsort.counts.keys.toList()
+                Log.d(TAG, "Arbeitsorte erfolgreich abgerufen: ${response.body()}")
+                Result.success(arbeitsorteListe)
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${response.message()}")
+                Result.failure(Exception("Fehler beim Abrufen der Arbeitsorte: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ausnahme beim Abrufen der Arbeitsorte: ${e.message}")
             Result.failure(e)
         }
     }

@@ -59,6 +59,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _berufsfelder = MutableLiveData<List<String>>()
     val berufsfelder: LiveData<List<String>> = _berufsfelder
 
+    private val _arbeitsorte = MutableLiveData<List<String>>()
+    val arbeitsorte: LiveData<List<String>> = _arbeitsorte
+
+
 
 
 
@@ -289,6 +293,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    fun fetchArbeitsorte() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getArbeitsorte()
+                if (response.isSuccess) {
+                    Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
+                    _arbeitsorte.value = response.getOrNull()
+                } else {
+                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
+                    _arbeitsorte.value = listOf()
+                    Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${response.exceptionOrNull()?.message}")
+                }
+            } catch (e: Exception) {
+                _arbeitsorte.value = listOf()
+                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${e.message}")
+            }
+        }
+    }
+
 
 
 

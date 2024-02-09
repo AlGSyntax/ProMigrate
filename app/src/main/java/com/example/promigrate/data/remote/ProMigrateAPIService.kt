@@ -26,6 +26,9 @@ interface ProMigrateAPIService {
 
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
     suspend fun getBerufsfelder(): Response<JobResponse>
+
+    @GET("jobboerse/jobsuche-service/pc/v4/jobs")
+    suspend fun getArbeitsorte(): Response<JobResponse>
 }
 
 object ProMigrateAPI {

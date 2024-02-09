@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.databinding.FragmentJobsForYouBinding
 import okhttp3.Call
@@ -20,6 +22,8 @@ import java.io.IOException
 
 class JobsForYouFragment : Fragment() {
 
+    private val viewModel: MainViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,7 +37,7 @@ class JobsForYouFragment : Fragment() {
 
         val binding = FragmentJobsForYouBinding.bind(view)
         binding.floatingActionButton.setOnClickListener {
-            fetchJobs("token", "Softwareentwickler", "Berlin", "Informatik")
+            viewModel.getJobs(berufsfeld = "Informatik", was = "Softwareentwickler", wo = "Berlin")
         }
 
     }

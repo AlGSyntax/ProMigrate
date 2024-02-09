@@ -33,8 +33,10 @@ class CreateYourProfileFragment : Fragment() {
     private var additionalMaidenName: String? = null
 
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:
+        Bundle?
+    ): View {
         binding = FragmentCreateYourProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,20 +44,21 @@ class CreateYourProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                selectedImageUri = uri
-                context?.let { context ->
-                    Glide.with(context)
-                        .load(uri)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(binding.ivProfilePicture)
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    selectedImageUri = uri
+                    context?.let { context ->
+                        Glide.with(context)
+                            .load(uri)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(binding.ivProfilePicture)
+                    }
+                    Log.d(TAG, "Selected URI: $uri")
+                } else {
+                    Log.d(TAG, "No media selected")
                 }
-                Log.d(TAG, "Selected URI: $uri")
-            } else {
-                Log.d(TAG, "No media selected")
             }
-        }
 
         binding.ivProfilePicture.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -68,15 +71,26 @@ class CreateYourProfileFragment : Fragment() {
             val isDataProtected = binding.cbDataProtection.isChecked
             // Erfasse den Wert des Sprachniveaus und den gewünschten Ort
             val languageLevel = binding.languageLevelSlider.value.toInt()
-            val desiredLocation = binding.etDesiredLocation.text.toString()
+            val desiredLocation = binding.autoCompleteTextView2.text.toString()
 
             // Prüfe, ob alle notwendigen Informationen vorhanden sind
-            if (validateInput(name, age, fieldOfWork, isDataProtected) && selectedImageUri != null) {
+            if (validateInput(
+                    name,
+                    age,
+                    fieldOfWork,
+                    isDataProtected
+                ) && selectedImageUri != null
+            ) {
                 viewModel.saveProfileWithImage(
-                    uri = selectedImageUri!!, name = name, age = age, fieldOfWork = fieldOfWork,
-                    isDataProtected = isDataProtected, languageLevel = languageLevel,
-                    desiredLocation = desiredLocation, street = additionalStreet.toString(),
-                    birthplace = additionalBirthPlace.toString(), maidenname = additionalMaidenName.toString()
+                    uri = selectedImageUri!!,
+                    name = name, age = age,
+                    fieldOfWork = fieldOfWork,
+                    isDataProtected = isDataProtected,
+                    languageLevel = languageLevel,
+                    desiredLocation = desiredLocation,
+                    street = additionalStreet.toString(),
+                    birthplace = additionalBirthPlace.toString(),
+                    maidenname = additionalMaidenName.toString()
                 )
                 // Navigiere zum nächsten Fragment
                 findNavController().navigate(R.id.action_createYourProfileFragment_to_jobsForYouFragment)
@@ -86,7 +100,8 @@ class CreateYourProfileFragment : Fragment() {
         }
 
         binding.btnAddContact.setOnClickListener {
-            val dialogView = LayoutInflater.from(it.context).inflate(R.layout.additional_contact_info, null)
+            val dialogView =
+                LayoutInflater.from(it.context).inflate(R.layout.additional_contact_info, null)
             val streetEditText = dialogView.findViewById<EditText>(R.id.etStreet)
             val birthPlaceEditText = dialogView.findViewById<EditText>(R.id.etBirthPlace)
             val maidenNameEditText = dialogView.findViewById<EditText>(R.id.etMaidenName)
@@ -101,7 +116,6 @@ class CreateYourProfileFragment : Fragment() {
                 .setNegativeButton("Abbrechen", null)
                 .show()
         }
-
 
 
 //TODO: Material outline für Buttons
@@ -124,19 +138,42 @@ class CreateYourProfileFragment : Fragment() {
         viewModel.berufsfelder.observe(viewLifecycleOwner) { berufsfelder ->
             if (berufsfelder != null) {
                 Log.d(TAG, "Berufsfelder erfolgreich abgerufen und Adapter gesetzt.")
-                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, berufsfelder)
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    berufsfelder
+                )
                 binding.autoCompleteTextView.setAdapter(adapter)
-            }else{
+            } else {
                 Log.e(TAG, "Fehler beim Abrufen der Berufsfelder.")
             }
 
         }
         viewModel.fetchBerufsfelder()
 
+        viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
+            if (arbeitsorte != null) {
+                Log.d(TAG, "Arbeitsorte erfolgreich abgerufen und Adapter gesetzt.")
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    arbeitsorte
+                )
+                binding.autoCompleteTextView2.setAdapter(adapter)
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte.")
+            }
+        }
+        viewModel.fetchArbeitsorte()
     }
 
 
-    private fun validateInput(name: String, age: String, work: String, isDataProtected: Boolean): Boolean {
+    private fun validateInput(
+        name: String,
+        age: String,
+        work: String,
+        isDataProtected: Boolean
+    ): Boolean {
         // Implementiere Validierungslogik
         return name.isNotEmpty() && age.isNotEmpty() && work.isNotEmpty() && isDataProtected
     }
