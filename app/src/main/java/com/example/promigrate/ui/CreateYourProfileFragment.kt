@@ -64,16 +64,16 @@ class CreateYourProfileFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             val name = binding.etName.text.toString()
             val age = binding.etAge.text.toString()
-            val work = binding.autoCompleteTextView.text.toString()
+            val fieldOfWork = binding.autoCompleteTextView.text.toString()
             val isDataProtected = binding.cbDataProtection.isChecked
             // Erfasse den Wert des Sprachniveaus und den gewünschten Ort
             val languageLevel = binding.languageLevelSlider.value.toInt()
             val desiredLocation = binding.etDesiredLocation.text.toString()
 
             // Prüfe, ob alle notwendigen Informationen vorhanden sind
-            if (validateInput(name, age, work, isDataProtected) && selectedImageUri != null) {
+            if (validateInput(name, age, fieldOfWork, isDataProtected) && selectedImageUri != null) {
                 viewModel.saveProfileWithImage(
-                    uri = selectedImageUri!!, name = name, age = age, work = work,
+                    uri = selectedImageUri!!, name = name, age = age, fieldOfWork = fieldOfWork,
                     isDataProtected = isDataProtected, languageLevel = languageLevel,
                     desiredLocation = desiredLocation, street = additionalStreet.toString(),
                     birthplace = additionalBirthPlace.toString(), maidenname = additionalMaidenName.toString()

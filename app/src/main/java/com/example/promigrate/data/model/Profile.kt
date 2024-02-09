@@ -8,7 +8,7 @@ package com.example.promigrate.data.model
  * @property profileImageUrl Die URL des Profilbilds des Benutzers.
  * @property name Der Name des Benutzers.
  * @property age Das Alter des Benutzers.
- * @property work Die aktuelle berufliche Tätigkeit des Benutzers.
+ * @property fieldOfWork Das aktuelle Berufsfeld des Benutzers.
  */
 data class Profile(
     val isPremium: Boolean = false,
@@ -17,7 +17,7 @@ data class Profile(
     val profileImageUrl: String? = null, // URL des Profilbilds
     val name: String = "",
     val age: Int = 0, // Alter als Int, da es normalerweise als Zahl gespeichert wird
-    val work: String = "",
+    val fieldOfWork: String = "",
     val languageLevel : String = "",
     val desiredLocation: String = "",
     val street: String = "",

@@ -229,7 +229,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    fun saveProfileWithImage(uri: Uri, name: String, age: String, work: String,
+    fun saveProfileWithImage(uri: Uri, name: String, age: String, fieldOfWork: String,
                              isDataProtected: Boolean, languageLevel: Int,
                              desiredLocation:String,street:String,birthplace:String,maidenname:String) {
         viewModelScope.launch {
@@ -243,7 +243,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val profileData = mapOf(
                     "name" to name,
                     "age" to ageInt,
-                    "work" to work,
+                    "fieldOfWork" to fieldOfWork,
                     "profilePicture" to imageUrl,
                     "dataProtection" to isDataProtected,
                     "languageLevel" to languageLevel,

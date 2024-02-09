@@ -20,11 +20,11 @@ data class Job(
 )
 
 data class Arbeitsort(
-    val plz: String,
-    val ort: String,
+    val plz: String?,
+    val ort: String?,
     val strasse: String?,
     val region: String?,
-    val land: String,
+    val land: String?,
     val koordinaten: Koordinaten
 )
 
