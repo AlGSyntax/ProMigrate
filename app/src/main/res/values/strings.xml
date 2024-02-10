@@ -9,6 +9,7 @@
     <string name="languageselectionmessage">We help you to migrate to Germany!</string>
     <string name="registrationinvitation">Don\'t have an account? Click here to Sign Up!</string>
     <string name="login">LogIn</string>
+    <string name="signup">SignUp</string>
     <string name="register">Register</string>
     <string name="cypheader">Create your Profile</string>
     <string name= "name">Username</string>
@@ -45,4 +46,5 @@
     <string name="hint_first_name">"First Name"</string>
     <string name="hint_last_name">"Last Name "</string>
     <string name="hint_phone_number">Phone Number</string>
+    <string name="additional_contact_info">Additional Contact Info</string>
 </resources>

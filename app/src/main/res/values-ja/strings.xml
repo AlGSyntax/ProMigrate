@@ -10,6 +10,7 @@
         ここをクリックしてサインアップしてください！</string>
     <string name="login">ログイン</string>
     <string name="register">登録する</string>
+    <string name="signup">サインアップ</string>
     <string name="cypheader">プロフィールを作成</string>
     <string name="name">ユーザー名</string>
     <string name="age">年齢</string>
@@ -44,5 +45,6 @@
     <string name="hint_first_name">名</string>
     <string name="hint_last_name">姓</string>
     <string name="hint_phone_number">電話番号</string>
+    <string name="additional_contact_info">追加の連絡先情報</string>
 
 </resources>

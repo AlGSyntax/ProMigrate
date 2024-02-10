@@ -10,6 +10,7 @@
     <string name="registrationinvitation">¿No tienes una cuenta? ¡Haz clic aquí para registrarte!</string>
     <string name="login">Iniciar sesión</string>
     <string name="register">Registrar</string>
+    <string name="signup">Registrarse</string>
     <string name="cypheader">Crea tu perfil</string>
     <string name="name">Nombre de usuario</string>
     <string name="age">Edad</string>
@@ -45,5 +46,6 @@
     <string name="hint_first_name">Nombre</string>
     <string name="hint_last_name">Apellido</string>
     <string name="hint_phone_number">Número de teléfono</string>
+    <string name="additional_contact_info">Información de contacto adicional</string>
 
 </resources>

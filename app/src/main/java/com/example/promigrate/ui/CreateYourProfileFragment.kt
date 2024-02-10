@@ -125,8 +125,9 @@ class CreateYourProfileFragment : Fragment() {
             val lastNameEditText = dialogView.findViewById<EditText>(R.id.etLastName)
             val phoneNumEditText = dialogView.findViewById<EditText>(R.id.etPhoneNumber)
 
-            AlertDialog.Builder(it.context)
+            AlertDialog.Builder(it.context,R.style.CustomAlertDialog)
                 .setView(dialogView)
+                .setTitle(R.string.additional_contact_info)
                 .setPositiveButton("Speichern") { _, _ ->
                     additionalStreet = streetEditText.text.toString()
                     additionalBirthPlace = birthPlaceEditText.text.toString()

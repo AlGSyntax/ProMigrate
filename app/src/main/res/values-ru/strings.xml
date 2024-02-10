@@ -11,6 +11,7 @@
     </string>
     <string name="login">Войти</string>
     <string name="register">Зарегистрироваться</string>
+    <string name="signup">Зарегистрироваться</string>
     <string name="cypheader">Создайте свой профиль</string>
     <string name="name">Имя пользователя</string>
     <string name="age">Возраст</string>
@@ -46,6 +47,7 @@
     <string name="hint_first_name">Имя</string>
     <string name="hint_last_name">Фамилия</string>
     <string name="hint_phone_number">Номер телефона</string>
+    <string name="additional_contact_info">Дополнительная контактная информация</string>
 
 
 </resources>

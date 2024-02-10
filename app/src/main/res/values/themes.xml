@@ -21,6 +21,12 @@
         <item name="android:fontWeight">900</item>
     </style>
 
+    <style name="CustomAlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/background</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <!-- Setze hier weitere Anpassungen wie Textfarbe usw. -->
+    </style>
 
 
 

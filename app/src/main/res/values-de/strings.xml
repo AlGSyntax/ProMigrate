@@ -11,6 +11,7 @@
     </string>
     <string name="login">Einloggen</string>
     <string name="register">Registrieren</string>
+    <string name="signup">Anmelden</string>
     <string name="cypheader">Erstelle dein Profil</string>
     <string name="name">Benutzername</string>
     <string name="age">Alter</string>
@@ -46,5 +47,9 @@
     <string name="hint_first_name">Vorname</string>
     <string name="hint_last_name">Nachname</string>
     <string name="hint_phone_number">Telefonnummer</string>
+    <string name="additional_contact_info">Zusätzliche Kontaktinformationen</string>
+
+
+
 
 </resources>
