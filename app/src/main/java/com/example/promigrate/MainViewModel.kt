@@ -298,11 +298,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     // Im ViewModel
     fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
+        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+
         viewModelScope.launch {
             val translatedBerufsfelder = mutableListOf<String>()
             berufsfelder.forEach { berufsfeld ->
                 try {
-                    val result = repository.translateText(berufsfeld, "EN") // DE für Deutsch
+                    // Verwende currentLanguageCode als Ziel für die Übersetzung
+                    val result = repository.translateText(berufsfeld, currentLanguageCode)
                     result?.text?.let {
                         translatedBerufsfelder.add(it)
                         Log.d("translateBerufsfelder", "Übersetzt: $berufsfeld zu $it")
@@ -314,6 +318,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             onComplete(translatedBerufsfelder)
         }
     }
+
 
 
 
