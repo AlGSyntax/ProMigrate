@@ -11,7 +11,7 @@
     <string name="login">Iniciar sesión</string>
     <string name="register">Registrar</string>
     <string name="cypheader">Crea tu perfil</string>
-    <string name="name">Nombre</string>
+    <string name="name">Nombre de usuario</string>
     <string name="age">Edad</string>
     <string name="currentoccupation">Su ocupación actual</string>
     <string name="addcontactinfo">Añadir información de contacto</string>
@@ -37,12 +37,13 @@
     <string name="proficient">C1: Habilidades competentes</string>
     <string name="near_native">C2: Nivel casi nativo</string>
     <string name="undefined">No definido</string>
-    <string name="desired_location_hint">desired location</string>
-    <string name="hint_street">Street</string>
-    <string name="hint_birth_place">BirthPlace</string>
-    <string name="hint_maiden_name">Maiden Name</string>
+    <string name="desired_location_hint">lugar deseado</string>
+    <string name="hint_street">Línea de dirección completa</string>
+    <string name="hint_birth_place">Lugar de nacimiento</string>
+    <string name="hint_maiden_name">Apellido de soltera</string>
     <string name="selectoppfield">Seleccione su campo profesional</string>
-    <string name="hint_first_name">"First Name "</string>
-    <string name="hint_last_name">"Last Name "</string>
+    <string name="hint_first_name">Nombre</string>
+    <string name="hint_last_name">Apellido</string>
+    <string name="hint_phone_number">Número de teléfono</string>
 
 </resources>

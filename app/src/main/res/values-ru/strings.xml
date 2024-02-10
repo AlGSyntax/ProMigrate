@@ -12,7 +12,7 @@
     <string name="login">Войти</string>
     <string name="register">Зарегистрироваться</string>
     <string name="cypheader">Создайте свой профиль</string>
-    <string name="name">Имя</string>
+    <string name="name">Имя пользователя</string>
     <string name="age">Возраст</string>
     <string name="currentoccupation">Ваша текущая профессия</string>
     <string name="addcontactinfo">Добавить контактную информацию</string>
@@ -38,13 +38,14 @@
     <string name="proficient">C1: Продвинутые навыки</string>
     <string name="near_native">C2: Владение на уровне носителя языка</string>
     <string name="undefined">Не определено</string>
-    <string name="desired_location_hint">desired location</string>
-    <string name="hint_street">Street</string>
-    <string name="hint_birth_place">BirthPlace</string>
-    <string name="hint_maiden_name">Maiden Name</string>
+    <string name="desired_location_hint">желаемое место</string>
+    <string name="hint_street">Полная адресная строка</string>
+    <string name="hint_birth_place">Место рождения</string>
+    <string name="hint_maiden_name">Девичья фамилия</string>
     <string name="selectoppfield">Выберите область профессиональной деятельности</string>
-    <string name="hint_first_name">"First Name "</string>
-    <string name="hint_last_name">"Last Name "</string>
+    <string name="hint_first_name">Имя</string>
+    <string name="hint_last_name">Фамилия</string>
+    <string name="hint_phone_number">Номер телефона</string>
 
 
 </resources>

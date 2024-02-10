@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -77,23 +78,24 @@ class CreateYourProfileFragment : Fragment() {
             val desiredLocation = binding.autoCompleteTextView2.text.toString()
 
             // Prüfe, ob alle notwendigen Informationen vorhanden sind
-            if (validateInput(
-                    name = name,
-                    age = age,
-                    isDataProtected = isDataProtected,
-                    selectedImageUri = selectedImageUri,
-                    additionalStreet = additionalStreet,
-                    additionalBirthPlace = additionalBirthPlace,
-                    additionalMaidenName = additionalMaidenName,
-                    additionalFirstName = additionalFirstName,
-                    additionalLastName = additionalLastName,
-                    additionalPhoneNum = additionalPhoneNum
+            val validationResponse = validateInput(
+                name = name,
+                age = age,
+                isDataProtected = isDataProtected,
+                selectedImageUri = selectedImageUri,
+                additionalStreet = additionalStreet,
+                additionalBirthPlace = additionalBirthPlace,
+                additionalMaidenName = additionalMaidenName,
+                additionalFirstName = additionalFirstName,
+                additionalLastName = additionalLastName,
+                additionalPhoneNum = additionalPhoneNum
+            )
 
-                ) && selectedImageUri != null
-            ) {
+            if (validationResponse.first) {
                 viewModel.saveProfileWithImage(
                     uri = selectedImageUri!!,
-                    name = name, age = age,
+                    name = name,
+                    age = age,
                     fieldOfWork = fieldOfWork,
                     isDataProtected = isDataProtected,
                     languageLevel = languageLevel,
@@ -108,7 +110,8 @@ class CreateYourProfileFragment : Fragment() {
                 // Navigiere zum nächsten Fragment
                 findNavController().navigate(R.id.action_createYourProfileFragment_to_jobsForYouFragment)
             } else {
-                // Zeige eine Fehlermeldung an
+                // Zeige eine Fehlermeldung an, die aus der Validierung zurückgegeben wurde
+                Toast.makeText(context, validationResponse.second, Toast.LENGTH_LONG).show()
             }
         }
 
@@ -201,24 +204,55 @@ class CreateYourProfileFragment : Fragment() {
         additionalFirstName: String?,
         additionalLastName: String?,
         additionalPhoneNum: String?
-    ): Boolean {
-        // Prüfe, ob die grundlegenden Informationen ausgefüllt sind
-        val basicInfoValid = name.isNotEmpty() && age.isNotEmpty() && isDataProtected
+    ): Pair<Boolean, String> {
+        if (name.isEmpty()) {
+            return Pair(false, "Name darf nicht leer sein.")
+        }
 
-        // Prüfe, ob ein Bild ausgewählt wurde
-        val imageSelected = selectedImageUri != null
+        if (age.isEmpty()) {
+            return Pair(false, "Alter darf nicht leer sein.")
+        } else {
+            age.toIntOrNull()?.let {
+                if (it < 0) return Pair(false, "Alter muss eine positive Zahl sein.")
+            } ?: return Pair(false, "Alter muss eine gültige Zahl sein.")
+        }
 
-        // Prüfe, ob zusätzliche Kontaktinformationen ausgefüllt sind
-        val additionalInfoValid = additionalStreet?.isNotEmpty() == true &&
-                additionalBirthPlace?.isNotEmpty() == true &&
-                additionalMaidenName?.isNotEmpty() == true &&
-                additionalFirstName?.isNotEmpty() == true &&
-                additionalLastName?.isNotEmpty() == true &&
-                additionalPhoneNum?.isNotEmpty() == true
+        if (!isDataProtected) {
+            return Pair(false, "Datenschutz muss akzeptiert werden.")
+        }
 
-        // Gib true zurück, wenn alle Validierungen wahr sind
-        return basicInfoValid && imageSelected && additionalInfoValid
+        if (selectedImageUri == null) {
+            return Pair(false, "Ein Profilbild muss ausgewählt werden.")
+        }
+
+        if (additionalStreet.isNullOrEmpty()) {
+            return Pair(false, "Zusätzliche Straße darf nicht leer sein.")
+        }
+
+        if (additionalBirthPlace.isNullOrEmpty()) {
+            return Pair(false, "Geburtsort darf nicht leer sein.")
+        }
+
+        if (additionalMaidenName.isNullOrEmpty()) {
+            return Pair(false, "Geburtsname darf nicht leer sein.")
+        }
+
+        if (additionalFirstName.isNullOrEmpty()) {
+            return Pair(false, "Vorname darf nicht leer sein.")
+        }
+
+        if (additionalLastName.isNullOrEmpty()) {
+            return Pair(false, "Nachname darf nicht leer sein.")
+        }
+
+        if (additionalPhoneNum.isNullOrEmpty()) {
+            return Pair(false, "Telefonnummer darf nicht leer sein.")
+        }
+
+        // Wenn alle Prüfungen bestanden sind
+        return Pair(true, "Alle Eingaben sind gültig.")
     }
+
 
 
 

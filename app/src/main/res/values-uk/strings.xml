@@ -11,7 +11,7 @@
     <string name="login">Увійти</string>
     <string name="register">Зареєструватися</string>
     <string name="cypheader">Створіть свій профіль</string>
-    <string name="name">Ім\'я</string>
+    <string name="name">Ім\'я користувача</string>
     <string name="age">Вік</string>
     <string name="currentoccupation">Ваша поточна професія</string>
     <string name="addcontactinfo">Додати контактну інформацію</string>
@@ -36,11 +36,12 @@
     <string name="proficient">C1: Високий рівень володіння</string>
     <string name="near_native">C2: Майже як у носія мови</string>
     <string name="undefined">Не визначено</string>
-    <string name="desired_location_hint">desired location</string>
-    <string name="hint_street">Street</string>
-    <string name="hint_birth_place">BirthPlace</string>
-    <string name="hint_maiden_name">Maiden Name</string>
+    <string name="desired_location_hint">бажане місце</string>
+    <string name="hint_street">Повний рядок адреси</string>
+    <string name="hint_birth_place">Місце народження</string>
+    <string name="hint_maiden_name">Дівоче прізвище</string>
     <string name="selectoppfield">Виберіть свою професійну сферу</string>
-    <string name="hint_first_name">"First Name "</string>
-    <string name="hint_last_name">"Last Name "</string>
+    <string name="hint_first_name">Ім\'я</string>
+    <string name="hint_last_name">Прізвище</string>
+    <string name="hint_phone_number">Номер телефону</string>
 </resources>

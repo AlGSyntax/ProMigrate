@@ -11,7 +11,7 @@
     <string name="login">ログイン</string>
     <string name="register">登録する</string>
     <string name="cypheader">プロフィールを作成</string>
-    <string name="name">名前</string>
+    <string name="name">ユーザー名</string>
     <string name="age">年齢</string>
     <string name="currentoccupation">現在の職業</string>
     <string name="addcontactinfo">連絡先情報を追加</string>
@@ -36,12 +36,13 @@
     <string name="proficient">C1: 熟練</string>
     <string name="near_native">C2: 母国語に近い</string>
     <string name="undefined">未定義</string>
-    <string name="desired_location_hint">desired location</string>
-    <string name="hint_street">Street</string>
-    <string name="hint_birth_place">BirthPlace</string>
-    <string name="hint_maiden_name">Maiden Name</string>
+    <string name="desired_location_hint">希望の場所</string>
+    <string name="hint_street">住所全行</string>
+    <string name="hint_birth_place">出生地</string>
+    <string name="hint_maiden_name">旧姓</string>
     <string name="selectoppfield">職業分野を選択する</string>
-    <string name="hint_first_name">"First Name "</string>
-    <string name="hint_last_name">"Last Name "</string>
+    <string name="hint_first_name">名</string>
+    <string name="hint_last_name">姓</string>
+    <string name="hint_phone_number">電話番号</string>
 
 </resources>

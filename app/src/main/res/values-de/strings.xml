@@ -12,7 +12,7 @@
     <string name="login">Einloggen</string>
     <string name="register">Registrieren</string>
     <string name="cypheader">Erstelle dein Profil</string>
-    <string name="name">Name</string>
+    <string name="name">Benutzername</string>
     <string name="age">Alter</string>
     <string name="currentoccupation">Ihre derzeitige Beschäftigung</string>
     <string name="addcontactinfo">Kontaktinformationen hinzufügen</string>
@@ -31,7 +31,7 @@
     <string name="GoogleSignUp">GoogleSignUp</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
     <string name="language_level_1">Sprachniveau: 1</string>
-    <string name="desired_location_hint">desired location</string>
+    <string name="desired_location_hint">gewünschter Standort</string>
     <string name="beginner">A1: Anfänger</string>
     <string name="basic_knowledge">A2: Grundlegende Kenntnisse</string>
     <string name="intermediate">B1: Fortgeschrittene Sprachverwendung</string>
@@ -39,11 +39,12 @@
     <string name="proficient">C1: Fachkundige Sprachkenntnisse</string>
     <string name="near_native">C2: Annähernd muttersprachliche Kenntnisse</string>
     <string name="undefined">Nicht definiert</string>
-    <string name="hint_street">Street</string>
-    <string name="hint_birth_place">BirthPlace</string>
-    <string name="hint_maiden_name">Maiden Name</string>
+    <string name="hint_street">Vollständige Adresszeile</string>
+    <string name="hint_birth_place">Geburtsort</string>
+    <string name="hint_maiden_name">Geburtsname</string>
     <string name="selectoppfield">Berufsfeld auswählen</string>
-    <string name="hint_first_name">"First Name "</string>
-    <string name="hint_last_name">"Last Name "</string>
+    <string name="hint_first_name">Vorname</string>
+    <string name="hint_last_name">Nachname</string>
+    <string name="hint_phone_number">Telefonnummer</string>
 
 </resources>

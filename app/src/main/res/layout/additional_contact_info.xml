@@ -3,80 +3,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/etStreet"
-        android:layout_width="0dp"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="245dp"
+        android:layout_marginBottom="439dp"
         android:hint="@string/hint_street"
         android:inputType="text"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/etBirthPlace"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/etBirthPlace"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etBirthPlace"
         android:layout_width="379dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="293dp"
+        android:layout_marginBottom="391dp"
         android:hint="@string/hint_birth_place"
         android:inputType="text"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/etMaidenName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etStreet" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+
+    <!-- Neues Feld: Vorname -->
+
+    <!-- Neues Feld: Nachname -->
+
+    <!-- Neues Feld: Telefonnummer -->
     <EditText
         android:id="@+id/etMaidenName"
-        android:layout_width="0dp"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="341dp"
+        android:layout_marginBottom="343dp"
         android:hint="@string/hint_maiden_name"
         android:inputType="text"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/etBirthPlace"
-        app:layout_constraintTop_toBottomOf="@+id/etBirthPlace" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    <!-- Neues Feld: Vorname -->
     <EditText
         android:id="@+id/etFirstName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="376dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="101dp"
+        android:layout_marginBottom="583dp"
         android:hint="@string/hint_first_name"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Neues Feld: Nachname -->
     <EditText
         android:id="@+id/etLastName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="377dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="149dp"
+        android:layout_marginBottom="536dp"
         android:hint="@string/hint_last_name"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/etFirstName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Neues Feld: Telefonnummer -->
     <EditText
         android:id="@+id/etPhoneNumber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="378dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="196dp"
+        android:layout_marginBottom="489dp"
         android:hint="@string/hint_phone_number"
         android:inputType="phone"
         android:minHeight="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/etLastName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
