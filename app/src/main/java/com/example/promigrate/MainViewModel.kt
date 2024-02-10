@@ -305,6 +305,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
         val currentLanguageCode = _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
 
+        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        if (currentLanguageCode == "de") {
+            onComplete(berufsfelder) // Gebe die ursprünglichen Berufsfelder zurück, ohne Übersetzung
+            return // Beende die Methode vorzeitig
+        }
+
         viewModelScope.launch {
             val translatedBerufsfelder = mutableListOf<String>()
             berufsfelder.forEach { berufsfeld ->
@@ -322,6 +328,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             onComplete(translatedBerufsfelder)
         }
     }
+
 
 
 
