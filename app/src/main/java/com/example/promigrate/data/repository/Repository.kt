@@ -86,7 +86,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     fun getUserProfile(userId: String): MutableLiveData<Profile?> {
         val userProfileLiveData = MutableLiveData<Profile?>()
 
-        firestore.collection("users").document(userId).get()
+        firestore.collection("user").document(userId).get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
                     // Versuche, das Dokument in ein Profile-Objekt zu konvertieren
