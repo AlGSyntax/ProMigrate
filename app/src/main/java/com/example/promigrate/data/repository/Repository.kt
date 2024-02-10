@@ -8,7 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
 import com.example.promigrate.data.model.JobResponse
 import com.example.promigrate.data.model.Profile
+import com.example.promigrate.data.model.TranslationRequest
+import com.example.promigrate.data.model.TranslationResult
 import com.example.promigrate.data.model.UserProfile
+import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,7 +22,8 @@ import java.util.Locale
 
 const val TAG = "Repository"
 class Repository (context: Context, val firebaseAuth: FirebaseAuth,
-                  private val firestore: FirebaseFirestore,private val apiService: ProMigrateAPIService
+                  private val firestore: FirebaseFirestore,private val apiService: ProMigrateAPIService,
+    private val deepLApiService: DeepLApiService
 ) {
 
     private val storage = FirebaseStorage.getInstance()
@@ -30,10 +34,11 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     companion object {
         private var INSTANCE: Repository? = null
 
-        fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore,apiService: ProMigrateAPIService):
+        fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore,
+                        apiService: ProMigrateAPIService,deepLApiService: DeepLApiService):
                 Repository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Repository(context, firebaseAuth, firestore,apiService).also { INSTANCE = it }
+                INSTANCE ?: Repository(context, firebaseAuth, firestore,apiService,deepLApiService).also { INSTANCE = it }
             }
         }
     }
@@ -140,6 +145,19 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
+
+    suspend fun translateText(text: String, targetLanguage: String): TranslationResult? {
+        Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
+        return try {
+            val response = deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
+            Log.d("translateText", "Übersetzung erfolgreich, Antwort = $response")
+            response.translations.first() // Annahme, dass nur ein Text übersetzt wird
+        } catch (e: Exception) {
+            Log.e("translateText", "Fehler bei der Übersetzung", e)
+            null
+        }
+    }
+
 
     suspend fun getBerufsfelder(): Result<List<String>> {
         return try {

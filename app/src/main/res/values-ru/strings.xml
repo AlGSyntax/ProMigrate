@@ -30,7 +30,7 @@
     <string name="choose_your_language">Выберите ваш язык</string>
     <string name="GoogleSignUp">Регистрация через Google</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
-    <string name="sprachniveau_1">Sprachniveau: 1</string>
+    <string name="language_level_1">Уровень языка: 1</string>
     <string name="beginner">A1: Начинающий</string>
     <string name="basic_knowledge">A2: Базовые знания</string>
     <string name="intermediate">B1: Средний уровень</string>
@@ -42,6 +42,7 @@
     <string name="hint_street">Street</string>
     <string name="hint_birth_place">BirthPlace</string>
     <string name="hint_maiden_name">Maiden Name</string>
+    <string name="selectoppfield">Выберите область профессиональной деятельности</string>
 
 
 </resources>

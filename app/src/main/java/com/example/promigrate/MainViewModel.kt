@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.promigrate.data.model.JobResponse
 import com.example.promigrate.data.model.Profile
+import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPI
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
@@ -29,7 +30,7 @@ const val TAG = "MainViewModel"
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository = Repository.getInstance(
         application, FirebaseAuth.getInstance(),
-        FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService
+        FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService, DeepLApiService.create()
     )
 
 
@@ -61,6 +62,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _arbeitsorte = MutableLiveData<List<String>>()
     val arbeitsorte: LiveData<List<String>> = _arbeitsorte
+
+    private val translationResult = MutableLiveData<String>()
 
 
 
@@ -274,6 +277,45 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+
+    fun translateText(inputText: String) {
+        viewModelScope.launch {
+            Log.d("translateText", "Übersetzung startet: Eingabetext = $inputText, Zielsprache = DE")
+            try {
+                val result = repository.translateText(inputText, "DE") // DE für Deutsch
+                if (result != null) {
+                    Log.d("translateText", "Übersetzung erfolgreich, Ergebnis = ${result.text}")
+                }
+                if (result != null) {
+                    translationResult.postValue(result.text)
+                }
+            } catch (e: Exception) {
+                Log.e("translateText", "Fehler bei der Übersetzung", e)
+            }
+        }
+    }
+
+    // Im ViewModel
+    fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
+        viewModelScope.launch {
+            val translatedBerufsfelder = mutableListOf<String>()
+            berufsfelder.forEach { berufsfeld ->
+                try {
+                    val result = repository.translateText(berufsfeld, "EN") // DE für Deutsch
+                    result?.text?.let {
+                        translatedBerufsfelder.add(it)
+                        Log.d("translateBerufsfelder", "Übersetzt: $berufsfeld zu $it")
+                    }
+                } catch (e: Exception) {
+                    Log.e("translateBerufsfelder", "Fehler bei der Übersetzung von $berufsfeld", e)
+                }
+            }
+            onComplete(translatedBerufsfelder)
+        }
+    }
+
+
 
     fun fetchBerufsfelder() {
         viewModelScope.launch {

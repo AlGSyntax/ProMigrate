@@ -97,7 +97,8 @@ dependencies {
     //WorkManager
     implementation ("androidx.work:work-runtime-ktx:2.9.0")
 
-
+    //DeepL
+    implementation ("com.deepl.api:deepl-java:1.4.0")
 
 
 

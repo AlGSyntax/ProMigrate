@@ -29,7 +29,7 @@
     <string name="choose_your_language">Elige tu idioma</string>
     <string name="GoogleSignUp">GoogleSignUp</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
-    <string name="sprachniveau_1">Sprachniveau: 1</string>
+    <string name="language_level_1">Nivel de idioma: 1</string>
     <string name="beginner">A1: Principiante</string>
     <string name="basic_knowledge">A2: Conocimientos básicos</string>
     <string name="intermediate">B1: Uso intermedio</string>
@@ -41,5 +41,6 @@
     <string name="hint_street">Street</string>
     <string name="hint_birth_place">BirthPlace</string>
     <string name="hint_maiden_name">Maiden Name</string>
+    <string name="selectoppfield">Seleccione su campo profesional</string>
 
 </resources>

@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="289dp"
         android:layout_marginBottom="397dp"
-        android:hint="Berufsfeld auswählen"
+        android:hint="@string/selectoppfield"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

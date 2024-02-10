@@ -137,19 +137,22 @@ class CreateYourProfileFragment : Fragment() {
 
         viewModel.berufsfelder.observe(viewLifecycleOwner) { berufsfelder ->
             if (berufsfelder != null) {
-                Log.d(TAG, "Berufsfelder erfolgreich abgerufen und Adapter gesetzt.")
-                val adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    berufsfelder
-                )
-                binding.autoCompleteTextView.setAdapter(adapter)
+                Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
+                viewModel.translateBerufsfelder(berufsfelder) { translatedBerufsfelder ->
+                    // Setze den Adapter nach der Übersetzung
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        translatedBerufsfelder
+                    )
+                    binding.autoCompleteTextView.setAdapter(adapter)
+                }
             } else {
                 Log.e(TAG, "Fehler beim Abrufen der Berufsfelder.")
             }
-
         }
         viewModel.fetchBerufsfelder()
+
 
         viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
             if (arbeitsorte != null) {

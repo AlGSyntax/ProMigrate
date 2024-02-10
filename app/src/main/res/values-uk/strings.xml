@@ -28,7 +28,7 @@
     <string name="choose_your_language">Оберіть свою мову</string>
     <string name="GoogleSignUp">Реєстрація через Google</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
-    <string name="sprachniveau_1">Sprachniveau: 1</string>
+    <string name="language_level_1">Рівень мови: 1</string>
     <string name="beginner">A1: Початковий</string>
     <string name="basic_knowledge">A2: Основні знання</string>
     <string name="intermediate">B1: Середній рівень</string>
@@ -40,4 +40,5 @@
     <string name="hint_street">Street</string>
     <string name="hint_birth_place">BirthPlace</string>
     <string name="hint_maiden_name">Maiden Name</string>
+    <string name="selectoppfield">Виберіть свою професійну сферу</string>
 </resources>
