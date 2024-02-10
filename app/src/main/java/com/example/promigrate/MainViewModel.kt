@@ -219,7 +219,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     val userProfile = repository.getUserProfile(uid).value
                     userProfile?.let { profile ->
-                        updateAppLocale(profile.languageCode)
+                        profile.languageCode?.let { updateAppLocale(it) }
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "Fehler beim Laden der Spracheinstellung", e)

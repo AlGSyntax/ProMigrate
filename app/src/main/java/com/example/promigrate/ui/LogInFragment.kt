@@ -91,14 +91,11 @@ class LogInFragment : Fragment() {
 
         // Passwortkriterien
         val password = binding.passwordET.text.toString()
-        val passwordPattern = getString(R.string.passwordpattern)
+
 
         // Überprüfung der Passwortkriterien
         if (password.isEmpty()) {
             binding.passwordInputLayout.error = getString(R.string.invalid_password_error_login) // Nutze eine angepasste Fehlermeldung
-            isValid = false
-        } else if (!password.matches(passwordPattern.toRegex())) {
-            binding.passwordInputLayout.error = getString(R.string.password_criteria_error)
             isValid = false
         }
 

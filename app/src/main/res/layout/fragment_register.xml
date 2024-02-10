@@ -11,6 +11,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        app:boxCornerRadiusBottomEnd="32dp"
+        app:boxCornerRadiusBottomStart="32dp"
+        app:boxCornerRadiusTopEnd="32dp"
+        app:boxCornerRadiusTopStart="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,6 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
+            android:fontFamily="@font/quicksandvariablefontwght"
+            android:textColor="@color/textcolor"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -30,6 +36,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        app:boxCornerRadiusBottomEnd="32dp"
+        app:boxCornerRadiusBottomStart="32dp"
+        app:boxCornerRadiusTopEnd="32dp"
+        app:boxCornerRadiusTopStart="32dp"
         app:layout_constraintEnd_toEndOf="@id/emailTextInputLayout"
         app:layout_constraintStart_toStartOf="@id/emailTextInputLayout"
         app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout"
@@ -40,6 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
+            android:fontFamily="@font/quicksandvariablefontwght"
+            android:textColor="@color/textcolor"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,6 +64,10 @@
         app:layout_constraintEnd_toEndOf="@id/passwordTextInputLayout"
         app:layout_constraintStart_toStartOf="@id/passwordTextInputLayout"
         app:layout_constraintTop_toBottomOf="@id/passwordTextInputLayout"
+        app:boxCornerRadiusBottomEnd="32dp"
+        app:boxCornerRadiusBottomStart="32dp"
+        app:boxCornerRadiusTopEnd="32dp"
+        app:boxCornerRadiusTopStart="32dp"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -59,6 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/confirmpassword"
+            android:textColor="@color/textcolor"
+            android:fontFamily="@font/quicksandvariablefontwght"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,9 +87,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/register"
+        android:backgroundTint="@color/background"
+        android:textColor="@color/textcolor"
+        android:fontFamily="@font/quicksandvariablefontwght"
         app:layout_constraintEnd_toEndOf="@id/confirmPasswordTextInputLayout"
         app:layout_constraintStart_toStartOf="@id/confirmPasswordTextInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/confirmPasswordTextInputLayout" />
+        app:layout_constraintTop_toBottomOf="@id/confirmPasswordTextInputLayout"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

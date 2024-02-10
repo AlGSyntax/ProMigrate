@@ -83,24 +83,26 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
-    fun getUserProfile(userId: String): MutableLiveData<UserProfile?> {
-        val userProfileLiveData = MutableLiveData<UserProfile?>()
+    fun getUserProfile(userId: String): MutableLiveData<Profile?> {
+        val userProfileLiveData = MutableLiveData<Profile?>()
 
-        firestore.collection("user").document(userId).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val userProfile = document.toObject(UserProfile::class.java)
-                    userProfileLiveData.postValue(userProfile)
+        firestore.collection("users").document(userId).get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    // Versuche, das Dokument in ein Profile-Objekt zu konvertieren
+                    val userProfile = documentSnapshot.toObject(Profile::class.java)
+                    userProfileLiveData.value = userProfile
                 } else {
                     Log.d(TAG, "Benutzerprofil nicht gefunden")
                 }
             }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Fehler beim Laden des Benutzerprofils", exception)
             }
 
         return userProfileLiveData
     }
+
 
 
     suspend fun uploadAndUpdateProfilePicture(uri: Uri, userId: String): String {
