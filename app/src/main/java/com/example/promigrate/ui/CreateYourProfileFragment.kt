@@ -31,6 +31,9 @@ class CreateYourProfileFragment : Fragment() {
     private var additionalStreet: String? = null
     private var additionalBirthPlace: String? = null
     private var additionalMaidenName: String? = null
+    private var additionalFirstName: String? = null
+    private var additionalLastName: String? = null
+    private var additionalPhoneNum: String? = null
 
 
     override fun onCreateView(
@@ -75,10 +78,17 @@ class CreateYourProfileFragment : Fragment() {
 
             // Prüfe, ob alle notwendigen Informationen vorhanden sind
             if (validateInput(
-                    name,
-                    age,
-                    fieldOfWork,
-                    isDataProtected
+                    name = name,
+                    age = age,
+                    isDataProtected = isDataProtected,
+                    selectedImageUri = selectedImageUri,
+                    additionalStreet = additionalStreet,
+                    additionalBirthPlace = additionalBirthPlace,
+                    additionalMaidenName = additionalMaidenName,
+                    additionalFirstName = additionalFirstName,
+                    additionalLastName = additionalLastName,
+                    additionalPhoneNum = additionalPhoneNum
+
                 ) && selectedImageUri != null
             ) {
                 viewModel.saveProfileWithImage(
@@ -90,7 +100,10 @@ class CreateYourProfileFragment : Fragment() {
                     desiredLocation = desiredLocation,
                     street = additionalStreet.toString(),
                     birthplace = additionalBirthPlace.toString(),
-                    maidenname = additionalMaidenName.toString()
+                    maidenname = additionalMaidenName.toString(),
+                    firstname = additionalFirstName.toString(),
+                    lastname = additionalLastName.toString(),
+                    phonenumber = additionalPhoneNum.toString()
                 )
                 // Navigiere zum nächsten Fragment
                 findNavController().navigate(R.id.action_createYourProfileFragment_to_jobsForYouFragment)
@@ -105,6 +118,9 @@ class CreateYourProfileFragment : Fragment() {
             val streetEditText = dialogView.findViewById<EditText>(R.id.etStreet)
             val birthPlaceEditText = dialogView.findViewById<EditText>(R.id.etBirthPlace)
             val maidenNameEditText = dialogView.findViewById<EditText>(R.id.etMaidenName)
+            val firstNameEditText = dialogView.findViewById<EditText>(R.id.etFirstName)
+            val lastNameEditText = dialogView.findViewById<EditText>(R.id.etLastName)
+            val phoneNumEditText = dialogView.findViewById<EditText>(R.id.etPhoneNumber)
 
             AlertDialog.Builder(it.context)
                 .setView(dialogView)
@@ -112,6 +128,9 @@ class CreateYourProfileFragment : Fragment() {
                     additionalStreet = streetEditText.text.toString()
                     additionalBirthPlace = birthPlaceEditText.text.toString()
                     additionalMaidenName = maidenNameEditText.text.toString()
+                    additionalFirstName = firstNameEditText.text.toString()
+                    additionalLastName = lastNameEditText.text.toString()
+                    additionalPhoneNum = phoneNumEditText.text.toString()
                 }
                 .setNegativeButton("Abbrechen", null)
                 .show()
@@ -174,12 +193,33 @@ class CreateYourProfileFragment : Fragment() {
     private fun validateInput(
         name: String,
         age: String,
-        work: String,
-        isDataProtected: Boolean
+        isDataProtected: Boolean,
+        selectedImageUri: Uri?,
+        additionalStreet: String?,
+        additionalBirthPlace: String?,
+        additionalMaidenName: String?,
+        additionalFirstName: String?,
+        additionalLastName: String?,
+        additionalPhoneNum: String?
     ): Boolean {
-        // Implementiere Validierungslogik
-        return name.isNotEmpty() && age.isNotEmpty() && work.isNotEmpty() && isDataProtected
+        // Prüfe, ob die grundlegenden Informationen ausgefüllt sind
+        val basicInfoValid = name.isNotEmpty() && age.isNotEmpty() && isDataProtected
+
+        // Prüfe, ob ein Bild ausgewählt wurde
+        val imageSelected = selectedImageUri != null
+
+        // Prüfe, ob zusätzliche Kontaktinformationen ausgefüllt sind
+        val additionalInfoValid = additionalStreet?.isNotEmpty() == true &&
+                additionalBirthPlace?.isNotEmpty() == true &&
+                additionalMaidenName?.isNotEmpty() == true &&
+                additionalFirstName?.isNotEmpty() == true &&
+                additionalLastName?.isNotEmpty() == true &&
+                additionalPhoneNum?.isNotEmpty() == true
+
+        // Gib true zurück, wenn alle Validierungen wahr sind
+        return basicInfoValid && imageSelected && additionalInfoValid
     }
+
 
 
 }

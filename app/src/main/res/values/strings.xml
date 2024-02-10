@@ -42,4 +42,7 @@
     <string name="hint_birth_place">BirthPlace</string>
     <string name="hint_maiden_name">Maiden Name</string>
     <string name="selectoppfield">Select your occupational field</string>
+    <string name="hint_first_name">"First Name "</string>
+    <string name="hint_last_name">"Last Name "</string>
+    <string name="hint_phone_number">Phone Number</string>
 </resources>

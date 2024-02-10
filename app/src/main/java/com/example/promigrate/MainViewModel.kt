@@ -238,7 +238,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun saveProfileWithImage(uri: Uri, name: String, age: String, fieldOfWork: String,
                              isDataProtected: Boolean, languageLevel: Int,
-                             desiredLocation:String,street:String,birthplace:String,maidenname:String) {
+                             desiredLocation:String,street:String,birthplace:String,maidenname:String,
+                             firstname:String,lastname:String,phonenumber:String) {
         viewModelScope.launch {
             try {
                 val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
@@ -257,7 +258,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "desiredLocation" to desiredLocation,
                     "street" to street,
                     "birthplace" to birthplace,
-                    "maidenname" to maidenname
+                    "maidenname" to maidenname,
+                    "firstname" to firstname,
+                    "lastname" to lastname,
+                    "phonenumber" to phonenumber
                 )
 
                 repository.updateUserProfile(userId, profileData)
