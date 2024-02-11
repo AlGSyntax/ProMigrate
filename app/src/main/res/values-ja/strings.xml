@@ -46,5 +46,21 @@
     <string name="hint_last_name">姓</string>
     <string name="hint_phone_number">電話番号</string>
     <string name="additional_contact_info">追加の連絡先情報</string>
+    <string name="errornameempt">名前は空にできません</string>
+    <string name="errornageampth">年齢は空にできません</string>
+    <string name="erroragepos">年齢は負になることはできません</string>
+    <string name="erroragevalid">年齢は有効な数値である必要があります</string>
+    <string name="errordataprotection">データ保護方針を受け入れる必要があります</string>
+    <string name="errorprofilepic">プロフィール写真を選択する必要があります</string>
+    <string name="errorvoidaddress">住所は空にできません</string>
+    <string name="emptybirthplace">出生地は空にできません</string>
+    <string name="emptymaidenname">旧姓は空にできません</string>
+    <string name="emptyfirstname">名は空にできません</string>
+    <string name="emptylastname">姓は空にできません</string>
+    <string name="emptyphonenumber">電話番号は空であってはならない</string>
+    <string name="allentavalid">すべてのエントリーが有効</string>
+    <string name="save">保存</string>
+    <string name="cancel">キャンセル</string>
+
 
 </resources>

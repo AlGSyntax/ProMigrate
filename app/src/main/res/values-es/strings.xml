@@ -47,5 +47,20 @@
     <string name="hint_last_name">Apellido</string>
     <string name="hint_phone_number">Número de teléfono</string>
     <string name="additional_contact_info">Información de contacto adicional</string>
+    <string name="errornameempt">El nombre no puede estar vacío</string>
+    <string name="errornageampth">La edad no puede estar vacía</string>
+    <string name="erroragepos" >La edad no puede ser negativa</string>
+    <string name="erroragevalid">La edad debe ser un número válido</string>
+    <string name="errordataprotection">La política de protección de datos debe ser aceptada</string>
+    <string name="errorprofilepic">Se debe seleccionar una foto de perfil</string>
+    <string name="errorvoidaddress">La dirección no puede estar vacía</string>
+    <string name="emptybirthplace">El lugar de nacimiento no puede estar vacío</string>
+    <string name="emptymaidenname">El apellido de soltera no puede estar vacío</string>
+    <string name="emptyfirstname">El nombre no puede estar vacío</string>
+    <string name="emptylastname">El apellido no puede estar vacío</string>
+    <string name="emptyphonenumber">El número de teléfono no puede estar vacío</string>
+    <string name="allentavalid">Todas las entradas son válidas.</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
 
 </resources>

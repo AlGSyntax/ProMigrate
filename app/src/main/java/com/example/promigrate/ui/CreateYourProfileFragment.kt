@@ -128,7 +128,7 @@ class CreateYourProfileFragment : Fragment() {
             AlertDialog.Builder(it.context,R.style.CustomAlertDialog)
                 .setView(dialogView)
                 .setTitle(R.string.additional_contact_info)
-                .setPositiveButton("Speichern") { _, _ ->
+                .setPositiveButton(R.string.save) { _, _ ->
                     additionalStreet = streetEditText.text.toString()
                     additionalBirthPlace = birthPlaceEditText.text.toString()
                     additionalMaidenName = maidenNameEditText.text.toString()
@@ -136,7 +136,7 @@ class CreateYourProfileFragment : Fragment() {
                     additionalLastName = lastNameEditText.text.toString()
                     additionalPhoneNum = phoneNumEditText.text.toString()
                 }
-                .setNegativeButton("Abbrechen", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show()
         }
 
@@ -209,51 +209,51 @@ class CreateYourProfileFragment : Fragment() {
         additionalPhoneNum: String?
     ): Pair<Boolean, String> {
         if (name.isEmpty()) {
-            return Pair(false, "Name darf nicht leer sein.")
+            return Pair(false, R.string.errornameempt.toString())
         }
 
         if (age.isEmpty()) {
-            return Pair(false, "Alter darf nicht leer sein.")
+            return Pair(false, R.string.errornageampth.toString())
         } else {
             age.toIntOrNull()?.let {
-                if (it < 0) return Pair(false, "Alter muss eine positive Zahl sein.")
-            } ?: return Pair(false, "Alter muss eine gültige Zahl sein.")
+                if (it < 0) return Pair(false, R.string.erroragepos.toString())
+            } ?: return Pair(false, R.string.erroragevalid.toString())
         }
 
         if (!isDataProtected) {
-            return Pair(false, "Datenschutz muss akzeptiert werden.")
+            return Pair(false, R.string.errordataprotection.toString())
         }
 
         if (selectedImageUri == null) {
-            return Pair(false, "Ein Profilbild muss ausgewählt werden.")
+            return Pair(false, R.string.errorprofilepic.toString())
         }
 
         if (additionalStreet.isNullOrEmpty()) {
-            return Pair(false, "Zusätzliche Straße darf nicht leer sein.")
+            return Pair(false, R.string.errorvoidaddress.toString())
         }
 
         if (additionalBirthPlace.isNullOrEmpty()) {
-            return Pair(false, "Geburtsort darf nicht leer sein.")
+            return Pair(false, R.string.emptybirthplace.toString())
         }
 
         if (additionalMaidenName.isNullOrEmpty()) {
-            return Pair(false, "Geburtsname darf nicht leer sein.")
+            return Pair(false, R.string.emptymaidenname.toString())
         }
 
         if (additionalFirstName.isNullOrEmpty()) {
-            return Pair(false, "Vorname darf nicht leer sein.")
+            return Pair(false, R.string.emptyfirstname.toString())
         }
 
         if (additionalLastName.isNullOrEmpty()) {
-            return Pair(false, "Nachname darf nicht leer sein.")
+            return Pair(false, R.string.emptylastname.toString())
         }
 
         if (additionalPhoneNum.isNullOrEmpty()) {
-            return Pair(false, "Telefonnummer darf nicht leer sein.")
+            return Pair(false, R.string.emptyphonenumber.toString())
         }
 
         // Wenn alle Prüfungen bestanden sind
-        return Pair(true, "Alle Eingaben sind gültig.")
+        return Pair(true, R.string.allentavalid.toString())
     }
 
 

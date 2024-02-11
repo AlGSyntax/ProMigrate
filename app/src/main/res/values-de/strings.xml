@@ -48,6 +48,21 @@
     <string name="hint_last_name">Nachname</string>
     <string name="hint_phone_number">Telefonnummer</string>
     <string name="additional_contact_info">Zusätzliche Kontaktinformationen</string>
+    <string name="errornameempt">Name darf nicht leer sein</string>
+    <string name="errornageampth">Alter darf nicht leer sein</string>
+    <string name="erroragepos">Alter darf nicht negativ sein</string>
+    <string name="erroragevalid">Alter muss eine gültige Zahl sein</string>
+    <string name="errordataprotection">Datenschutzrichtlinie muss akzeptiert werden</string>
+    <string name="errorprofilepic"> Ein Profilbild muss ausgewählt werden</string>
+    <string name="errorvoidaddress">Adresse darf nicht leer sein</string>
+    <string name="emptybirthplace">Geburtsort darf nicht leer sein</string>
+    <string name="emptymaidenname">Geburtsname darf nicht leer sein</string>
+    <string name="emptyfirstname">Vorname darf nicht leer sein</string>
+    <string name="emptylastname">Nachname darf nicht leer sein</string>
+    <string name="emptyphonenumber">Telefonnummer darf nicht leer sein</string>
+    <string name="allentavalid">Alle Einträge sind gültig.</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
 
 
 

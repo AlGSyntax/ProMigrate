@@ -48,6 +48,21 @@
     <string name="hint_last_name">Фамилия</string>
     <string name="hint_phone_number">Номер телефона</string>
     <string name="additional_contact_info">Дополнительная контактная информация</string>
+    <string name="errornameempt">Имя не может быть пустым</string>
+    <string name="errornageampth">Возраст не может быть пустым</string>
+    <string name="erroragepos">Возраст не может быть отрицательным</string>
+    <string name="erroragevalid">Возраст должен быть допустимым числом</string>
+    <string name="errordataprotection">Политика защиты данных должна быть принята</string>
+    <string name="errorprofilepic">Необходимо выбрать фотографию профиля</string>
+    <string name="errorvoidaddress">Адрес не может быть пустым</string>
+    <string name="emptybirthplace">Место рождения не может быть пустым</string>
+    <string name="emptymaidenname">Девичья фамилия не может быть пустой</string>
+    <string name="emptyfirstname">Имя не может быть пустым</string>
+    <string name="emptylastname">Фамилия не может быть пустой</string>
+    <string name="emptyphonenumber">Номер телефона не может быть пустым</string>
+    <string name="allentavalid">Все записи действительны</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
 
 
 </resources>

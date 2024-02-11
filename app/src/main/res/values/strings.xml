@@ -47,4 +47,19 @@
     <string name="hint_last_name">"Last Name "</string>
     <string name="hint_phone_number">Phone Number</string>
     <string name="additional_contact_info">Additional Contact Info</string>
+    <string name="errornameempt">Name cannot be empty</string>
+    <string name="errornageampth">Age cannot be empty</string>
+    <string name="erroragepos" >Age cannot be negative</string>
+    <string name="erroragevalid">Age must be a valid number</string>
+    <string name="errordataprotection">“Data protection must be accepted</string>
+    <string name="errorprofilepic">A Profile picture must be selected</string>
+    <string name="errorvoidaddress">Address cannot be empty</string>
+    <string name="emptybirthplace">BirthPlace cannot be empty</string>
+    <string name="emptymaidenname">Maiden Name cannot be empty</string>
+    <string name="emptyfirstname">First Name cannot be empty</string>
+    <string name="emptylastname">Last Name cannot be empty</string>
+    <string name="emptyphonenumber">Phone Number cannot be empty</string>
+    <string name="allentavalid">All entries are valid.</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>
