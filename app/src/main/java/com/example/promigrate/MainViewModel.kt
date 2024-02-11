@@ -329,6 +329,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun translateArbeitsorte(arbeitsorte: List<String>, onComplete: (List<String>) -> Unit) {
+        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+
+        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        if (currentLanguageCode == "de") {
+            onComplete(arbeitsorte) // Gebe die ursprünglichen Arbeitsorte zurück, ohne Übersetzung
+            return // Beende die Methode vorzeitig
+        }
+
+        viewModelScope.launch {
+            val translatedArbeitsorte = mutableListOf<String>()
+            arbeitsorte.forEach { arbeitsort ->
+                try {
+                    // Verwende currentLanguageCode als Ziel für die Übersetzung
+                    val result = repository.translateText(arbeitsort, currentLanguageCode)
+                    result?.text?.let {
+                        translatedArbeitsorte.add(it)
+                        Log.d("translateArbeitsorte", "Übersetzt: $arbeitsort zu $it")
+                    }
+                } catch (e: Exception) {
+                    Log.e("translateArbeitsorte", "Fehler bei der Übersetzung von $arbeitsort", e)
+                }
+            }
+            onComplete(translatedArbeitsorte)
+        }
+    }
+
+
 
 
 

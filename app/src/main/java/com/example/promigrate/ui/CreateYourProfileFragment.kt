@@ -179,13 +179,16 @@ class CreateYourProfileFragment : Fragment() {
 
         viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
             if (arbeitsorte != null) {
-                Log.d(TAG, "Arbeitsorte erfolgreich abgerufen und Adapter gesetzt.")
-                val adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    arbeitsorte
-                )
-                binding.autoCompleteTextView2.setAdapter(adapter)
+                Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
+                viewModel.translateArbeitsorte(arbeitsorte) { translatedArbeitsorte ->
+                    // Setze den Adapter nach der Übersetzung
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        translatedArbeitsorte
+                    )
+                    binding.autoCompleteTextView2.setAdapter(adapter)
+                }
             } else {
                 Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte.")
             }
@@ -193,8 +196,7 @@ class CreateYourProfileFragment : Fragment() {
         viewModel.fetchArbeitsorte()
     }
 
-
-    private fun validateInput(
+        private fun validateInput(
         name: String,
         age: String,
         isDataProtected: Boolean,
