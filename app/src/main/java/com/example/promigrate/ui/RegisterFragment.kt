@@ -40,16 +40,22 @@ class RegisterFragment : Fragment() {
                     // Holt den String basierend auf der Ressourcen-ID
                     val message = getString(status.message as Int) // Konvertiert die message in eine Ressourcen-ID und holt den String
                     val snackbar = Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
+                    val snackbarLayout = snackbar.view
+                    snackbarLayout.setBackgroundResource(R.drawable.snackbar_custom_background)
+                    // Anpassen der Snackbar (optional)
+                    snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+                    snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
+
+                    snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
+
                     snackbar.setAction(R.string.close) {
                         // Die Aktion dient dazu, die Snackbar zu schließen.
                     }
-                    // Anpassen der Snackbar (optional)
-                    snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
-                    snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
                     snackbar.show()
                 }
             }
         }
+
 
 
 

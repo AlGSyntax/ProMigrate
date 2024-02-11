@@ -1,0 +1,12 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Hintergrund mit Ecken und optionaler Stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/elevation" /> <!-- Hintergrundfarbe -->
+            <corners android:radius="32dp" /> <!-- Eckenradius -->
+            <stroke
+                android:width="2dp"
+                android:color="@color/white" /> <!-- Randfarbe und -breite -->
+        </shape>
+    </item>
+</layer-list>
