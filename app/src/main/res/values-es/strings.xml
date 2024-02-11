@@ -62,5 +62,8 @@
     <string name="allentavalid">Todas las entradas son válidas.</string>
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
+    <string name="close">Cerrar</string>
+    <string name="emailinuse">Esta dirección de correo electrónico ya está en uso.</string>
+    <string name="unkownregistererror">Error de registro desconocido</string>
 
 </resources>

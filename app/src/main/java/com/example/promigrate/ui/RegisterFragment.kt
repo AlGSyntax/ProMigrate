@@ -6,13 +6,14 @@ import android.os.LocaleList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.databinding.FragmentRegisterBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class RegisterFragment : Fragment() {
@@ -30,15 +31,28 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.registrationStatus.observe(viewLifecycleOwner) { isSuccessful ->
-            if (isSuccessful) {
-                // Navigiere zum CreateYourProfileFragment
-                findNavController().navigate(R.id.createYourProfileFragment)
-            } else {
-                // Zeige eine Fehlermeldung an
-                Toast.makeText(context, "Registrierung fehlgeschlagen", Toast.LENGTH_SHORT).show()
+        viewModel.registrationStatus.observe(viewLifecycleOwner) { registrationStatus ->
+            registrationStatus?.let { status ->
+                if (status.success) {
+                    // Navigiere zum CreateYourProfileFragment
+                    findNavController().navigate(R.id.createYourProfileFragment)
+                } else {
+                    // Holt den String basierend auf der Ressourcen-ID
+                    val message = getString(status.message as Int) // Konvertiert die message in eine Ressourcen-ID und holt den String
+                    val snackbar = Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
+                    snackbar.setAction(R.string.close) {
+                        // Die Aktion dient dazu, die Snackbar zu schließen.
+                    }
+                    // Anpassen der Snackbar (optional)
+                    snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+                    snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
+                    snackbar.show()
+                }
             }
         }
+
+
+
         viewModel.localeList.observe(viewLifecycleOwner) { localeListCompat ->
             updateUI(localeListCompat.unwrap() as LocaleList)
         }

@@ -61,4 +61,7 @@
     <string name="allentavalid">Усі роботи є дійсними.</string>
     <string name="save">Зберегти</string>
     <string name="cancel">Скасувати</string>
+    <string name="close">Закрити</string>
+    <string name="emailinuse">Адреса електронної пошти вже використовується.</string>
+    <string name="unkownregistererror">Невідома помилка реєстрації</string>
 </resources>

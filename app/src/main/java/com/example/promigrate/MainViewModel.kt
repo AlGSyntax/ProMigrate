@@ -11,11 +11,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.promigrate.data.model.JobResponse
 import com.example.promigrate.data.model.Profile
+import com.example.promigrate.data.model.RegistrationStatus
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPI
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
@@ -41,8 +43,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val selectedLanguageCode: LiveData<String> = _selectedLanguageCode
 
 
-    private val _registrationStatus = MutableLiveData<Boolean>()
-    val registrationStatus: LiveData<Boolean> = _registrationStatus
+    private val _registrationStatus = MutableLiveData<RegistrationStatus>()
+    val registrationStatus: LiveData<RegistrationStatus> = _registrationStatus
 
     private val _loginStatus = MutableLiveData<Boolean>()
     val loginStatus: LiveData<Boolean> = _loginStatus
@@ -141,8 +143,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
         if (password != confirmPassword) {
-            _registrationStatus.value = false
-            Log.e(TAG, "Passwörter stimmen nicht überein")
+            _registrationStatus.value = RegistrationStatus(success = false, message = "Passwörter stimmen nicht überein")
             return
         }
         Log.d(TAG, "Versuche, den Benutzer zu registrieren mit E-Mail: $email")
@@ -157,19 +158,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         val userProfile = Profile(isPremium = false, username = email, languageCode = languageCode)
                         repository.createUserProfile(userId, userProfile) // Rufe die Methode aus dem Repository auf
                     }
-                    _registrationStatus.value = true
+                    _registrationStatus.value = RegistrationStatus(success = true)
                 } else {
-                    task.exception?.let {
-                        Log.e(TAG, "Fehler beim Registrieren des Benutzers", it)
+                    val message = when (task.exception) {
+                        is FirebaseAuthUserCollisionException -> R.string.emailinuse
+                        else -> R.string.unkownregistererror
                     }
-                    _registrationStatus.value = false
+                    Log.e(TAG, message.toString(), task.exception)
+                    _registrationStatus.value = RegistrationStatus(success = false, message = message)
                 }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Ausnahme in der Registrationsmethode", e)
-            _registrationStatus.value = false
+            _registrationStatus.value = RegistrationStatus(success = false, message = "Ausnahme in der Registrationsmethode: ${e.localizedMessage}")
         }
     }
+
 
 
 

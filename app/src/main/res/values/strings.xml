@@ -62,4 +62,7 @@
     <string name="allentavalid">All entries are valid.</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="emailinuse">This e-mail address is already in use.</string>
+    <string name="unkownregistererror">Unknown registration error</string>
 </resources>

@@ -61,6 +61,9 @@
     <string name="allentavalid">すべてのエントリーが有効</string>
     <string name="save">保存</string>
     <string name="cancel">キャンセル</string>
+    <string name="close">閉じる</string>
+    <string name="emailinuse">メールアドレスはすでに使用されています。</string>
+    <string name="unkownregistererror">不明な登録エラー</string>
 
 
 </resources>

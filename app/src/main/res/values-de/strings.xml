@@ -63,6 +63,9 @@
     <string name="allentavalid">Alle Einträge sind gültig.</string>
     <string name="save">Speichern</string>
     <string name="cancel">Abbrechen</string>
+    <string name="close">Schließen</string>
+    <string name="emailinuse">E-Mail-Adresse wird bereits verwendet.</string>
+    <string name="unkownregistererror">Unbekannter Registrierungsfehler</string>
 
 
 
