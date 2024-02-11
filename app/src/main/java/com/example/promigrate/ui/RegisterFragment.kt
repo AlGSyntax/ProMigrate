@@ -97,5 +97,6 @@ class RegisterFragment : Fragment() {
         val resources = context.resources
 
         binding.registerBTN.text = resources?.getString(R.string.register)
+        binding.headerTextView.text = resources?.getString(R.string.signup)
     }
 }
