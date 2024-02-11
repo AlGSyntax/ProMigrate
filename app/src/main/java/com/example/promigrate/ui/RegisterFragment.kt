@@ -45,9 +45,7 @@ class RegisterFragment : Fragment() {
                     // Anpassen der Snackbar (optional)
                     snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
                     snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
-
                     snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
-
                     snackbar.setAction(R.string.close) {
                         // Die Aktion dient dazu, die Snackbar zu schließen.
                     }

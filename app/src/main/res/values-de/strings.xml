@@ -66,6 +66,10 @@
     <string name="close">Schließen</string>
     <string name="emailinuse">E-Mail-Adresse wird bereits verwendet.</string>
     <string name="unkownregistererror">Unbekannter Registrierungsfehler</string>
+    <string name="resetpassword">Passwort vergessen? Bitte klicken Sie hier, um Ihr Passwort zurückzusetzen.</string>
+    <string name="pleaseputemailin">Bitte geben Sie Ihre E-Mail-Adresse ein.</string>
+    <string name="resetpasswordsuccess">Eine E-Mail wurde an Ihre E-Mail-Adresse gesendet. Bitte folgen Sie den Anweisungen in der E-Mail, um Ihr Passwort zurückzusetzen.</string>
+    <string name="resetpasswordfail">Beim Versuch, Ihr Passwort zurückzusetzen, ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre E-Mail-Adresse und versuchen Sie es erneut.</string>
 
 
 

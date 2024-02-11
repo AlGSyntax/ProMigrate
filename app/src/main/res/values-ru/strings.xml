@@ -66,6 +66,10 @@
     <string name="close">Закрыть</string>
     <string name="emailinuse">Электронная почта уже используется.</string>
     <string name="unkownregistererror">Неизвестная ошибка регистрации</string>
+    <string name="resetpassword">Забыли пароль? Нажмите здесь, чтобы сбросить пароль.</string>
+    <string name="pleaseputemailin">Пожалуйста, введите свой адрес электронной почты.</string>
+    <string name="resetpasswordsuccess">На ваш адрес электронной почты было отправлено письмо. Следуйте инструкциям в письме, чтобы сбросить пароль.</string>
+    <string name="resetpasswordfail">При попытке сбросить пароль произошла ошибка. Пожалуйста, проверьте адрес электронной почты и повторите попытку.</string>
 
 
 </resources>

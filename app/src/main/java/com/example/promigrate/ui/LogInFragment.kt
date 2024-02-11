@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 
 
 class LogInFragment : Fragment() {
@@ -58,6 +61,54 @@ class LogInFragment : Fragment() {
         binding.loginButton.setOnClickListener {
             signIn()
         }
+
+        binding.resetPasswordTV.setOnClickListener {
+            val email = binding.emailET.text.toString().trim()
+
+            if (email.isEmpty()) {
+                // Benutze Snackbar anstatt Toast
+                val snackbar = Snackbar.make(binding.root, R.string.pleaseputemailin, Snackbar.LENGTH_INDEFINITE)
+                val snackbarLayout = snackbar.view
+                snackbarLayout.setBackgroundResource(R.drawable.snackbar_custom_background)
+                snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+                snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
+                snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
+                snackbar.show()
+            } else {
+                // Sendet die Anfrage zum Zurücksetzen des Passworts
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Benachrichtigung, dass die E-Mail gesendet wurde, mit Snackbar
+                            val message = R.string.resetpasswordsuccess
+                            val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
+                            val snackbarLayout = snackbar.view
+                            snackbarLayout.setBackgroundResource(R.drawable.snackbar_custom_background)
+                            snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+                            snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
+                            snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
+                            snackbar.setAction(R.string.close) {
+                                snackbar.dismiss()
+                            }
+                            snackbar.show()
+                        } else {
+                            // Fehlerbehandlung mit Snackbar
+                            val errorMessage = R.string.resetpasswordfail
+                            val errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_INDEFINITE)
+                            val errorSnackbarLayout = errorSnackbar.view
+                            errorSnackbarLayout.setBackgroundResource(R.drawable.snackbar_custom_background)
+                            errorSnackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
+                            errorSnackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
+                            errorSnackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+                            errorSnackbar.setAction(R.string.close) {
+                                errorSnackbar.dismiss()
+                            }
+                            errorSnackbar.show()
+                        }
+                    }
+            }
+        }
+
 
 
         binding.toregister.setOnClickListener {

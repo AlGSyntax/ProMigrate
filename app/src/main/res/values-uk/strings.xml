@@ -64,4 +64,8 @@
     <string name="close">Закрити</string>
     <string name="emailinuse">Адреса електронної пошти вже використовується.</string>
     <string name="unkownregistererror">Невідома помилка реєстрації</string>
+    <string name="resetpassword">Забули пароль? Будь ласка, натисніть тут, щоб відновити пароль.</string>
+   <string name="pleaseputemailin">Будь ласка, введіть свою електронну адресу</string>
+    <string name="resetpasswordsuccess">На вашу адресу електронної пошти було надіслано лист. Дотримуйтесь інструкцій у листі, щоб скинути пароль.</string>
+    <string name="resetpasswordfail">Виникла помилка при спробі скинути пароль. Будь ласка, перевірте свою електронну адресу та спробуйте ще раз.</string>
 </resources>

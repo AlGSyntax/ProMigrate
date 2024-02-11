@@ -65,4 +65,8 @@
     <string name="close">Close</string>
     <string name="emailinuse">This e-mail address is already in use.</string>
     <string name="unkownregistererror">Unknown registration error</string>
+    <string name="resetpassword">Forgotten your password? Please click here to reset your password.</string>
+    <string name="pleaseputemailin">Please enter your e-mail address.</string>
+    <string name="resetpasswordsuccess">An e-mail has been sent to your e-mail address. Please follow the instructions in the e-mail to reset your password.</string>
+    <string name="resetpasswordfail">An error occurred while trying to reset your password. Please check your e-mail address and try again.</string>
 </resources>
