@@ -37,7 +37,7 @@
     <string name="independent">B2: Uso independiente</string>
     <string name="proficient">C1: Habilidades competentes</string>
     <string name="near_native">C2: Nivel casi nativo</string>
-    <string name="undefined">No definido</string>
+    <string name="undefined">Nivel de idioma: Indefinido</string>
     <string name="desired_location_hint">lugar deseado</string>
     <string name="hint_street">Línea de dirección completa</string>
     <string name="hint_birth_place">Lugar de nacimiento</string>

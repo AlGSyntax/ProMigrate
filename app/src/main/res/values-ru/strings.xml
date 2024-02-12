@@ -38,7 +38,7 @@
     <string name="independent">B2: Самостоятельный уровень</string>
     <string name="proficient">C1: Продвинутые навыки</string>
     <string name="near_native">C2: Владение на уровне носителя языка</string>
-    <string name="undefined">Не определено</string>
+    <string name="undefined">Уровень языка: Неопределенный</string>
     <string name="desired_location_hint">желаемое место</string>
     <string name="hint_street">Полная адресная строка</string>
     <string name="hint_birth_place">Место рождения</string>

@@ -36,7 +36,7 @@
     <string name="independent">B2: 自立</string>
     <string name="proficient">C1: 熟練</string>
     <string name="near_native">C2: 母国語に近い</string>
-    <string name="undefined">未定義</string>
+    <string name="undefined">言語レベル：未定義</string>
     <string name="desired_location_hint">希望の場所</string>
     <string name="hint_street">住所全行</string>
     <string name="hint_birth_place">出生地</string>

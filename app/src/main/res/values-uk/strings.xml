@@ -36,7 +36,7 @@
     <string name="independent">B2: Самостійне використання</string>
     <string name="proficient">C1: Високий рівень володіння</string>
     <string name="near_native">C2: Майже як у носія мови</string>
-    <string name="undefined">Не визначено</string>
+    <string name="undefined">Рівень мови: Невизначений</string>
     <string name="desired_location_hint">бажане місце</string>
     <string name="hint_street">Повний рядок адреси</string>
     <string name="hint_birth_place">Місце народження</string>

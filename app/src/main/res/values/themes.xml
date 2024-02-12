@@ -25,6 +25,7 @@
         <item name="android:background">@color/background</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/quicksandsemibold</item>
         <!-- Setze hier weitere Anpassungen wie Textfarbe usw. -->
     </style>
 

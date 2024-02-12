@@ -20,6 +20,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
     }
 
     buildTypes {
@@ -99,6 +101,9 @@ dependencies {
 
     //DeepL
     implementation ("com.deepl.api:deepl-java:1.4.0")
+
+    //Guava
+    implementation("com.google.guava:guava:33.0.0-android")
 
 
 

@@ -115,9 +115,17 @@
         android:stepSize="1"
         android:valueFrom="0"
         android:valueTo="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnAddContact" />
+
+        app:trackHeight="4dp"
+        app:thumbRadius="12dp"
+        app:trackColorActive="@color/titles"
+    app:trackColorInactive="@color/icons"
+    app:thumbColor="@color/textcolor"
+
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/btnAddContact" />
+
 
     <TextView
         android:id="@+id/languageLevelText"

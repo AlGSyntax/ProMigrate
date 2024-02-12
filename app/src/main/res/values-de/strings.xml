@@ -39,7 +39,7 @@
     <string name="independent">B2: Selbstständige Sprachverwendung</string>
     <string name="proficient">C1: Fachkundige Sprachkenntnisse</string>
     <string name="near_native">C2: Annähernd muttersprachliche Kenntnisse</string>
-    <string name="undefined">Nicht definiert</string>
+    <string name="undefined">Sprachniveau: Undefiniert</string>
     <string name="hint_street">Vollständige Adresszeile</string>
     <string name="hint_birth_place">Geburtsort</string>
     <string name="hint_maiden_name">Geburtsname</string>

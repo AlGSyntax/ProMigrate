@@ -15,15 +15,16 @@
 
     <!-- In deiner fragment_language_selection.xml -->
 
+
     <TextView
         android:id="@+id/tv_welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/quicksandbold"
         android:text="@string/languageselectionmessage"
         android:textAlignment="center"
-        android:textColor="@color/titles"
+        android:textColor="@color/lsftitles"
         android:textSize="41sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +36,7 @@
         android:id="@+id/spinner_language_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="312dp"
         android:background="@drawable/spinner_background"
         android:entries="@array/language_options"
         android:minHeight="48dp"
@@ -46,16 +47,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_confirm_language"
         android:layout_width="129dp"
         android:layout_height="48dp"
-        android:layout_marginTop="583dp"
-        android:layout_marginBottom="84dp"
+        android:layout_marginTop="430dp"
+        android:layout_marginBottom="237dp"
+        android:backgroundTint="@color/background"
         android:fontFamily="@font/quicksandbold"
         android:text="@string/confirm"
-        android:backgroundTint="@color/background"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -67,14 +67,14 @@
 
     <TextView
         android:id="@+id/chooselanguage"
-        android:layout_width="257dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="449dp"
-        android:layout_marginBottom="236dp"
+        android:layout_width="212dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="226dp"
+        android:layout_marginBottom="429dp"
         android:fontFamily="@font/quicksandbold"
         android:text="@string/choose_your_language"
         android:textAlignment="center"
-        android:textColor="@color/titles"
+        android:textColor="@color/lsftitles"
         android:textColorHighlight="@color/white"
         android:textColorHint="@color/white"
         android:textColorLink="@color/white"
@@ -84,21 +84,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="82dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="384dp"
-        android:layout_marginBottom="253dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_arrow_circle_up_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

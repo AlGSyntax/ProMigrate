@@ -38,7 +38,7 @@
     <string name="independent">B2: Independent usage</string>
     <string name="proficient">C1: Proficient skills</string>
     <string name="near_native">C2: Near native level</string>
-    <string name="undefined">Undefined</string>
+    <string name="undefined">Language level: Undefined</string>
     <string name="hint_street">Complete address line</string>
     <string name="hint_birth_place">BirthPlace</string>
     <string name="hint_maiden_name">Maiden Name</string>

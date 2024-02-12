@@ -10,6 +10,7 @@ import retrofit2.http.POST
 
 interface DeepLApiService {
 
+
     @POST("/v2/translate")
     @Headers("Authorization: DeepL-Auth-Key b3231e9c-fe21-1292-f347-0c1124304d1c:fx", "User-Agent: YourApp/1.2.3")
     suspend fun translateText(@Body requestBody: TranslationRequest): TranslationResponse

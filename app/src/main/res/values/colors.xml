@@ -10,6 +10,7 @@
     <color name="background">#5EDDE7</color>
     <!-- Accent Colors -->
     <color name="titles">#FFF8E7</color>
+    <color name="lsftitles">#E6E6E6</color>
     <color name="icons">#B1EFF3</color>
     <color name="markericons">#699BF7</color>
     <color name="todolist1">#AF9205</color>

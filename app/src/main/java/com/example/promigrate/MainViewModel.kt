@@ -77,7 +77,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         loadLanguageSetting()
         setupUserEnv()
-
     }
 
     /**
