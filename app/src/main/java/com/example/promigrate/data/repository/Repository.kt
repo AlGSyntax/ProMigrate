@@ -6,7 +6,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
-import com.example.promigrate.data.model.JobResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
@@ -132,7 +131,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
-
+    /**
     suspend fun getJobs(was: String?, wo: String?, berufsfeld: String?): Result<JobResponse> {
         return try {
             val response = apiService.getJobs(was, wo, berufsfeld)
@@ -147,6 +146,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
+    */
 
     suspend fun translateText(text: String, targetLanguage: String): TranslationResult? {
         Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
@@ -198,6 +198,24 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
+
+    suspend fun getJobs(berufsfeld: String, wo: String): Result<List<String>> {
+        return try {
+            val response = apiService.getJobs(berufsfeld = berufsfeld, wo = wo)
+            if (response.isSuccessful && response.body() != null) {
+                // Angenommen, du möchtest weiterhin aus den Facetten extrahieren
+                val berufsListe = response.body()!!.stellenangebote.map { it.beruf ?: "" }
+                Result.success(berufsListe)
+            } else {
+                Log.e("JobRepository", "Fehler beim Abrufen der Jobs: ${response.message()}")
+                Result.failure(Exception("Fehler beim Abrufen der Jobs: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Log.e("JobRepository", "Ausnahme beim Abrufen der Jobs: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
 
 
 

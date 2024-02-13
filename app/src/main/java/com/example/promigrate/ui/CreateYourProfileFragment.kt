@@ -107,8 +107,12 @@ class CreateYourProfileFragment : Fragment() {
                     lastname = additionalLastName.toString(),
                     phonenumber = additionalPhoneNum.toString()
                 )
+                Log.d(TAG, fieldOfWork)
                 // Navigiere zum nächsten Fragment
-                findNavController().navigate(R.id.action_createYourProfileFragment_to_jobsForYouFragment)
+                val action = CreateYourProfileFragmentDirections
+                    .actionCreateYourProfileFragmentToJobsForYouFragment(desiredLocation, fieldOfWork)
+                findNavController().navigate(action)
+
             } else {
                 // Zeige eine Fehlermeldung an, die aus der Validierung zurückgegeben wurde
                 Toast.makeText(context, validationResponse.second, Toast.LENGTH_LONG).show()

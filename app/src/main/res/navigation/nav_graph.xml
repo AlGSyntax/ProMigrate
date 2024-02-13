@@ -48,6 +48,13 @@
     <fragment
         android:id="@+id/jobsForYouFragment"
         android:name="com.example.promigrate.ui.JobsForYouFragment"
-        android:label="fragment_jobs_for_you"
-        tools:layout="@layout/fragment_jobs_for_you" />
+        android:label="JobsForYouFragment" >
+        <argument
+            android:name="wo"
+            app:argType="string" />
+        <argument
+            android:name="berufsfeld"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

@@ -9,7 +9,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.promigrate.data.model.JobResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.RegistrationStatus
 import com.example.promigrate.data.remote.DeepLApiService
@@ -56,8 +55,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val user: LiveData<FirebaseUser?>
         get() = _user
 
-    private val _jobs = MutableLiveData<Result<JobResponse>>()
-    val jobs: LiveData<Result<JobResponse>> = _jobs
+    private val _jobs = MutableLiveData<List<String>>()
+    val jobs: LiveData<List<String>> = _jobs
 
     private val _berufsfelder = MutableLiveData<List<String>>()
     val berufsfelder: LiveData<List<String>> = _berufsfelder
@@ -274,7 +273,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+/**
     fun getJobs(was: String?, wo: String?, berufsfeld: String?) {
         viewModelScope.launch {
             try {
@@ -284,7 +283,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
+*/
 
     fun translateText(inputText: String) {
         viewModelScope.launch {
@@ -403,7 +402,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+    // Im ViewModel
+    fun fetchJobs(wo: String, arbeitsort: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getJobs(wo, arbeitsort)
+                if (response.isSuccess) {
+                    Log.d(TAG, "Jobs erfolgreich abgerufen.")
+                    _jobs.value = response.getOrNull() ?: listOf()
+                } else {
+                    _jobs.value = listOf()
+                    Log.e(TAG, "Fehler beim Abrufen der Jobs: ${response.exceptionOrNull()?.message}")
+                }
+            } catch (e: Exception) {
+                _jobs.value = listOf()
+                Log.e(TAG, "Fehler beim Abrufen der Jobs: ${e.message}")
+            }
+        }
+    }
 
 
 
