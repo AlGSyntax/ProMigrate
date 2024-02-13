@@ -30,7 +30,8 @@ class JobsForYouFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecyclerView()
+        binding.rvJobs.layoutManager = LinearLayoutManager(context)
+        binding.rvJobs.adapter = jobsAdapter
 
         // Angenommene Parameter aus dem Bundle
         val berufsfeld = arguments?.getString("berufsfeld") ?: ""
@@ -47,14 +48,6 @@ class JobsForYouFragment : Fragment() {
         }
     }
 
-
-    private fun setupRecyclerView() {
-        // Setze den LayoutManager und den Adapter für den RecyclerView
-        binding.rvJobs.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = jobsAdapter
-        }
-    }
 }
 
 
