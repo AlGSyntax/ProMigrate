@@ -199,22 +199,40 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
-    suspend fun getJobs(berufsfeld: String, wo: String): Result<List<String>> {
+    suspend fun getJobs(berufsfeld: String, arbeitsort: String): Result<List<String>> {
         return try {
-            val response = apiService.getJobs(berufsfeld = berufsfeld, wo = wo)
+            val response = apiService.getJobs(berufsfeld = berufsfeld, wo = arbeitsort)
+            Log.d(TAG, "API-Antwort: ${response.raw()}")
             if (response.isSuccessful && response.body() != null) {
                 // Angenommen, du möchtest weiterhin aus den Facetten extrahieren
                 val berufsListe = response.body()!!.stellenangebote.map { it.beruf ?: "" }
                 Result.success(berufsListe)
             } else {
-                Log.e("JobRepository", "Fehler beim Abrufen der Jobs: ${response.message()}")
+                Log.e(TAG, "Fehler beim Abrufen der Jobs: ${response.message()}")
+                Log.e(TAG, arbeitsort)
                 Result.failure(Exception("Fehler beim Abrufen der Jobs: ${response.message()}"))
             }
         } catch (e: Exception) {
-            Log.e("JobRepository", "Ausnahme beim Abrufen der Jobs: ${e.message}")
+            Log.e(TAG, arbeitsort)
+            Log.e(TAG, "Ausnahme beim Abrufen der Jobs: ${e.message}")
             Result.failure(e)
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

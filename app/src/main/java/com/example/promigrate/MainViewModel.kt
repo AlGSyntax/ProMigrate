@@ -359,6 +359,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // translate german to english
+    fun translateJobTitles(jobTitles: List<String>, onComplete: (List<String>) -> Unit) {
+        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+
+        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        if (currentLanguageCode == "de") {
+            onComplete(jobTitles) // Gebe die ursprünglichen Jobtitel zurück, ohne Übersetzung
+            return // Beende die Methode vorzeitig
+        }
+
+        viewModelScope.launch {
+            val translatedJobTitles = mutableListOf<String>()
+            jobTitles.forEach { jobTitle ->
+                try {
+                    // Verwende currentLanguageCode als Ziel für die Übersetzung
+                    val result = repository.translateText(jobTitle, currentLanguageCode)
+                    result?.text?.let {
+                        translatedJobTitles.add(it)
+                        Log.d("translateJobTitles", "Übersetzt: $jobTitle zu $it")
+                    }
+                } catch (e: Exception) {
+                    Log.e("translateJobTitles", "Fehler bei der Übersetzung von $jobTitle", e)
+                }
+            }
+            onComplete(translatedJobTitles)
+        }
+    }
 
 
 
@@ -403,10 +431,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // Im ViewModel
-    fun fetchJobs(wo: String, arbeitsort: String) {
+    fun fetchJobs(berufsfeld: String, arbeitsort: String) {
         viewModelScope.launch {
             try {
-                val response = repository.getJobs(wo, arbeitsort)
+                val response = repository.getJobs(berufsfeld,arbeitsort)
                 if (response.isSuccess) {
                     Log.d(TAG, "Jobs erfolgreich abgerufen.")
                     _jobs.value = response.getOrNull() ?: listOf()

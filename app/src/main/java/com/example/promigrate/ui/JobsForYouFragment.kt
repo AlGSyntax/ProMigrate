@@ -1,6 +1,7 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,15 +40,29 @@ class JobsForYouFragment : Fragment() {
 
 
 // Aufruf der angepassten Methode
+
+
+        Log.e("JobsForYouFragment", "Berufsfeld: $berufsfeld, Arbeitsort: $arbeitsort")
+        // Auf deutsch übersetzen!
         viewModel.fetchJobs(berufsfeld, arbeitsort)
+
 
 
         // Beobachte die Jobliste im ViewModel und reiche die Daten an den Adapter weiter
         viewModel.jobs.observe(viewLifecycleOwner) { jobs ->
-            jobsAdapter.submitList(jobs)
+            if (jobs != null) {
+                Log.d(TAG, "Jobs erfolgreich abgerufen.")
+                viewModel.translateJobTitles(jobs) { translatedJobs ->
+                    // Aktualisiere den Adapter mit den übersetzten Jobtiteln
+                    jobsAdapter.submitList(translatedJobs)
+                }
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Jobs.")
+            }
         }
-    }
 
+    }
+    
 }
 
 

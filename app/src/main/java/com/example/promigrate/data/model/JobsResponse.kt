@@ -40,8 +40,6 @@ data class ArbeitsortList(
 )
 
 
-
-
 data class Berufsfeld(
     val counts:Map<String,Int>
 )
