@@ -374,7 +374,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Sozialwissenschaften"->"Gesellschaftswissenschaften"
                     "Humanmedizin und Zahnmedizin"->"Human- und Zahnmedizin"
                     "Krankenpflege, Notdienst und Hebammenwesen"->"Krankenpflege, Rettungsdienst und Geburtshilfe"
-
+                    
 
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
                     else -> translatedText
@@ -457,7 +457,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${e.message}")
             }
         }
-    }
+    }// Brauhce Ich diese daten später nochmal ?
 
     // Im ViewModel
     fun fetchJobs(berufsfeld: String, arbeitsort: String) {

@@ -25,6 +25,11 @@ class JobsAdapter : ListAdapter<String, JobsAdapter.JobViewHolder>(DiffCallback)
         fun bind(jobTitle: String) {
             // Stelle sicher, dass du hier auf das korrekte TextView in deinem Layout referenzierst
             binding.jobTitleTextView.text = jobTitle
+
+            binding.itemCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                // Hier kannst du die Logik für das Anhaken des Jobs implementieren
+            }
+
         }
     }
 
