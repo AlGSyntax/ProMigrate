@@ -220,6 +220,26 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
+    suspend fun getJobOffers(was: String): Result<List<String>> {
+        return try {
+            val response = apiService.getJobOffers(was)
+            Log.d(TAG, "API-Antwort: ${response.raw()}")
+            if (response.isSuccessful && response.body() != null) {
+                // Verwende ein Set, um Duplikate zu vermeiden
+                val uniqueJobs = response.body()!!.stellenangebote.map { it.titel}.toSet()
+                // Konvertiere das Set zurück in eine Liste, um das Ergebnis zurückzugeben
+                val berufsListe = uniqueJobs.toList()
+                Result.success(berufsListe)
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Jobs: ${response.message()}")
+                Result.failure(Exception("Fehler beim Abrufen der Jobs: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ausnahme beim Abrufen der Jobs: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
 
 
 

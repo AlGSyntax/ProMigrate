@@ -30,6 +30,11 @@ interface ProMigrateAPIService {
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
     suspend fun getArbeitsorte(): Response<JobResponse>
 
+    @GET("jobboerse/jobsuche-service/pc/v4/jobs")
+    suspend fun getJobOffers(
+        @Query("was") was: String
+    ): Response<JobResponse>
+
 
 
 }

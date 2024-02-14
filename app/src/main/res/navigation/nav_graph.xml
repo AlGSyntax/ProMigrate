@@ -57,12 +57,16 @@
             app:argType="string" />
         <action
             android:id="@+id/action_jobsForYouFragment_to_jobOportunitiesFragment"
-            app:destination="@id/jobOportunitiesFragment" />
+            app:destination="@id/jobOpportunitiesFragment" />
     </fragment>
     <fragment
-        android:id="@+id/jobOportunitiesFragment"
-        android:name="com.example.promigrate.ui.JobOportunitiesFragment"
-        android:label="fragment_job_oportunities"
-        tools:layout="@layout/fragment_job_oportunities" />
+        android:id="@+id/jobOpportunitiesFragment"
+        android:name="com.example.promigrate.ui.JobOpportunitiesFragment"
+        android:label="job_opportunities_fragment_label">
+        <argument
+            android:name="selectedJobs"
+            app:argType="string[]" />
+    </fragment>
+
 
 </navigation>

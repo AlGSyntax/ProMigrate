@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.adapter.JobsAdapter
@@ -18,7 +19,13 @@ class JobsForYouFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
 
     // Erstelle eine Instanz deines Adapters
-    private val jobsAdapter = JobsAdapter()
+    private val jobsAdapter = JobsAdapter { jobTitle, isChecked ->
+        if (isChecked) {
+            viewModel.toggleJobSelection(jobTitle)
+        } else {
+            viewModel.toggleJobSelection(jobTitle)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +40,18 @@ class JobsForYouFragment : Fragment() {
 
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
+        binding.floatingActionButton.setOnClickListener {
+            // Beobachte die ausgewählten Jobs und navigiere zum nächsten Fragment
+            viewModel.selectedJobs.observe(viewLifecycleOwner) { selectedJobs ->
+                // Konvertiere das Set oder die Liste von Strings in ein Array, da Safe Args Arrays erfordern
+                val selectedJobsArray = selectedJobs.toTypedArray()
+
+                // Verwende Safe Args, um zur JobOpportunitiesFragment zu navigieren und die ausgewählten Jobs zu übergeben
+                val action = JobsForYouFragmentDirections.actionJobsForYouFragmentToJobOportunitiesFragment(selectedJobsArray)
+                findNavController().navigate(action)
+            }
+        }
+
 
         // Angenommene Parameter aus dem Bundle
         val berufsfeld = arguments?.getString("berufsfeld") ?: ""

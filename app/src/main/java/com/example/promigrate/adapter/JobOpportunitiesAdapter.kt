@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.databinding.JobItemBinding
 
-
-class JobsAdapter(private val onItemChecked: (String, Boolean) -> Unit) : ListAdapter<String, JobsAdapter.JobViewHolder>(DiffCallback) {
+class JobOpportunitiesAdapter(private val onItemChecked: (String, Boolean) -> Unit) : ListAdapter<String, JobOpportunitiesAdapter.JobViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val binding = JobItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

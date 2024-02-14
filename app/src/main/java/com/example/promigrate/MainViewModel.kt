@@ -66,6 +66,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val translationResult = MutableLiveData<String>()
 
+    private val _selectedJobs = MutableLiveData<Set<String>>()
+    val selectedJobs: LiveData<Set<String>> = _selectedJobs
+
+    private val _jobOffers = MutableLiveData<List<String>>()
+    val jobOffers: LiveData<List<String>> = _jobOffers
+
 
 
 
@@ -76,6 +82,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         loadLanguageSetting()
         setupUserEnv()
+        _selectedJobs.value = emptySet()
     }
 
     /**
@@ -474,6 +481,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: Exception) {
                 _jobs.value = listOf()
                 Log.e(TAG, "Fehler beim Abrufen der Jobs: ${e.message}")
+            }
+        }
+    }
+
+    fun toggleJobSelection(jobId: String) {
+        _selectedJobs.value = _selectedJobs.value?.let { currentSelection ->
+            if (currentSelection.contains(jobId)) {
+                currentSelection - jobId // Entferne den Job, wenn er bereits ausgewählt war
+            } else {
+                currentSelection + jobId // Füge den Job hinzu, wenn er noch nicht ausgewählt war
+            }
+        }
+    }
+
+    fun fetchJobOffers(was: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getJobOffers(was)
+                if (response.isSuccess) {
+                    Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
+                    _jobOffers.value = response.getOrNull() ?: listOf()
+                } else {
+                    _jobOffers.value = listOf()
+                    Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")
+                }
+            } catch (e: Exception) {
+                _jobOffers.value = listOf()
+                Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${e.message}")
             }
         }
     }
