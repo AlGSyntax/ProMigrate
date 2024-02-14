@@ -12,7 +12,7 @@ interface DeepLApiService {
 
 
     @POST("/v2/translate")
-    @Headers("Authorization: DeepL-Auth-Key b3231e9c-fe21-1292-f347-0c1124304d1c:fx", "User-Agent: YourApp/1.2.3")
+    @Headers("Authorization: DeepL-Auth-Key 11c2dd85-db24-2bc2-1dd4-c01787a9cbc2:fx", "User-Agent: YourApp/1.2.3")
     suspend fun translateText(@Body requestBody: TranslationRequest): TranslationResponse
 
     companion object {

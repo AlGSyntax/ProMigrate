@@ -200,7 +200,7 @@ class CreateYourProfileFragment : Fragment() {
         viewModel.fetchArbeitsorte()
     }
 
-        private fun validateInput(
+    private fun validateInput(
         name: String,
         age: String,
         isDataProtected: Boolean,
@@ -213,52 +213,53 @@ class CreateYourProfileFragment : Fragment() {
         additionalPhoneNum: String?
     ): Pair<Boolean, String> {
         if (name.isEmpty()) {
-            return Pair(false, R.string.errornameempt.toString())
+            return Pair(false, requireContext().getString(R.string.errornameempt))
         }
 
         if (age.isEmpty()) {
-            return Pair(false, R.string.errornageampth.toString())
+            return Pair(false, requireContext().getString(R.string.errornageampth))
         } else {
             age.toIntOrNull()?.let {
-                if (it < 0) return Pair(false, R.string.erroragepos.toString())
-            } ?: return Pair(false, R.string.erroragevalid.toString())
+                if (it < 0) return Pair(false, requireContext().getString(R.string.erroragepos))
+            } ?: return Pair(false, requireContext().getString(R.string.erroragevalid))
         }
 
         if (!isDataProtected) {
-            return Pair(false, R.string.errordataprotection.toString())
+            return Pair(false, requireContext().getString(R.string.errordataprotection))
         }
 
         if (selectedImageUri == null) {
-            return Pair(false, R.string.errorprofilepic.toString())
+            return Pair(false, requireContext().getString(R.string.errorprofilepic))
         }
 
         if (additionalStreet.isNullOrEmpty()) {
-            return Pair(false, R.string.errorvoidaddress.toString())
+            return Pair(false, requireContext().getString(R.string.errorvoidaddress))
         }
 
         if (additionalBirthPlace.isNullOrEmpty()) {
-            return Pair(false, R.string.emptybirthplace.toString())
+            return Pair(false, requireContext().getString(R.string.emptybirthplace))
         }
 
         if (additionalMaidenName.isNullOrEmpty()) {
-            return Pair(false, R.string.emptymaidenname.toString())
+            return Pair(false, requireContext().getString(R.string.emptymaidenname))
         }
 
         if (additionalFirstName.isNullOrEmpty()) {
-            return Pair(false, R.string.emptyfirstname.toString())
+            return Pair(false, requireContext().getString(R.string.emptyfirstname))
         }
 
         if (additionalLastName.isNullOrEmpty()) {
-            return Pair(false, R.string.emptylastname.toString())
+            return Pair(false, requireContext().getString(R.string.emptylastname))
         }
 
         if (additionalPhoneNum.isNullOrEmpty()) {
-            return Pair(false, R.string.emptyphonenumber.toString())
+            return Pair(false, requireContext().getString(R.string.emptyphonenumber))
         }
 
         // Wenn alle Prüfungen bestanden sind
-        return Pair(true, R.string.allentavalid.toString())
+        return Pair(true, "")
     }
+
 
 
 

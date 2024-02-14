@@ -368,6 +368,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 // Prüfe und korrigiere spezifische Übersetzungen
                 val correctedTranslation = when(val translatedText = response?.text ?: inputText) {
                     "Computerwissenschaften" -> "Informatik"
+                    "Angehörige der regulären Streitkräfte in anderen Dienstgraden"->"Angehörige der regulären Streitkräfte in sonstigen Rängen"
+                    "Ärztin und Praxisassistentin"->"Arzt- und Praxishilfe"
+                    "Innen- und Trockenbau, Isolierung, Tischlerei, Verglasung"->"Aus- und Trockenbau, Isolierung, Zimmerei, Glaserei"
+                    "Sozialwissenschaften"->"Gesellschaftswissenschaften"
+                    "Humanmedizin und Zahnmedizin"->"Human- und Zahnmedizin"
+                    "Krankenpflege, Notdienst und Hebammenwesen"->"Krankenpflege, Rettungsdienst und Geburtshilfe"
+
+
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
                     else -> translatedText
                 }
