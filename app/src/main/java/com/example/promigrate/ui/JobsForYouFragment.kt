@@ -38,15 +38,14 @@ class JobsForYouFragment : Fragment() {
         val berufsfeld = arguments?.getString("berufsfeld") ?: ""
         val arbeitsort = arguments?.getString("wo") ?: ""
 
-
-// Aufruf der angepassten Methode
-
-
-        Log.e("JobsForYouFragment", "Berufsfeld: $berufsfeld, Arbeitsort: $arbeitsort")
-        // Auf deutsch übersetzen!
-        viewModel.fetchJobs(berufsfeld, arbeitsort)
-
-
+        // Translate the arguments to German
+        viewModel.translateToGerman(berufsfeld) { translatedBerufsfeld ->
+            viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
+                // Verwende die übersetzten Werte direkt in den Parametern für fetchJobs
+                // unter den spezifischen Namen berufsfeld und arbeitsort
+                viewModel.fetchJobs(berufsfeld = translatedBerufsfeld, arbeitsort = translatedArbeitsort)
+            }
+        }
 
         // Beobachte die Jobliste im ViewModel und reiche die Daten an den Adapter weiter
         viewModel.jobs.observe(viewLifecycleOwner) { jobs ->
@@ -60,9 +59,6 @@ class JobsForYouFragment : Fragment() {
                 Log.e(TAG, "Fehler beim Abrufen der Jobs.")
             }
         }
-
     }
-    
 }
-
 

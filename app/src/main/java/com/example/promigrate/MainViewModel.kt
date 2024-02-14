@@ -359,6 +359,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    // In MainViewModel.kt
+    fun translateToGerman(inputText: String, onComplete: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = repository.translateText(inputText, "DE")
+                // Prüfe und korrigiere spezifische Übersetzungen
+                val correctedTranslation = when(val translatedText = response?.text ?: inputText) {
+                    "Computerwissenschaften" -> "Informatik"
+                    // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
+                    else -> translatedText
+                }
+                onComplete(correctedTranslation)
+            } catch (e: Exception) {
+                Log.e("translateToGerman", "Fehler bei der Übersetzung von $inputText", e)
+                // Optional: Handle den Fehler angemessen, z.B. durch Rückgabe eines Fehlercodes
+                onComplete(inputText) // Gebe im Fehlerfall den Originaltext zurück
+            }
+        }
+    }
+
     // translate german to english
     fun translateJobTitles(jobTitles: List<String>, onComplete: (List<String>) -> Unit) {
         // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
