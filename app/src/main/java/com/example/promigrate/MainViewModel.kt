@@ -495,13 +495,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun fetchJobOffers(was: String) {
+    fun fetchJobOffers(was: String, arbeitsort: Array<String>) {
         viewModelScope.launch {
             try {
-                val response = repository.getJobOffers(was)
+                val response = repository.getJobOffers(was,arbeitsort)
                 if (response.isSuccess) {
                     Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
-                    _jobOffers.value = response.getOrNull() ?: listOf()
+                    _jobOffers.value = (response.getOrNull() ?: listOf()) as List<String>?
                 } else {
                     _jobOffers.value = listOf()
                     Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")

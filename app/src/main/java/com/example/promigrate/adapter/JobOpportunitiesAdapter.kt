@@ -14,37 +14,25 @@ class JobOpportunitiesAdapter(private val onItemChecked: (String, Boolean) -> Un
         return JobViewHolder(binding, onItemChecked)
     }
 
-
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val jobTitle = getItem(position)
-        holder.bind(jobTitle, holder.binding.itemCheckbox.isChecked)
-
-        holder.binding.itemCheckbox.setOnClickListener {
-            val isChecked = holder.binding.itemCheckbox.isChecked
-            onItemChecked(jobTitle, isChecked)
-        }
-
-
+        // Rufe hier die bind-Methode auf, ohne den isChecked Zustand zu übergeben
+        holder.bind(jobTitle)
     }
 
     class JobViewHolder(val binding: JobItemBinding, private val onItemChecked: (String, Boolean) -> Unit) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobTitle: String, isChecked: Boolean) {
+        fun bind(jobTitle: String) {
             binding.jobTitleTextView.text = jobTitle
-            binding.itemCheckbox.isChecked = isChecked
 
+            // Setze den initialen Zustand der Checkbox, falls notwendig
+            binding.itemCheckbox.isChecked = false
 
-
-
-            // Entferne den alten Click-Listener, um Doppelaufrufe zu vermeiden
-            binding.itemCheckbox.setOnClickListener(null)
-
-            // Setze einen neuen Click-Listener, der den aktuellen Zustand der Checkbox zurückgibt
+            // Setze den Click-Listener, der den aktuellen Zustand der Checkbox zurückgibt
             binding.itemCheckbox.setOnClickListener {
-                val currentChecked = binding.itemCheckbox.isChecked
-                onItemChecked(jobTitle, currentChecked)
+                // Der isChecked Zustand wird hier direkt abgefragt
+                val isChecked = binding.itemCheckbox.isChecked
+                onItemChecked(jobTitle, isChecked)
             }
-
-
         }
     }
 
@@ -58,4 +46,3 @@ class JobOpportunitiesAdapter(private val onItemChecked: (String, Boolean) -> Un
         }
     }
 }
-

@@ -18,7 +18,6 @@ class JobsForYouFragment : Fragment() {
     private lateinit var binding: FragmentJobsForYouBinding
     private val viewModel: MainViewModel by activityViewModels()
 
-    // Erstelle eine Instanz deines Adapters
     private val jobsAdapter = JobsAdapter { jobTitle, isChecked ->
         if (isChecked) {
             viewModel.toggleJobSelection(jobTitle)
@@ -41,37 +40,29 @@ class JobsForYouFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
         binding.floatingActionButton.setOnClickListener {
-            // Beobachte die ausgewählten Jobs und navigiere zum nächsten Fragment
             viewModel.selectedJobs.observe(viewLifecycleOwner) { selectedJobs ->
-                // Konvertiere das Set oder die Liste von Strings in ein Array, da Safe Args Arrays erfordern
                 val selectedJobsArray = selectedJobs.toTypedArray()
-
-                // Verwende Safe Args, um zur JobOpportunitiesFragment zu navigieren und die ausgewählten Jobs zu übergeben
-                val action = JobsForYouFragmentDirections.actionJobsForYouFragmentToJobOportunitiesFragment(selectedJobsArray)
+                val arbeitsort = arguments?.getString("wo") ?: ""
+                val action = JobsForYouFragmentDirections.actionJobsForYouFragmentToJobOportunitiesFragment(selectedJobsArray,
+                    arrayOf(arbeitsort)
+                )
                 findNavController().navigate(action)
             }
         }
 
-
-        // Angenommene Parameter aus dem Bundle
         val berufsfeld = arguments?.getString("berufsfeld") ?: ""
         val arbeitsort = arguments?.getString("wo") ?: ""
 
-        // Translate the arguments to German
         viewModel.translateToGerman(berufsfeld) { translatedBerufsfeld ->
             viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
-                // Verwende die übersetzten Werte direkt in den Parametern für fetchJobs
-                // unter den spezifischen Namen berufsfeld und arbeitsort
                 viewModel.fetchJobs(berufsfeld = translatedBerufsfeld, arbeitsort = translatedArbeitsort)
             }
         }
 
-        // Beobachte die Jobliste im ViewModel und reiche die Daten an den Adapter weiter
         viewModel.jobs.observe(viewLifecycleOwner) { jobs ->
             if (jobs != null) {
                 Log.d(TAG, "Jobs erfolgreich abgerufen.")
                 viewModel.translateJobTitles(jobs) { translatedJobs ->
-                    // Aktualisiere den Adapter mit den übersetzten Jobtiteln
                     jobsAdapter.submitList(translatedJobs)
                 }
             } else {
@@ -80,4 +71,3 @@ class JobsForYouFragment : Fragment() {
         }
     }
 }
-

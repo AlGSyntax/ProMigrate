@@ -37,19 +37,27 @@ class JobOpportunitiesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Setup RecyclerView
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
 
-        val selectedJob = "" // replace "SomeJob" with the actual job
-        viewModel.fetchJobOffers(selectedJob)
+        // Annahme: Du hast den Arbeitsort und die ausgewählten Berufe als Argumente erhalten
+        val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
+        val selectedJobs = args.selectedJobs.toList() // oder wie auch immer du die Daten übergeben hast
+        val arbeitsort = args.arbeitsort // Stelle sicher, dass du diesen Parameter übergeben und im NavGraph definiert hast
 
-        viewModel.selectedJobs.observe(viewLifecycleOwner) { jobDetails ->
-            if (jobDetails != null) {
-                Log.d(TAG, "Jobdetails erfolgreich abgerufen.")
-                jobsAdapter.submitList(jobDetails.toList())
+        // Hier musst du eine Logik implementieren, um für jeden ausgewählten Beruf die Jobangebote abzurufen
+        // Dies könnte eine Schleife sein, die `viewModel.fetchJobOffers` für jeden Beruf aufruft, oder eine Anpassung deiner Backend-Logik,
+        // um mehrere Berufe auf einmal zu berücksichtigen
+        selectedJobs.forEach { selectedJob ->
+            viewModel.fetchJobOffers(selectedJob, arbeitsort)
+        }
+
+        viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
+            if (jobOffers != null) {
+                Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
+                jobsAdapter.submitList(jobOffers.toList())
             } else {
-                Log.e(TAG, "Fehler beim Abrufen der Jobdetails.")
+                Log.e(TAG, "Fehler beim Abrufen der Jobangebote.")
             }
         }
     }

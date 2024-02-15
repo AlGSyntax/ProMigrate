@@ -9,7 +9,7 @@ data class JobResponse(
 
 data class Job(
     val beruf: String?,
-    val titel: String,
+    val titel: String?,
     val refnr: String,
     val arbeitsort: Arbeitsort,
     val arbeitgeber: String,

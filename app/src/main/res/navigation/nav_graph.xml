@@ -66,6 +66,9 @@
         <argument
             android:name="selectedJobs"
             app:argType="string[]" />
+        <argument
+            android:name="arbeitsort"
+            app:argType="string[]" />
     </fragment>
 
 
