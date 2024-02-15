@@ -70,6 +70,8 @@
     <string name="resetpasswordfail">パスワードをリセットしようとしてエラーが発生しました。メールアドレスをご確認の上、再度お試しください。</string>
     <string name="jobsforyou">あなたのための仕事</string>
     <string name="saveandnext">保存して次へ</string>
+    <string name="jobsopportunities">仕事の機会</string>
+    <string name="finish">終わり</string>
 
 
 </resources>

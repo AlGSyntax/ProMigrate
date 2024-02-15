@@ -71,4 +71,6 @@
     <string name="resetpasswordfail">An error occurred while trying to reset your password. Please check your e-mail address and try again.</string>
     <string name="jobsforyou">Job\'s for YOU</string>
     <string name="saveandnext"><![CDATA[Save & Next]]></string>
+    <string name="jobsopportunities">Job Opportunities</string>
+    <string name="finish">Finish</string>
 </resources>

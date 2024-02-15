@@ -71,5 +71,7 @@
     <string name="resetpasswordfail">Se ha producido un error al intentar restablecer su contraseña. Compruebe su dirección de correo electrónico e inténtelo de nuevo.</string>
     <string name="jobsforyou">Trabajos para ti</string>
     <string name="saveandnext">Guardar y siguiente</string>
+    <string name="jobsopportunities">Oportunidades de trabajo</string>
+    <string name="finish">Terminar</string>
 
 </resources>

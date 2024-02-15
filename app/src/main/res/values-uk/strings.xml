@@ -70,4 +70,6 @@
     <string name="resetpasswordfail">Виникла помилка при спробі скинути пароль. Будь ласка, перевірте свою електронну адресу та спробуйте ще раз.</string>
     <string name="jobsforyou">Роботи для вас</string>
     <string name="saveandnext">Зберегти та продовжити</string>
+    <string name="jobsopportunities">Можливості працевлаштування</string>
+    <string name="finish">Завершити</string>
 </resources>

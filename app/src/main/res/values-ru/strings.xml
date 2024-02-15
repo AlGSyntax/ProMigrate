@@ -72,6 +72,8 @@
     <string name="resetpasswordfail">При попытке сбросить пароль произошла ошибка. Пожалуйста, проверьте адрес электронной почты и повторите попытку.</string>
     <string name="jobsforyou">Работа для вас</string>
     <string name="saveandnext">Сохранить и продолжить</string>
+    <string name="jobsopportunities">Возможности работы</string>
+    <string name="finish">Завершить</string>
 
 
 </resources>
