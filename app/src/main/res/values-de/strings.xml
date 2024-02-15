@@ -70,6 +70,8 @@
     <string name="pleaseputemailin">Bitte geben Sie Ihre E-Mail-Adresse ein.</string>
     <string name="resetpasswordsuccess">Eine E-Mail wurde an Ihre E-Mail-Adresse gesendet. Bitte folgen Sie den Anweisungen in der E-Mail, um Ihr Passwort zurückzusetzen.</string>
     <string name="resetpasswordfail">Beim Versuch, Ihr Passwort zurückzusetzen, ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre E-Mail-Adresse und versuchen Sie es erneut.</string>
+    <string name="jobsforyou">Jobs für dich</string>
+    <string name="saveandnext">Speichern &amp; Weiter</string>
 
 
 

@@ -68,4 +68,6 @@
    <string name="pleaseputemailin">Будь ласка, введіть свою електронну адресу</string>
     <string name="resetpasswordsuccess">На вашу адресу електронної пошти було надіслано лист. Дотримуйтесь інструкцій у листі, щоб скинути пароль.</string>
     <string name="resetpasswordfail">Виникла помилка при спробі скинути пароль. Будь ласка, перевірте свою електронну адресу та спробуйте ще раз.</string>
+    <string name="jobsforyou">Роботи для вас</string>
+    <string name="saveandnext">Зберегти та продовжити</string>
 </resources>

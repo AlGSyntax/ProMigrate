@@ -7,30 +7,61 @@
     android:layout_height="match_parent"
     tools:context=".ui.JobsForYouFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvJobs"
-        android:layout_width="412dp"
-        android:layout_height="503dp"
-        android:layout_marginTop="95dp"
-        android:layout_marginBottom="133dp"
+    <TextView
+        android:id="@+id/tvJobsForYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/jobsforyou"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="22dp"
+        app:cardCornerRadius="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/saveandnextbtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJobsForYou">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvJobs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveandnextbtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="641dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="42dp"
+        android:text="@string/saveandnext"
+        android:textColor="@color/textcolor"
+        android:backgroundTint="@color/background"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="643dp"
-        android:layout_marginBottom="32dp"
-        android:clickable="true"
-        android:contentDescription="@string/addcontactinfo"
-        android:src="@drawable/baseline_arrow_circle_up_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

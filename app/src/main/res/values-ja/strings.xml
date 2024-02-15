@@ -68,6 +68,8 @@
     <string name="pleaseputemailin">メールアドレスを入力してください。</string>
     <string name="resetpasswordsuccess">メールがメールアドレスに送信されました。メールの指示に従ってパスワードをリセットしてください。</string>
     <string name="resetpasswordfail">パスワードをリセットしようとしてエラーが発生しました。メールアドレスをご確認の上、再度お試しください。</string>
+    <string name="jobsforyou">あなたのための仕事</string>
+    <string name="saveandnext">保存して次へ</string>
 
 
 </resources>

@@ -108,6 +108,7 @@
         android:backgroundTint="@color/background"
         android:textColor="@color/textcolor"
         android:fontFamily="@font/quicksandvariablefontwght"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/confirmPasswordTextInputLayout"
         app:layout_constraintStart_toStartOf="@id/confirmPasswordTextInputLayout"
         app:layout_constraintTop_toBottomOf="@id/confirmPasswordTextInputLayout"
