@@ -389,6 +389,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Sozialwissenschaften" -> "Gesellschaftswissenschaften"
                     "Humanmedizin und Zahnmedizin" -> "Human- und Zahnmedizin"
                     "Krankenpflege, Notdienst und Hebammenwesen" -> "Krankenpflege, Rettungsdienst und Geburtshilfe"
+                    "Datenverarbeitung"->"Informatik"
+                    "Altenpflegehelferin"->"Altenpflegehelfer/in\""
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
                     else -> translatedText
                 }

@@ -69,7 +69,15 @@
         <argument
             android:name="arbeitsort"
             app:argType="string" />
+        <action
+            android:id="@+id/action_jobOpportunitiesFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.promigrate.ui.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
 
 
 </navigation>

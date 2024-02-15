@@ -199,4 +199,6 @@ class LogInFragment : Fragment() {
             Toast.makeText(context, "Google Sign-In fehlgeschlagen: ${e.statusCode}", Toast.LENGTH_LONG).show()
         }
     }
+
+
 }
