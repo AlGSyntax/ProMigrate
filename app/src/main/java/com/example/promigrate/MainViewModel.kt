@@ -369,31 +369,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     // In MainViewModel.kt
     fun translateToGerman(inputText: String, onComplete: (String) -> Unit) {
+
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
+        // Prüfe, ob die aktuelle Sprache bereits Deutsch ist
+        if (currentLanguageCode=="de") {
+            onComplete(inputText) // Gebe den ursprünglichen Text zurück, ohne Übersetzung
+            return // Beende die Methode vorzeitig
+        }
+
         viewModelScope.launch {
             try {
                 val response = repository.translateText(inputText, "DE")
                 // Prüfe und korrigiere spezifische Übersetzungen
-                val correctedTranslation = when(val translatedText = response?.text ?: inputText) {
+                val correctedTranslation = when (val translatedText = response?.text ?: inputText) {
                     "Computerwissenschaften" -> "Informatik"
-                    "Angehörige der regulären Streitkräfte in anderen Dienstgraden"->"Angehörige der regulären Streitkräfte in sonstigen Rängen"
-                    "Ärztin und Praxisassistentin"->"Arzt- und Praxishilfe"
-                    "Innen- und Trockenbau, Isolierung, Tischlerei, Verglasung"->"Aus- und Trockenbau, Isolierung, Zimmerei, Glaserei"
-                    "Sozialwissenschaften"->"Gesellschaftswissenschaften"
-                    "Humanmedizin und Zahnmedizin"->"Human- und Zahnmedizin"
-                    "Krankenpflege, Notdienst und Hebammenwesen"->"Krankenpflege, Rettungsdienst und Geburtshilfe"
-                    
-
+                    "Angehörige der regulären Streitkräfte in anderen Dienstgraden" -> "Angehörige der regulären Streitkräfte in sonstigen Rängen"
+                    "Ärztin und Praxisassistentin" -> "Arzt- und Praxishilfe"
+                    "Innen- und Trockenbau, Isolierung, Tischlerei, Verglasung" -> "Aus- und Trockenbau, Isolierung, Zimmerei, Glaserei"
+                    "Sozialwissenschaften" -> "Gesellschaftswissenschaften"
+                    "Humanmedizin und Zahnmedizin" -> "Human- und Zahnmedizin"
+                    "Krankenpflege, Notdienst und Hebammenwesen" -> "Krankenpflege, Rettungsdienst und Geburtshilfe"
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
                     else -> translatedText
                 }
                 onComplete(correctedTranslation)
             } catch (e: Exception) {
                 Log.e("translateToGerman", "Fehler bei der Übersetzung von $inputText", e)
-                // Optional: Handle den Fehler angemessen, z.B. durch Rückgabe eines Fehlercodes
+                // Optional: Handle den Fehler angemessen
                 onComplete(inputText) // Gebe im Fehlerfall den Originaltext zurück
             }
         }
     }
+
 
     // translate german to english
     fun translateJobTitles(jobTitles: List<String>, onComplete: (List<String>) -> Unit) {
@@ -495,13 +502,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun fetchJobOffers(was: String, arbeitsort: Array<String>) {
+    fun fetchJobOffers(was: String, arbeitsort: String) {
         viewModelScope.launch {
             try {
                 val response = repository.getJobOffers(was,arbeitsort)
                 if (response.isSuccess) {
                     Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
-                    _jobOffers.value = (response.getOrNull() ?: listOf()) as List<String>?
+                    _jobOffers.value = (response.getOrNull() ?: listOf()).map { it?: "" }
                 } else {
                     _jobOffers.value = listOf()
                     Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")

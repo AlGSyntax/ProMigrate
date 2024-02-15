@@ -45,7 +45,7 @@ class JobsForYouFragment : Fragment() {
                 val selectedJobsArray = selectedJobs.toTypedArray()
                 val arbeitsort = arguments?.getString("wo") ?: ""
                 val action = JobsForYouFragmentDirections.actionJobsForYouFragmentToJobOportunitiesFragment(selectedJobsArray,
-                    arrayOf(arbeitsort)
+                    arbeitsort
                 )
                 findNavController().navigate(action)
             }

@@ -48,9 +48,20 @@ class JobOpportunitiesFragment : Fragment() {
         // Hier musst du eine Logik implementieren, um für jeden ausgewählten Beruf die Jobangebote abzurufen
         // Dies könnte eine Schleife sein, die `viewModel.fetchJobOffers` für jeden Beruf aufruft, oder eine Anpassung deiner Backend-Logik,
         // um mehrere Berufe auf einmal zu berücksichtigen
-        selectedJobs.forEach { selectedJob ->
-            viewModel.fetchJobOffers(selectedJob, arbeitsort)
+        // Da arbeitsort ein einzelner String ist, ist keine Iteration notwendig
+        // Übersetze den Arbeitsort, da er ein einzelner String ist und für alle Jobs verwendet wird
+        viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
+            // Iteriere durch jeden ausgewählten Job in der Liste selectedJobs
+            selectedJobs.forEach { selectedJob ->
+                // Übersetze den aktuellen Job
+                viewModel.translateToGerman(selectedJob) { translatedJobs ->
+                    // Nachdem sowohl der Job als auch der Arbeitsort übersetzt wurden, rufe die Jobangebote ab
+                    // Hier wird der übersetzte Job und der übersetzte Arbeitsort genutzt, um die Jobangebote zu erhalten
+                    viewModel.fetchJobOffers(was =translatedJobs, arbeitsort = translatedArbeitsort)
+                }
+            }
         }
+
 
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             if (jobOffers != null) {

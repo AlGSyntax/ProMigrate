@@ -68,7 +68,7 @@
             app:argType="string[]" />
         <argument
             android:name="arbeitsort"
-            app:argType="string[]" />
+            app:argType="string" />
     </fragment>
 
 

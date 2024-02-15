@@ -33,7 +33,7 @@ interface ProMigrateAPIService {
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
     suspend fun getJobOffers(
         @Query("was") was: String,
-        @Query("wo") wo: Array<String> // Hinzufügen des Arbeitsorts als Parameter
+        @Query("wo") wo: String // Hinzufügen des Arbeitsorts als Parameter
     ): Response<JobResponse>
 
 

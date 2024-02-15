@@ -220,7 +220,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-    suspend fun getJobOffers(was: String, arbeitsort: Array<String>): Result<List<String?>> {
+    suspend fun getJobOffers(was: String, arbeitsort: String): Result<List<String?>> {
         return try {
             val response = apiService.getJobOffers(was, wo = arbeitsort)
             Log.d(TAG, "API-Antwort: ${response.raw()}")
