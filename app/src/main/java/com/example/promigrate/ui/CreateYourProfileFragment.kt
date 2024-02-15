@@ -106,6 +106,7 @@ class CreateYourProfileFragment : Fragment() {
                     firstname = additionalFirstName.toString(),
                     lastname = additionalLastName.toString(),
                     phonenumber = additionalPhoneNum.toString()
+
                 )
                 Log.d(TAG, fieldOfWork)
                 // Navigiere zum nächsten Fragment

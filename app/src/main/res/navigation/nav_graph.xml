@@ -77,7 +77,16 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.promigrate.ui.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_detailToDoJobApplicationFragment"
+            app:destination="@id/detailToDoJobApplicationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailToDoJobApplicationFragment"
+        android:name="com.example.promigrate.ui.DetailToDoJobApplicationFragment"
+        android:label="fragment_detail_to_do_job_application"
+        tools:layout="@layout/fragment_detail_to_do_job_application" />
 
 
 </navigation>

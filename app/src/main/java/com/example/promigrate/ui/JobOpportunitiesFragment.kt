@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.adapter.JobOpportunitiesAdapter
@@ -39,6 +40,11 @@ class JobOpportunitiesFragment : Fragment() {
 
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
+        binding.finishbtn.setOnClickListener{
+            viewModel.saveSelectedJobs()
+            val action = JobOpportunitiesFragmentDirections.actionJobOpportunitiesFragmentToDashboardFragment()
+            findNavController().navigate(action)
+        }
 
         // Annahme: Du hast den Arbeitsort und die ausgewählten Berufe als Argumente erhalten
         val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
@@ -61,6 +67,8 @@ class JobOpportunitiesFragment : Fragment() {
                 }
             }
         }
+
+
 
 
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->

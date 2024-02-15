@@ -280,7 +280,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-/**
+    fun saveSelectedJobs() {
+        viewModelScope.launch {
+            try {
+                val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                val selectedJobsSet = _selectedJobs.value ?: emptySet()
+
+                // Konvertiere das Set in eine für Firebase geeignete Form (z.B. List oder String)
+                val selectedJobsList = selectedJobsSet.toList()
+
+                // Aktualisiere das User-Profil mit den ausgewählten Jobs
+                repository.updateUserProfileField(userId, "selectedJobs", selectedJobsList)
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern der ausgewählten Jobs", e)
+            }
+        }
+    }
+
+
+    /**
     fun getJobs(was: String?, wo: String?, berufsfeld: String?) {
         viewModelScope.launch {
             try {

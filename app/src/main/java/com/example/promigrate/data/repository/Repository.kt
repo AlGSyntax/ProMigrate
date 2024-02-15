@@ -131,6 +131,12 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
+    fun updateUserProfileField(userId: String, field: String, value: Any) {
+        // Beispiel-Implementierung, passe sie entsprechend deiner Datenstruktur an
+        firestore.collection("user").document(userId).update(field, value)
+    }
+
+
     /**
     suspend fun getJobs(was: String?, wo: String?, berufsfeld: String?): Result<JobResponse> {
         return try {
