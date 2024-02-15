@@ -73,5 +73,6 @@
     <string name="saveandnext">Guardar y siguiente</string>
     <string name="jobsopportunities">Oportunidades de trabajo</string>
     <string name="finish">Terminar</string>
+    <string name="dashboard">Tablero</string>
 
 </resources>

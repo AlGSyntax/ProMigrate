@@ -73,4 +73,5 @@
     <string name="saveandnext"><![CDATA[Save & Next]]></string>
     <string name="jobsopportunities">Job Opportunities</string>
     <string name="finish">Finish</string>
+    <string name="dashboard">Dashboard</string>
 </resources>
