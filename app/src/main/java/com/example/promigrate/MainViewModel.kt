@@ -436,6 +436,53 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Krankenpflege, Notdienst und Hebammenwesen" -> "Krankenpflege, Rettungsdienst und Geburtshilfe"
                     "Datenverarbeitung"->"Informatik"
                     "Altenpflegehelferin"->"Altenpflegehelfer/in\""
+                    "Verwaltung von Baumaschinen und Transportmitteln"->"Bau- und Transportgeräteführung"
+                    "Bühnen- und Kostümbild, Requisiten"->"Bühnen- und Kostümbildnerei, Requisite"
+                    "Einkauf und Verkauf"->"Einkauf und Vertrieb"
+                    "Elektroingenieurwesen"->"Elektrotechnik"
+                    "Ernährung und Gesundheitsberatung"->"Ernährungs- und Gesundheitsberatung"
+                    "Erziehung, Sozialarbeit, Heilpädagogik"->"Erziehung, Sozialarbeit, Heilerziehungspflege"
+                    "Fahrzeugführung im Schienenverkehr"->"Fahrzeugführung im Eisenbahnverkehr"
+                    "Fahrzeugrouting im Schiffsverkehr"->"Fahrzeugführung im Schiffsverkehr"
+                    "Farben- und Lacktechnologie"->"Farb- und Lacktechnik"
+                    "Feinmechanik und Werkzeugtechnik"->"Feinwerk- und Werkzeugtechnik"
+                    "Fischereiindustrie"->"Fischwirtschaft"
+                    "Forstwirtschaft, Jagd, Landschaftspflege"->"Forstwirtschaft, Jagdwirtschaft, Landschaftspflege"
+                    "Management und Vorstand"->"Geschäftsführung und Vorstand"
+                    "Handel, Gesundheitsüberwachung, Desinfektion"->"Gewerbe, Gesundheitsaufsicht, Desinfektion"
+                    "Bauwesen"->"Hochbau"
+                    "Holzbearbeitung und Holzverarbeitung"->"Holzbe- und -verarbeitung"
+                    "Hotelgewerbe"->"Hotellerie"
+                    "IT-Netzwerktechnik, Verwaltung, Organisation"->"IT-Netzwerktechnik, -Administration, -Organisation"
+                    "IT-Systemanalyse, Anwendungsberatung und Vertrieb"->"IT-Systemanalyse, -Anwendungsberatung und -Vertrieb"
+                    "Immobilien- und Gebäudemanagement"->"Immobilienwirtschaft und Facility-Management"
+                    "Industrielle Glasproduktion"->"Industrielle Glasherstellung"
+                    "Industrielle Keramikproduktion"->"Industrielle Keramikherstellung"
+                    "Innenarchitektur, Inneneinrichtung"->"Innenarchitektur, Raumausstattung"
+                    "Geschäftsleute - Transport und Logistik"->"Kaufleute - Verkehr und Logistik"
+                    "Sanitär-, Heizungs- und Klimatechnik"->"Klempnerei, Sanitär-, Heizungs- und Klimatechnik"
+                    "Kunsthandwerkliches Keramik- und Glasdesign"->"Kunsthandwerkliche Keramik- und Glasgestaltung"
+                    "Handwerkliches Metalldesign"->"Kunsthandwerkliche Metallgestaltung"
+                    "Herstellung von Kunststoffen und Gummi"-> "Kunststoff- und Kautschukherstellung"
+                    "Lagerhaltung, Post und Zustellung, Warenumschlag"->"Lagerwirtschaft, Post und Zustellung, Güterumschlag"
+                    "Nahrungs- und Genussmittelproduktion"->"Lebensmittel- und Genussmittelherstellung"
+                    "Leder- und Pelzproduktion"->"Leder- und Pelzherstellung"
+                    "Lehr- und Forschungstätigkeiten an Universitäten"->"Lehr- und Forschungstätigkeit an Hochschulen"
+                    "Unterricht an allgemeinbildenden Schulen"->"Lehrtätigkeit an allgemeinbildenden Schulen"
+                    "Unterricht an außerschulischen Bildungseinrichtungen"->"Lehrtätigkeit an außerschulischen Bildungseinrichtungen"
+                    "Unterricht in beruflichen Fächern und betriebliche Ausbildung"->"Lehrtätigkeit berufsbildender Fächer und betriebliche Ausbildung"
+
+
+
+
+
+
+
+
+
+
+
+
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
                     else -> translatedText
                 }

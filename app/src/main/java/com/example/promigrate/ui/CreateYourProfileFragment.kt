@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -130,7 +131,7 @@ class CreateYourProfileFragment : Fragment() {
             val lastNameEditText = dialogView.findViewById<EditText>(R.id.etLastName)
             val phoneNumEditText = dialogView.findViewById<EditText>(R.id.etPhoneNumber)
 
-            AlertDialog.Builder(it.context,R.style.CustomAlertDialog)
+            AlertDialog.Builder(it.context, R.style.CustomAlertDialog)
                 .setView(dialogView)
                 .setTitle(R.string.additional_contact_info)
                 .setPositiveButton(R.string.save) { _, _ ->
@@ -140,6 +141,8 @@ class CreateYourProfileFragment : Fragment() {
                     additionalFirstName = firstNameEditText.text.toString()
                     additionalLastName = lastNameEditText.text.toString()
                     additionalPhoneNum = phoneNumEditText.text.toString()
+
+
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -233,31 +236,41 @@ class CreateYourProfileFragment : Fragment() {
             return Pair(false, requireContext().getString(R.string.errorprofilepic))
         }
 
-        if (additionalStreet.isNullOrEmpty()) {
-            return Pair(false, requireContext().getString(R.string.errorvoidaddress))
-        }
-
-        if (additionalBirthPlace.isNullOrEmpty()) {
-            return Pair(false, requireContext().getString(R.string.emptybirthplace))
-        }
-
-        if (additionalMaidenName.isNullOrEmpty()) {
-            return Pair(false, requireContext().getString(R.string.emptymaidenname))
-        }
-
         if (additionalFirstName.isNullOrEmpty()) {
+            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptyfirstname))
         }
 
         if (additionalLastName.isNullOrEmpty()) {
+            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptylastname))
         }
 
         if (additionalPhoneNum.isNullOrEmpty()) {
+            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptyphonenumber))
         }
 
+
+        if (additionalStreet.isNullOrEmpty()) {
+            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            return Pair(false, requireContext().getString(R.string.errorvoidaddress))
+        }
+
+        if (additionalBirthPlace.isNullOrEmpty()) {
+            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            return Pair(false, requireContext().getString(R.string.emptybirthplace))
+        }
+
+        if (additionalMaidenName.isNullOrEmpty()) {
+            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            return Pair(false, requireContext().getString(R.string.emptymaidenname))
+        }
+
+
+
         // Wenn alle Prüfungen bestanden sind
+        binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background))
         return Pair(true, "")
     }
 
