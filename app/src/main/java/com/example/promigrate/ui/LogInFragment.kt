@@ -2,6 +2,7 @@ package com.example.promigrate.ui
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
@@ -120,9 +121,27 @@ class LogInFragment : Fragment() {
 
         viewModel.loginStatus.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
+                if (isOnboardingComplete()) {
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                } else {
+                    findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
+                }
             } else {
                 Toast.makeText(context, "Login fehlgeschlagen. Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
+            if (userProfile != null) {
+                // UserProfile-Daten sind geladen, navigiere zum DetailToDoJobApplicationFragment
+                val selectedJobsArray = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()
+                val arbeitsort = userProfile.desiredLocation ?: ""
+
+                val action = LogInFragmentDirections.actionLoginFragmentToDashboardFragment(
+                    selectedJobs = selectedJobsArray,
+                    arbeitsort = arbeitsort
+                )
+                findNavController().navigate(action)
             }
         }
 
@@ -198,6 +217,11 @@ class LogInFragment : Fragment() {
             // Der Google Sign-In ist fehlgeschlagen, handle den Fehler
             Toast.makeText(context, "Google Sign-In fehlgeschlagen: ${e.statusCode}", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun isOnboardingComplete(): Boolean {
+        val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+        return sharedPref?.getBoolean("OnboardingComplete", false) ?: false
     }
 
 

@@ -1,15 +1,6 @@
 package com.example.promigrate.data.model
 
-/**
- * Datenklasse, die ein Benutzerprofil repräsentiert.
- * @property isPremium Gibt an, ob der Benutzer ein Premium-Konto hat.
- * @property username Der Benutzername des Benutzers.
- * @property languageCode Der Sprachcode, der die bevorzugte Sprache des Benutzers angibt.
- * @property profileImageUrl Die URL des Profilbilds des Benutzers.
- * @property name Der Name des Benutzers.
- * @property age Das Alter des Benutzers.
- * @property fieldOfWork Das aktuelle Berufsfeld des Benutzers.
- */
+
 data class Profile(
     val isPremium: Boolean = false,
     val username: String? = "",
@@ -22,5 +13,6 @@ data class Profile(
     val desiredLocation: String? = "",
     val street: String? = "",
     val birthplace: String?= "",
-    val maidenname: String? = ""
+    val maidenname: String? = "",
+    val selectedJobs: List<String>? =  emptyList()
 )

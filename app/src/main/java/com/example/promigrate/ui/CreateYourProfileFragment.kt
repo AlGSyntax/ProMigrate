@@ -74,7 +74,7 @@ class CreateYourProfileFragment : Fragment() {
             val fieldOfWork = binding.autoCompleteTextView.text.toString()
             val isDataProtected = binding.cbDataProtection.isChecked
             // Erfasse den Wert des Sprachniveaus und den gewünschten Ort
-            val languageLevel = binding.languageLevelSlider.value.toInt()
+            val languageLevel = binding.languageLevelSlider.value.toString()
             val desiredLocation = binding.autoCompleteTextView2.text.toString()
 
             // Prüfe, ob alle notwendigen Informationen vorhanden sind

@@ -1,5 +1,6 @@
 package com.example.promigrate.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,6 @@ class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashboardBinding
     private val viewModel: MainViewModel by activityViewModels()
 
-    // Verwende die generierten Safe Args, um auf die Argumente zuzugreifen
     private val args: DashboardFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -26,19 +26,47 @@ class DashboardFragment : Fragment() {
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
         binding.cardBottomLeft.setOnClickListener {
-            // Verwende die Argumente, die bereits im DashboardFragment vorhanden sind
-            val selectedJobsArray = args.selectedJobs
-            val arbeitsort = args.arbeitsort
+            // Check if userProfileData is already loaded
+            val userProfile = viewModel.userProfileData.value
+            if (userProfile != null) {
+                // If userProfileData is loaded, use it
+                val selectedJobs = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()
+                val arbeitsort = userProfile.desiredLocation ?: ""
 
-            // Richtige Navigationsaktion, die zum DetailToDoJobApplicationFragment führt
-            val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
-                selectedJobs = selectedJobsArray,
-                arbeitsort = arbeitsort
-            )
-            findNavController().navigate(action)
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                    selectedJobs = selectedJobs,
+                    arbeitsort = arbeitsort
+                )
+                findNavController().navigate(action)
+            } else {
+                // If userProfileData is not loaded, use the data from DashboardFragmentArgs
+                val selectedJobsArray = args.selectedJobs ?: arrayOf()
+                val arbeitsort = args.arbeitsort ?: ""
+
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                    selectedJobs = selectedJobsArray,
+                    arbeitsort = arbeitsort
+                )
+                findNavController().navigate(action)
+            }
         }
 
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        markOnboardingComplete()
+    }
+
+
+
+    private fun markOnboardingComplete() {
+        val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putBoolean("OnboardingComplete", true)
+            apply()
+        }
     }
 }

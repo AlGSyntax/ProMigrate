@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -71,6 +73,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _jobOffers = MutableLiveData<List<String>>()
     val jobOffers: LiveData<List<String>> = _jobOffers
+
+    private val _userProfileData = MutableLiveData<Profile?>()
+    val userProfileData: LiveData<Profile?> = _userProfileData
+
+
+
+
 
 
 
@@ -190,6 +199,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (task.isSuccessful) {
                     Log.d(TAG, "Benutzer erfolgreich eingeloggt mit E-Mail: $email")
                     setupUserEnv()
+                    fetchUserProfile()
                     loadUserLanguageSetting(auth.currentUser?.uid)
                     _loginStatus.value =
                         true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
@@ -203,6 +213,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         } catch (e: Exception) {
             Log.e(TAG, "Ausnahme in der LogIn-Methode", e)
             _loginStatus.value = false
+        }
+    }
+
+    fun fetchUserProfile() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val docRef = Firebase.firestore.collection("user").document(userId)
+            docRef.get().addOnSuccessListener { documentSnapshot ->
+                val userProfile = documentSnapshot.toObject<Profile>()
+                _userProfileData.value = userProfile
+            }.addOnFailureListener { e ->
+                Log.w(TAG, "Error fetching user profile", e)
+                _userProfileData.value = null
+            }
+        } else {
+            Log.w(TAG, "User ID is null, can't fetch user profile")
+            _userProfileData.value = null
         }
     }
 
@@ -246,7 +273,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun saveProfileWithImage(uri: Uri, name: String, age: String, fieldOfWork: String,
-                             isDataProtected: Boolean, languageLevel: Int,
+                             isDataProtected: Boolean, languageLevel: String,
                              desiredLocation:String,street:String,birthplace:String,maidenname:String,
                              firstname:String,lastname:String,phonenumber:String) {
         viewModelScope.launch {

@@ -19,6 +19,7 @@ class JobOpportunitiesFragment : Fragment() {
     private lateinit var binding: FragmentJobOportunitiesBinding
     private val viewModel: MainViewModel by activityViewModels()
 
+
     private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, isChecked ->
         if (isChecked) {
             viewModel.toggleJobSelection(jobTitle)
@@ -38,9 +39,13 @@ class JobOpportunitiesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
         binding.finishbtn.setOnClickListener{
+
+
             // Hole die aktuell ausgewählten Jobs aus dem ViewModel
             val selectedJobsArray = viewModel.selectedJobs.value?.toTypedArray() ?: arrayOf()
 
@@ -53,6 +58,7 @@ class JobOpportunitiesFragment : Fragment() {
                 arbeitsort = arbeitsort,
                 selectedJobs = selectedJobsArray
             )
+            viewModel.saveSelectedJobs()
             findNavController().navigate(action)
         }
 

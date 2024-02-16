@@ -60,6 +60,7 @@
         app:boxCornerRadiusBottomStart="32dp"
         app:boxCornerRadiusTopEnd="32dp"
         app:boxCornerRadiusTopStart="32dp"
+        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailInputLayout">
