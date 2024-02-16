@@ -41,35 +41,32 @@ class JobOpportunitiesFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
         binding.finishbtn.setOnClickListener{
-            viewModel.saveSelectedJobs()
-            val action = JobOpportunitiesFragmentDirections.actionJobOpportunitiesFragmentToDashboardFragment()
+            // Hole die aktuell ausgewählten Jobs aus dem ViewModel
+            val selectedJobsArray = viewModel.selectedJobs.value?.toTypedArray() ?: arrayOf()
+
+            // Hole den Arbeitsort aus den Fragment-Argumenten
+            val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
+            val arbeitsort = args.arbeitsort
+
+            // Navigiere zum DashboardFragment mit den gesammelten Daten
+            val action = JobOpportunitiesFragmentDirections.actionJobOpportunitiesFragmentToDashboardFragment(
+                arbeitsort = arbeitsort,
+                selectedJobs = selectedJobsArray
+            )
             findNavController().navigate(action)
         }
 
-        // Annahme: Du hast den Arbeitsort und die ausgewählten Berufe als Argumente erhalten
         val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
-        val selectedJobs = args.selectedJobs.toList() // oder wie auch immer du die Daten übergeben hast
-        val arbeitsort = args.arbeitsort // Stelle sicher, dass du diesen Parameter übergeben und im NavGraph definiert hast
+        val selectedJobs = args.selectedJobs.toList()
+        val arbeitsort = args.arbeitsort
 
-        // Hier musst du eine Logik implementieren, um für jeden ausgewählten Beruf die Jobangebote abzurufen
-        // Dies könnte eine Schleife sein, die `viewModel.fetchJobOffers` für jeden Beruf aufruft, oder eine Anpassung deiner Backend-Logik,
-        // um mehrere Berufe auf einmal zu berücksichtigen
-        // Da arbeitsort ein einzelner String ist, ist keine Iteration notwendig
-        // Übersetze den Arbeitsort, da er ein einzelner String ist und für alle Jobs verwendet wird
         viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
-            // Iteriere durch jeden ausgewählten Job in der Liste selectedJobs
             selectedJobs.forEach { selectedJob ->
-                // Übersetze den aktuellen Job
                 viewModel.translateToGerman(selectedJob) { translatedJobs ->
-                    // Nachdem sowohl der Job als auch der Arbeitsort übersetzt wurden, rufe die Jobangebote ab
-                    // Hier wird der übersetzte Job und der übersetzte Arbeitsort genutzt, um die Jobangebote zu erhalten
                     viewModel.fetchJobOffers(was =translatedJobs, arbeitsort = translatedArbeitsort)
                 }
             }
         }
-
-
-
 
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             if (jobOffers != null) {

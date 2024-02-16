@@ -12,7 +12,7 @@ data class Job(
     val titel: String?,
     val refnr: String,
     val arbeitsort: Arbeitsort,
-    val arbeitgeber: String,
+    val arbeitgeber: String?,
     val aktuelleVeroeffentlichungsdatum: String,
     val modifikationsTimestamp: String,
     val eintrittsdatum: String,
