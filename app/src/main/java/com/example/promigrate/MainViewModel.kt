@@ -614,6 +614,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Inside MainViewModel.kt
+    fun updateJobOffers(was: String, arbeitsort: String) {
+        fetchJobOffers(was, arbeitsort)
+    }
 
 
 
