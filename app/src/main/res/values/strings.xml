@@ -76,4 +76,6 @@
     <string name="dashboard">Dashboard</string>
     <string name="selected_jobs_will_be_displayed_here">Selected Jobs will be displayed here</string>
     <string name="arbeitsort_will_be_displayed_here">Arbeitsort will be displayed here</string>
+    <string name="jobaapplication">To Do: Job Application</string>
+    <string name="back">Back</string>
 </resources>
