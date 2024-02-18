@@ -113,8 +113,14 @@
         <argument
             android:name="arbeitsort"
             app:argType="string" />
+        <action
+            android:id="@+id/action_detailToDoJobApplicationFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="com.example.promigrate.ui.ViewPagerFragment"
+        android:label="ViewPagerFragment" />
 
 
 </navigation>

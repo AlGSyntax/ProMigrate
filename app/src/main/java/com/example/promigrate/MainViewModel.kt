@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.promigrate.data.model.Profile
@@ -70,6 +71,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _selectedJobs = MutableLiveData<Set<String>>()
     val selectedJobs: LiveData<Set<String>> = _selectedJobs
+
+    private val _initialSelectedJobs = MutableLiveData<List<String>>()
+    private val initialSelectedJobs: LiveData<List<String>> = _initialSelectedJobs
+
+    private val _additionalSelectedJobs = MutableLiveData<List<String>>()
+    private val additionalSelectedJobs: LiveData<List<String>> = _additionalSelectedJobs
+
 
     private val _jobOffers = MutableLiveData<List<String>>()
     val jobOffers: LiveData<List<String>> = _jobOffers
@@ -617,6 +625,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // Inside MainViewModel.kt
     fun updateJobOffers(was: String, arbeitsort: String) {
         fetchJobOffers(was, arbeitsort)
+    }
+
+    fun addJobSelection(jobTitle: String) {
+        // Füge den Job zur Liste der zusätzlich ausgewählten Jobs hinzu
+        val currentJobs = _additionalSelectedJobs.value ?: listOf()
+        _additionalSelectedJobs.value = currentJobs + jobTitle
+    }
+
+    fun combineJobSelections(): LiveData<List<String>> {
+        // Kombiniere initialSelectedJobs und additionalSelectedJobs in einer neuen LiveData
+        val allSelectedJobs = MediatorLiveData<List<String>>()
+        allSelectedJobs.addSource(initialSelectedJobs) { initialJobs ->
+            allSelectedJobs.value = initialJobs + (additionalSelectedJobs.value ?: listOf())
+        }
+        allSelectedJobs.addSource(additionalSelectedJobs) { additionalJobs ->
+            allSelectedJobs.value = (initialSelectedJobs.value ?: listOf()) + additionalJobs
+        }
+        return allSelectedJobs
+    }
+    fun updateInitialSelectedJobs(selectedJobs: List<String>) {
+        _initialSelectedJobs.value = selectedJobs
     }
 
 
