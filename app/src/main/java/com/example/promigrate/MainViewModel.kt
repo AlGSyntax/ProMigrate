@@ -1,6 +1,8 @@
 package com.example.promigrate
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
@@ -78,12 +80,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _additionalSelectedJobs = MutableLiveData<List<String>>()
     private val additionalSelectedJobs: LiveData<List<String>> = _additionalSelectedJobs
 
+    private val _combinedSelectedJobs = MutableLiveData<List<String>>()
+    val combinedSelectedJobs: LiveData<List<String>> = _combinedSelectedJobs
+
 
     private val _jobOffers = MutableLiveData<List<String>>()
     val jobOffers: LiveData<List<String>> = _jobOffers
 
     private val _userProfileData = MutableLiveData<Profile?>()
     val userProfileData: LiveData<Profile?> = _userProfileData
+
+    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
 
 
 
@@ -100,6 +107,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadLanguageSetting()
         setupUserEnv()
         _selectedJobs.value = emptySet()
+        val savedJobs = sharedPreferences.getStringSet("selectedJobs", emptySet())
+        _initialSelectedJobs.value = savedJobs?.toList()
     }
 
     /**
@@ -328,6 +337,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 repository.updateUserProfileField(userId, "selectedJobs", selectedJobsList)
             } catch (e: Exception) {
                 Log.e(TAG, "Fehler beim Speichern der ausgewählten Jobs", e)
+            }
+        }
+    }
+
+    fun saveCombinedSelectedJobs(combinedSelectedJobs: List<String>) {
+        viewModelScope.launch {
+            try {
+                val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                // Aktualisiere das User-Profil mit den kombinierten ausgewählten Jobs
+                repository.updateUserProfileField(userId, "selectedJobs", combinedSelectedJobs)
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern der kombinierten ausgewählten Jobs: ${e.message}", e)
             }
         }
     }
@@ -642,10 +663,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         allSelectedJobs.addSource(additionalSelectedJobs) { additionalJobs ->
             allSelectedJobs.value = (initialSelectedJobs.value ?: listOf()) + additionalJobs
         }
+        // Speichern Sie die ausgewählten Jobs in SharedPreferences
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("selectedJobs", allSelectedJobs.value?.toSet())
+        editor.apply()
         return allSelectedJobs
     }
+
+
+
     fun updateInitialSelectedJobs(selectedJobs: List<String>) {
         _initialSelectedJobs.value = selectedJobs
+    }
+
+    fun updateCombinedSelectedJobs(jobs: List<String>) {
+        _combinedSelectedJobs.value = jobs
     }
 
 

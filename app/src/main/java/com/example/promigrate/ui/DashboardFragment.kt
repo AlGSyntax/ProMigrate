@@ -25,6 +25,15 @@ class DashboardFragment : Fragment() {
     ): View {
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+        viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
+            if (userProfile != null) {
+                binding.cardTopLeft.visibility = View.VISIBLE
+                binding.cardTopRight.visibility = View.VISIBLE
+                binding.cardBottomLeft.visibility = View.VISIBLE
+                binding.cardBottomRight.visibility = View.VISIBLE
+            }
+        }
+
         binding.cardBottomLeft.setOnClickListener {
             // Check if userProfileData is already loaded
             val userProfile = viewModel.userProfileData.value
@@ -50,6 +59,8 @@ class DashboardFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+
+
 
         return binding.root
     }

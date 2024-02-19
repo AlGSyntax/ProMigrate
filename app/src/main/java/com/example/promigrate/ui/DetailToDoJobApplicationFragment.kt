@@ -1,6 +1,9 @@
 package com.example.promigrate.ui
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,57 +12,76 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.adapter.DetailToDoJobApplicationAdapter
-import com.google.android.material.button.MaterialButton
+import com.example.promigrate.databinding.FragmentDetailToDoJobApplicationBinding
 
 const val TAG2 = "DetailToDoJobApplicationFragment"
 
 class DetailToDoJobApplicationFragment : Fragment() {
+    private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var binding: FragmentDetailToDoJobApplicationBinding
     private val viewModel: MainViewModel by activityViewModels()
+
+
     private val args: DetailToDoJobApplicationFragmentArgs by navArgs()
 
+
     private val adapter = DetailToDoJobApplicationAdapter { jobTitle, isChecked ->
-        // Logik zur Behandlung der Jobauswahl
         viewModel.toggleJobSelection(jobTitle)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Layout des Fragments aufblasen
-        return inflater.inflate(R.layout.fragment_detail_to_do_job_application, container, false)
+        // Korrekte Verwendung von View Binding
+        sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+        binding = FragmentDetailToDoJobApplicationBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // RecyclerView Setup
-        val recyclerView: RecyclerView = view.findViewById(R.id.rvJobs)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
+        // Setup RecyclerView mit View Binding
+        binding.rvJobs.layoutManager = LinearLayoutManager(context)
+        binding.rvJobs.adapter = adapter
 
-        // Übergeben Sie die ausgewählten Jobs direkt an den Adapter
+        val savedJobs = sharedPreferences.getStringSet("selectedJobs", emptySet())
+        adapter.submitList(savedJobs?.toList())
+        savedJobs?.toList()?.let { viewModel.updateInitialSelectedJobs(it) }
+
         adapter.submitList(args.selectedJobs.toList())
-
-        // Beim Laden des Fragments oder sobald die initialen Daten verfügbar sind
         viewModel.updateInitialSelectedJobs(args.selectedJobs.toList())
 
-        // Beobachte die neuen ausgewählten Jobs
-        val combinedSelectedJobs = viewModel.combineJobSelections()
-        combinedSelectedJobs.observe(viewLifecycleOwner) { selectedJobs ->
+        viewModel.combineJobSelections().observe(viewLifecycleOwner) { selectedJobs ->
             adapter.submitList(selectedJobs)
         }
 
-        // Button zur Neustartung des Onboardings, ohne AlertDialog Logik hier
-        val restartOnboardingButton: MaterialButton = view.findViewById(R.id.restartOnboardingButton)
-        restartOnboardingButton.setOnClickListener {
+        binding.restartOnboardingButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_viewPagerFragment)
+        }
+
+        fun updateCombinedSelectedJobs() {
+            val combinedSelectedJobs = viewModel.combineJobSelections().value ?: listOf()
+            viewModel.updateCombinedSelectedJobs(combinedSelectedJobs)
+        }
+
+        // Korrekter OnClickListener für den Speichern-und-Zurück-Button
+        binding.backtodashbtn.setOnClickListener {
+            updateCombinedSelectedJobs()
+            viewModel.combineJobSelections().observe(viewLifecycleOwner) { combinedSelectedJobs ->
+                if (combinedSelectedJobs.isNotEmpty()) {
+                    viewModel.saveCombinedSelectedJobs(combinedSelectedJobs)
+                    if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
+                        findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
+                    }
+                } else {
+                    Log.d(TAG2, "Keine kombinierten Jobs zum Speichern")
+                }
+            }
         }
     }
 }
