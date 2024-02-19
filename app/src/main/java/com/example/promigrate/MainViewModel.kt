@@ -24,8 +24,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -87,7 +85,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _jobOffers = MutableLiveData<List<String>>()
     val jobOffers: LiveData<List<String>> = _jobOffers
 
-    private val _userProfileData = MutableLiveData<Profile?>()
+    private var _userProfileData = MutableLiveData<Profile?>()
     val userProfileData: LiveData<Profile?> = _userProfileData
 
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
@@ -233,21 +231,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun fetchUserProfile() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId != null) {
-            val docRef = Firebase.firestore.collection("user").document(userId)
-            docRef.get().addOnSuccessListener { documentSnapshot ->
-                val userProfile = documentSnapshot.toObject<Profile>()
-                _userProfileData.value = userProfile
-            }.addOnFailureListener { e ->
-                Log.w(TAG, "Error fetching user profile", e)
-                _userProfileData.value = null
-            }
-        } else {
-            Log.w(TAG, "User ID is null, can't fetch user profile")
-            _userProfileData.value = null
-        }
+    private fun fetchUserProfile() {
+        _userProfileData = repository.fetchUserProfile() as MutableLiveData<Profile?>
     }
 
     fun onGoogleLoginClicked(idToken: String) {
@@ -643,42 +628,89 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    fun getSelectedJobs(): Set<String> {
+        return try {
+            val jobs = sharedPreferences.getStringSet("selectedJobs", emptySet()) ?: emptySet()
+            Log.d("getSelectedJobs", "Successfully retrieved selected jobs: $jobs")
+            jobs
+        } catch (e: Exception) {
+            Log.e("getSelectedJobs", "Error retrieving selected jobs", e)
+            emptySet()
+        }
+    }
+
+
     // Inside MainViewModel.kt
     fun updateJobOffers(was: String, arbeitsort: String) {
-        fetchJobOffers(was, arbeitsort)
+        try {
+            fetchJobOffers(was, arbeitsort)
+            Log.d("updateJobOffers", "Successfully updated job offers for $was in $arbeitsort")
+        } catch (e: Exception) {
+            Log.e("updateJobOffers", "Error updating job offers for $was in $arbeitsort", e)
+        }
     }
+
 
     fun addJobSelection(jobTitle: String) {
-        // Füge den Job zur Liste der zusätzlich ausgewählten Jobs hinzu
-        val currentJobs = _additionalSelectedJobs.value ?: listOf()
-        _additionalSelectedJobs.value = currentJobs + jobTitle
+        try {
+            // Füge den Job zur Liste der zusätzlich ausgewählten Jobs hinzu
+            val currentJobs = _additionalSelectedJobs.value ?: listOf()
+            _additionalSelectedJobs.value = currentJobs + jobTitle
+            Log.d("addJobSelection", "Successfully added $jobTitle to the job selection")
+        } catch (e: Exception) {
+            Log.e("addJobSelection", "Error adding $jobTitle to the job selection", e)
+        }
     }
 
+
     fun combineJobSelections(): LiveData<List<String>> {
-        // Kombiniere initialSelectedJobs und additionalSelectedJobs in einer neuen LiveData
         val allSelectedJobs = MediatorLiveData<List<String>>()
-        allSelectedJobs.addSource(initialSelectedJobs) { initialJobs ->
-            allSelectedJobs.value = initialJobs + (additionalSelectedJobs.value ?: listOf())
+        try {
+            // Kombiniere initialSelectedJobs und additionalSelectedJobs in einer neuen LiveData
+            allSelectedJobs.addSource(initialSelectedJobs) { initialJobs ->
+                allSelectedJobs.value = initialJobs + (additionalSelectedJobs.value ?: listOf())
+            }
+            allSelectedJobs.addSource(additionalSelectedJobs) { additionalJobs ->
+                allSelectedJobs.value = (initialSelectedJobs.value ?: listOf()) + additionalJobs
+            }
+            Log.d("combineJobSelections", "Successfully combined job selections")
+
+            // Speichern Sie die ausgewählten Jobs in SharedPreferences
+            val editor = sharedPreferences.edit()
+            editor.putStringSet("selectedJobs", allSelectedJobs.value?.toSet())
+            editor.apply()
+            Log.d("combineJobSelections", "Successfully saved job selections to SharedPreferences")
+        } catch (e: Exception) {
+            Log.e("combineJobSelections", "Error combining job selections or saving to SharedPreferences", e)
         }
-        allSelectedJobs.addSource(additionalSelectedJobs) { additionalJobs ->
-            allSelectedJobs.value = (initialSelectedJobs.value ?: listOf()) + additionalJobs
-        }
-        // Speichern Sie die ausgewählten Jobs in SharedPreferences
-        val editor = sharedPreferences.edit()
-        editor.putStringSet("selectedJobs", allSelectedJobs.value?.toSet())
-        editor.apply()
         return allSelectedJobs
     }
 
 
 
+
     fun updateInitialSelectedJobs(selectedJobs: List<String>) {
-        _initialSelectedJobs.value = selectedJobs
+        try {
+            _initialSelectedJobs.value = selectedJobs
+            Log.d("updateInitialSelectedJobs", "Successfully updated initial selected jobs to $selectedJobs")
+        } catch (e: Exception) {
+            Log.e("updateInitialSelectedJobs", "Error updating initial selected jobs to $selectedJobs", e)
+        }
     }
 
+
     fun updateCombinedSelectedJobs(jobs: List<String>) {
-        _combinedSelectedJobs.value = jobs
+        try {
+            _combinedSelectedJobs.value = jobs
+            Log.d("updateCombinedSelectedJobs", "Successfully updated combined selected jobs to $jobs")
+        } catch (e: Exception) {
+            Log.e("updateCombinedSelectedJobs", "Error updating combined selected jobs to $jobs", e)
+        }
     }
+
+
+
 
 
 

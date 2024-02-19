@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
 import com.example.promigrate.data.model.Profile
@@ -15,6 +16,7 @@ import com.example.promigrate.data.remote.ProMigrateAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.util.Locale
@@ -99,6 +101,25 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
                 Log.e(TAG, "Fehler beim Laden des Benutzerprofils", exception)
             }
 
+        return userProfileLiveData
+    }
+
+    fun fetchUserProfile(): LiveData<Profile?> {
+        val userProfileLiveData = MutableLiveData<Profile?>()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val docRef = FirebaseFirestore.getInstance().collection("user").document(userId)
+            docRef.get().addOnSuccessListener { documentSnapshot ->
+                val userProfile = documentSnapshot.toObject<Profile>()
+                userProfileLiveData.value = userProfile
+            }.addOnFailureListener { e ->
+                Log.w(TAG, "Error fetching user profile", e)
+                userProfileLiveData.value = null
+            }
+        } else {
+            Log.w(TAG, "User ID is null, can't fetch user profile")
+            userProfileLiveData.value = null
+        }
         return userProfileLiveData
     }
 
