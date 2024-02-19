@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/quicksandvariablefontwght"
-        android:text="@string/jobaapplication"
+        android:text="@string/joboffselect"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
@@ -45,16 +45,6 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/restartOnboardingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Onboarding wiederholen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/backtodashbtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,10 +52,10 @@
         android:layout_marginTop="641dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="42dp"
-        android:text="@string/back"
-        android:textColor="@color/textcolor"
         android:backgroundTint="@color/background"
         android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/backtotodolist"
+        android:textColor="@color/textcolor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,5 +63,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/white"
-        app:strokeWidth="2dp"/>
+        app:strokeWidth="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

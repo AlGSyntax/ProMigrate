@@ -29,7 +29,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
     private val args: DetailToDoJobApplicationFragmentArgs by navArgs()
 
 
-    private val adapter = DetailToDoJobApplicationAdapter { jobTitle, isChecked ->
+    private val adapter = DetailToDoJobApplicationAdapter { jobTitle, _ ->
         viewModel.toggleJobSelection(jobTitle)
     }
 
@@ -49,9 +49,9 @@ class DetailToDoJobApplicationFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = adapter
 
-        val savedJobs = sharedPreferences.getStringSet("selectedJobs", emptySet())
-        adapter.submitList(savedJobs?.toList())
-        savedJobs?.toList()?.let { viewModel.updateInitialSelectedJobs(it) }
+        val savedJobs = viewModel.getSelectedJobs()
+        adapter.submitList(savedJobs.toList())
+        savedJobs.toList().let { viewModel.updateInitialSelectedJobs(it) }
 
         adapter.submitList(args.selectedJobs.toList())
         viewModel.updateInitialSelectedJobs(args.selectedJobs.toList())

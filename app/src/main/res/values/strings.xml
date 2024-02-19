@@ -74,8 +74,13 @@
     <string name="jobsopportunities">Job Opportunities</string>
     <string name="finish">Finish</string>
     <string name="dashboard">Dashboard</string>
-    <string name="selected_jobs_will_be_displayed_here">Selected Jobs will be displayed here</string>
+    <string name="newdesiredjob">New Desired Job</string>
+    <string name="submit">Submit</string>
+    <string name="back">Back</string>
     <string name="arbeitsort_will_be_displayed_here">Arbeitsort will be displayed here</string>
     <string name="jobaapplication">To Do: Job Application</string>
-    <string name="back">Back</string>
+    <string name="headertextonboarding">Please enter your new desired job and your new desired place of work here</string>
+    <string name="joboffselect">Select new Job Offers</string>
+    <string name="backtotodolist">Back to ToDo-List</string>
+
 </resources>

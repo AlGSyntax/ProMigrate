@@ -73,4 +73,9 @@
     <string name="jobsopportunities">Можливості працевлаштування</string>
     <string name="finish">Завершити</string>
     <string name="dashboard">Панель приладів</string>
+    <string name="newdesiredjob">Бажана нова робота</string>
+    <string name="submit">Подати</string>
+    <string name="back">Назад</string>
+    <string name="joboffselect">Обирайте нові вакансії </string>
+    <string name="backtotodolist">Повернемося до списку справ</string>
 </resources>

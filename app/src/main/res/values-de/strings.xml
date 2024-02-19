@@ -75,6 +75,11 @@
     <string name="jobsopportunities">Jobmöglichkeiten</string>
     <string name="finish">Fertig</string>
     <string name="dashboard">Dashboard</string>
+    <string name="newdesiredjob">Neuer Wunschberuf</string>
+    <string name="submit">Einreichen</string>
+    <string name="back">Zurück</string>
+    <string name="joboffselect">Neue Stellenangebote auswählen</string>
+    <string name="backtotodolist">Zurück zur To-Do-Liste</string>
 
 
 

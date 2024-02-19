@@ -3,46 +3,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/headertextonboarding"
+        android:textAlignment="center"
+        android:textColor="@color/titles"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <AutoCompleteTextView
         android:id="@+id/arbeitsortEditText"
-        android:layout_width="match_parent"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:hint="Arbeitsort"
+        android:layout_marginTop="288dp"
+        android:layout_marginBottom="395dp"
+        android:background="@drawable/et_border"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:hint="@string/desired_location_hint"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/berufEditText"
+        android:textColor="@color/textcolor"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <AutoCompleteTextView
         android:id="@+id/berufEditText"
-        android:layout_width="match_parent"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:hint="Beruf"
+        android:layout_marginTop="372dp"
+        android:layout_marginBottom="311dp"
+        android:background="@drawable/et_border"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:hint="@string/newdesiredjob"
         android:minHeight="48dp"
+        android:textColor="@color/textcolor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arbeitsortEditText"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="350dp"
-        android:layout_marginBottom="333dp"
-        android:text="Submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/background"
+        android:text="@string/submit"
+        android:textStyle="bold"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/berufEditText"
+        app:layout_constraintVertical_bias="0.233"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

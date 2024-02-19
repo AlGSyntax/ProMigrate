@@ -24,6 +24,10 @@ class ReOnboardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+
+
         viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
             if (arbeitsorte != null) {
                 val adapter = ArrayAdapter(
@@ -74,6 +78,8 @@ class ReOnboardingFragment : Fragment() {
                 Toast.makeText(context, "Bitte füllen Sie alle Felder aus", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 
 

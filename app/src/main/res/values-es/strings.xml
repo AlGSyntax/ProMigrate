@@ -74,5 +74,10 @@
     <string name="jobsopportunities">Oportunidades de trabajo</string>
     <string name="finish">Terminar</string>
     <string name="dashboard">Tablero</string>
+    <string name="newdesiredjob">Nuevo trabajo deseado</string>
+    <string name="submit">Enviar</string>
+    <string name="back">Atrás</string>
+    <string name="joboffselect">Nuevos Trabajos para ti</string>
+    <string name="backtotodolist">Volver a la lista de tareas</string>
 
 </resources>

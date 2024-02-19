@@ -75,6 +75,11 @@
     <string name="jobsopportunities">Возможности работы</string>
     <string name="finish">Завершить</string>
     <string name="dashboard">Панель</string>
+    <string name="newdesiredjob">Новая желаемая работа</string>
+    <string name="submit">Отправить</string>
+    <string name="back">Назад</string>
+    <string name="joboffselect">Новые вакансии для вас</string>
+    <string name="backtotodolist">Вернуться к списку дел</string>
 
 
 </resources>

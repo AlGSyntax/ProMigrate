@@ -73,6 +73,11 @@
     <string name="jobsopportunities">仕事の機会</string>
     <string name="finish">終わり</string>
     <string name="dashboard">ダッシュボード</string>
+    <string name="newdesiredjob">新しい希望職種</string>
+    <string name="submit">提出</string>
+    <string name="back">戻る</string>
+    <string name="joboffselect">新しい空席を選択する</string>
+    <string name="backtotodolist">To-Doリストに戻る</string>
 
 
 </resources>
