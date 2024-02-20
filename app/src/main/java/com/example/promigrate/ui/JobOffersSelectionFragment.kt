@@ -25,17 +25,11 @@ class JobOffersSelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
 
         val adapter = JobOffersSelectionAdapter { jobTitle, isSelected ->
-            // This method is called when a job is selected
-            if (isSelected) {
-                viewModel.addJobSelection(jobTitle)
-            } else {
-                viewModel.getSelectedJobs()
-            }
+            // This method is called when a job is selected or deselected
+            viewModel.toggleJobSelection(jobTitle)
         }
         binding.rvJobs.adapter = adapter
 

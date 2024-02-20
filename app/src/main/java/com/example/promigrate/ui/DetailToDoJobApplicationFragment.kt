@@ -1,7 +1,5 @@
 package com.example.promigrate.ui
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,14 +18,11 @@ import com.example.promigrate.databinding.FragmentDetailToDoJobApplicationBindin
 const val TAG2 = "DetailToDoJobApplicationFragment"
 
 class DetailToDoJobApplicationFragment : Fragment() {
-    private lateinit var sharedPreferences: SharedPreferences
+
 
     private lateinit var binding: FragmentDetailToDoJobApplicationBinding
     private val viewModel: MainViewModel by activityViewModels()
-
-
     private val args: DetailToDoJobApplicationFragmentArgs by navArgs()
-
 
     private val adapter = DetailToDoJobApplicationAdapter { jobTitle, _ ->
         viewModel.toggleJobSelection(jobTitle)
@@ -35,9 +30,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        // Korrekte Verwendung von View Binding
-        sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+    ): View {
         binding = FragmentDetailToDoJobApplicationBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,43 +38,27 @@ class DetailToDoJobApplicationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Setup RecyclerView mit View Binding
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = adapter
 
-        val savedJobs = viewModel.getSelectedJobs()
-        adapter.submitList(savedJobs.toList())
-        savedJobs.toList().let { viewModel.updateInitialSelectedJobs(it) }
+        val selectedJobs = args.selectedJobs.toList()
 
-        adapter.submitList(args.selectedJobs.toList())
-        viewModel.updateInitialSelectedJobs(args.selectedJobs.toList())
+        // Update the RecyclerView
+        adapter.submitList(selectedJobs)
 
-        viewModel.combineJobSelections().observe(viewLifecycleOwner) { selectedJobs ->
-            adapter.submitList(selectedJobs)
-        }
+
 
         binding.restartOnboardingButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_viewPagerFragment)
         }
 
-        fun updateCombinedSelectedJobs() {
-            val combinedSelectedJobs = viewModel.combineJobSelections().value ?: listOf()
-            viewModel.updateCombinedSelectedJobs(combinedSelectedJobs)
-        }
-
-        // Korrekter OnClickListener für den Speichern-und-Zurück-Button
         binding.backtodashbtn.setOnClickListener {
-            updateCombinedSelectedJobs()
-            viewModel.combineJobSelections().observe(viewLifecycleOwner) { combinedSelectedJobs ->
-                if (combinedSelectedJobs.isNotEmpty()) {
-                    viewModel.saveCombinedSelectedJobs(combinedSelectedJobs)
-                    if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
-                        findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
-                    }
-                } else {
-                    Log.d(TAG2, "Keine kombinierten Jobs zum Speichern")
+                if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
+                    findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
+                    viewModel.updateSharedPreferences()
                 }
-            }
+                Log.d(TAG2, "No jobs selected")
+
         }
     }
 }

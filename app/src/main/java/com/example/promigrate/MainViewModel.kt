@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.promigrate.data.model.Profile
@@ -24,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -72,14 +73,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedJobs = MutableLiveData<Set<String>>()
     val selectedJobs: LiveData<Set<String>> = _selectedJobs
 
-    private val _initialSelectedJobs = MutableLiveData<List<String>>()
-    private val initialSelectedJobs: LiveData<List<String>> = _initialSelectedJobs
 
-    private val _additionalSelectedJobs = MutableLiveData<List<String>>()
-    private val additionalSelectedJobs: LiveData<List<String>> = _additionalSelectedJobs
-
-    private val _combinedSelectedJobs = MutableLiveData<List<String>>()
-    val combinedSelectedJobs: LiveData<List<String>> = _combinedSelectedJobs
 
 
     private val _jobOffers = MutableLiveData<List<String>>()
@@ -88,7 +82,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var _userProfileData = MutableLiveData<Profile?>()
     val userProfileData: LiveData<Profile?> = _userProfileData
 
-    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("selectedJobs", Context.MODE_PRIVATE)
 
 
 
@@ -105,8 +99,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadLanguageSetting()
         setupUserEnv()
         _selectedJobs.value = emptySet()
-        val savedJobs = sharedPreferences.getStringSet("selectedJobs", emptySet())
-        _initialSelectedJobs.value = savedJobs?.toList()
+
+
+
     }
 
     /**
@@ -231,8 +226,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun fetchUserProfile() {
-        _userProfileData = repository.fetchUserProfile() as MutableLiveData<Profile?>
+    fun fetchUserProfile() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val docRef = Firebase.firestore.collection("user").document(userId)
+            docRef.get().addOnSuccessListener { documentSnapshot ->
+                val userProfile = documentSnapshot.toObject<Profile>()
+                _userProfileData.value = userProfile
+            }.addOnFailureListener { e ->
+                Log.w(TAG, "Error fetching user profile", e)
+                _userProfileData.value = null
+            }
+        } else {
+            Log.w(TAG, "User ID is null, can't fetch user profile")
+            _userProfileData.value = null
+        }
     }
 
     fun onGoogleLoginClicked(idToken: String) {
@@ -629,15 +637,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun getSelectedJobs(): Set<String> {
-        return try {
-            val jobs = sharedPreferences.getStringSet("selectedJobs", emptySet()) ?: emptySet()
-            Log.d("getSelectedJobs", "Successfully retrieved selected jobs: $jobs")
-            jobs
-        } catch (e: Exception) {
-            Log.e("getSelectedJobs", "Error retrieving selected jobs", e)
-            emptySet()
-        }
+    fun updateSelectedJobs(selectedJobs: List<String>) {
+        _selectedJobs.value = selectedJobs.toSet()
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("selectedJobs", selectedJobs.toSet())
+        editor.apply()
+    }
+
+
+    fun updateSharedPreferences() {
+        val selectedJobs = _selectedJobs.value ?: emptySet()
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("selectedJobs", selectedJobs)
+        editor.apply()
     }
 
 
@@ -652,62 +664,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun addJobSelection(jobTitle: String) {
-        try {
-            // Füge den Job zur Liste der zusätzlich ausgewählten Jobs hinzu
-            val currentJobs = _additionalSelectedJobs.value ?: listOf()
-            _additionalSelectedJobs.value = currentJobs + jobTitle
-            Log.d("addJobSelection", "Successfully added $jobTitle to the job selection")
-        } catch (e: Exception) {
-            Log.e("addJobSelection", "Error adding $jobTitle to the job selection", e)
-        }
-    }
-
-
-    fun combineJobSelections(): LiveData<List<String>> {
-        val allSelectedJobs = MediatorLiveData<List<String>>()
-        try {
-            // Kombiniere initialSelectedJobs und additionalSelectedJobs in einer neuen LiveData
-            allSelectedJobs.addSource(initialSelectedJobs) { initialJobs ->
-                allSelectedJobs.value = initialJobs + (additionalSelectedJobs.value ?: listOf())
-            }
-            allSelectedJobs.addSource(additionalSelectedJobs) { additionalJobs ->
-                allSelectedJobs.value = (initialSelectedJobs.value ?: listOf()) + additionalJobs
-            }
-            Log.d("combineJobSelections", "Successfully combined job selections")
-
-            // Speichern Sie die ausgewählten Jobs in SharedPreferences
-            val editor = sharedPreferences.edit()
-            editor.putStringSet("selectedJobs", allSelectedJobs.value?.toSet())
-            editor.apply()
-            Log.d("combineJobSelections", "Successfully saved job selections to SharedPreferences")
-        } catch (e: Exception) {
-            Log.e("combineJobSelections", "Error combining job selections or saving to SharedPreferences", e)
-        }
-        return allSelectedJobs
-    }
 
 
 
 
-    fun updateInitialSelectedJobs(selectedJobs: List<String>) {
-        try {
-            _initialSelectedJobs.value = selectedJobs
-            Log.d("updateInitialSelectedJobs", "Successfully updated initial selected jobs to $selectedJobs")
-        } catch (e: Exception) {
-            Log.e("updateInitialSelectedJobs", "Error updating initial selected jobs to $selectedJobs", e)
-        }
-    }
 
 
-    fun updateCombinedSelectedJobs(jobs: List<String>) {
-        try {
-            _combinedSelectedJobs.value = jobs
-            Log.d("updateCombinedSelectedJobs", "Successfully updated combined selected jobs to $jobs")
-        } catch (e: Exception) {
-            Log.e("updateCombinedSelectedJobs", "Error updating combined selected jobs to $jobs", e)
-        }
-    }
+
+
+
 
 
 

@@ -1,30 +1,80 @@
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="494dp"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/headertextonboarding"
+        android:textAlignment="center"
+        android:textColor="@color/titles"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <AutoCompleteTextView
         android:id="@+id/arbeitsortEditText"
-        android:layout_width="match_parent"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:hint="Arbeitsort"
-        android:minHeight="48dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="288dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="395dp"
+        android:background="@drawable/et_border"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:hint="@string/desired_location_hint"
+        android:minHeight="48dp"
+        android:textColor="@color/textcolor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <AutoCompleteTextView
         android:id="@+id/berufEditText"
-        android:layout_width="match_parent"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:hint="Beruf"
-        android:minHeight="48dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="373dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="310dp"
+        android:background="@drawable/et_border"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:hint="@string/newdesiredjob"
+        android:minHeight="48dp"
+        android:textColor="@color/textcolor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submitButton"
-        android:layout_width="match_parent"
+        android:layout_width="411dp"
         android:layout_height="wrap_content"
-        android:text="Submit"/>
+        android:layout_marginTop="482dp"
+        android:layout_marginBottom="201dp"
+        android:backgroundTint="@color/background"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/submit"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

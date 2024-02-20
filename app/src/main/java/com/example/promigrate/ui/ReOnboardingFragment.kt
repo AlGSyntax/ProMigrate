@@ -26,8 +26,6 @@ class ReOnboardingFragment : Fragment() {
 
 
 
-
-
         viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
             if (arbeitsorte != null) {
                 val adapter = ArrayAdapter(
