@@ -94,7 +94,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     //Google Sign In
-    implementation ("com.google.android.gms:play-services-auth:20.7.0")
+    implementation ("com.google.android.gms:play-services-auth:21.0.0")
 
     //WorkManager
     implementation ("androidx.work:work-runtime-ktx:2.9.0")

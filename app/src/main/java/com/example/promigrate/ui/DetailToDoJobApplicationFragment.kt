@@ -19,7 +19,6 @@ const val TAG2 = "DetailToDoJobApplicationFragment"
 
 class DetailToDoJobApplicationFragment : Fragment() {
 
-
     private lateinit var binding: FragmentDetailToDoJobApplicationBinding
     private val viewModel: MainViewModel by activityViewModels()
     private val args: DetailToDoJobApplicationFragmentArgs by navArgs()
@@ -41,24 +40,38 @@ class DetailToDoJobApplicationFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = adapter
 
-        val selectedJobs = args.selectedJobs.toList()
+        val selectedJobs = args.selectedJobs.toSet().toList()
+        viewModel._selectedJobs.value = selectedJobs.toSet()
+        //Live Data im viewModel überschreiben 'selectedJobs'
 
-        // Update the RecyclerView
-        adapter.submitList(selectedJobs)
 
 
+        viewModel.selectedJobs.observe(viewLifecycleOwner) { selectedJobsSet ->
+            Log.d(TAG2, "Beobachte Änderungen in selectedJobs: $selectedJobsSet")
+            // Konvertiere das Set in eine Liste, die vom Adapter verwendet werden kann
+            val selectedJobsList = selectedJobsSet.toList()
+            // Aktualisiere den Adapter mit der neuen Liste
+            adapter.submitList(selectedJobsList)
+            // Optional: Eine Log-Nachricht ausgeben
+            Log.d(TAG2, "Aktualisierte Liste der ausgewählten Jobs: $selectedJobsList")
+        }
+
+
+
+        // Mit geupdateter Live Data befüllen
+
+        //AUfjedenfall einen observer damit der Adapter neu befüllt wird .
 
         binding.restartOnboardingButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_viewPagerFragment)
         }
 
         binding.backtodashbtn.setOnClickListener {
-                if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
-                    findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
-                    viewModel.updateSharedPreferences()
-                }
-                Log.d(TAG2, "No jobs selected")
-
+            viewModel.updateSelectedJobsAndPersist(selectedJobs.toSet())
+            if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
+                findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
+            }
+            Log.d(TAG2, "No jobs selected")
         }
     }
 }

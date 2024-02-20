@@ -39,7 +39,7 @@ class DashboardFragment : Fragment() {
             val userProfile = viewModel.userProfileData.value
             if (userProfile != null) {
                 // If userProfileData is loaded, use it
-                val selectedJobs = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()
+                val selectedJobs = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()//Firebase
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
                 val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(

@@ -70,7 +70,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val translationResult = MutableLiveData<String>()
 
-    private val _selectedJobs = MutableLiveData<Set<String>>()
+    val _selectedJobs = MutableLiveData<Set<String>>()
     val selectedJobs: LiveData<Set<String>> = _selectedJobs
 
 
@@ -324,7 +324,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val selectedJobsSet = _selectedJobs.value ?: emptySet()
 
                 // Konvertiere das Set in eine für Firebase geeignete Form (z.B. List oder String)
-                val selectedJobsList = selectedJobsSet.toList()
+                val selectedJobsList = selectedJobsSet.toList().toSet().toList()
 
                 // Aktualisiere das User-Profil mit den ausgewählten Jobs
                 repository.updateUserProfileField(userId, "selectedJobs", selectedJobsList)
@@ -611,12 +611,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun toggleJobSelection(jobId: String) {
         _selectedJobs.value = _selectedJobs.value?.let { currentSelection ->
             if (currentSelection.contains(jobId)) {
-                currentSelection - jobId // Entferne den Job, wenn er bereits ausgewählt war
+                currentSelection.minus(jobId) // Entferne den Job, wenn er bereits ausgewählt war
             } else {
-                currentSelection + jobId // Füge den Job hinzu, wenn er noch nicht ausgewählt war
+                currentSelection.plus(jobId) // Füge den Job hinzu, wenn er noch nicht ausgewählt war
+            }.also {
+                Log.d(TAG, "Jobauswahl aktualisiert: $it")
             }
         }
-    }
+    }// Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
+    //Logs beispielsweise , baue einen observer (todoListe)
 
     fun fetchJobOffers(was: String, arbeitsort: String) {
         viewModelScope.launch {
@@ -661,6 +664,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         } catch (e: Exception) {
             Log.e("updateJobOffers", "Error updating job offers for $was in $arbeitsort", e)
         }
+    }
+
+
+    fun updateSelectedJobsAndPersist(selectedJobs: Set<String>) {
+        _selectedJobs.value = selectedJobs
+        saveSelectedJobsToFirebase(selectedJobs.toList())
+        saveSelectedJobsToSharedPreferences(selectedJobs)
+    }
+
+    private fun saveSelectedJobsToFirebase(selectedJobs: List<String>) {
+        val userId = auth.currentUser?.uid ?: return // Return early if no user is logged in
+        repository.updateUserProfileField(userId, "selectedJobs", selectedJobs.toList())
+    }
+
+    private fun saveSelectedJobsToSharedPreferences(selectedJobs: Set<String>) {
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("selectedJobs", selectedJobs)
+        editor.apply()
     }
 
 

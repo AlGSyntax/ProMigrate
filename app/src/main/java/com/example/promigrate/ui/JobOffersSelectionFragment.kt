@@ -1,6 +1,7 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ class JobOffersSelectionFragment : Fragment() {
     private lateinit var binding: FragmentJobOffersSelectionBinding
     private val viewModel: MainViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentJobOffersSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -27,18 +28,20 @@ class JobOffersSelectionFragment : Fragment() {
 
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
 
-        val adapter = JobOffersSelectionAdapter { jobTitle, isSelected ->
-            // This method is called when a job is selected or deselected
+        val adapter = JobOffersSelectionAdapter { jobTitle, _ ->
             viewModel.toggleJobSelection(jobTitle)
+            Log.d("JobOffersSelectionFragment", "Jobauswahl getoggelt: $jobTitle")
         }
+
         binding.rvJobs.adapter = adapter
 
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             adapter.submitList(jobOffers)
         }
 
+
+
         binding.backtodashbtn.setOnClickListener {
-            viewModel.saveSelectedJobs()
             // Navigate back in the navigation stack
             findNavController().navigateUp()
         }

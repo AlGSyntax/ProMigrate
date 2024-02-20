@@ -42,7 +42,7 @@ class JobsForYouFragment : Fragment() {
         binding.rvJobs.adapter = jobsAdapter
         binding.saveandnextbtn.setOnClickListener {
             viewModel.selectedJobs.observe(viewLifecycleOwner) { selectedJobs ->
-                val selectedJobsArray = selectedJobs.toTypedArray() ?: arrayOf()
+                val selectedJobsArray = selectedJobs.toTypedArray()
                 val arbeitsort = arguments?.getString("wo") ?: ""
                 val action = JobsForYouFragmentDirections.actionJobsForYouFragmentToJobOportunitiesFragment(selectedJobsArray,
                     arbeitsort
