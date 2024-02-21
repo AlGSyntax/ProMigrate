@@ -17,14 +17,16 @@ class JobsForYouFragment : Fragment() {
 
     private lateinit var binding: FragmentJobsForYouBinding
     private val viewModel: MainViewModel by activityViewModels()
+    private var selectedJobs = mutableSetOf<String>()
 
     private val jobsAdapter = JobsAdapter { jobTitle, isChecked ->
         if (isChecked) {
-            viewModel.toggleJobSelection(jobTitle)
+            selectedJobs.add(jobTitle)
         } else {
-            viewModel.toggleJobSelection(jobTitle)
+            selectedJobs.remove(jobTitle)
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +43,14 @@ class JobsForYouFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
         binding.saveandnextbtn.setOnClickListener {
-            viewModel.selectedJobs.observe(viewLifecycleOwner) { selectedJobs ->
+
                 val selectedJobsArray = selectedJobs.toTypedArray()
                 val arbeitsort = arguments?.getString("wo") ?: ""
                 val action = JobsForYouFragmentDirections.actionJobsForYouFragmentToJobOportunitiesFragment(selectedJobsArray,
                     arbeitsort
                 )
                 findNavController().navigate(action)
-            }
+
         }
 
         val berufsfeld = arguments?.getString("berufsfeld") ?: ""
