@@ -609,16 +609,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun toggleJobSelection(jobId: String) {
-        _selectedJobs.value = _selectedJobs.value?.let { currentSelection ->
-            if (currentSelection.contains(jobId)) {
-                currentSelection.minus(jobId) // Entferne den Job, wenn er bereits ausgewählt war
-            } else {
-                currentSelection.plus(jobId) // Füge den Job hinzu, wenn er noch nicht ausgewählt war
-            }.also {
-                Log.d(TAG, "Jobauswahl aktualisiert: $it")
-            }
+        val currentProfile = _userProfileData.value ?: Profile().also { _userProfileData.value = it }
+        val currentSelectedJobs = currentProfile.selectedJobs?.toMutableSet() ?: mutableSetOf()
+
+        if (currentSelectedJobs.contains(jobId)) {
+            currentSelectedJobs.remove(jobId)
+        } else {
+            currentSelectedJobs.add(jobId)
         }
-    }// Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
+
+        // Setze die aktualisierte Liste zurück ins Profile-Objekt
+        currentProfile.selectedJobs = currentSelectedJobs.toList()
+        _userProfileData.value = currentProfile
+
+        Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
+    }
+
+// Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
     //Logs beispielsweise , baue einen observer (todoListe)
 
     fun fetchJobOffers(was: String, arbeitsort: String) {
@@ -668,10 +675,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun updateSelectedJobsAndPersist(selectedJobs: Set<String>) {
-        _selectedJobs.value = selectedJobs
+        // Hole das aktuelle Profile-Objekt oder erstelle ein neues, wenn es null ist
+        val currentProfile = _userProfileData.value ?: Profile()
+
+        // Aktualisiere die selectedJobs im Profile-Objekt
+        currentProfile.selectedJobs = selectedJobs.toList()
+
+        // Aktualisiere das userProfileData LiveData mit dem neuen Profile-Objekt
+        _userProfileData.value = currentProfile
+
+        // Persistiere die Änderungen
         saveSelectedJobsToFirebase(selectedJobs.toList())
         saveSelectedJobsToSharedPreferences(selectedJobs)
     }
+
 
     private fun saveSelectedJobsToFirebase(selectedJobs: List<String>) {
         val userId = auth.currentUser?.uid ?: return // Return early if no user is logged in
