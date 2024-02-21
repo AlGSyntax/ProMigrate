@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:textAlignment="center"
     tools:context=".ui.JobOpportunitiesFragment">
 
 
@@ -55,10 +56,10 @@
         android:layout_marginTop="641dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="42dp"
-        android:text="@string/finish"
-        android:textColor="@color/textcolor"
         android:backgroundTint="@color/background"
         android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/finish"
+        android:textColor="@color/textcolor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,6 +67,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/white"
-        app:strokeWidth="2dp"/>
+        app:strokeWidth="2dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

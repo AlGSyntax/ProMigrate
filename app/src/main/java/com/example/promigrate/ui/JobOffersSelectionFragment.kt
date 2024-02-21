@@ -28,10 +28,12 @@ class JobOffersSelectionFragment : Fragment() {
 
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
 
+
+
         val adapter = JobOffersSelectionAdapter { jobTitle, _ ->
             viewModel.toggleJobSelection(jobTitle)
             Log.d("JobOffersSelectionFragment", "Jobauswahl getoggelt: $jobTitle")
-        }
+        }// Local History 9:50 AM
 
         binding.rvJobs.adapter = adapter
 
@@ -42,6 +44,7 @@ class JobOffersSelectionFragment : Fragment() {
 
 
         binding.backtodashbtn.setOnClickListener {
+            viewModel.updateSelectedJobsAndPersist(viewModel.userProfileData.value?.selectedJobs?.toSet() ?: emptySet())
             // Navigate back in the navigation stack
             findNavController().navigateUp()
         }

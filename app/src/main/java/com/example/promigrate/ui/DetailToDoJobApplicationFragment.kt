@@ -24,12 +24,11 @@ class DetailToDoJobApplicationFragment : Fragment() {
     private val args: DetailToDoJobApplicationFragmentArgs by navArgs()
 
     private val adapter = DetailToDoJobApplicationAdapter { jobTitle, _ ->
+        // Diese Methode im ViewModel muss entsprechend angepasst werden
         viewModel.toggleJobSelection(jobTitle)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDetailToDoJobApplicationBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,34 +39,20 @@ class DetailToDoJobApplicationFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = adapter
 
-        val selectedJobs = args.selectedJobs.toSet().toList()
-        viewModel._selectedJobs.value = selectedJobs.toSet()
-        //Live Data im viewModel überschreiben 'selectedJobs'
-
-
-
-        viewModel.selectedJobs.observe(viewLifecycleOwner) { selectedJobsSet ->
-            Log.d(TAG2, "Beobachte Änderungen in selectedJobs: $selectedJobsSet")
-            // Konvertiere das Set in eine Liste, die vom Adapter verwendet werden kann
-            val selectedJobsList = selectedJobsSet.toList()
-            // Aktualisiere den Adapter mit der neuen Liste
+        // Ersetze die direkte Beobachtung und Manipulation von _selectedJobs
+        // mit Beobachtung von userProfileData
+        viewModel.userProfileData.observe(viewLifecycleOwner) { profile ->
+            val selectedJobsList = profile?.selectedJobs?.toList() ?: emptyList()
             adapter.submitList(selectedJobsList)
-            // Optional: Eine Log-Nachricht ausgeben
             Log.d(TAG2, "Aktualisierte Liste der ausgewählten Jobs: $selectedJobsList")
         }
 
-
-
-        // Mit geupdateter Live Data befüllen
-
-        //AUfjedenfall einen observer damit der Adapter neu befüllt wird .
-
+        // Logik zum Navigieren beibehalten
         binding.restartOnboardingButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_viewPagerFragment)
         }
 
         binding.backtodashbtn.setOnClickListener {
-            viewModel.updateSelectedJobsAndPersist(selectedJobs.toSet())
             if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
                 findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
             }
@@ -75,3 +60,4 @@ class DetailToDoJobApplicationFragment : Fragment() {
         }
     }
 }
+// Argumente aus den vorherigen Fragment übernehmen, wie kann ich das machen ?

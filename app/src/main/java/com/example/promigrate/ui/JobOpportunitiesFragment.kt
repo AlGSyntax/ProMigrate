@@ -20,12 +20,8 @@ class JobOpportunitiesFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
 
 
-    private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, isChecked ->
-        if (isChecked) {
-            viewModel.toggleJobSelection(jobTitle)
-        } else {
-            viewModel.toggleJobSelection(jobTitle)
-        }
+    private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, _ ->
+        viewModel.toggleJobSelection(jobTitle)
     }
 
     override fun onCreateView(
@@ -47,18 +43,19 @@ class JobOpportunitiesFragment : Fragment() {
 
 
             // Hole die aktuell ausgewählten Jobs aus dem ViewModel
-            val selectedJobsArray = viewModel.selectedJobs.value?.toTypedArray() ?: arrayOf()
+
 
             // Hole den Arbeitsort aus den Fragment-Argumenten
             val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
             val arbeitsort = args.arbeitsort
+            val selectedJobs = args.selectedJobs.toList()
 
             // Navigiere zum DashboardFragment mit den gesammelten Daten
             val action = JobOpportunitiesFragmentDirections.actionJobOpportunitiesFragmentToDashboardFragment(
                 arbeitsort = arbeitsort,
-                selectedJobs = selectedJobsArray
+                selectedJobs = selectedJobs.toList().toTypedArray()
             )
-            viewModel.saveSelectedJobs()
+            viewModel.updateSelectedJobsAndPersist(selectedJobs.toSet())
             findNavController().navigate(action)
         }
 

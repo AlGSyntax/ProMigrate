@@ -25,6 +25,8 @@ class DashboardFragment : Fragment() {
     ): View {
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+        markOnboardingComplete()
+
         viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
             if (userProfile != null) {
                 binding.cardTopLeft.visibility = View.VISIBLE
@@ -64,13 +66,6 @@ class DashboardFragment : Fragment() {
 
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        markOnboardingComplete()
-    }
-
 
 
     private fun markOnboardingComplete() {

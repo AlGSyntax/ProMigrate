@@ -32,12 +32,20 @@ class JobOffersSelectionAdapter(private val onItemChecked: (String, Boolean) -> 
     class JobViewHolder(private val binding: JobItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(jobTitle: String, isChecked: Boolean, onCheckedChanged: (Boolean) -> Unit) {
             binding.jobTitleTextView.text = jobTitle
+
+            // Entferne den vorhandenen CheckChangeListener, um unbeabsichtigte Aufrufe beim Recycling zu vermeiden
+            binding.itemCheckbox.setOnCheckedChangeListener(null)
+
+            // Setze den Zustand der Checkbox basierend auf dem aktuellen Auswahlzustand
             binding.itemCheckbox.isChecked = isChecked
+
+            // Setze den CheckChangeListener, um Änderungen zu erfassen
             binding.itemCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 onCheckedChanged(isChecked)
             }
         }
     }
+
 
     companion object DiffCallback : DiffUtil.ItemCallback<String>() {
         override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {

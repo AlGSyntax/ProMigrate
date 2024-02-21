@@ -80,6 +80,9 @@
     <string name="back">Назад</string>
     <string name="joboffselect">Новые вакансии для вас</string>
     <string name="backtotodolist">Вернуться к списку дел</string>
+    <string name="onboardingrepeat">Повторить Onboarding</string>
+    <string name="headertextonboarding">Пожалуйста, введите вашу новую желаемую работу и ваше новое желаемое место работы здесь</string>
+    <string name="jobapplication">To Do: Приложение для работы</string>
 
 
 </resources>

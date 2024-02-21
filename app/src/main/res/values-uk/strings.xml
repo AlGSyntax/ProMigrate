@@ -78,4 +78,7 @@
     <string name="back">Назад</string>
     <string name="joboffselect">Обирайте нові вакансії </string>
     <string name="backtotodolist">Повернемося до списку справ</string>
+    <string name="onboardingrepeat">Повторити Onboarding</string>
+    <string name="headertextonboarding">Будь ласка, введіть свою нову бажану роботу та нове бажане місце роботи тут</string>
+    <string name="jobapplication">To Do: Job Application</string>
 </resources>

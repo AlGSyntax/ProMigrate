@@ -79,5 +79,8 @@
     <string name="back">Atrás</string>
     <string name="joboffselect">Nuevos Trabajos para ti</string>
     <string name="backtotodolist">Volver a la lista de tareas</string>
+    <string name="onboardingrepeat">Repetir Onboarding</string>
+    <string name="headertextonboarding">Por favor, introduzca su nuevo trabajo deseado y su nuevo lugar de trabajo deseado aquí</string>
+    <string name="jobapplication">Por hacer: Solicitud de empleo</string>
 
 </resources>

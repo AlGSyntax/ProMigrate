@@ -80,6 +80,9 @@
     <string name="back">Zurück</string>
     <string name="joboffselect">Neue Stellenangebote auswählen</string>
     <string name="backtotodolist">Zurück zur To-Do-Liste</string>
+    <string name="onboardingrepeat">Onboarding wiederholen</string>
+    <string name="headertextonboarding">Bitte geben Sie hier Ihren neuen Wunschberuf und Ihren neuen Wunschort der Arbeit ein</string>
+    <string name="jobapplication">To Do:Job-Bewerbung</string>
 
 
 
