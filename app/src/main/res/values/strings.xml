@@ -82,5 +82,6 @@
     <string name="joboffselect">Select new Job Offers</string>
     <string name="backtotodolist">Back to ToDo-List</string>
     <string name="onboardingrepeat">Repeat Onboarding</string>
+    <string name="todojobresearch">To Do : Job Research</string>
 
 </resources>

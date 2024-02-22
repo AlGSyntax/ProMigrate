@@ -101,6 +101,9 @@
                 android:name="arbeitsort"
                 app:argType="string" />
         </action>
+        <action
+            android:id="@+id/action_dashboardFragment_to_detailToDoJobResearchFragment"
+            app:destination="@id/detailToDoJobResearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailToDoJobApplicationFragment"
@@ -124,6 +127,19 @@
         android:id="@+id/viewPagerFragment"
         android:name="com.example.promigrate.ui.ViewPagerFragment"
         android:label="ViewPagerFragment" />
+    <fragment
+        android:id="@+id/detailToDoJobResearchFragment"
+        android:name="com.example.promigrate.ui.DetailToDoJobResearchFragment"
+        android:label="fragment_detail_to_do_job_research"
+        tools:layout="@layout/fragment_detail_to_do_job_research">
+        <argument
+            android:name="selectedJobs"
+            app:argType="string[]" />
+        <argument
+            android:name="arbeitsort"
+            app:argType="string" />
+    </fragment>
+
 
 
 </navigation>

@@ -62,6 +62,31 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        binding.cardTopLeft.setOnClickListener {
+            val userProfile = viewModel.userProfileData.value
+            if (userProfile != null) {
+                // If userProfileData is loaded, use it
+                val selectedJobs = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()//Firebase
+                val arbeitsort = userProfile.desiredLocation ?: ""
+
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
+                    selectedJobs = selectedJobs,
+                    arbeitsort = arbeitsort
+                )
+                findNavController().navigate(action)
+            } else {
+                // If userProfileData is not loaded, use the data from DashboardFragmentArgs
+                val selectedJobsArray = args.selectedJobs ?: arrayOf()
+                val arbeitsort = args.arbeitsort ?: ""
+
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
+                    selectedJobs = selectedJobsArray,
+                    arbeitsort = arbeitsort
+                )
+                findNavController().navigate(action)
+            }
+        }
+
 
 
         return binding.root

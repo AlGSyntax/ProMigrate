@@ -80,5 +80,6 @@
     <string name="backtotodolist">Повернемося до списку справ</string>
     <string name="onboardingrepeat">Повторити Onboarding</string>
     <string name="headertextonboarding">Будь ласка, введіть свою нову бажану роботу та нове бажане місце роботи тут</string>
-    <string name="jobapplication">To Do: Job Application</string>
+    <string name="jobapplication">To Do: Подати заявку на роботу</string>
+    <string name="todojobresearch">To Do:  Пошук роботи</string>
 </resources>

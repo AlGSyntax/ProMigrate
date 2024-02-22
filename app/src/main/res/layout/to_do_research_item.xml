@@ -1,0 +1,36 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Sichtbare Inhalte der CardView -->
+            <TextView
+                android:id="@+id/textViewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Titel"
+                android:padding="16dp" />
+
+            <!-- Versteckte Inhalte, die beim Klicken angezeigt werden -->
+            <LinearLayout
+                android:id="@+id/hiddenView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="16dp">
+
+                <!-- Hier kommen deine zusätzlichen Informationen hinein -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Detailinformationen" />
+            </LinearLayout>
+        </LinearLayout>
+</androidx.cardview.widget.CardView>
+

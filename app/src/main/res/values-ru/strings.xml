@@ -83,6 +83,7 @@
     <string name="onboardingrepeat">Повторить Onboarding</string>
     <string name="headertextonboarding">Пожалуйста, введите вашу новую желаемую работу и ваше новое желаемое место работы здесь</string>
     <string name="jobapplication">To Do: Приложение для работы</string>
+    <string name="todojobresearch">To Do: Исследование работы</string>
 
 
 </resources>

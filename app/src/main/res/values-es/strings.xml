@@ -82,5 +82,6 @@
     <string name="onboardingrepeat">Repetir Onboarding</string>
     <string name="headertextonboarding">Por favor, introduzca su nuevo trabajo deseado y su nuevo lugar de trabajo deseado aquí</string>
     <string name="jobapplication">Por hacer: Solicitud de empleo</string>
+    <string name="todojobresearch">Por hacer: Investigación de empleo</string>
 
 </resources>

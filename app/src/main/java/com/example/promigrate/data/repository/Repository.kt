@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.local.UserDatabase
+import com.example.promigrate.data.model.Job
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
@@ -263,6 +264,28 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             }
         } catch (e: Exception) {
             Log.e(TAG, "Ausnahme beim Abrufen der Jobs: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+
+    suspend fun getJobDetails(encodedHashID: String): Result<Job> {
+        return try {
+            val response = apiService.getJobDetails(encodedHashID)
+            Log.d(TAG, "API-Antwort: ${response.raw()}")
+            if (response.isSuccessful && response.body() != null) {
+                // Wir nehmen an, dass die API eine ähnliche Antwort wie die Liste der Jobs zurückgibt,
+                // aber in diesem Fall nur mit einem einzigen Job-Objekt in der 'stellenangebote' Liste.
+                val jobDetail = response.body()!!.stellenangebote.firstOrNull()
+                jobDetail?.let {
+                    Result.success(it)
+                } ?: Result.failure(Exception("Jobdetails nicht gefunden"))
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Jobdetails: ${response.message()}")
+                Result.failure(Exception("Fehler beim Abrufen der Jobdetails: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ausnahme beim Abrufen der Jobdetails: ${e.message}")
             Result.failure(e)
         }
     }

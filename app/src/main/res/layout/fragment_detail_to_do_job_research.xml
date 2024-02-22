@@ -2,18 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout3"
+    android:id="@+id/frameLayout4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.DetailToDoJobApplicationFragment">
+    tools:context=".ui.DetailToDoJobResearchFragment">
 
     <TextView
-        android:id="@+id/tvJobsForYou"
+        android:id="@+id/tvJobDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:fontFamily="@font/quicksandvariablefontwght"
-        android:text="@string/jobapplication"
+        android:text="@string/todojobresearch"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="40sp"
@@ -32,10 +31,10 @@
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="22dp"
         app:cardCornerRadius="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/restartOnboardingButton"
+        app:layout_constraintBottom_toTopOf="@+id/backtodashbtn2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvJobsForYou">
+        app:layout_constraintTop_toBottomOf="@+id/tvJobDetails">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvJobs"
@@ -45,41 +44,23 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/restartOnboardingButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/onboardingrepeat"
-        android:textColor="@color/textcolor"
-        android:backgroundTint="@color/background"
-        android:fontFamily="@font/quicksandvariablefontwght"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:strokeColor="@color/white"
-        app:strokeWidth="2dp"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/backtodashbtn"
+        android:id="@+id/backtodashbtn2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="42dp"
-        android:text="@string/back"
-        android:textColor="@color/textcolor"
         android:backgroundTint="@color/background"
         android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/back"
+        android:textColor="@color/textcolor"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/restartOnboardingButton"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:strokeColor="@color/white"
-        app:strokeWidth="2dp"/>
+        app:strokeWidth="2dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

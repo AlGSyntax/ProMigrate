@@ -11,6 +11,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 const val BASE_URL = "https://rest.arbeitsagentur.de/"
@@ -34,6 +35,11 @@ interface ProMigrateAPIService {
     suspend fun getJobOffers(
         @Query("was") was: String,
         @Query("wo") wo: String // Hinzufügen des Arbeitsorts als Parameter
+    ): Response<JobResponse>
+
+    @GET("jobboerse/jobsuche-service/pc/v2/jobdetails/{encodedHashID}")
+    suspend fun getJobDetails(
+        @Path("encodedHashID") encodedHashID: String
     ): Response<JobResponse>
 
 

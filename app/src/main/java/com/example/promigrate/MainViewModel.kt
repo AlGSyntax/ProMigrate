@@ -11,6 +11,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.promigrate.data.model.Job
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.RegistrationStatus
 import com.example.promigrate.data.remote.DeepLApiService
@@ -81,6 +82,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _userProfileData = MutableLiveData<Profile?>()
     val userProfileData: LiveData<Profile?> = _userProfileData
+
+    private val _jobDetails = MutableLiveData<Result<Job>>()
+    val jobDetails: LiveData<Result<Job>> = _jobDetails
 
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences("selectedJobs", Context.MODE_PRIVATE)
 
@@ -645,6 +649,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+
+    fun fetchJobDetails(encodedHashID: String) {
+        viewModelScope.launch {
+            try {
+                val result = repository.getJobDetails(encodedHashID)
+                _jobDetails.value = result
+            } catch (e: Exception) {
+                // Du könntest auch eine spezifischere Fehlerbehandlung hier einbauen
+                _jobDetails.value = Result.failure(e)
+            }
+        }
+    }
+
+
+
+
+
+
+
 
 
     fun updateSelectedJobs(selectedJobs: List<String>) {
