@@ -14,5 +14,5 @@ data class Profile(
     val street: String? = "",
     val birthplace: String?= "",
     val maidenname: String? = "",
-    var selectedJobs: List<String>? =  emptyList()
+    var selectedJobs: Map<String, String>? = null
 )

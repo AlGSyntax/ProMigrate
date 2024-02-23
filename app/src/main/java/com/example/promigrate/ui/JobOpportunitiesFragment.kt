@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
+import com.example.promigrate.R
 import com.example.promigrate.adapter.JobOpportunitiesAdapter
 import com.example.promigrate.databinding.FragmentJobOportunitiesBinding
 
@@ -19,9 +20,15 @@ class JobOpportunitiesFragment : Fragment() {
     private lateinit var binding: FragmentJobOportunitiesBinding
     private val viewModel: MainViewModel by activityViewModels()
 
+    private var selectedJobHashIds = mutableMapOf<String, String>()
 
-    private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, _ ->
-        viewModel.toggleJobSelection(jobTitle)
+
+    private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, hashId, isChecked ->
+        if (isChecked) {
+            selectedJobHashIds[jobTitle] = hashId
+        } else {
+            selectedJobHashIds.remove(jobTitle)
+        }
     }
 
     override fun onCreateView(
@@ -39,24 +46,25 @@ class JobOpportunitiesFragment : Fragment() {
 
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = jobsAdapter
-        binding.finishbtn.setOnClickListener{
-
-
-            // Hole die aktuell ausgewählten Jobs aus dem ViewModel
-
-
-            // Hole den Arbeitsort aus den Fragment-Argumenten
+        binding.finishbtn.setOnClickListener {
+            // Get the currently selected jobs from the ViewModel
+            // Get the workplace from the fragment arguments
             val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
             val arbeitsort = args.arbeitsort
-            val selectedJobs = args.selectedJobs.toList()
 
-            // Navigiere zum DashboardFragment mit den gesammelten Daten
+            // Navigate to the DashboardFragment with the collected data
             val action = JobOpportunitiesFragmentDirections.actionJobOpportunitiesFragmentToDashboardFragment(
-                arbeitsort = arbeitsort,
-                selectedJobs = selectedJobs.toList().toTypedArray()
+                selectedJobTitles = selectedJobHashIds.keys.toTypedArray(),
+                selectedJobHashIds = selectedJobHashIds.values.toTypedArray(),
+                arbeitsort = arbeitsort
             )
-            viewModel.updateSelectedJobsAndPersist(selectedJobs.toSet())
-            findNavController().navigate(action)
+
+            viewModel.updateSelectedJobsAndPersist(selectedJobHashIds)
+
+            // Check if the current destination is not the dashboardFragment before navigating
+            if (findNavController().currentDestination?.id != R.id.dashboardFragment) {
+                findNavController().navigate(action)
+            }
         }
 
         val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
@@ -74,10 +82,13 @@ class JobOpportunitiesFragment : Fragment() {
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             if (jobOffers != null) {
                 Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
-                jobsAdapter.submitList(jobOffers.toList())
+                // Übergebe die vollständige Liste von Paaren direkt an den Adapter.
+                jobsAdapter.submitList(jobOffers)
             } else {
                 Log.e(TAG, "Fehler beim Abrufen der Jobangebote.")
             }
         }
+
+
     }
 }

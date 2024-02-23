@@ -16,7 +16,7 @@ class DetailToDoJobApplicationAdapter(private val onItemChecked: (String, Boolea
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val jobTitle = getItem(position)
-        holder.bind(jobTitle, holder.binding.itemCheckbox.isChecked)
+        holder.bind(jobTitle)
 
         holder.binding.itemCheckbox.setOnClickListener {
             val isChecked = holder.binding.itemCheckbox.isChecked
@@ -25,9 +25,8 @@ class DetailToDoJobApplicationAdapter(private val onItemChecked: (String, Boolea
     }
 
     class JobViewHolder(val binding: ToDoApplicationItemBinding, private val onItemChecked: (String, Boolean) -> Unit) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobTitle: String, isChecked: Boolean) {
+        fun bind(jobTitle: String) {
             binding.jobTitleTextView.text = jobTitle
-            binding.itemCheckbox.isChecked = isChecked
 
             // Entferne den alten Click-Listener, um Doppelaufrufe zu vermeiden
             binding.itemCheckbox.setOnClickListener(null)

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
@@ -21,11 +20,15 @@ class DetailToDoJobApplicationFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailToDoJobApplicationBinding
     private val viewModel: MainViewModel by activityViewModels()
-    private val args: DetailToDoJobApplicationFragmentArgs by navArgs()
 
-    private val adapter = DetailToDoJobApplicationAdapter { jobTitle, _ ->
-        // Diese Methode im ViewModel muss entsprechend angepasst werden
-        viewModel.toggleJobSelection(jobTitle)
+    private val adapter = DetailToDoJobApplicationAdapter { jobTitle, isChecked ->
+        // Hole die Hash-ID für den gewählten Jobtitel
+        val hashId = viewModel.userProfileData.value?.selectedJobs?.get(jobTitle) ?: ""
+        if (isChecked) {
+            viewModel.toggleJobSelection(jobTitle, hashId)
+        } else {
+            viewModel.toggleJobSelection(jobTitle, "")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -39,15 +42,13 @@ class DetailToDoJobApplicationFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = adapter
 
-        // Ersetze die direkte Beobachtung und Manipulation von _selectedJobs
-        // mit Beobachtung von userProfileData
         viewModel.userProfileData.observe(viewLifecycleOwner) { profile ->
-            val selectedJobsList = profile?.selectedJobs?.toList() ?: emptyList()
+            val selectedJobsList = profile?.selectedJobs?.keys?.toList() ?: emptyList()
             adapter.submitList(selectedJobsList)
             Log.d(TAG2, "Aktualisierte Liste der ausgewählten Jobs: $selectedJobsList")
         }
 
-        // Logik zum Navigieren beibehalten
+
         binding.restartOnboardingButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_viewPagerFragment)
         }
@@ -56,8 +57,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
             if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
                 findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
             }
-            Log.d(TAG2, "No jobs selected")
+            Log.d(TAG2, "Navigation back to dashboard")
         }
     }
 }
-// Argumente aus den vorherigen Fragment übernehmen, wie kann ich das machen ?

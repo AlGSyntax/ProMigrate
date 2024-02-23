@@ -5,44 +5,44 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.promigrate.databinding.JobItemBinding
+import com.example.promigrate.databinding.ToDoApplicationItemBinding
 
-class JobOpportunitiesAdapter(private val onItemChecked: (String, Boolean) -> Unit) : ListAdapter<String, JobOpportunitiesAdapter.JobViewHolder>(DiffCallback) {
+class JobOpportunitiesAdapter(private val onItemChecked: (String, String, Boolean) -> Unit) :
+    ListAdapter<Pair<String, String>, JobOpportunitiesAdapter.JobViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val binding = JobItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ToDoApplicationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return JobViewHolder(binding, onItemChecked)
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        val jobTitle = getItem(position)
-        // Rufe hier die bind-Methode auf, ohne den isChecked Zustand zu übergeben
-        holder.bind(jobTitle)
+        val jobPair = getItem(position)
+        holder.bind(jobPair.first, jobPair.second, holder.binding.itemCheckbox.isChecked)
     }
 
-    class JobViewHolder(val binding: JobItemBinding, private val onItemChecked: (String, Boolean) -> Unit) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobTitle: String) {
+    class JobViewHolder(val binding: ToDoApplicationItemBinding, private val onItemChecked: (String, String, Boolean) -> Unit) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(jobTitle: String, hashId: String, isChecked: Boolean) {
             binding.jobTitleTextView.text = jobTitle
+            binding.itemCheckbox.isChecked = isChecked
 
-            // Setze den initialen Zustand der Checkbox, falls notwendig
-            binding.itemCheckbox.isChecked = false
-
-            // Setze den Click-Listener, der den aktuellen Zustand der Checkbox zurückgibt
+            // Setze einen neuen Click-Listener, der den aktuellen Zustand der Checkbox und die Hash-ID zurückgibt
             binding.itemCheckbox.setOnClickListener {
-                // Der isChecked Zustand wird hier direkt abgefragt
-                val isChecked = binding.itemCheckbox.isChecked
-                onItemChecked(jobTitle, isChecked)
+                val currentChecked = binding.itemCheckbox.isChecked
+                onItemChecked(jobTitle, hashId, currentChecked)
             }
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
+    companion object DiffCallback : DiffUtil.ItemCallback<Pair<String, String>>() {
+        override fun areItemsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
+            return oldItem.first == newItem.first // Vergleiche nur die Jobtitel
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
+        override fun areContentsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
+            return oldItem == newItem // Vergleiche die gesamten Paare
         }
     }
 }
+
+

@@ -26,6 +26,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -56,9 +57,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val auth = Firebase.auth
 
-    private val _user: MutableLiveData<FirebaseUser?> = MutableLiveData()
-    val user: LiveData<FirebaseUser?>
-        get() = _user
+    private val _user = MutableLiveData<FirebaseUser?>()
+    val user: LiveData<FirebaseUser?> = _user
+
 
     private val _jobs = MutableLiveData<List<String>>()
     val jobs: LiveData<List<String>> = _jobs
@@ -69,16 +70,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _arbeitsorte = MutableLiveData<List<String>>()
     val arbeitsorte: LiveData<List<String>> = _arbeitsorte
 
-    private val translationResult = MutableLiveData<String>()
-
     val _selectedJobs = MutableLiveData<Set<String>>()
     val selectedJobs: LiveData<Set<String>> = _selectedJobs
 
 
 
 
-    private val _jobOffers = MutableLiveData<List<String>>()
-    val jobOffers: LiveData<List<String>> = _jobOffers
+    private val _jobOffers = MutableLiveData<List<Pair<String, String>>>()
+    val jobOffers: LiveData<List<Pair<String, String>>> = _jobOffers
+
 
     private var _userProfileData = MutableLiveData<Profile?>()
     val userProfileData: LiveData<Profile?> = _userProfileData
@@ -321,34 +321,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun saveSelectedJobs() {
-        viewModelScope.launch {
-            try {
-                val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
-                val selectedJobsSet = _selectedJobs.value ?: emptySet()
 
-                // Konvertiere das Set in eine für Firebase geeignete Form (z.B. List oder String)
-                val selectedJobsList = selectedJobsSet.toList().toSet().toList()
-
-                // Aktualisiere das User-Profil mit den ausgewählten Jobs
-                repository.updateUserProfileField(userId, "selectedJobs", selectedJobsList)
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern der ausgewählten Jobs", e)
-            }
-        }
-    }
-
-    fun saveCombinedSelectedJobs(combinedSelectedJobs: List<String>) {
-        viewModelScope.launch {
-            try {
-                val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
-                // Aktualisiere das User-Profil mit den kombinierten ausgewählten Jobs
-                repository.updateUserProfileField(userId, "selectedJobs", combinedSelectedJobs)
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern der kombinierten ausgewählten Jobs: ${e.message}", e)
-            }
-        }
-    }
 
 
     /**
@@ -362,7 +335,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 */
-
+/**
     fun translateText(inputText: String) {
         viewModelScope.launch {
             Log.d("translateText", "Übersetzung startet: Eingabetext = $inputText, Zielsprache = DE")
@@ -379,6 +352,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    */
 
     // Im ViewModel
     fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
@@ -554,7 +528,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-
     fun fetchBerufsfelder() {
         viewModelScope.launch {
             try {
@@ -612,43 +585,42 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun toggleJobSelection(jobId: String) {
+    fun toggleJobSelection(jobTitle: String, hashId: String) {
         val currentProfile = _userProfileData.value ?: Profile().also { _userProfileData.value = it }
-        val currentSelectedJobs = currentProfile.selectedJobs?.toMutableSet() ?: mutableSetOf()
+        // Verwende eine mutable Map, um die Jobtitel und Hash-IDs zu speichern
+        val currentSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
 
-        if (currentSelectedJobs.contains(jobId)) {
-            currentSelectedJobs.remove(jobId)
+        if (currentSelectedJobs.containsKey(jobTitle)) {
+            currentSelectedJobs.remove(jobTitle)
         } else {
-            currentSelectedJobs.add(jobId)
+            currentSelectedJobs[jobTitle] = hashId
         }
 
-        // Setze die aktualisierte Liste zurück ins Profile-Objekt
-        currentProfile.selectedJobs = currentSelectedJobs.toList()
+        // Setze die aktualisierte Map zurück ins Profile-Objekt
+        currentProfile.selectedJobs = currentSelectedJobs
         _userProfileData.value = currentProfile
 
         Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
     }
+
 
 // Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
     //Logs beispielsweise , baue einen observer (todoListe)
 
     fun fetchJobOffers(was: String, arbeitsort: String) {
         viewModelScope.launch {
-            try {
-                val response = repository.getJobOffers(was,arbeitsort)
-                if (response.isSuccess) {
-                    Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
-                    _jobOffers.value = (response.getOrNull() ?: listOf()).map { it?: "" }
-                } else {
-                    _jobOffers.value = listOf()
-                    Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")
-                }
-            } catch (e: Exception) {
-                _jobOffers.value = listOf()
-                Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${e.message}")
+            val response = repository.getJobOffers(was, arbeitsort)
+            if (response.isSuccess) {
+                // Angenommen, die API gibt eine Liste von Job-Objekten zurück
+                val jobPairs = response.getOrNull()?.map { it  }?.toList() ?: listOf()
+                _jobOffers.postValue(jobPairs)
+            } else {
+                _jobOffers.postValue(listOf())
+                Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")
             }
         }
     }
+
 
 
     fun fetchJobDetails(encodedHashID: String) {
@@ -668,25 +640,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-
-
-
-    fun updateSelectedJobs(selectedJobs: List<String>) {
-        _selectedJobs.value = selectedJobs.toSet()
-        val editor = sharedPreferences.edit()
-        editor.putStringSet("selectedJobs", selectedJobs.toSet())
-        editor.apply()
-    }
-
-
-    fun updateSharedPreferences() {
-        val selectedJobs = _selectedJobs.value ?: emptySet()
-        val editor = sharedPreferences.edit()
-        editor.putStringSet("selectedJobs", selectedJobs)
-        editor.apply()
-    }
-
-
     // Inside MainViewModel.kt
     fun updateJobOffers(was: String, arbeitsort: String) {
         try {
@@ -698,32 +651,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun updateSelectedJobsAndPersist(selectedJobs: Set<String>) {
-        // Hole das aktuelle Profile-Objekt oder erstelle ein neues, wenn es null ist
+    fun updateSelectedJobsAndPersist(newSelectedJobs: Map<String, String>) {
         val currentProfile = _userProfileData.value ?: Profile()
 
-        // Aktualisiere die selectedJobs im Profile-Objekt
-        currentProfile.selectedJobs = selectedJobs.toList()
+        // Ergänze die aktuellen ausgewählten Jobs mit den neuen
+        val updatedSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+        updatedSelectedJobs.putAll(newSelectedJobs)
 
-        // Aktualisiere das userProfileData LiveData mit dem neuen Profile-Objekt
+        currentProfile.selectedJobs = updatedSelectedJobs.toMap()
+
         _userProfileData.value = currentProfile
 
-        // Persistiere die Änderungen
-        saveSelectedJobsToFirebase(selectedJobs.toList())
-        saveSelectedJobsToSharedPreferences(selectedJobs)
+        saveSelectedJobsToFirebase(updatedSelectedJobs.toMap())
+        saveSelectedJobsToSharedPreferences(updatedSelectedJobs)
     }
 
 
-    private fun saveSelectedJobsToFirebase(selectedJobs: List<String>) {
-        val userId = auth.currentUser?.uid ?: return // Return early if no user is logged in
-        repository.updateUserProfileField(userId, "selectedJobs", selectedJobs.toList())
+    private fun saveSelectedJobsToFirebase(selectedJobs: Map<String, String>) {
+        val userId = auth.currentUser?.uid ?: return
+        repository.updateUserProfileField(userId, "selectedJobs", selectedJobs)
     }
 
-    private fun saveSelectedJobsToSharedPreferences(selectedJobs: Set<String>) {
+
+    private fun saveSelectedJobsToSharedPreferences(selectedJobs: Map<String, String>) {
         val editor = sharedPreferences.edit()
-        editor.putStringSet("selectedJobs", selectedJobs)
+        // Konvertiere die Map in einen JSON-String
+        val selectedJobsJson = Gson().toJson(selectedJobs)
+        editor.putString("selectedJobs", selectedJobsJson)
         editor.apply()
     }
+
 
 
 

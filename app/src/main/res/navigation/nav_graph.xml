@@ -82,10 +82,15 @@
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard">
         <argument
-            android:name="selectedJobs"
+            android:name="selectedJobTitles"
             app:argType="string[]"
             android:defaultValue="@null"
-            app:nullable="true"/> <!-- Setze den Standardwert auf null -->
+            app:nullable="true"/>
+        <argument
+            android:name="selectedJobHashIds"
+            app:argType="string[]"
+            android:defaultValue="@null"
+            app:nullable="true"/>
         <argument
             android:name="arbeitsort"
             app:argType="string"
@@ -95,7 +100,10 @@
             android:id="@+id/action_dashboardFragment_to_detailToDoJobApplicationFragment"
             app:destination="@id/detailToDoJobApplicationFragment">
             <argument
-                android:name="selectedJobs"
+                android:name="selectedJobTitles"
+                app:argType="string[]" />
+            <argument
+                android:name="selectedJobHashIds"
                 app:argType="string[]" />
             <argument
                 android:name="arbeitsort"
@@ -105,13 +113,14 @@
             android:id="@+id/action_dashboardFragment_to_detailToDoJobResearchFragment"
             app:destination="@id/detailToDoJobResearchFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/detailToDoJobApplicationFragment"
         android:name="com.example.promigrate.ui.DetailToDoJobApplicationFragment"
         android:label="fragment_detail_to_do_job_application"
         tools:layout="@layout/fragment_detail_to_do_job_application">
         <argument
-            android:name="selectedJobs"
+            android:name="selectedJobTitles"
             app:argType="string[]" />
         <argument
             android:name="arbeitsort"

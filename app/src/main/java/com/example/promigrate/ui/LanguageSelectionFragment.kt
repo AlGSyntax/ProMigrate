@@ -83,4 +83,3 @@ class LanguageSelectionFragment : Fragment() {
         binding.chooselanguage.text = context.resources.getString(R.string.choose_your_language)
     }
 }
-// Wann macht es sinn sachen in funktionen auszulagern ? Wann nicht ?

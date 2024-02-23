@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.databinding.JobItemBinding
 
-class JobOffersSelectionAdapter(private val onItemChecked: (String, Boolean) -> Unit) :
-    ListAdapter<String, JobOffersSelectionAdapter.JobViewHolder>(DiffCallback) {
-
-    private val selectedJobs = mutableSetOf<String>()
+class JobOffersSelectionAdapter(private val onItemChecked: (String, String, Boolean) -> Unit) :
+    ListAdapter<Pair<String, String>, JobOffersSelectionAdapter.JobViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val binding = JobItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -18,42 +16,31 @@ class JobOffersSelectionAdapter(private val onItemChecked: (String, Boolean) -> 
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        val jobTitle = getItem(position)
-        holder.bind(jobTitle, selectedJobs.contains(jobTitle)) { isChecked ->
-            if (isChecked) {
-                selectedJobs.add(jobTitle)
-            } else {
-                selectedJobs.remove(jobTitle)
-            }
-            onItemChecked(jobTitle, isChecked)
+        val job = getItem(position)
+        holder.bind(job) { isChecked ->
+            onItemChecked(job.first, job.second, isChecked)
         }
     }
 
     class JobViewHolder(private val binding: JobItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobTitle: String, isChecked: Boolean, onCheckedChanged: (Boolean) -> Unit) {
-            binding.jobTitleTextView.text = jobTitle
-
-            // Entferne den vorhandenen CheckChangeListener, um unbeabsichtigte Aufrufe beim Recycling zu vermeiden
+        fun bind(job: Pair<String, String>, onCheckedChanged: (Boolean) -> Unit) {
+            binding.jobTitleTextView.text = job.first
             binding.itemCheckbox.setOnCheckedChangeListener(null)
-
-            // Setze den Zustand der Checkbox basierend auf dem aktuellen Auswahlzustand
-            binding.itemCheckbox.isChecked = isChecked
-
-            // Setze den CheckChangeListener, um Änderungen zu erfassen
+            binding.itemCheckbox.isChecked = false
             binding.itemCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 onCheckedChanged(isChecked)
             }
         }
     }
 
-
-    companion object DiffCallback : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
+    companion object DiffCallback : DiffUtil.ItemCallback<Pair<String, String>>() {
+        override fun areItemsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
+            return oldItem.first == newItem.first
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
             return oldItem == newItem
         }
     }
 }
+

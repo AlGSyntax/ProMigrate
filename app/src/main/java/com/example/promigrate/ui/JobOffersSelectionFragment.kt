@@ -1,7 +1,6 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ class JobOffersSelectionFragment : Fragment() {
 
     private lateinit var binding: FragmentJobOffersSelectionBinding
     private val viewModel: MainViewModel by activityViewModels()
+    private var selectedJobs = mutableMapOf<String, String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentJobOffersSelectionBinding.inflate(inflater, container, false)
@@ -25,15 +25,15 @@ class JobOffersSelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
 
-
-
-        val adapter = JobOffersSelectionAdapter { jobTitle, _ ->
-            viewModel.toggleJobSelection(jobTitle)
-            Log.d("JobOffersSelectionFragment", "Jobauswahl getoggelt: $jobTitle")
-        }// Local History 9:50 AM
+        val adapter = JobOffersSelectionAdapter { jobTitle, hashId, isChecked ->
+            if (isChecked) {
+                selectedJobs[jobTitle] = hashId
+            } else {
+                selectedJobs.remove(jobTitle)
+            }
+        }
 
         binding.rvJobs.adapter = adapter
 
@@ -41,11 +41,8 @@ class JobOffersSelectionFragment : Fragment() {
             adapter.submitList(jobOffers)
         }
 
-
-
         binding.backtodashbtn.setOnClickListener {
-            viewModel.updateSelectedJobsAndPersist(viewModel.userProfileData.value?.selectedJobs?.toSet() ?: emptySet())
-            // Navigate back in the navigation stack
+            viewModel.updateSelectedJobsAndPersist(selectedJobs)
             findNavController().navigateUp()
         }
     }

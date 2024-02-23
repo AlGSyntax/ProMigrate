@@ -35,9 +35,7 @@ class ViewPagerFragment : Fragment() {
         }
     }
 
-    fun navigateToDetailToDoJobApplicationFragment() {
-        viewPager.currentItem = 1 // Index von DetailToDoJobApplicationFragment im ViewPager
-    }
+
 
     private inner class MyViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         override fun getItemCount(): Int = 2 // Anzahl der Seiten

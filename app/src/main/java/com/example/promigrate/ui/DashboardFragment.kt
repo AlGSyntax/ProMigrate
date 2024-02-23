@@ -39,48 +39,59 @@ class DashboardFragment : Fragment() {
         binding.cardBottomLeft.setOnClickListener {
             // Check if userProfileData is already loaded
             val userProfile = viewModel.userProfileData.value
-            if (userProfile != null) {
+            if (userProfile?.selectedJobs != null) {
                 // If userProfileData is loaded, use it
-                val selectedJobs = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()//Firebase
+                val jobTitlesArray = userProfile.selectedJobs!!.keys.toTypedArray()
+                val hashIdsArray = userProfile.selectedJobs!!.values.toTypedArray()
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
                 val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
-                    selectedJobs = selectedJobs,
+                    selectedJobTitles = jobTitlesArray,
+                    selectedJobHashIds = hashIdsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)
-            } else {
-                // If userProfileData is not loaded, use the data from DashboardFragmentArgs
-                val selectedJobsArray = args.selectedJobs ?: arrayOf()
+            }else {
+                // Im 'else'-Teil: Verwende die Argumente aus den FragmentArgs
+                val selectedJobsArray = args.selectedJobTitles ?: arrayOf()
+                val hashIdsArray = args.selectedJobHashIds ?: arrayOf()
+
                 val arbeitsort = args.arbeitsort ?: ""
 
                 val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
-                    selectedJobs = selectedJobsArray,
+                    selectedJobTitles = selectedJobsArray,
+                    selectedJobHashIds = hashIdsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)
             }
         }
 
+
         binding.cardTopLeft.setOnClickListener {
             val userProfile = viewModel.userProfileData.value
-            if (userProfile != null) {
+            if (userProfile?.selectedJobs != null) {
                 // If userProfileData is loaded, use it
-                val selectedJobs = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()//Firebase
+                val jobTitlesArray = userProfile.selectedJobs!!.keys.toTypedArray()
+                val hashIdsArray = userProfile.selectedJobs!!.values.toTypedArray()
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
-                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
-                    selectedJobs = selectedJobs,
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                    selectedJobTitles = jobTitlesArray,
+                    selectedJobHashIds = hashIdsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)
             } else {
-                // If userProfileData is not loaded, use the data from DashboardFragmentArgs
-                val selectedJobsArray = args.selectedJobs ?: arrayOf()
+                // Im 'else'-Teil: Verwende die Argumente aus den FragmentArgs
+                val selectedJobsArray = args.selectedJobTitles ?: arrayOf()
+                val hashIdsArray = args.selectedJobHashIds ?: arrayOf()
+
                 val arbeitsort = args.arbeitsort ?: ""
 
-                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
-                    selectedJobs = selectedJobsArray,
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                    selectedJobTitles = selectedJobsArray,
+                    selectedJobHashIds = hashIdsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)

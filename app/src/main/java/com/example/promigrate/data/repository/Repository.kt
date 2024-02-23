@@ -4,20 +4,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.promigrate.data.local.UserDatabase
 import com.example.promigrate.data.model.Job
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
-import com.example.promigrate.data.model.UserProfile
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.util.Locale
@@ -105,6 +101,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         return userProfileLiveData
     }
 
+    /**
     fun fetchUserProfile(): LiveData<Profile?> {
         val userProfileLiveData = MutableLiveData<Profile?>()
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -123,6 +120,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
         return userProfileLiveData
     }
+    */
 
 
 
@@ -248,16 +246,16 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-    suspend fun getJobOffers(was: String, arbeitsort: String): Result<List<String?>> {
+    suspend fun getJobOffers(was: String, arbeitsort: String): Result<List<Pair<String, String>>> {
         return try {
             val response = apiService.getJobOffers(was, wo = arbeitsort)
             Log.d(TAG, "API-Antwort: ${response.raw()}")
             if (response.isSuccessful && response.body() != null) {
-                // Verwende ein Set, um Duplikate zu vermeiden
-                val uniqueJobs = response.body()!!.stellenangebote.map { it.titel}.toSet()
-                // Konvertiere das Set zurück in eine Liste, um das Ergebnis zurückzugeben
-                val berufsListe = uniqueJobs.toList()
-                Result.success(berufsListe)
+                // Erstelle eine Liste von Paaren aus Jobtitel und Hash-ID
+                val jobPairs = response.body()!!.stellenangebote.mapNotNull {
+                    if (it.titel != null) it.titel to it.hashId else null
+                }
+                Result.success(jobPairs)
             } else {
                 Log.e(TAG, "Fehler beim Abrufen der Jobs: ${response.message()}")
                 Result.failure(Exception("Fehler beim Abrufen der Jobs: ${response.message()}"))
@@ -267,6 +265,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
+
 
 
     suspend fun getJobDetails(encodedHashID: String): Result<Job> {
@@ -307,13 +306,8 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
 
 
-//TODO
 
-
-
-
-    //TODO ALLE FIRESTORE METHODEN INS REPOSITORY!!!!
-
+    /**
     private val db = UserDatabase.getDatabase(context)
     private val userProfileDao = db.userProfileDao()
 
@@ -327,5 +321,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
         }
     }
+    */
 
 }

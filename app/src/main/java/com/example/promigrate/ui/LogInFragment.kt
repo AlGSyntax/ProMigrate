@@ -130,20 +130,22 @@ class LogInFragment : Fragment() {
                 Toast.makeText(context, "Login fehlgeschlagen. Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show()
             }
         }
-
         viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
             if (userProfile != null) {
-                // UserProfile-Daten sind geladen, navigiere zum DetailToDoJobApplicationFragment
-                val selectedJobsArray = userProfile.selectedJobs?.toTypedArray() ?: arrayOf()
+                // Wenn userProfileData geladen ist, extrahiere die Jobtitel und Hash-IDs
+                val jobTitlesArray = userProfile.selectedJobs?.keys?.toList()?.toTypedArray() ?: arrayOf()
+                val hashIdsArray = userProfile.selectedJobs?.values?.toList()?.toTypedArray() ?: arrayOf()
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
                 val action = LogInFragmentDirections.actionLoginFragmentToDashboardFragment(
-                    selectedJobs = selectedJobsArray,
+                    selectedJobTitles = jobTitlesArray,
+                    selectedJobHashIds = hashIdsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)
             }
         }
+
 
     }
 

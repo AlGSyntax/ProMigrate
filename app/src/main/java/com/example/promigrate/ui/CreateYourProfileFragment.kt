@@ -219,7 +219,6 @@ class CreateYourProfileFragment : Fragment() {
         if (name.isEmpty()) {
             return Pair(false, requireContext().getString(R.string.errornameempt))
         }
-
         if (age.isEmpty()) {
             return Pair(false, requireContext().getString(R.string.errornageampth))
         } else {
