@@ -12,7 +12,6 @@ import com.example.promigrate.data.model.TranslationResult
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPIService
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
@@ -43,11 +42,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
 
 
-    fun setupUserEnvironment(firebaseUser: FirebaseUser) {
-        val profileRef = FirebaseFirestore.getInstance().collection("user").document(firebaseUser.uid)
-        // Hier könntest du weitere Setup-Aktionen durchführen oder die Referenzen bei Bedarf zurückgeben
-        Log.d(TAG, "Benutzerumgebungseinrichtung erfolgreich für ${firebaseUser.uid}")
-    }
+
 
 
     fun createUserProfile(userId: String, profile: Profile) {
@@ -273,22 +268,19 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             val response = apiService.getJobDetails(encodedHashID)
             Log.d(TAG, "API-Antwort: ${response.raw()}")
             if (response.isSuccessful && response.body() != null) {
-                // Wir nehmen an, dass die API eine ähnliche Antwort wie die Liste der Jobs zurückgibt,
-                // aber in diesem Fall nur mit einem einzigen Job-Objekt in der 'stellenangebote' Liste.
                 val jobDetail = response.body()!!.stellenangebote.firstOrNull()
                 jobDetail?.let {
                     Result.success(it)
-                } ?: Result.failure(Exception("Jobdetails nicht gefunden"))
+                } ?: Result.failure(Exception("Jobdetails nicht gefunden für HashID: $encodedHashID"))
             } else {
-                Log.e(TAG, "Fehler beim Abrufen der Jobdetails: ${response.message()}")
-                Result.failure(Exception("Fehler beim Abrufen der Jobdetails: ${response.message()}"))
+                Log.e(TAG, "Fehler beim Abrufen der Jobdetails für HashID: $encodedHashID, Fehler: ${response.message()}")
+                Result.failure(Exception("Fehler beim Abrufen der Jobdetails für HashID: $encodedHashID, Fehler: ${response.message()}"))
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Ausnahme beim Abrufen der Jobdetails: ${e.message}")
+            Log.e(TAG, "Ausnahme beim Abrufen der Jobdetails für HashID: $encodedHashID, Ausnahme: ${e.message}")
             Result.failure(e)
         }
     }
-
 
 
 

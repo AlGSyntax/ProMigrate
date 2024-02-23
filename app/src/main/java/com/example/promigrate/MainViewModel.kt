@@ -47,22 +47,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedLanguageCode = MutableLiveData<String>()
     val selectedLanguageCode: LiveData<String> = _selectedLanguageCode
 
-
-    private val _registrationStatus = MutableLiveData<RegistrationStatus>()
-    val registrationStatus: LiveData<RegistrationStatus> = _registrationStatus
-
     private val _loginStatus = MutableLiveData<Boolean>()
     val loginStatus: LiveData<Boolean> = _loginStatus
-
 
     private val auth = Firebase.auth
 
     private val _user = MutableLiveData<FirebaseUser?>()
-    val user: LiveData<FirebaseUser?> = _user
 
 
-    private val _jobs = MutableLiveData<List<String>>()
-    val jobs: LiveData<List<String>> = _jobs
+    private val _registrationStatus = MutableLiveData<RegistrationStatus>()
+    val registrationStatus: LiveData<RegistrationStatus> = _registrationStatus
+
 
     private val _berufsfelder = MutableLiveData<List<String>>()
     val berufsfelder: LiveData<List<String>> = _berufsfelder
@@ -70,23 +65,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _arbeitsorte = MutableLiveData<List<String>>()
     val arbeitsorte: LiveData<List<String>> = _arbeitsorte
 
-    val _selectedJobs = MutableLiveData<Set<String>>()
-    val selectedJobs: LiveData<Set<String>> = _selectedJobs
+    private var _userProfileData = MutableLiveData<Profile?>()
+    val userProfileData: LiveData<Profile?> = _userProfileData
 
 
+    private val _jobs = MutableLiveData<List<String>>()
+    val jobs: LiveData<List<String>> = _jobs
 
 
     private val _jobOffers = MutableLiveData<List<Pair<String, String>>>()
     val jobOffers: LiveData<List<Pair<String, String>>> = _jobOffers
 
 
-    private var _userProfileData = MutableLiveData<Profile?>()
-    val userProfileData: LiveData<Profile?> = _userProfileData
-
     private val _jobDetails = MutableLiveData<Result<Job>>()
     val jobDetails: LiveData<Result<Job>> = _jobDetails
 
-    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("selectedJobs", Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences =
+        application.getSharedPreferences("selectedJobs", Context.MODE_PRIVATE)
 
 
 
@@ -100,12 +95,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     init {
-        loadLanguageSetting()
-        setupUserEnv()
-        _selectedJobs.value = emptySet()
-
-
-
+        loadUserLanguageSetting()
     }
 
     /**
@@ -113,6 +103,37 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     return repository.getUserProfile(userId)
     }
      */
+
+    private fun loadUserLanguageSetting(userId: String? = null) {
+        viewModelScope.launch {
+            try {
+                // Versuche zuerst, die Benutzerspracheinstellung zu laden, wenn eine Benutzer-ID vorhanden ist
+                val userLanguageCode = userId?.let { uid ->
+                    repository.getUserProfile(uid).value?.languageCode
+                }
+
+                // Falls keine Benutzerspracheinstellung vorhanden ist, verwende die System- oder App-Einstellung
+                val languageCode = userLanguageCode ?: withContext(Dispatchers.IO) {
+                    repository.loadLanguageSetting()
+                }
+
+                // Aktualisiere die App-Locale mit der gefundenen Spracheinstellung
+                val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
+                AppCompatDelegate.setApplicationLocales(localeListCompat)
+                _localeList.postValue(localeListCompat)
+
+                Log.d(TAG, "Sprache aktualisiert zu: $languageCode")
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Aktualisieren der Spracheinstellung", e)
+            }
+        }
+    }
+
+
+
+
+
+
 
     fun setSelectedLanguageCode(languageCode: String) {
         _selectedLanguageCode.value = languageCode
@@ -136,37 +157,63 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun loadLanguageSetting() {
-        viewModelScope.launch {
-            try {
-                val languageCode = withContext(Dispatchers.IO) {
-                    // Lade die gespeicherte Spracheinstellung
-                    repository.loadLanguageSetting().also {
-                        Log.d(TAG, "Geladene Spracheinstellung: $it")
+
+    fun login(email: String, password: String) {
+        Log.d(TAG, "Versuche, Benutzer einzuloggen mit E-Mail: $email")
+        try {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "Benutzer erfolgreich eingeloggt mit E-Mail: $email")
+
+                    fetchUserProfile()
+                    loadUserLanguageSetting(auth.currentUser?.uid)
+                    _loginStatus.value =
+                        true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
+                } else {
+                    task.exception?.let {
+                        Log.e(TAG, "Fehler beim Einloggen des Benutzers", it)
                     }
+                    _loginStatus.value = false // Setze den Status entsprechend
                 }
-                val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
-                AppCompatDelegate.setApplicationLocales(localeListCompat)
-                _localeList.postValue(localeListCompat)
-                Log.d(TAG, "Sprache geladen: $languageCode")
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Laden der Spracheinstellung", e)
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ausnahme in der LogIn-Methode", e)
+            _loginStatus.value = false
         }
     }
 
-    private fun setupUserEnv() {
-        try {
-            _user.value = auth.currentUser
-            auth.currentUser?.let { firebaseUser ->
-                // Rufe die Methode aus dem Repository auf, um die Umgebung einzurichten
-                repository.setupUserEnvironment(firebaseUser)
+    private fun fetchUserProfile() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val docRef = Firebase.firestore.collection("user").document(userId)
+            docRef.get().addOnSuccessListener { documentSnapshot ->
+                val userProfile = documentSnapshot.toObject<Profile>()
+                _userProfileData.value = userProfile
+            }.addOnFailureListener { e ->
+                Log.w(TAG, "Error fetching user profile", e)
+                _userProfileData.value = null
             }
-            Log.d("setupUserEnv", "Benutzerumgebungseinrichtung erfolgreich")
-        } catch (e: Exception) {
-            Log.e("setupUserEnv", "Fehler beim Einrichten der Benutzerumgebung", e)
+        } else {
+            Log.w(TAG, "User ID is null, can't fetch user profile")
+            _userProfileData.value = null
         }
     }
+
+    fun onGoogleLoginClicked(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Anmeldung erfolgreich
+                    _loginStatus.value = true
+                    loadUserLanguageSetting(auth.currentUser?.uid)
+                } else {
+                    // Anmeldung fehlgeschlagen
+                    _loginStatus.value = false
+                }
+            }
+    }// TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
+
 
 
     fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
@@ -206,83 +253,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    fun login(email: String, password: String) {
-        Log.d(TAG, "Versuche, Benutzer einzuloggen mit E-Mail: $email")
-        try {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "Benutzer erfolgreich eingeloggt mit E-Mail: $email")
-                    setupUserEnv()
-                    fetchUserProfile()
-                    loadUserLanguageSetting(auth.currentUser?.uid)
-                    _loginStatus.value =
-                        true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
-                } else {
-                    task.exception?.let {
-                        Log.e(TAG, "Fehler beim Einloggen des Benutzers", it)
-                    }
-                    _loginStatus.value = false // Setze den Status entsprechend
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Ausnahme in der LogIn-Methode", e)
-            _loginStatus.value = false
-        }
-    }
-
-    fun fetchUserProfile() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId != null) {
-            val docRef = Firebase.firestore.collection("user").document(userId)
-            docRef.get().addOnSuccessListener { documentSnapshot ->
-                val userProfile = documentSnapshot.toObject<Profile>()
-                _userProfileData.value = userProfile
-            }.addOnFailureListener { e ->
-                Log.w(TAG, "Error fetching user profile", e)
-                _userProfileData.value = null
-            }
-        } else {
-            Log.w(TAG, "User ID is null, can't fetch user profile")
-            _userProfileData.value = null
-        }
-    }
-
-    fun onGoogleLoginClicked(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Anmeldung erfolgreich
-                    _loginStatus.value = true
-                    loadUserLanguageSetting(auth.currentUser?.uid)
-                } else {
-                    // Anmeldung fehlgeschlagen
-                    _loginStatus.value = false
-                }
-            }
-    }// TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
+   // TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
 
 
-    private fun loadUserLanguageSetting(userId: String?) {
-        userId?.let { uid ->
-            viewModelScope.launch {
-                try {
-                    val userProfile = repository.getUserProfile(uid).value
-                    userProfile?.let { profile ->
-                        profile.languageCode?.let { updateAppLocale(it) }
-                    }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Fehler beim Laden der Spracheinstellung", e)
-                }
-            }
-        }
-    }
 
-    private fun updateAppLocale(languageCode: String) {
-        val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
-        AppCompatDelegate.setApplicationLocales(localeListCompat)
-        Log.d(TAG, "Sprache geändert zu: $languageCode")
-    }
+
+
 
 
 
@@ -603,43 +579,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
     }
 
-
-// Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
-    //Logs beispielsweise , baue einen observer (todoListe)
-
-    fun fetchJobOffers(was: String, arbeitsort: String) {
-        viewModelScope.launch {
-            val response = repository.getJobOffers(was, arbeitsort)
-            if (response.isSuccess) {
-                // Angenommen, die API gibt eine Liste von Job-Objekten zurück
-                val jobPairs = response.getOrNull()?.map { it  }?.toList() ?: listOf()
-                _jobOffers.postValue(jobPairs)
-            } else {
-                _jobOffers.postValue(listOf())
-                Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")
-            }
-        }
-    }
-
-
-
-    fun fetchJobDetails(encodedHashID: String) {
-        viewModelScope.launch {
-            try {
-                val result = repository.getJobDetails(encodedHashID)
-                _jobDetails.value = result
-            } catch (e: Exception) {
-                // Du könntest auch eine spezifischere Fehlerbehandlung hier einbauen
-                _jobDetails.value = Result.failure(e)
-            }
-        }
-    }
-
-
-
-
-
-
     // Inside MainViewModel.kt
     fun updateJobOffers(was: String, arbeitsort: String) {
         try {
@@ -680,6 +619,45 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         editor.putString("selectedJobs", selectedJobsJson)
         editor.apply()
     }
+
+
+// Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
+    //Logs beispielsweise , baue einen observer (todoListe)
+
+    fun fetchJobOffers(was: String, arbeitsort: String) {
+        viewModelScope.launch {
+            val response = repository.getJobOffers(was, arbeitsort)
+            if (response.isSuccess) {
+                // Angenommen, die API gibt eine Liste von Job-Objekten zurück
+                val jobPairs = response.getOrNull()?.map { it  }?.toList() ?: listOf()
+                _jobOffers.postValue(jobPairs)
+            } else {
+                _jobOffers.postValue(listOf())
+                Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")
+            }
+        }
+    }
+
+
+
+    fun fetchJobDetails(encodedHashID: String) {
+        viewModelScope.launch {
+            try {
+                val result = repository.getJobDetails(encodedHashID)
+                _jobDetails.value = result
+            } catch (e: Exception) {
+                // Du könntest auch eine spezifischere Fehlerbehandlung hier einbauen
+                _jobDetails.value = Result.failure(e)
+            }
+        }
+    }
+
+
+
+
+
+
+    // Inside MainViewModel.kt
 
 
 
@@ -727,7 +705,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun logout() {
         try {
             auth.signOut()
-            setupUserEnv()
+            _loginStatus.value = false
             Log.d("logout", "Benutzer erfolgreich ausgeloggt")
         } catch (e: Exception) {
             Log.e("logout", "Fehler in der LogOut-Methode", e)

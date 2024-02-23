@@ -1,8 +1,6 @@
 package com.example.promigrate.ui
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.os.LocaleList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,9 +55,6 @@ class RegisterFragment : Fragment() {
 
 
 
-        viewModel.localeList.observe(viewLifecycleOwner) { localeListCompat ->
-            updateUI(localeListCompat.unwrap() as LocaleList)
-        }
 
         viewModel.selectedLanguageCode.observe(viewLifecycleOwner) { selectedLanguageCode ->
             binding.registerBTN.setOnClickListener {
@@ -108,13 +103,5 @@ class RegisterFragment : Fragment() {
 
 
 
-    private fun updateUI(localeList: LocaleList) {
-        val configuration = Configuration()
-        configuration.setLocales(localeList)
-        val context = requireContext().createConfigurationContext(configuration)
-        val resources = context.resources
 
-        binding.registerBTN.text = resources?.getString(R.string.register)
-        binding.headerTextView.text = resources?.getString(R.string.signup)
-    }
 }

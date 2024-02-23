@@ -76,7 +76,7 @@ class DashboardFragment : Fragment() {
                 val hashIdsArray = userProfile.selectedJobs!!.values.toTypedArray()
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
-                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
                     selectedJobTitles = jobTitlesArray,
                     selectedJobHashIds = hashIdsArray,
                     arbeitsort = arbeitsort
@@ -89,7 +89,7 @@ class DashboardFragment : Fragment() {
 
                 val arbeitsort = args.arbeitsort ?: ""
 
-                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
                     selectedJobTitles = selectedJobsArray,
                     selectedJobHashIds = hashIdsArray,
                     arbeitsort = arbeitsort

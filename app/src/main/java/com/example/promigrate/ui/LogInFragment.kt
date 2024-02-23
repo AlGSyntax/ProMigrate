@@ -3,9 +3,7 @@ package com.example.promigrate.ui
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
-import android.os.LocaleList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,9 +46,7 @@ class LogInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.localeList.observe(viewLifecycleOwner) { localeListCompat ->
-            updateUI(localeListCompat.unwrap() as LocaleList)
-        }
+
 
         binding.loginBTN.setOnClickListener {
             // Prüfe die Eingaben vor dem Login
@@ -176,16 +172,7 @@ class LogInFragment : Fragment() {
 
 
 
-    private fun updateUI(localeList: LocaleList) {
-        val configuration = Configuration()
-        configuration.setLocales(localeList)
-        val context = requireContext().createConfigurationContext(configuration)
-        val resources = context.resources
 
-        binding.loginBTN.text = resources?.getString(R.string.login)
-        binding.toregister.text =resources?.getString(R.string.registrationinvitation)
-        // Weitere UI-Elemente aktualisieren
-    }
 
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
