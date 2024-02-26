@@ -3,6 +3,7 @@ package com.example.promigrate.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
+import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.model.JobDetailsResponse
@@ -230,7 +231,10 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
     suspend fun getJobDetails(encodedHashID: String): Result<JobDetailsResponse> {
         return try {
-            val response = apiService.getJobDetails(encodedHashID)
+            // Kodiere die HashID in Base64
+            val base64EncodedHashID = Base64.encodeToString(encodedHashID.toByteArray(charset("UTF-8")), Base64.NO_WRAP)
+
+            val response = apiService.getJobDetails(base64EncodedHashID)
             Log.d(TAG, "API-Antwort: ${response.raw()}")
             if (response.isSuccessful && response.body() != null) {
                 val jobDetail = response.body()
