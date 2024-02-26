@@ -76,8 +76,6 @@ class ReOnboardingFragment : Fragment() {
                 Toast.makeText(context, "Bitte füllen Sie alle Felder aus", Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
 
 

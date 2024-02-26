@@ -29,26 +29,19 @@ class DetailToDoJobResearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = DetailToDoJobResearchAdapter { hashId ->
-            viewModel.fetchJobDetails(hashId) // Ruft die Methode im ViewModel auf, um Details zu holen
+            viewModel.fetchJobDetails(hashId)
         }
 
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = adapter
 
-        // Verwende die ausgewählten Jobtitel und Hash-IDs aus den Argumenten
         args.selectedJobHashIds.let { hashIds ->
-            args.selectedJobTitles.forEachIndexed { index, jobTitle ->
-                if (index < hashIds.size) {
-                    adapter.submitList(hashIds.map { jobTitle to it })
-                }
-            }
+            adapter.submitList(args.selectedJobTitles.zip(hashIds))
         }
 
         viewModel.jobDetails.observe(viewLifecycleOwner) { result ->
             result.onSuccess { jobDetails ->
-                // Aktualisiere die UI mit den Jobdetails
-                // Hier könntest du ein Dialogfenster oder eine erweiterte Ansicht verwenden, um die Details anzuzeigen
-                Log.d(TAG, "Jobdetails geladen: $jobDetails")
+                jobDetails.hashId?.let { adapter.setJobDetails(it, jobDetails.toString()) }
             }.onFailure { exception ->
                 Log.e(TAG, "Fehler beim Laden der Jobdetails", exception)
             }
@@ -63,4 +56,3 @@ class DetailToDoJobResearchFragment : Fragment() {
         private const val TAG = "DetailToDoJobResearchFragment"
     }
 }
-
