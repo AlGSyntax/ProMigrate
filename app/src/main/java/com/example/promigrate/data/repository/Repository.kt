@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.promigrate.data.model.Job
+import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
@@ -96,26 +96,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         return userProfileLiveData
     }
 
-    /**
-    fun fetchUserProfile(): LiveData<Profile?> {
-        val userProfileLiveData = MutableLiveData<Profile?>()
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId != null) {
-            val docRef = FirebaseFirestore.getInstance().collection("user").document(userId)
-            docRef.get().addOnSuccessListener { documentSnapshot ->
-                val userProfile = documentSnapshot.toObject<Profile>()
-                userProfileLiveData.value = userProfile
-            }.addOnFailureListener { e ->
-                Log.w(TAG, "Error fetching user profile", e)
-                userProfileLiveData.value = null
-            }
-        } else {
-            Log.w(TAG, "User ID is null, can't fetch user profile")
-            userProfileLiveData.value = null
-        }
-        return userProfileLiveData
-    }
-    */
 
 
 
@@ -152,22 +132,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-    /**
-    suspend fun getJobs(was: String?, wo: String?, berufsfeld: String?): Result<JobResponse> {
-        return try {
-            val response = apiService.getJobs(was, wo, berufsfeld)
-            if (response.isSuccessful && response.body() != null) {
-                Log.d(TAG, "Jobs erfolgreich abgerufen: ${response.body()}")
-                Result.success(response.body()!!)
 
-            } else {
-                Result.failure(RuntimeException("response error: ${response.code()} ${response.message()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    */
 
     suspend fun translateText(text: String, targetLanguage: String): TranslationResult? {
         Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
@@ -263,12 +228,12 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
 
 
-    suspend fun getJobDetails(encodedHashID: String): Result<Job> {
+    suspend fun getJobDetails(encodedHashID: String): Result<JobDetailsResponse> {
         return try {
             val response = apiService.getJobDetails(encodedHashID)
             Log.d(TAG, "API-Antwort: ${response.raw()}")
             if (response.isSuccessful && response.body() != null) {
-                val jobDetail = response.body()!!.stellenangebote.firstOrNull()
+                val jobDetail = response.body()
                 jobDetail?.let {
                     Result.success(it)
                 } ?: Result.failure(Exception("Jobdetails nicht gefunden für HashID: $encodedHashID"))
@@ -281,8 +246,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
-
-
 
 
 

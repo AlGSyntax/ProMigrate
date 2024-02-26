@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
+import com.example.promigrate.databinding.AdditionalContactInfoBinding
 import com.example.promigrate.databinding.FragmentCreateYourProfileBinding
 
 const val TAG = "CreateYourProfileFragment"
@@ -122,14 +122,14 @@ class CreateYourProfileFragment : Fragment() {
         }
 
         binding.btnAddContact.setOnClickListener {
-            val dialogView =
-                LayoutInflater.from(it.context).inflate(R.layout.additional_contact_info, null)
-            val streetEditText = dialogView.findViewById<EditText>(R.id.etStreet)
-            val birthPlaceEditText = dialogView.findViewById<EditText>(R.id.etBirthPlace)
-            val maidenNameEditText = dialogView.findViewById<EditText>(R.id.etMaidenName)
-            val firstNameEditText = dialogView.findViewById<EditText>(R.id.etFirstName)
-            val lastNameEditText = dialogView.findViewById<EditText>(R.id.etLastName)
-            val phoneNumEditText = dialogView.findViewById<EditText>(R.id.etPhoneNumber)
+            val dialogBinding = AdditionalContactInfoBinding.inflate(LayoutInflater.from(it.context))
+            val dialogView = dialogBinding.root
+            val streetEditText = dialogBinding.etStreet
+            val birthPlaceEditText = dialogBinding.etBirthPlace
+            val maidenNameEditText = dialogBinding.etMaidenName
+            val firstNameEditText = dialogBinding.etFirstName
+            val lastNameEditText = dialogBinding.etLastName
+            val phoneNumEditText = dialogBinding.etPhoneNumber
 
             AlertDialog.Builder(it.context, R.style.CustomAlertDialog)
                 .setView(dialogView)

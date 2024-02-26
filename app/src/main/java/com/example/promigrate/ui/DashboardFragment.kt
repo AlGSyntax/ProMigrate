@@ -100,6 +100,16 @@ class DashboardFragment : Fragment() {
 
 
 
+
+
+
+        binding.imageView.setOnClickListener {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToSettingsFragment()
+            findNavController().navigate(action)
+        }
+
+
+
         return binding.root
     }
 

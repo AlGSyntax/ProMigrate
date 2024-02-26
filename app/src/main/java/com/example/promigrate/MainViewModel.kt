@@ -11,7 +11,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.promigrate.data.model.Job
+import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.RegistrationStatus
 import com.example.promigrate.data.remote.DeepLApiService
@@ -20,15 +20,16 @@ import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.storage.storage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
@@ -51,8 +52,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val loginStatus: LiveData<Boolean> = _loginStatus
 
     private val auth = Firebase.auth
-
-    private val _user = MutableLiveData<FirebaseUser?>()
 
 
     private val _registrationStatus = MutableLiveData<RegistrationStatus>()
@@ -77,8 +76,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val jobOffers: LiveData<List<Pair<String, String>>> = _jobOffers
 
 
-    private val _jobDetails = MutableLiveData<Result<Job>>()
-    val jobDetails: LiveData<Result<Job>> = _jobDetails
+    private val _jobDetails = MutableLiveData<Result<JobDetailsResponse>>()
+    val jobDetails: LiveData<Result<JobDetailsResponse>> = _jobDetails
+
 
     private val sharedPreferences: SharedPreferences =
         application.getSharedPreferences("selectedJobs", Context.MODE_PRIVATE)
@@ -393,7 +393,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
         // Prüfe, ob die aktuelle Sprache bereits Deutsch ist
-        if (currentLanguageCode=="de") {
+        if (currentLanguageCode == "de") {
             onComplete(inputText) // Gebe den ursprünglichen Text zurück, ohne Übersetzung
             return // Beende die Methode vorzeitig
         }
@@ -410,53 +410,43 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Sozialwissenschaften" -> "Gesellschaftswissenschaften"
                     "Humanmedizin und Zahnmedizin" -> "Human- und Zahnmedizin"
                     "Krankenpflege, Notdienst und Hebammenwesen" -> "Krankenpflege, Rettungsdienst und Geburtshilfe"
-                    "Datenverarbeitung"->"Informatik"
-                    "Altenpflegehelferin"->"Altenpflegehelfer/in\""
-                    "Verwaltung von Baumaschinen und Transportmitteln"->"Bau- und Transportgeräteführung"
-                    "Bühnen- und Kostümbild, Requisiten"->"Bühnen- und Kostümbildnerei, Requisite"
-                    "Einkauf und Verkauf"->"Einkauf und Vertrieb"
-                    "Elektroingenieurwesen"->"Elektrotechnik"
-                    "Ernährung und Gesundheitsberatung"->"Ernährungs- und Gesundheitsberatung"
-                    "Erziehung, Sozialarbeit, Heilpädagogik"->"Erziehung, Sozialarbeit, Heilerziehungspflege"
-                    "Fahrzeugführung im Schienenverkehr"->"Fahrzeugführung im Eisenbahnverkehr"
-                    "Fahrzeugrouting im Schiffsverkehr"->"Fahrzeugführung im Schiffsverkehr"
-                    "Farben- und Lacktechnologie"->"Farb- und Lacktechnik"
-                    "Feinmechanik und Werkzeugtechnik"->"Feinwerk- und Werkzeugtechnik"
-                    "Fischereiindustrie"->"Fischwirtschaft"
-                    "Forstwirtschaft, Jagd, Landschaftspflege"->"Forstwirtschaft, Jagdwirtschaft, Landschaftspflege"
-                    "Management und Vorstand"->"Geschäftsführung und Vorstand"
-                    "Handel, Gesundheitsüberwachung, Desinfektion"->"Gewerbe, Gesundheitsaufsicht, Desinfektion"
-                    "Bauwesen"->"Hochbau"
-                    "Holzbearbeitung und Holzverarbeitung"->"Holzbe- und -verarbeitung"
-                    "Hotelgewerbe"->"Hotellerie"
-                    "IT-Netzwerktechnik, Verwaltung, Organisation"->"IT-Netzwerktechnik, -Administration, -Organisation"
-                    "IT-Systemanalyse, Anwendungsberatung und Vertrieb"->"IT-Systemanalyse, -Anwendungsberatung und -Vertrieb"
-                    "Immobilien- und Gebäudemanagement"->"Immobilienwirtschaft und Facility-Management"
-                    "Industrielle Glasproduktion"->"Industrielle Glasherstellung"
-                    "Industrielle Keramikproduktion"->"Industrielle Keramikherstellung"
-                    "Innenarchitektur, Inneneinrichtung"->"Innenarchitektur, Raumausstattung"
-                    "Geschäftsleute - Transport und Logistik"->"Kaufleute - Verkehr und Logistik"
-                    "Sanitär-, Heizungs- und Klimatechnik"->"Klempnerei, Sanitär-, Heizungs- und Klimatechnik"
-                    "Kunsthandwerkliches Keramik- und Glasdesign"->"Kunsthandwerkliche Keramik- und Glasgestaltung"
-                    "Handwerkliches Metalldesign"->"Kunsthandwerkliche Metallgestaltung"
-                    "Herstellung von Kunststoffen und Gummi"-> "Kunststoff- und Kautschukherstellung"
-                    "Lagerhaltung, Post und Zustellung, Warenumschlag"->"Lagerwirtschaft, Post und Zustellung, Güterumschlag"
-                    "Nahrungs- und Genussmittelproduktion"->"Lebensmittel- und Genussmittelherstellung"
-                    "Leder- und Pelzproduktion"->"Leder- und Pelzherstellung"
-                    "Lehr- und Forschungstätigkeiten an Universitäten"->"Lehr- und Forschungstätigkeit an Hochschulen"
-                    "Unterricht an allgemeinbildenden Schulen"->"Lehrtätigkeit an allgemeinbildenden Schulen"
-                    "Unterricht an außerschulischen Bildungseinrichtungen"->"Lehrtätigkeit an außerschulischen Bildungseinrichtungen"
-                    "Unterricht in beruflichen Fächern und betriebliche Ausbildung"->"Lehrtätigkeit berufsbildender Fächer und betriebliche Ausbildung"
-
-
-
-
-
-
-
-
-
-
+                    "Datenverarbeitung" -> "Informatik"
+                    "Altenpflegehelferin" -> "Altenpflegehelfer/in\""
+                    "Verwaltung von Baumaschinen und Transportmitteln" -> "Bau- und Transportgeräteführung"
+                    "Bühnen- und Kostümbild, Requisiten" -> "Bühnen- und Kostümbildnerei, Requisite"
+                    "Einkauf und Verkauf" -> "Einkauf und Vertrieb"
+                    "Elektroingenieurwesen" -> "Elektrotechnik"
+                    "Ernährung und Gesundheitsberatung" -> "Ernährungs- und Gesundheitsberatung"
+                    "Erziehung, Sozialarbeit, Heilpädagogik" -> "Erziehung, Sozialarbeit, Heilerziehungspflege"
+                    "Fahrzeugführung im Schienenverkehr" -> "Fahrzeugführung im Eisenbahnverkehr"
+                    "Fahrzeugrouting im Schiffsverkehr" -> "Fahrzeugführung im Schiffsverkehr"
+                    "Farben- und Lacktechnologie" -> "Farb- und Lacktechnik"
+                    "Feinmechanik und Werkzeugtechnik" -> "Feinwerk- und Werkzeugtechnik"
+                    "Fischereiindustrie" -> "Fischwirtschaft"
+                    "Forstwirtschaft, Jagd, Landschaftspflege" -> "Forstwirtschaft, Jagdwirtschaft, Landschaftspflege"
+                    "Management und Vorstand" -> "Geschäftsführung und Vorstand"
+                    "Handel, Gesundheitsüberwachung, Desinfektion" -> "Gewerbe, Gesundheitsaufsicht, Desinfektion"
+                    "Bauwesen" -> "Hochbau"
+                    "Holzbearbeitung und Holzverarbeitung" -> "Holzbe- und -verarbeitung"
+                    "Hotelgewerbe" -> "Hotellerie"
+                    "IT-Netzwerktechnik, Verwaltung, Organisation" -> "IT-Netzwerktechnik, -Administration, -Organisation"
+                    "IT-Systemanalyse, Anwendungsberatung und Vertrieb" -> "IT-Systemanalyse, -Anwendungsberatung und -Vertrieb"
+                    "Immobilien- und Gebäudemanagement" -> "Immobilienwirtschaft und Facility-Management"
+                    "Industrielle Glasproduktion" -> "Industrielle Glasherstellung"
+                    "Industrielle Keramikproduktion" -> "Industrielle Keramikherstellung"
+                    "Innenarchitektur, Inneneinrichtung" -> "Innenarchitektur, Raumausstattung"
+                    "Geschäftsleute - Transport und Logistik" -> "Kaufleute - Verkehr und Logistik"
+                    "Sanitär-, Heizungs- und Klimatechnik" -> "Klempnerei, Sanitär-, Heizungs- und Klimatechnik"
+                    "Kunsthandwerkliches Keramik- und Glasdesign" -> "Kunsthandwerkliche Keramik- und Glasgestaltung"
+                    "Handwerkliches Metalldesign" -> "Kunsthandwerkliche Metallgestaltung"
+                    "Herstellung von Kunststoffen und Gummi" -> "Kunststoff- und Kautschukherstellung"
+                    "Lagerhaltung, Post und Zustellung, Warenumschlag" -> "Lagerwirtschaft, Post und Zustellung, Güterumschlag"
+                    "Nahrungs- und Genussmittelproduktion" -> "Lebensmittel- und Genussmittelherstellung"
+                    "Leder- und Pelzproduktion" -> "Leder- und Pelzherstellung"
+                    "Lehr- und Forschungstätigkeiten an Universitäten" -> "Lehr- und Forschungstätigkeit an Hochschulen"
+                    "Unterricht an allgemeinbildenden Schulen" -> "Lehrtätigkeit an allgemeinbildenden Schulen"
+                    "Unterricht an außerschulischen Bildungseinrichtungen" -> "Lehrtätigkeit an außerschulischen Bildungseinrichtungen"
+                    "Unterricht in beruflichen Fächern und betriebliche Ausbildung" -> "Lehrtätigkeit berufsbildender Fächer und betriebliche Ausbildung"
 
 
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
@@ -657,8 +647,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    // Inside MainViewModel.kt
 
+
+    fun updateProfileImage(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val userId = auth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                val firebaseStorage = Firebase.storage
+                val firebaseFirestore = Firebase.firestore
+
+                val imageRef = firebaseStorage.reference.child("images/$userId/profilePicture")
+                // Direktes Hochladen des Bildes ohne Zuweisung zu einer Variable
+                imageRef.putFile(uri).await()
+                val imageUrl = imageRef.downloadUrl.await().toString()
+                firebaseFirestore.collection("user").document(userId).update("profilePicture", imageUrl).await()
+                Log.d("MainViewModel", "Profilbild erfolgreich aktualisiert: $imageUrl")
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Fehler beim Aktualisieren des Profilbildes", e)
+            }
+        }
+    }
 
 
 
@@ -705,6 +713,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun logout() {
         try {
             auth.signOut()
+            _userProfileData.value = null
             _loginStatus.value = false
             Log.d("logout", "Benutzer erfolgreich ausgeloggt")
         } catch (e: Exception) {

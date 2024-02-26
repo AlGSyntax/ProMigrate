@@ -6,18 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.promigrate.data.model.Job
 import com.example.promigrate.databinding.ToDoResearchItemBinding
 
-
-
-class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) : ListAdapter<Job, DetailToDoJobResearchAdapter.DetailToDoJobResearchViewHolder>(
-    JobDiffCallback
-) {
+class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) :
+    ListAdapter<Pair<String, String>, DetailToDoJobResearchAdapter.DetailToDoJobResearchViewHolder>(
+        JobDiffCallback
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailToDoJobResearchViewHolder {
         val binding = ToDoResearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DetailToDoJobResearchViewHolder(binding)
+        return DetailToDoJobResearchViewHolder(binding, onItemClicked)
     }
 
     override fun onBindViewHolder(holder: DetailToDoJobResearchViewHolder, position: Int) {
@@ -25,27 +23,35 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
         holder.bind(job)
     }
 
-    inner class DetailToDoJobResearchViewHolder(private val binding: ToDoResearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(job: Job) {
-            binding.textViewTitle.text = job.titel ?: "Unbekannter Titel"
-
-            binding.hiddenView.visibility = View.GONE
+    inner class DetailToDoJobResearchViewHolder(
+        private val binding: ToDoResearchItemBinding,
+        private val onItemClicked: (String) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(job: Pair<String, String>) {
+            binding.textViewTitle.text = job.first
 
             binding.root.setOnClickListener {
+                // Toggle visibility of the hidden view
                 binding.hiddenView.visibility = if (binding.hiddenView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                onItemClicked(job.hashId)
+            }
+
+            // Click listener for the whole card to fetch details
+            binding.hiddenView.setOnClickListener {
+                onItemClicked(job.second) // Übermittle die hashId des angeklickten Jobs
             }
         }
     }
 
-    companion object JobDiffCallback : DiffUtil.ItemCallback<Job>() {
-        override fun areItemsTheSame(oldItem: Job, newItem: Job): Boolean {
-            return oldItem.hashId == newItem.hashId
+    companion object JobDiffCallback : DiffUtil.ItemCallback<Pair<String, String>>() {
+        override fun areItemsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
+            return oldItem.second == newItem.second // Vergleiche basierend auf hashId
         }
 
-        override fun areContentsTheSame(oldItem: Job, newItem: Job): Boolean {
+        override fun areContentsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
             return oldItem == newItem
         }
     }
 }
+
+
 

@@ -84,6 +84,10 @@
     <string name="headertextonboarding">Пожалуйста, введите вашу новую желаемую работу и ваше новое желаемое место работы здесь</string>
     <string name="jobapplication">To Do: Приложение для работы</string>
     <string name="todojobresearch">To Do: Исследование работы</string>
+    <string name="logout">Выйти</string>
+    <string name="hellouser">Привет, %1$s!</string>
+    <string name="unknownuser">Неизвестный пользователь</string>
+    <string name="exit">Выход</string>
 
 
 </resources>

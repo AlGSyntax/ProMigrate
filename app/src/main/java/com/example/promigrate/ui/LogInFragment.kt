@@ -123,7 +123,7 @@ class LogInFragment : Fragment() {
                     findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
                 }
             } else {
-                Toast.makeText(context, "Login fehlgeschlagen. Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Benutzer erfolgreich ausgeloggt.", Toast.LENGTH_LONG).show()
             }
         }
         viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
@@ -140,6 +140,10 @@ class LogInFragment : Fragment() {
                 )
                 findNavController().navigate(action)
             }
+        }
+
+        binding.exitapp.setOnClickListener {
+            activity?.finish()
         }
 
 

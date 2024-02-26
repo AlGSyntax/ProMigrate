@@ -82,3 +82,4 @@ class AuthTokenInterceptor(context: Context) : Interceptor {
         }
     }
 }
+//https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v2/jobdetails/{encodedHashID}

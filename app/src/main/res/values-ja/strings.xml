@@ -82,6 +82,10 @@
     <string name="headertextonboarding">新しい希望職種と新しい希望勤務地をここに入力してください</string>
     <string name="jobapplication">To Do: 仕事の応募</string>
     <string name="todojobresearch">To Do: 仕事の調査</string>
+    <string name="logout">ログアウト</string>
+    <string name="hellouser">こんにちは、%1$sさん！</string>
+    <string name="unknownuser">不明なユーザー</string>
+    <string name="exit">出口</string>
 
 
 </resources>

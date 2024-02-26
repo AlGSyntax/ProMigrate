@@ -1,6 +1,5 @@
 package com.example.promigrate.ui
 
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
@@ -38,8 +37,6 @@ class LanguageSelectionFragment : Fragment() {
         viewModel.localeList.observe(viewLifecycleOwner) { localeListCompat ->
             val configuration = Configuration(resources.configuration)
             configuration.setLocales(localeListCompat.unwrap() as LocaleList?)
-            val context = requireContext().createConfigurationContext(configuration)
-            updateUI(context)
         }
     }
 
@@ -76,10 +73,5 @@ class LanguageSelectionFragment : Fragment() {
     }
 
 
-    private fun updateUI(context: Context) {
-        binding.tvWelcomeMessage.text = context.resources.getString(R.string.languageselectionmessage)
-        // Aktualisiere weitere UI-Elemente hier
-        binding.btnConfirmLanguage.text =context.resources.getString(R.string.confirm)
-        binding.chooselanguage.text = context.resources.getString(R.string.choose_your_language)
-    }
+
 }

@@ -12,66 +12,99 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="84dp"
         android:layout_marginBottom="608dp"
-        android:text="@string/dashboard"
         android:fontFamily="@font/quicksandvariablefontwght"
+        android:text="@string/dashboard"
         android:textColor="@color/titles"
-        android:textStyle="bold"
         android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardTopLeft"
         android:layout_width="166dp"
         android:layout_height="121dp"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardBottomLeft"
-        app:layout_constraintEnd_toStartOf="@+id/cardTopRight"
-        app:layout_constraintHeight_percent="0.4"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="182dp"
+        android:layout_marginEnd="217dp"
+        android:layout_marginBottom="428dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.4" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/todojobresearchbackground" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardTopRight"
         android:layout_width="166dp"
         android:layout_height="121dp"
-        android:layout_margin="8dp"
+        android:layout_marginStart="222dp"
+        android:layout_marginTop="182dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="428dp"
         app:cardBackgroundColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/cardBottomRight"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.4"
-        app:layout_constraintStart_toEndOf="@+id/cardTopLeft"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.4" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardBottomLeft"
         android:layout_width="166dp"
         android:layout_height="121dp"
-        android:layout_margin="8dp"
-        app:cardBackgroundColor="@color/black"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="329dp"
+        android:layout_marginEnd="217dp"
+        android:layout_marginBottom="281dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cardBottomRight"
-        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardTopLeft"
-        app:layout_constraintWidth_percent="0.4" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/todojobapplicationbackground" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardBottomRight"
         android:layout_width="166dp"
         android:layout_height="121dp"
-        android:layout_margin="8dp"
+        android:layout_marginStart="222dp"
+        android:layout_marginTop="329dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="281dp"
         app:cardBackgroundColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.4"
-        app:layout_constraintStart_toEndOf="@+id/cardBottomLeft"
-        app:layout_constraintTop_toBottomOf="@+id/cardTopRight"
-        app:layout_constraintWidth_percent="0.4" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="39dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="335dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="645dp"
+        android:src="@drawable/baseline_admin_panel_settings_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

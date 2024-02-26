@@ -83,5 +83,9 @@
     <string name="headertextonboarding">Por favor, introduzca su nuevo trabajo deseado y su nuevo lugar de trabajo deseado aquí</string>
     <string name="jobapplication">Por hacer: Solicitud de empleo</string>
     <string name="todojobresearch">Por hacer: Investigación de empleo</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="hellouser">Hola, %1$s!</string>
+    <string name="unknownuser">Usuario desconocido</string>
+    <string name="exit">Salir</string>
 
 </resources>
