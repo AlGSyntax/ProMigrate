@@ -300,35 +300,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    /**
-    fun getJobs(was: String?, wo: String?, berufsfeld: String?) {
-        viewModelScope.launch {
-            try {
-                _jobs.value = repository.getJobs(was, wo, berufsfeld)
-            } catch (e: Exception) {
-                Log.e("JobFetch", "Fehler beim Abrufen der Jobs: ${e.message}")
-            }
-        }
-    }
-*/
-/**
-    fun translateText(inputText: String) {
-        viewModelScope.launch {
-            Log.d("translateText", "Übersetzung startet: Eingabetext = $inputText, Zielsprache = DE")
-            try {
-                val result = repository.translateText(inputText, "DE") // DE für Deutsch
-                if (result != null) {
-                    Log.d("translateText", "Übersetzung erfolgreich, Ergebnis = ${result.text}")
-                }
-                if (result != null) {
-                    translationResult.postValue(result.text)
-                }
-            } catch (e: Exception) {
-                Log.e("translateText", "Fehler bei der Übersetzung", e)
-            }
-        }
-    }
-    */
 
     // Im ViewModel
     fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
@@ -458,8 +429,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Sach-, Personen- und Feuerschutz, Arbeitssicherheit"->"Objekt-, Personen-, Brandschutz, Arbeitssicherheit"
                     "Beamte"->"Offiziere"
                     "Verwaltung der Humanressourcen und Dienstleistungen"->"Personalwesen und -dienstleistung"
-                    ""->""
-                    ""->""
+
 
 
 
@@ -474,6 +444,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 onComplete(inputText) // Gebe im Fehlerfall den Originaltext zurück
             }
         }
+    }
+
+    fun toggleJobSelection(jobTitle: String, hashId: String) {
+        val currentProfile = _userProfileData.value ?: Profile().also { _userProfileData.value = it }
+        // Verwende eine mutable Map, um die Jobtitel und Hash-IDs zu speichern
+        val currentSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+
+        if (currentSelectedJobs.containsKey(jobTitle)) {
+            currentSelectedJobs.remove(jobTitle)
+        } else {
+            currentSelectedJobs[jobTitle] = hashId
+        }
+
+        // Setze die aktualisierte Map zurück ins Profile-Objekt
+        currentProfile.selectedJobs = currentSelectedJobs
+        _userProfileData.value = currentProfile
+
+        Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
     }
 
 
@@ -645,23 +633,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun toggleJobSelection(jobTitle: String, hashId: String) {
-        val currentProfile = _userProfileData.value ?: Profile().also { _userProfileData.value = it }
-        // Verwende eine mutable Map, um die Jobtitel und Hash-IDs zu speichern
-        val currentSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
-
-        if (currentSelectedJobs.containsKey(jobTitle)) {
-            currentSelectedJobs.remove(jobTitle)
-        } else {
-            currentSelectedJobs[jobTitle] = hashId
-        }
-
-        // Setze die aktualisierte Map zurück ins Profile-Objekt
-        currentProfile.selectedJobs = currentSelectedJobs
-        _userProfileData.value = currentProfile
-
-        Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
-    }
 
     // Inside MainViewModel.kt
     fun updateJobOffers(was: String, arbeitsort: String) {
@@ -724,6 +695,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
+
+
+
+
     fun fetchJobDetails(encodedHashID: String) {
         viewModelScope.launch {
             try {
@@ -761,6 +736,57 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+
+
+    fun updateToDoItemForJob(userId: String, rawJobId: String, todoId: String, isCompleted: Boolean) {
+        // Bereinige die jobId, um problematische Zeichen zu entfernen
+        val jobId = sanitizeJobId(rawJobId)
+        val userDocRef = FirebaseFirestore.getInstance().collection("user").document(userId)
+        val todoDocRef = userDocRef.collection("todos").document(jobId)
+
+        // Überprüfe, ob das Dokument existiert, und erstelle oder aktualisiere es
+        todoDocRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                // Dokument existiert, aktualisiere es
+                todoDocRef.update("todos.$todoId.erledigt", isCompleted)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "ToDo item updated successfully")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e(TAG, "Error updating ToDo item", e)
+                    }
+            } else {
+                // Dokument existiert nicht, erstelle es mit dem initialen ToDo-Item
+                val newTodo = mapOf(
+                    "todos" to mapOf(
+                        todoId to mapOf(
+                            "erledigt" to isCompleted,
+                            "text" to "Beispieltext" // Beispieltext hinzugefügt, anpassen nach Bedarf
+                        )
+                    )
+                )
+                todoDocRef.set(newTodo)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "ToDo item created successfully")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e(TAG, "Error creating ToDo item", e)
+                    }
+            }
+        }.addOnFailureListener { e ->
+            Log.e(TAG, "Error checking if ToDo item exists", e)
+        }
+    }
+
+    /**
+     * Bereinigt die jobId, indem sie alle nicht alphanumerischen Zeichen durch Unterstriche ersetzt.
+     */
+    private fun sanitizeJobId(jobId: String): String {
+        return jobId.replace(Regex("[^A-Za-z0-9]"), "_")
+    }
+
+
 
 
 

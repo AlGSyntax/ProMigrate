@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <CheckBox
+        android:id="@+id/todoItemCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/todoItemTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:textColor="@android:color/black"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="To-Do Item" />
+
+    <!-- Optional: Add a button or an icon to delete or edit the to-do item -->
+
+
+</LinearLayout>

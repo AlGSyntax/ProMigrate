@@ -82,7 +82,7 @@
     <string name="onboardingrepeat">Repetir Onboarding</string>
     <string name="headertextonboarding">Por favor, introduzca su nuevo trabajo deseado y su nuevo lugar de trabajo deseado aquí</string>
     <string name="jobapplication">Por hacer: Solicitud de empleo</string>
-    <string name="todojobresearch">Por hacer: Investigación de empleo</string>
+    <string name="todojobresearch">Investigación de empleo</string>
     <string name="logout">Cerrar sesión</string>
     <string name="hellouser">Hola, %1$s!</string>
     <string name="unknownuser">Usuario desconocido</string>
@@ -95,6 +95,13 @@
     <string name="description">Descripción: %1$s</string>
     <string name="branch">Rama: %1$s</string>
     <string name="job">Trabajo: %1$s</string>
+    <string name="unlimited">Ilimitado</string>
+    <string name="limited">Limitado</string>
+    <string name="unknown">Desconocido</string>
+    <string name="todo_item_1">Redactar un CV para esta oferta de empleo</string>
+    <string name="todo_item_2">Redactar una carta de presentación para esta oferta de empleo</string>
+    <string name="todo_item_3">Preguntar con curiosidad a mi interlocutor sobre el estado del proceso de solicitud</string>
+
 
 
 </resources>

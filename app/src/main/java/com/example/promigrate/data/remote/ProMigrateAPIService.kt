@@ -2,6 +2,7 @@ package com.example.promigrate.data.remote
 
 import android.content.Context
 import com.example.promigrate.BuildConfig
+import com.example.promigrate.data.model.BildungsangebotResponse
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.JobResponse
 import com.squareup.moshi.Moshi
@@ -41,6 +42,18 @@ interface ProMigrateAPIService {
 
     @GET("jobboerse/jobsuche-service/pc/v2/jobdetails/{encodedHashID}")
     suspend fun getJobDetails(@Path("encodedHashID") encodedHashID: String?): Response<JobDetailsResponse>
+
+    @GET("infosysbub/sprachfoerderung/pc/v1/bildungsangebot")
+    suspend fun getBildungsangebot(
+        @Query("systematiken") systematiken: String,
+        @Query("orte") orte: String,
+        @Query("page") page: Int,
+        @Query("umkreis") umkreis: String,
+        @Query("sprachniveau") sprachniveau: String,
+        @Query("beginntermine") beginntermine: Int,
+        @Query("unterrichtsformen") unterrichtsformen: String,
+        @Query("anbieter") anbieter: Int
+    ): Response<BildungsangebotResponse>
 
 
 

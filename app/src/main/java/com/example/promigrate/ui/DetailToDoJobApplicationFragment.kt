@@ -13,21 +13,23 @@ import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.adapter.DetailToDoJobApplicationAdapter
 import com.example.promigrate.databinding.FragmentDetailToDoJobApplicationBinding
+import com.google.firebase.auth.FirebaseAuth
 
-const val TAG2 = "DetailToDoJobApplicationFragment"
+const val TAG2 = "DetailToDoJobApplication"
 
 class DetailToDoJobApplicationFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailToDoJobApplicationBinding
     private val viewModel: MainViewModel by activityViewModels()
 
-    private val adapter = DetailToDoJobApplicationAdapter { jobTitle, isChecked ->
-        // Hole die Hash-ID für den gewählten Jobtitel
-        val hashId = viewModel.userProfileData.value?.selectedJobs?.get(jobTitle) ?: ""
-        if (isChecked) {
-            viewModel.toggleJobSelection(jobTitle, hashId)
-        } else {
-            viewModel.toggleJobSelection(jobTitle, "")
+    private val adapter: DetailToDoJobApplicationAdapter
+
+    init {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid ?: ""
+
+        adapter = DetailToDoJobApplicationAdapter { jobId, todoId, isCompleted ->
+            viewModel.updateToDoItemForJob(userId = userId, rawJobId = jobId, todoId = todoId, isCompleted = isCompleted)
         }
     }
 
@@ -43,11 +45,10 @@ class DetailToDoJobApplicationFragment : Fragment() {
         binding.rvJobs.adapter = adapter
 
         viewModel.userProfileData.observe(viewLifecycleOwner) { profile ->
-            val selectedJobsList = profile?.selectedJobs?.keys?.toList() ?: emptyList()
-            adapter.submitList(selectedJobsList)
-            Log.d(TAG2, "Aktualisierte Liste der ausgewählten Jobs: $selectedJobsList")
+            val jobTitles = profile?.selectedJobs?.keys?.toList() ?: emptyList()
+            adapter.submitList(jobTitles)
+            Log.d(TAG2, "Aktualisierte Liste der Jobtitel: $jobTitles")
         }
-
 
         binding.restartOnboardingButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_viewPagerFragment)

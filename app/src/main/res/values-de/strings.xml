@@ -83,7 +83,7 @@
     <string name="onboardingrepeat">Onboarding wiederholen</string>
     <string name="headertextonboarding">Bitte geben Sie hier Ihren neuen Wunschberuf und Ihren neuen Wunschort der Arbeit ein</string>
     <string name="jobapplication">To Do:Job-Bewerbung</string>
-    <string name="todojobresearch">To Do: Job-Recherche</string>
+    <string name="todojobresearch">Job-Recherche</string>
     <string name="logout">Ausloggen</string>
     <string name="hellouser">Hallo, %1$s!</string>
     <string name="unknownuser">Unbekannter Benutzer</string>
@@ -96,6 +96,14 @@
     <string name="description">Beschreibung: %1$s</string>
     <string name="branch">Branche: %1$s</string>
     <string name="job">Beruf: %1$s</string>
+    <string name="unlimited">Befristet</string>
+    <string name="limited">Unbefristet</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="todo_item_1">Einen Lebenslauf für dieses Stellenangebot schreiben</string>
+    <string name="todo_item_2">Ein Anschreiben für dieses Stellenangebot schreiben</string>
+    <string name="todo_item_3">Einen Termin für das Vorstellungsgespräch vereinbaren</string>
+
+
 
 
 

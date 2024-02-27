@@ -83,7 +83,7 @@
     <string name="onboardingrepeat">Повторить Onboarding</string>
     <string name="headertextonboarding">Пожалуйста, введите вашу новую желаемую работу и ваше новое желаемое место работы здесь</string>
     <string name="jobapplication">To Do: Приложение для работы</string>
-    <string name="todojobresearch">To Do: Исследование работы</string>
+    <string name="todojobresearch">Исследование работы</string>
     <string name="logout">Выйти</string>
     <string name="hellouser">Привет, %1$s!</string>
     <string name="unknownuser">Неизвестный пользователь</string>
@@ -96,6 +96,13 @@
     <string name="description">Описание: %1$s</string>
     <string name="branch">Отрасль: %1$s</string>
     <string name="job">Работа: %1$s</string>
+    <string name="unlimited">Неограниченный</string>
+    <string name="limited">Ограниченный</string>
+    <string name="unknown">Неизвестный</string>
+        <string name="todo_item_1">Составление резюме для этой вакансии</string>
+    <string name="todo_item_2">Составление сопроводительного письма для этого предложения о работе</string>
+    <string name="todo_item_3">С любопытством расспрашиваю собеседника о ходе процесса подачи документов.</string>
+
 
 
 

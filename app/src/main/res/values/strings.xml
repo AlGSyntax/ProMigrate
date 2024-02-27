@@ -82,7 +82,7 @@
     <string name="joboffselect">Select new Job Offers</string>
     <string name="backtotodolist">Back to ToDo-List</string>
     <string name="onboardingrepeat">Repeat Onboarding</string>
-    <string name="todojobresearch">To Do : Job Research</string>
+    <string name="todojobresearch">Job Research</string>
     <string name="logout">LogOut</string>
     <string name="hellouser">Hi, %1$s!</string>
     <string name="unknownuser">Unknown User</string>
@@ -98,6 +98,9 @@
     <string name="unlimited">Unlimited\n</string>
     <string name="limited">Limited</string>
     <string name="unknown">Unknown</string>
+    <string name="todo_item_1">Writing a CV for this job offer</string>
+    <string name="todo_item_2">Writing a decent cover letter</string>
+    <string name="todo_item_3">Curiously ask your contact person about the status of the application process </string>
 
 
 </resources>

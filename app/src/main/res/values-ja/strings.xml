@@ -81,7 +81,7 @@
     <string name="onboardingrepeat">オンボーディングを繰り返す</string>
     <string name="headertextonboarding">新しい希望職種と新しい希望勤務地をここに入力してください</string>
     <string name="jobapplication">To Do: 仕事の応募</string>
-    <string name="todojobresearch">To Do: 仕事の調査</string>
+    <string name="todojobresearch">仕事の調査</string>
     <string name="logout">ログアウト</string>
     <string name="hellouser">こんにちは、%1$sさん！</string>
     <string name="unknownuser">不明なユーザー</string>
@@ -94,6 +94,14 @@
     <string name="description">説明：%1$s</string>
     <string name="branch">ブランチ：%1$s</string>
     <string name="job">仕事：%1$s</string>
+    <string name="unlimited">無制限</string>
+    <string name="limited">限定</string>
+    <string name="unknown">不明</string>
+    <string name="todo_item_1">職務経歴書の書き方</string>
+    <string name="todo_item_2">この求人に対するカバーレターの書き方</string>
+    <string name="todo_item_3">不思議に思いながら、申請手続きの状況を間者に尋ねた。</string>
+
+
 
 
 </resources>

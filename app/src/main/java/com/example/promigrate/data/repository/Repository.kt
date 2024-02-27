@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
+import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
 import com.example.promigrate.data.remote.DeepLApiService
@@ -247,6 +248,31 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             }
         } catch (e: Exception) {
             Log.e(TAG, "Ausnahme beim Abrufen der Jobdetails für HashID: $encodedHashID, Ausnahme: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+
+    suspend fun getBildungsangebote(
+        systematiken: String,
+        orte: String,
+        page: Int,
+        umkreis: String,
+        sprachniveau: String,
+        beginntermine: Int,
+        unterrichtsformen: String,
+        anbieter: Int
+    ): Result<List<TerminResponse>> {
+        return try {
+            val response = apiService.getBildungsangebot(systematiken, orte, page, umkreis, sprachniveau, beginntermine, unterrichtsformen, anbieter)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!._embedded.termine)
+            } else {
+                Log.e("Repository", "Fehler beim Abrufen der Bildungsangebote: ${response.message()}")
+                Result.failure(Exception("Fehler beim Abrufen der Bildungsangebote"))
+            }
+        } catch (e: Exception) {
+            Log.e("Repository", "Exception beim Abrufen der Bildungsangebote", e)
             Result.failure(e)
         }
     }

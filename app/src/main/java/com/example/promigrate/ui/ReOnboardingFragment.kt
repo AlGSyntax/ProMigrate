@@ -16,7 +16,7 @@ class ReOnboardingFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding : FragmentReOnboardingBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding= FragmentReOnboardingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -90,6 +90,4 @@ class ReOnboardingFragment : Fragment() {
         }
 
     }
-
-
 }
