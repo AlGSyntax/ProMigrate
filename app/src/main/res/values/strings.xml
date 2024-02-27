@@ -87,6 +87,14 @@
     <string name="hellouser">Hi, %1$s!</string>
     <string name="unknownuser">Unknown User</string>
     <string name="exit">Exit</string>
+    <string name="employer">Employer: %1$s</string>
+    <string name="location">Location: %1$s</string>
+    <string name="work_model">Work Model: %1$s</string>
+    <string name="contract">Contract: %1$s</string>
+    <string name="salary">Salary: %1$s</string>
+    <string name="description">Description: %1$s</string>
+    <string name="branch">Branch: %1$s</string>
+    <string name="job">Job: %1$s</string>
 
 
 </resources>

@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.promigrate.databinding.ToDoApplicationItemBinding
+import com.example.promigrate.databinding.JobOportunitiesItemBinding
 
 class JobOpportunitiesAdapter(private val onItemChecked: (String, String, Boolean) -> Unit) :
     ListAdapter<Pair<String, String>, JobOpportunitiesAdapter.JobViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val binding = ToDoApplicationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = JobOportunitiesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return JobViewHolder(binding, onItemChecked)
     }
 
@@ -20,7 +20,7 @@ class JobOpportunitiesAdapter(private val onItemChecked: (String, String, Boolea
         holder.bind(jobPair.first, jobPair.second, holder.binding.itemCheckbox.isChecked)
     }
 
-    class JobViewHolder(val binding: ToDoApplicationItemBinding, private val onItemChecked: (String, String, Boolean) -> Unit) :
+    class JobViewHolder(val binding: JobOportunitiesItemBinding, private val onItemChecked: (String, String, Boolean) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(jobTitle: String, hashId: String, isChecked: Boolean) {
             binding.jobTitleTextView.text = jobTitle

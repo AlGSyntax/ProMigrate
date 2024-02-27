@@ -87,5 +87,14 @@
     <string name="hellouser">Hola, %1$s!</string>
     <string name="unknownuser">Usuario desconocido</string>
     <string name="exit">Salir</string>
+    <string name="employer">Empleador: %1$s</string>
+    <string name="location">Ubicación: %1$s</string>
+    <string name="work_model">Modelo de trabajo: %1$s</string>
+    <string name="contract">Límite temporal: %1$s </string>
+    <string name="salary">Salario: %1$s</string>
+    <string name="description">Descripción: %1$s</string>
+    <string name="branch">Rama: %1$s</string>
+    <string name="job">Trabajo: %1$s</string>
+
 
 </resources>

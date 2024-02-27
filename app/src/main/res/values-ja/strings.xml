@@ -86,6 +86,14 @@
     <string name="hellouser">こんにちは、%1$sさん！</string>
     <string name="unknownuser">不明なユーザー</string>
     <string name="exit">出口</string>
+    <string name="employer">雇用主：%1$s</string>
+    <string name="location">場所：%1$s</string>
+    <string name="work_model">労働モデル：%1$s</string>
+    <string name="contract">契約：%1$s</string>
+    <string name="salary">給与：%1$s</string>
+    <string name="description">説明：%1$s</string>
+    <string name="branch">ブランチ：%1$s</string>
+    <string name="job">仕事：%1$s</string>
 
 
 </resources>

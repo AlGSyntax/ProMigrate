@@ -41,7 +41,7 @@ class DetailToDoJobResearchFragment : Fragment() {
 
         viewModel.jobDetails.observe(viewLifecycleOwner) { result ->
             result.onSuccess { jobDetails ->
-                jobDetails.hashId?.let { adapter.setJobDetails(it, jobDetails.toString()) }
+                jobDetails.hashId?.let { adapter.setJobDetails(it, jobDetails) }
             }.onFailure { exception ->
                 Log.e(TAG, "Fehler beim Laden der Jobdetails", exception)
             }
@@ -56,3 +56,4 @@ class DetailToDoJobResearchFragment : Fragment() {
         private const val TAG = "DetailToDoJobResearchFragment"
     }
 }
+

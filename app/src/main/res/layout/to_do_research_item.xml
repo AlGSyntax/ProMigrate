@@ -1,7 +1,9 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +15,10 @@
             android:id="@+id/textViewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Titel" />
+            android:textStyle="bold"
+            android:fontFamily="@font/quicksandvariablefontwght"
+            android:textColor="@color/textcolor"
+            />
 
         <LinearLayout
             android:id="@+id/hiddenView"
@@ -23,12 +28,71 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/textviewdetails"
+                android:id="@+id/textViewEmployer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Detailinformationen" />
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="8dp"/>
 
-            <!-- Füge hier weitere Details hinzu, die angezeigt werden sollen -->
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
+            <TextView
+                android:id="@+id/textViewWorkModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
+            <TextView
+                android:id="@+id/textViewContract"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
+            <TextView
+                android:id="@+id/textViewSalary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
+            <!-- Add more TextViews for other details from JobDetailsResponse -->
+            <TextView
+                android:id="@+id/textViewBranch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
+            <TextView
+                android:id="@+id/textViewJob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
+            <!-- Add more TextViews as needed -->
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -6,19 +6,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.promigrate.R
+import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.databinding.ToDoResearchItemBinding
-
 
 class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) :
     ListAdapter<Pair<String, String>, DetailToDoJobResearchAdapter.DetailToDoJobResearchViewHolder>(
         JobDiffCallback
     ) {
 
-    private var jobDetailsMap = mutableMapOf<String, String>()
+    private var jobDetailsMap = mutableMapOf<String, JobDetailsResponse>()
 
-    fun setJobDetails(hashId: String, details: String) {
+    fun setJobDetails(hashId: String, details: JobDetailsResponse) {
         jobDetailsMap[hashId] = details
-        notifyDataSetChanged()
+        val position = currentList.indexOfFirst { it.second == hashId }
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailToDoJobResearchViewHolder {
@@ -28,7 +32,7 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
 
     override fun onBindViewHolder(holder: DetailToDoJobResearchViewHolder, position: Int) {
         val job = getItem(position)
-        holder.bind(job, jobDetailsMap[job.second] ?: "")
+        holder.bind(job, jobDetailsMap[job.second])
     }
 
     inner class DetailToDoJobResearchViewHolder(
@@ -36,25 +40,37 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
         private val onItemClicked: (String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(job: Pair<String, String>, details: String) {
+        fun bind(job: Pair<String, String>, details: JobDetailsResponse?) {
             binding.textViewTitle.text = job.first
-
-            if (details.isNotEmpty()) {
-                binding.textviewdetails.text = details
-                binding.hiddenView.visibility = View.VISIBLE
-            } else {
-                binding.hiddenView.visibility = View.GONE
+            details?.let {
+                binding.textViewEmployer.text = binding.root.context.getString(R.string.employer, it.arbeitgeber ?: "N/A")
+                binding.textViewLocation.text = binding.root.context.getString(R.string.location, it.arbeitgeberAdresse?.ort ?: "N/A")
+                binding.textViewWorkModel.text = binding.root.context.getString(R.string.work_model, it.arbeitszeitmodelle?.joinToString(", ") ?: "N/A")
+                binding.textViewContract.text = binding.root.context.getString(R.string.contract, getBefristung(details.befristung?.toInt() ?: 0))
+                binding.textViewSalary.text = binding.root.context.getString(R.string.salary, it.verguetung ?: "N/A")
+                binding.textViewDescription.text = binding.root.context.getString(R.string.description, it.stellenbeschreibung ?: "N/A")
+                binding.textViewBranch.text = binding.root.context.getString(R.string.branch, it.branche ?: "N/A")
+                binding.textViewJob.text = binding.root.context.getString(R.string.job, it.beruf ?: "N/A")
+                // Füge weitere Details nach Bedarf hinzu.
             }
 
+
+
+            // Initial set the visibility to GONE
             binding.root.setOnClickListener {
-                val showDetails = binding.hiddenView.visibility != View.VISIBLE
-                if (showDetails) {
-                    onItemClicked(job.second)
-                } else {
-                    binding.hiddenView.visibility = View.GONE
-                }
+                // Toggle die Sichtbarkeit der Detailansicht.
+                binding.hiddenView.visibility = if (binding.hiddenView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+                onItemClicked(job.second)  // Callback für zusätzliche Aktionen.
             }
         }
+        private fun getBefristung(befristungCode: Int): String {
+            return when (befristungCode) {
+                1 -> "Befristet"
+                2 -> "Unbefristet"
+                else -> "Unbekannt"
+            }
+        }
+
     }
 
     companion object JobDiffCallback : DiffUtil.ItemCallback<Pair<String, String>>() {
@@ -67,7 +83,5 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
         }
     }
 }
-
-
 
 

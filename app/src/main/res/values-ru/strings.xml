@@ -88,6 +88,16 @@
     <string name="hellouser">Привет, %1$s!</string>
     <string name="unknownuser">Неизвестный пользователь</string>
     <string name="exit">Выход</string>
+    <string name="employer">Работодатель: %1$s</string>
+    <string name="location">Местоположение: %1$s</string>
+    <string name="work_model">Модель работы: %1$s</string>
+    <string name="contract">Контракт: %1$s</string>
+    <string name="salary">Зарплата: %1$s</string>
+    <string name="description">Описание: %1$s</string>
+    <string name="branch">Отрасль: %1$s</string>
+    <string name="job">Работа: %1$s</string>
+
+
 
 
 </resources>

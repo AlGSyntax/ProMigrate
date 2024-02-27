@@ -86,4 +86,13 @@
     <string name="hellouser">Привіт, %1$s!</string>
     <string name="unknownuser">Невідомий користувач</string>
     <string name="exit">Вихід</string>
+    <string name="employer">Роботодавець: %1$s</string>
+    <string name="location">Місце розташування: %1$s</string>
+    <string name="work_model">Модель роботи: %1$s</string>
+    <string name="contract">Контракт: %1$s</string>
+    <string name="salary">Зарплата: %1$s</string>
+    <string name="description">Опис: %1$s</string>
+    <string name="branch">Галузь: %1$s</string>
+    <string name="job">Робота: %1$s</string>
+
 </resources>

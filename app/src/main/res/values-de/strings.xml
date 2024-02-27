@@ -88,6 +88,15 @@
     <string name="hellouser">Hallo, %1$s!</string>
     <string name="unknownuser">Unbekannter Benutzer</string>
     <string name="exit">Exit</string>
+    <string name="employer">Arbeitgeber: %1$s</string>
+    <string name="location">Ort: %1$s</string>
+    <string name="work_model">Arbeitsmodell: %1$s</string>
+    <string name="contract">Befristung: %1$s</string>
+    <string name="salary">Vergütung: %1$s</string>
+    <string name="description">Beschreibung: %1$s</string>
+    <string name="branch">Branche: %1$s</string>
+    <string name="job">Beruf: %1$s</string>
+
 
 
 
