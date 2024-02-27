@@ -41,11 +41,16 @@ class DetailToDoJobResearchFragment : Fragment() {
 
         viewModel.jobDetails.observe(viewLifecycleOwner) { result ->
             result.onSuccess { jobDetails ->
-                jobDetails.hashId?.let { adapter.setJobDetails(it, jobDetails) }
+                viewModel.translateJobDetails(jobDetails) { translatedJobDetails ->
+                    translatedJobDetails.hashId?.let { hashId ->
+                        adapter.setJobDetails(hashId, translatedJobDetails)
+                    }
+                }
             }.onFailure { exception ->
                 Log.e(TAG, "Fehler beim Laden der Jobdetails", exception)
             }
         }
+
 
         binding.backtodashbtn2.setOnClickListener {
             findNavController().navigate(DetailToDoJobResearchFragmentDirections.actionDetailToDoJobResearchFragmentToDashboardFragment())

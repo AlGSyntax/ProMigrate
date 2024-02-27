@@ -447,6 +447,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Unterricht an allgemeinbildenden Schulen" -> "Lehrtätigkeit an allgemeinbildenden Schulen"
                     "Unterricht an außerschulischen Bildungseinrichtungen" -> "Lehrtätigkeit an außerschulischen Bildungseinrichtungen"
                     "Unterricht in beruflichen Fächern und betriebliche Ausbildung" -> "Lehrtätigkeit berufsbildender Fächer und betriebliche Ausbildung"
+                    "Maschinenbau und Betriebstechnik"->"Maschinenbau- und Betriebstechnik"
+                    "Medien, Dokumentation und Informationsdienste"->"Medien-, Dokumentations- und Informationsdienste"
+                    "Medizinisches Labor"->"Medizinisches Laboratorium"
+                    "Oberflächenbehandlung von Metall"->"Metalloberflächenbehandlung"
+                    "Museumstechnik und -verwaltung"->"Museumstechnik und -management"
+                    "Musik, Gesang, Dirigentenarbeit"->"Musik-, Gesang-, Dirigententätigkeiten"
+                    "Naturstein- und Mineralienverarbeitung, Baumaterialproduktion"->"Naturstein- und Mineralaufbereitung, Baustoffherstellung"
+                    "Nichtmedizinische Therapie und Medizin"->"Nichtärztliche Therapie und Heilkunde"
+                    "Sach-, Personen- und Feuerschutz, Arbeitssicherheit"->"Objekt-, Personen-, Brandschutz, Arbeitssicherheit"
+                    "Beamte"->"Offiziere"
+                    "Verwaltung der Humanressourcen und Dienstleistungen"->"Personalwesen und -dienstleistung"
+                    ""->""
+                    ""->""
+
+
 
 
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
@@ -514,6 +529,59 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             onComplete(translatedJobOffers)
         }
     }
+
+
+    fun translateJobDetails(jobDetails: JobDetailsResponse, onComplete: (JobDetailsResponse) -> Unit) {
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
+        if (currentLanguageCode == "de") {
+            onComplete(jobDetails)
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                // Annahme: JobDetailsResponse enthält Felder, die übersetzt werden sollen.
+                val translatedArbeitgeber = repository.translateText(jobDetails.arbeitgeber ?: "", currentLanguageCode)?.text ?: jobDetails.arbeitgeber
+                val translatedStellenbeschreibung = repository.translateText(jobDetails.stellenbeschreibung ?: "", currentLanguageCode)?.text ?: jobDetails.stellenbeschreibung
+                val translatedBranche = repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text ?: jobDetails.branche
+                val translatedAngebotsart = repository.translateText(jobDetails.angebotsart ?: "", currentLanguageCode)?.text ?: jobDetails.angebotsart
+                val translatedTitel = repository.translateText(jobDetails.titel ?: "", currentLanguageCode)?.text ?: jobDetails.titel
+                val translatedBeruf = repository.translateText(jobDetails.beruf ?: "", currentLanguageCode)?.text ?: jobDetails.beruf
+                val translatedVerguetung = repository.translateText(jobDetails.verguetung ?: "", currentLanguageCode)?.text ?: jobDetails.verguetung
+
+
+                val translatedArbeitszeitmodelle = jobDetails.arbeitszeitmodelle?.map { model ->
+                    repository.translateText(model, currentLanguageCode)?.text ?: model
+                } ?: listOf()
+
+                // Übersetzung der Arbeitsorte, wenn nötig
+                val translatedArbeitsorte = jobDetails.arbeitsorte?.map { ort ->
+                    ort.copy(
+                        ort = repository.translateText(ort.ort ?: "", currentLanguageCode)?.text ?: ort.ort
+                    )
+                }
+
+                // Erstelle ein neues JobDetailsResponse-Objekt mit den übersetzten Werten
+                val translatedJobDetails = jobDetails.copy(
+                    arbeitgeber = translatedArbeitgeber,
+                    stellenbeschreibung = translatedStellenbeschreibung,
+                    branche = translatedBranche,
+                    angebotsart = translatedAngebotsart,
+                    titel = translatedTitel,
+                    beruf = translatedBeruf,
+                    arbeitszeitmodelle = translatedArbeitszeitmodelle,
+                    arbeitsorte = translatedArbeitsorte,
+                    verguetung = translatedVerguetung,
+                )
+
+                onComplete(translatedJobDetails)
+            } catch (e: Exception) {
+                Log.e("translateJobDetails", "Fehler bei der Übersetzung der Jobdetails", e)
+                onComplete(jobDetails) // Gebe die ursprünglichen Jobdetails zurück, falls ein Fehler auftritt
+            }
+        }
+    }
+
 
 
 

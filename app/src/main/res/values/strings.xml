@@ -95,6 +95,9 @@
     <string name="description">Description: %1$s</string>
     <string name="branch">Branch: %1$s</string>
     <string name="job">Job: %1$s</string>
+    <string name="unlimited">Unlimited\n</string>
+    <string name="limited">Limited</string>
+    <string name="unknown">Unknown</string>
 
 
 </resources>

@@ -46,7 +46,7 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
                 binding.textViewEmployer.text = binding.root.context.getString(R.string.employer, it.arbeitgeber ?: "N/A")
                 binding.textViewLocation.text = binding.root.context.getString(R.string.location, it.arbeitgeberAdresse?.ort ?: "N/A")
                 binding.textViewWorkModel.text = binding.root.context.getString(R.string.work_model, it.arbeitszeitmodelle?.joinToString(", ") ?: "N/A")
-                binding.textViewContract.text = binding.root.context.getString(R.string.contract, getBefristung(details.befristung?.toInt() ?: 0))
+                binding.textViewContract.text = binding.root.context.getString(R.string.contract, getBefristung(details.befristung))
                 binding.textViewSalary.text = binding.root.context.getString(R.string.salary, it.verguetung ?: "N/A")
                 binding.textViewDescription.text = binding.root.context.getString(R.string.description, it.stellenbeschreibung ?: "N/A")
                 binding.textViewBranch.text = binding.root.context.getString(R.string.branch, it.branche ?: "N/A")
@@ -63,13 +63,14 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
                 onItemClicked(job.second)  // Callback für zusätzliche Aktionen.
             }
         }
-        private fun getBefristung(befristungCode: Int): String {
-            return when (befristungCode) {
-                1 -> "Befristet"
-                2 -> "Unbefristet"
-                else -> "Unbekannt"
+        private fun getBefristung(befristungsCode: String?): String {
+            return when (befristungsCode) {
+                "UNBEFRISTET" -> binding.root.context.getString(R.string.unlimited)
+                "BEFRISTET" -> binding.root.context.getString(R.string.limited)
+                else -> binding.root.context.getString(R.string.unknown)
             }
         }
+
 
     }
 
