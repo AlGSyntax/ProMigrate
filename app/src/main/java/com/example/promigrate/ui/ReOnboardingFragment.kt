@@ -40,42 +40,55 @@ class ReOnboardingFragment : Fragment() {
         }
 
         binding.arbeitsortEditText.setOnItemClickListener { adapterView, _, position, _ ->
-            val arbeitsort = adapterView.getItemAtPosition(position) as String
-            val berufsfeld = viewModel.userProfileData.value?.fieldOfWork ?: ""
-
-            if (berufsfeld.isNotBlank()) {
-                viewModel.fetchJobs(berufsfeld, arbeitsort)
-            } else {
-                Toast.makeText(context, "Berufsfeld im Profil nicht gesetzt", Toast.LENGTH_SHORT).show()
+            val selectedArbeitsort = adapterView.getItemAtPosition(position) as String
+            viewModel.translateToGerman(selectedArbeitsort) { translatedArbeitsort ->
+                val berufsfeld = viewModel.userProfileData.value?.fieldOfWork ?: ""
+                if (berufsfeld.isNotBlank()) {
+                    viewModel.translateToGerman(berufsfeld) { translatedBerufsfeld ->
+                        viewModel.fetchJobs(translatedBerufsfeld, translatedArbeitsort)
+                    }
+                } else {
+                    Toast.makeText(context, "Berufsfeld im Profil nicht gesetzt", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
         viewModel.jobs.observe(viewLifecycleOwner) { jobs ->
             if (jobs.isNotEmpty()) {
-                val jobsAdapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    jobs
-                )
-                binding.berufEditText.setAdapter(jobsAdapter)
+                viewModel.translateJobTitles(jobs) { translatedJobs ->
+                    // Verwende die übersetzten Jobs, um den ArrayAdapter zu befüllen
+                    val jobsAdapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        translatedJobs
+                    )
+                    binding.berufEditText.setAdapter(jobsAdapter)
+                }
             } else {
                 Toast.makeText(context, "Keine Jobangebote gefunden", Toast.LENGTH_SHORT).show()
             }
         }
+
 
         binding.submitButton.setOnClickListener {
             val arbeitsort = binding.arbeitsortEditText.text.toString()
             val beruf = binding.berufEditText.text.toString()
 
             if (arbeitsort.isNotBlank() && beruf.isNotBlank()) {
-                (parentFragment as? ViewPagerFragment)?.let {
-                    it.viewModel.updateJobOffers(beruf, arbeitsort)
-                    it.moveToNextPage()
+                viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
+                    viewModel.translateToGerman(beruf) { translatedBeruf ->
+                        // Verwende die übersetzten Daten, um das ViewModel zu aktualisieren und zum nächsten Schritt zu navigieren.
+                        (parentFragment as? ViewPagerFragment)?.let {
+                            it.viewModel.updateJobOffers(translatedBeruf, translatedArbeitsort)
+                            it.moveToNextPage()
+                        }
+                    }
                 }
             } else {
                 Toast.makeText(context, "Bitte füllen Sie alle Felder aus", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
 

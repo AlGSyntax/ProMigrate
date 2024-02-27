@@ -491,6 +491,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // translate job offers to the selected language
+    fun translateJobOffers(jobOffers: List<Pair<String, String>>, onComplete: (List<Pair<String, String>>) -> Unit) {
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
+        if (currentLanguageCode == "de") {
+            onComplete(jobOffers)
+            return
+        }
+
+        viewModelScope.launch {
+            val translatedJobOffers = mutableListOf<Pair<String, String>>()
+            jobOffers.forEach { (jobTitle, hashId) ->
+                try {
+                    val result = repository.translateText(jobTitle, currentLanguageCode)
+                    val translatedTitle = result?.text ?: jobTitle // Verwende den Originaltitel als Fallback
+                    translatedJobOffers.add(Pair(translatedTitle, hashId))
+                } catch (e: Exception) {
+                    Log.e("translateJobOffers", "Fehler bei der Übersetzung von $jobTitle", e)
+                    translatedJobOffers.add(Pair(jobTitle, hashId)) // Füge den Originaltitel im Fehlerfall hinzu
+                }
+            }
+            onComplete(translatedJobOffers)
+        }
+    }
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,8 +39,15 @@ class JobOffersSelectionFragment : Fragment() {
         binding.rvJobs.adapter = adapter
 
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
-            adapter.submitList(jobOffers)
+            if (jobOffers != null) {
+                viewModel.translateJobOffers(jobOffers) { translatedJobOffers ->
+                    adapter.submitList(translatedJobOffers)
+                }
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Jobangebote.")
+            }
         }
+
 
         binding.backtodashbtn.setOnClickListener {
             viewModel.updateSelectedJobsAndPersist(selectedJobs)

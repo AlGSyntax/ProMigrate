@@ -82,12 +82,14 @@ class JobOpportunitiesFragment : Fragment() {
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             if (jobOffers != null) {
                 Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
-                // Übergebe die vollständige Liste von Paaren direkt an den Adapter.
-                jobsAdapter.submitList(jobOffers)
+                viewModel.translateJobOffers(jobOffers) { translatedJobOffers ->
+                    jobsAdapter.submitList(translatedJobOffers)
+                }
             } else {
                 Log.e(TAG, "Fehler beim Abrufen der Jobangebote.")
             }
         }
+
 
 
     }
