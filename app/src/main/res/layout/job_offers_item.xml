@@ -22,6 +22,7 @@
             android:textStyle="bold"
             android:textColor="@color/textcolor"
             android:fontFamily="@font/quicksandvariablefontwght"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_checkbox"
             app:layout_constraintStart_toStartOf="parent"

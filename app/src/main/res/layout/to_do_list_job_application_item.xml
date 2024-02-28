@@ -17,10 +17,12 @@
         android:layout_weight="1"
         android:textSize="16sp"
         android:textStyle="normal"
-        android:textColor="@android:color/black"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="To-Do Item" />
+        android:textColor="@color/textcolor"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textAlignment="center"
+         />
 
     <!-- Optional: Add a button or an icon to delete or edit the to-do item -->
 

@@ -1,6 +1,7 @@
 package com.example.promigrate.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.R
 import com.example.promigrate.databinding.ToDoApplicationItemBinding
 
-
-class DetailToDoJobApplicationAdapter(private val onToDoItemChanged: (String, String, Boolean) -> Unit) : ListAdapter<String, DetailToDoJobApplicationAdapter.JobViewHolder>(DiffCallback) {
+class DetailToDoJobApplicationAdapter(private val onToDoItemChanged: (String, String, Boolean) -> Unit) :
+    ListAdapter<String, DetailToDoJobApplicationAdapter.JobViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val binding = ToDoApplicationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,8 +23,15 @@ class DetailToDoJobApplicationAdapter(private val onToDoItemChanged: (String, St
     }
 
     class JobViewHolder(private val binding: ToDoApplicationItemBinding, private val onToDoItemChanged: (String, String, Boolean) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+        private var isListVisible = false
+
         fun bind(jobTitle: String) {
             binding.jobTitleTextView.text = jobTitle
+            binding.jobTitleTextView.setOnClickListener {
+                // Umschalten der Sichtbarkeit und direkte Anwendung
+                isListVisible = !isListVisible
+                binding.todoListRecyclerView.visibility = if (isListVisible) View.VISIBLE else View.GONE
+            }
 
             val staticToDoList = listOf(
                 ToDoItem("1", binding.root.context.getString(R.string.todo_item_1)),
@@ -38,8 +46,12 @@ class DetailToDoJobApplicationAdapter(private val onToDoItemChanged: (String, St
             binding.todoListRecyclerView.adapter = toDoListAdapter
             binding.todoListRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
             toDoListAdapter.submitList(staticToDoList)
+
+            // Setzen der initialen Sichtbarkeit
+            binding.todoListRecyclerView.visibility = if (isListVisible) View.VISIBLE else View.GONE
         }
     }
+
 
     companion object DiffCallback : DiffUtil.ItemCallback<String>() {
         override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
