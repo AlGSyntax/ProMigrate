@@ -1,5 +1,6 @@
 package com.example.promigrate.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,6 +60,7 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
             // Initial set the visibility to GONE
             binding.root.setOnClickListener {
                 // Toggle die Sichtbarkeit der Detailansicht.
+                Log.e("Adappaa", "Clicked on item: ${job.second}")
                 binding.hiddenView.visibility = if (binding.hiddenView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
                 onItemClicked(job.second)  // Callback für zusätzliche Aktionen.
             }

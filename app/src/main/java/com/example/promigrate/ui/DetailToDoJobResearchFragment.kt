@@ -28,8 +28,8 @@ class DetailToDoJobResearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = DetailToDoJobResearchAdapter { hashId ->
-            viewModel.fetchJobDetails(hashId)
+        val adapter = DetailToDoJobResearchAdapter { refnr ->
+            viewModel.fetchJobDetails(refnr)
         }
 
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
@@ -42,9 +42,9 @@ class DetailToDoJobResearchFragment : Fragment() {
         viewModel.jobDetails.observe(viewLifecycleOwner) { result ->
             result.onSuccess { jobDetails ->
                 viewModel.translateJobDetails(jobDetails) { translatedJobDetails ->
-                    translatedJobDetails.hashId?.let { hashId ->
-                        adapter.setJobDetails(hashId, translatedJobDetails)
-                    }
+                    translatedJobDetails.refnr?.let { refnr ->
+                        adapter.setJobDetails(refnr, translatedJobDetails)
+                    }// Datenfluss nachverfolgen , um zu gucken wo es nicht richtig geladen wird und dann die Fehler beheben
                 }
             }.onFailure { exception ->
                 Log.e(TAG, "Fehler beim Laden der Jobdetails", exception)

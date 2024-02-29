@@ -178,6 +178,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Log.d(TAG, "Starte Abruf der Arbeitsorte.")
             val response = apiService.getArbeitsorte()
             if (response.isSuccessful && response.body() != null) {
+                Log.e(TAG, "Arbeitsorte erfolgreich abgerufen: ${response.body()}")
                 // Hier wird angenommen, dass du nur die Arbeitsorte extrahieren möchtest.
                 val arbeitsorteListe = response.body()!!.facetten.arbeitsort.counts.keys.toList()
                 Log.d(TAG, "Arbeitsorte erfolgreich abgerufen: ${response.body()}")
@@ -221,7 +222,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             if (response.isSuccessful && response.body() != null) {
                 // Erstelle eine Liste von Paaren aus Jobtitel und Hash-ID
                 val jobPairs = response.body()!!.stellenangebote.mapNotNull {
-                    if (it.titel != null) it.titel to it.hashId else null
+                    if (it.titel != null) it.titel to it.refnr else null
                 }
                 Result.success(jobPairs)
             } else {

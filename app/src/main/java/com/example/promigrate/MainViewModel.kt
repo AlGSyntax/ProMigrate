@@ -530,7 +530,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                // Annahme: JobDetailsResponse enthält Felder, die übersetzt werden sollen.
                 val translatedArbeitgeber = repository.translateText(jobDetails.arbeitgeber ?: "", currentLanguageCode)?.text ?: jobDetails.arbeitgeber
                 val translatedStellenbeschreibung = repository.translateText(jobDetails.stellenbeschreibung ?: "", currentLanguageCode)?.text ?: jobDetails.stellenbeschreibung
                 val translatedBranche = repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text ?: jobDetails.branche

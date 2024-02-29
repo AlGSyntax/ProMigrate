@@ -17,7 +17,6 @@ data class Job(
     val modifikationsTimestamp: String,
     val eintrittsdatum: String,
     val logoHashId: String?,
-    val hashId: String,
     val kundennummerHash: String?
 )
 
