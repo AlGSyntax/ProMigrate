@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.RegistrationStatus
+import com.example.promigrate.data.model.ToDoItem
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPI
 import com.example.promigrate.data.repository.Repository
@@ -78,6 +79,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _jobDetails = MutableLiveData<Result<JobDetailsResponse>>()
     val jobDetails: LiveData<Result<JobDetailsResponse>> = _jobDetails
+
 
 
     private val sharedPreferences: SharedPreferences =
@@ -739,17 +741,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    fun updateToDoItemForJob(userId: String, rawJobId: String, todoId: String, isCompleted: Boolean) {
-        // Bereinige die jobId, um problematische Zeichen zu entfernen
+
+
+
+    fun updateToDoItemForJob(userId: String, rawJobId: String, todoId: String, isCompleted: Boolean, text: String) {
         val jobId = sanitizeJobId(rawJobId)
         val userDocRef = FirebaseFirestore.getInstance().collection("user").document(userId)
         val todoDocRef = userDocRef.collection("todos").document(jobId)
 
-        // Überprüfe, ob das Dokument existiert, und erstelle oder aktualisiere es
+        val toDoData = mapOf(
+            "erledigt" to isCompleted,
+            "text" to text
+        )
+
         todoDocRef.get().addOnSuccessListener { document ->
             if (document.exists()) {
-                // Dokument existiert, aktualisiere es
-                todoDocRef.update("todos.$todoId.erledigt", isCompleted)
+                // Wenn das Dokument existiert, aktualisiere das spezifische To-Do-Item
+                todoDocRef.update("todos.$todoId", toDoData)
                     .addOnSuccessListener {
                         Log.d(TAG, "ToDo item updated successfully")
                     }
@@ -757,21 +765,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         Log.e(TAG, "Error updating ToDo item", e)
                     }
             } else {
-                // Dokument existiert nicht, erstelle es mit dem initialen ToDo-Item
-                val newTodo = mapOf(
-                    "todos" to mapOf(
-                        todoId to mapOf(
-                            "erledigt" to isCompleted,
-                            "text" to "Beispieltext" // Beispieltext hinzugefügt, anpassen nach Bedarf
-                        )
-                    )
-                )
+                // Wenn das Dokument nicht existiert, erstelle ein neues mit dem To-Do-Item
+                val newTodo = mapOf("todos" to mapOf(todoId to toDoData))
                 todoDocRef.set(newTodo)
                     .addOnSuccessListener {
-                        Log.d(TAG, "ToDo item created successfully")
+                        Log.d(TAG, "New ToDo item created successfully")
                     }
                     .addOnFailureListener { e ->
-                        Log.e(TAG, "Error creating ToDo item", e)
+                        Log.e(TAG, "Error creating new ToDo item", e)
                     }
             }
         }.addOnFailureListener { e ->
@@ -779,12 +780,65 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    fun getToDoItemsForJob(userId: String, jobId: String): LiveData<List<ToDoItem>> {
+        val liveData = MutableLiveData<List<ToDoItem>>()
+
+        viewModelScope.launch {
+            try {
+                val sanitizedJobId = sanitizeJobId(jobId)
+                val todoDocRef = FirebaseFirestore.getInstance()
+                    .collection("user")
+                    .document(userId)
+                    .collection("todos")
+                    .document(sanitizedJobId)
+
+                todoDocRef.addSnapshotListener { snapshot, e ->
+                    if (e != null) {
+                        Log.e(TAG, "Error fetching todo items", e)
+                        liveData.value = emptyList()
+                    } else {
+                        val todos = snapshot?.get("todos") as? Map<String, Map<String, Any>> ?: emptyMap()
+                        val toDoItems = todos.map { (id, data) ->
+                            ToDoItem(id, data["text"] as? String ?: "", data["erledigt"] as? Boolean ?: false)
+                        }
+                        liveData.value = toDoItems
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching todo items", e)
+                liveData.value = emptyList()
+            }
+        }
+
+        return liveData
+    }
+
+
+
+
     /**
      * Bereinigt die jobId, indem sie alle nicht alphanumerischen Zeichen durch Unterstriche ersetzt.
      */
     private fun sanitizeJobId(jobId: String): String {
         return jobId.replace(Regex("[^A-Za-z0-9]"), "_")
     }
+
+    fun updateToDoText(userId: String, jobId: String, todoId: String, newText: String) {
+        val sanitizedJobId = sanitizeJobId(jobId)
+        val todoDocRef = FirebaseFirestore.getInstance()
+            .collection("user")
+            .document(userId)
+            .collection("todos")
+            .document(sanitizedJobId)
+
+        todoDocRef.update("todos.$todoId.text", newText)
+            .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
+    }
+
+
+
 
 
 

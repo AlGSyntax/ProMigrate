@@ -151,22 +151,27 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
     suspend fun getBerufsfelder(): Result<List<String>> {
         return try {
-            Log.d(TAG, "Starte Abruf der Berufsfelder.")
+            val startTime = System.currentTimeMillis()
+            Log.d(TAG, "Starte Abruf der Berufsfelder um: $startTime")
+
             val response = apiService.getBerufsfelder()
+            val endTime = System.currentTimeMillis()
+            Log.d(TAG, "Berufsfelder-Anfrage abgeschlossen um: $endTime, Dauer: ${endTime - startTime} ms")
+
             if (response.isSuccessful && response.body() != null) {
-                // Hier wird angenommen, dass du nur die Berufsfelder extrahieren möchtest.
                 val berufsfelderListe = response.body()!!.facetten.berufsfeld.counts.keys.toList()
-                Log.d(TAG, "Berufsfelder erfolgreich abgerufen: ${response.body()}")
+                Log.d(TAG, "Berufsfelder erfolgreich abgerufen: ${response.body()}, HTTP Status Code: ${response.code()}")
                 Result.success(berufsfelderListe)
             } else {
-                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${response.message()}")
+                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${response.message()}, HTTP Status Code: ${response.code()}, Response Body: ${response.errorBody()?.string()}")
                 Result.failure(Exception("Fehler beim Abrufen der Berufsfelder: ${response.message()}"))
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Ausnahme beim Abrufen der Berufsfelder: ${e.message}")
+            Log.e(TAG, "Ausnahme beim Abrufen der Berufsfelder", e)
             Result.failure(e)
         }
     }
+
 
     suspend fun getArbeitsorte(): Result<List<String>> {
         return try {
@@ -206,6 +211,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
+
 
 
     suspend fun getJobOffers(was: String, arbeitsort: String): Result<List<Pair<String, String>>> {

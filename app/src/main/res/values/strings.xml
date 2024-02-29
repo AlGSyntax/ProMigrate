@@ -101,6 +101,8 @@
     <string name="todo_item_1">Writing a CV for this job offer</string>
     <string name="todo_item_2">Writing a decent cover letter</string>
     <string name="todo_item_3">Curiously ask your contact person about the status of the application process </string>
+    <string name="edit_todo_hint">Edit your To Do Object</string>
+    <string name="add_todo_hint">Add your new To Do Object</string>
 
 
 </resources>
