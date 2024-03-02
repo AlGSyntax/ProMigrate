@@ -34,10 +34,12 @@ class ReOnboardingFragment : Fragment() {
                     arbeitsorte
                 )
                 binding.arbeitsortEditText.setAdapter(adapter)
-            } else {
-                Toast.makeText(context, "Fehler beim Laden der Arbeitsorte", Toast.LENGTH_SHORT).show()
+
+                // Stelle sicher, dass der Adapter benachrichtigt wird, wenn sich die Daten ändern
+                adapter.notifyDataSetChanged()
             }
         }
+
 
         binding.arbeitsortEditText.setOnItemClickListener { adapterView, _, position, _ ->
             val selectedArbeitsort = adapterView.getItemAtPosition(position) as String

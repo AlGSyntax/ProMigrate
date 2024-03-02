@@ -38,40 +38,33 @@ class DetailToDoJobApplicationFragment : Fragment() {
         val userId = currentUser?.uid ?: ""
 
         adapter = DetailToDoJobApplicationAdapter(
-            { jobId, todoId, isCompleted -> viewModel.updateToDoItemForJob(userId, jobId, todoId, isCompleted, "Item Text") },
-            { jobId -> addToDoItem(userId, jobId) },
-            // Übergeben Sie den aktuellen Text des ToDo-Items an die editToDoItem-Funktion.
-            { jobId, todoId, currentText -> editToDoItem(userId, jobId, todoId, currentText) }
+            { jobId -> addToDoItem(userId, jobId) }
         )
+        // Übergeben Sie den aktuellen Text des ToDo-Items an die editToDoItem-Funktion.
+        { jobId, todoId, currentText -> editToDoItem(userId, jobId, todoId, currentText) }
     }
 
 
 
     private fun editToDoItem(userId: String, jobId: String, todoId: String, currentText: String) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_todo_item, null)
-        val editText = dialogView.findViewById<EditText>(R.id.editTextToDoEdit).apply {
-            setText(currentText)
-        }
+        val editText = EditText(context).apply { setText(currentText) }
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.edit_todo_hint))
-            .setView(dialogView)
+            .setView(editText)
             .setPositiveButton(getString(R.string.save)) { _, _ ->
-                val newText = editText.text.toString()
-                viewModel.updateToDoText(userId, jobId, todoId, newText)
+                viewModel.updateToDoText(userId, jobId, todoId, editText.text.toString())
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
-
     private fun addToDoItem(userId: String, jobId: String) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_todo_item, null)
-        val editText = dialogView.findViewById<EditText>(R.id.editTextToDoAdd)
+        val editText = EditText(context)
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.add_todo_hint))
-            .setView(dialogView)
+            .setView(editText)
             .setPositiveButton(getString(R.string.add_todo_hint)) { _, _ ->
                 val newText = editText.text.toString()
                 val newToDoId = generateNewToDoId()

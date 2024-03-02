@@ -11,14 +11,13 @@ import com.example.promigrate.data.model.ToDoItem
 import com.example.promigrate.databinding.ToDoApplicationItemBinding
 
 class DetailToDoJobApplicationAdapter(
-    private val onToDoItemChanged: (String, String, Boolean) -> Unit,
     private val onItemAdd: (String) -> Unit,
-    private val onItemEdit: (String, String, String) -> Unit  // Änderung hier: zusätzlicher String-Parameter für den Text
+    private val onItemEdit: (String, String, String) -> Unit  // Änderung hier: zusätzlicher String-Parameter für den Text){}
 ) : ListAdapter<JobWithToDoItems, DetailToDoJobApplicationAdapter.JobViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val binding = ToDoApplicationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return JobViewHolder(binding, onToDoItemChanged, onItemAdd, onItemEdit)
+        return JobViewHolder(binding, onItemAdd, onItemEdit)
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
@@ -28,19 +27,21 @@ class DetailToDoJobApplicationAdapter(
 
     class JobViewHolder(
         private val binding: ToDoApplicationItemBinding,
-        private val onToDoItemChanged: (String, String, Boolean) -> Unit,
         private val onItemAdd: (String) -> Unit,
-        private val onItemEdit: (String, String, String) -> Unit  // Parameter für die Funktion angepasst
+        private val onItemEdit: (String, String, String) -> Unit  // Parameter für die Funktion angepasst){}
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private var isListVisible = false
 
         fun bind(jobWithToDoItems: JobWithToDoItems) {
             binding.jobTitleTextView.text = jobWithToDoItems.jobTitle
-            val toDoListAdapter = ToDoListAdapter(
-                { todoId, isChecked -> onToDoItemChanged(jobWithToDoItems.jobTitle, todoId, isChecked) },
-                { todoId, _, text -> onItemEdit(jobWithToDoItems.jobTitle, todoId, text) }
-            )
+            val toDoListAdapter = ToDoListAdapter { todoId, _, text ->
+                onItemEdit(
+                    jobWithToDoItems.jobTitle,
+                    todoId,
+                    text
+                )
+            }
             binding.jobTitleTextView.setOnClickListener {
                 toggleToDoListVisibility()
             }

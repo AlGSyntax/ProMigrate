@@ -11,13 +11,11 @@ import com.example.promigrate.databinding.ToDoListJobApplicationItemBinding
 
 
 class ToDoListAdapter(
-    private val onItemCheckedChanged: (String, Boolean) -> Unit,
-    private val onItemEdit: (String, String, String) -> Unit  // Änderung hier: zusätzlicher String-Parameter für den Text
+    private val onItemEdit: (String, String, String) -> Unit  // Änderung hier: zusätzlicher String-Parameter für den Text){}
 ) : ListAdapter<ToDoItem, ToDoListAdapter.ToDoViewHolder>(ToDoDiffCallback) {
 
     class ToDoViewHolder(
         private val binding: ToDoListJobApplicationItemBinding,
-        private val onItemCheckedChanged: (String, Boolean) -> Unit,
         private val onItemEdit: (String, String, String) -> Unit,  // Parameter für die Funktion angepasst
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -34,7 +32,7 @@ class ToDoListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
         val binding = ToDoListJobApplicationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ToDoViewHolder(binding, onItemCheckedChanged, onItemEdit)
+        return ToDoViewHolder(binding, onItemEdit)
     }
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {

@@ -598,7 +598,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val response = repository.getBerufsfelder()
                 if (response.isSuccess) {
                     Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
-                    _berufsfelder.value = response.getOrNull()
+                    _berufsfelder.value = response.getOrNull()!!
                 } else {
                     // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
                     _berufsfelder.value = listOf()
@@ -620,7 +620,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val response = repository.getArbeitsorte()
                 if (response.isSuccess) {
                     Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
-                    _arbeitsorte.value = response.getOrNull()
+                    _arbeitsorte.value = response.getOrNull()!!
                 } else {
                     // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
                     _arbeitsorte.value = listOf()
