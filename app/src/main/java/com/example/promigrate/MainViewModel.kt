@@ -1,8 +1,6 @@
 package com.example.promigrate
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
@@ -27,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.storage.storage
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -41,6 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         application, FirebaseAuth.getInstance(),
         FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService, DeepLApiService.create()
     )
+
 
 
     private val _localeList = MutableLiveData<LocaleListCompat>()
@@ -81,22 +79,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val jobDetails: LiveData<Result<JobDetailsResponse>> = _jobDetails
 
 
-    private val sharedPreferences: SharedPreferences =
-        application.getSharedPreferences("selectedJobs", Context.MODE_PRIVATE)
+
 
 
     //TODO LiveData = UI-Aktualisierungen ,Berechnungen = lokale Variablen, slider Int lokal speichern
+
 
 
     init {
         loadUserLanguageSetting()
     }
 
-    /**
-    fun loadUserProfile(userId: String): MutableLiveData<UserProfile?> {
-    return repository.getUserProfile(userId)
-    }
-     */
+
+
+
 
     private fun loadUserLanguageSetting(userId: String? = null) {
         viewModelScope.launch {
@@ -253,105 +249,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
 
 
-    fun saveProfileWithImage(
-        uri: Uri, name: String, age: String, fieldOfWork: String,
-        isDataProtected: Boolean, languageLevel: String,
-        desiredLocation: String, street: String, birthplace: String, maidenname: String,
-        firstname: String, lastname: String, phonenumber: String
-    ) {
-        viewModelScope.launch {
-            try {
-                val userId =
-                    repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
-                val imageUrl = repository.uploadAndUpdateProfilePicture(uri, userId)
-                Log.d(TAG, "Profilbild erfolgreich aktualisiert: $imageUrl")
-
-                val ageInt = age.toIntOrNull() ?: 0
-
-                val profileData = mapOf(
-                    "name" to name,
-                    "age" to ageInt,
-                    "fieldOfWork" to fieldOfWork,
-                    "profilePicture" to imageUrl,
-                    "dataProtection" to isDataProtected,
-                    "languageLevel" to languageLevel,
-                    "desiredLocation" to desiredLocation,
-                    "street" to street,
-                    "birthplace" to birthplace,
-                    "maidenname" to maidenname,
-                    "firstname" to firstname,
-                    "lastname" to lastname,
-                    "phonenumber" to phonenumber
-                )
-
-                repository.updateUserProfile(userId, profileData)
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern des Profils", e)
-            }
-        }
-    }
-
-
-    // Im ViewModel
-    fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
-        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
-        val currentLanguageCode =
-            _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
-
-        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
-        if (currentLanguageCode == "de") {
-            onComplete(berufsfelder) // Gebe die ursprünglichen Berufsfelder zurück, ohne Übersetzung
-            return // Beende die Methode vorzeitig
-        }
-
-        viewModelScope.launch {
-            val translatedBerufsfelder = mutableListOf<String>()
-            berufsfelder.forEach { berufsfeld ->
-                try {
-                    // Verwende currentLanguageCode als Ziel für die Übersetzung
-                    val result = repository.translateText(berufsfeld, currentLanguageCode)
-                    result?.text?.let {
-                        translatedBerufsfelder.add(it)
-                        Log.d("translateBerufsfelder", "Übersetzt: $berufsfeld zu $it")
-                    }
-                } catch (e: Exception) {
-                    Log.e("translateBerufsfelder", "Fehler bei der Übersetzung von $berufsfeld", e)
-                }
-            }
-            onComplete(translatedBerufsfelder)
-        }
-    }
-
-    fun translateArbeitsorte(arbeitsorte: List<String>, onComplete: (List<String>) -> Unit) {
-        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
-        val currentLanguageCode =
-            _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
-
-        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
-        if (currentLanguageCode == "de") {
-            onComplete(arbeitsorte) // Gebe die ursprünglichen Arbeitsorte zurück, ohne Übersetzung
-            return // Beende die Methode vorzeitig
-        }
-
-        viewModelScope.launch {
-            val translatedArbeitsorte = mutableListOf<String>()
-            arbeitsorte.forEach { arbeitsort ->
-                try {
-                    // Verwende currentLanguageCode als Ziel für die Übersetzung
-                    val result = repository.translateText(arbeitsort, currentLanguageCode)
-                    result?.text?.let {
-                        translatedArbeitsorte.add(it)
-                        Log.d("translateArbeitsorte", "Übersetzt: $arbeitsort zu $it")
-                    }
-                } catch (e: Exception) {
-                    Log.e("translateArbeitsorte", "Fehler bei der Übersetzung von $arbeitsort", e)
-                }
-            }
-            onComplete(translatedArbeitsorte)
-        }
-    }
-
-
     // In MainViewModel.kt
     fun translateToGerman(inputText: String, onComplete: (String) -> Unit) {
 
@@ -436,6 +333,154 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+
+    fun fetchBerufsfelder() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getBerufsfelder()
+                if (response.isSuccess) {
+                    Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
+                    _berufsfelder.value = response.getOrNull()!!
+                } else {
+                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
+                    _berufsfelder.value = listOf()
+                    Log.e(
+                        TAG,
+                        "Fehler beim Abrufen der Berufsfelder: ${response.exceptionOrNull()?.message}"
+                    )
+                }
+            } catch (e: Exception) {
+                _berufsfelder.value = listOf()
+                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${e.message}")
+            }
+        }
+    }
+
+
+    // Im ViewModel
+    fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
+        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        val currentLanguageCode =
+            _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+
+        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        if (currentLanguageCode == "de") {
+            onComplete(berufsfelder) // Gebe die ursprünglichen Berufsfelder zurück, ohne Übersetzung
+            return // Beende die Methode vorzeitig
+        }
+
+        viewModelScope.launch {
+            val translatedBerufsfelder = mutableListOf<String>()
+            berufsfelder.forEach { berufsfeld ->
+                try {
+                    // Verwende currentLanguageCode als Ziel für die Übersetzung
+                    val result = repository.translateText(berufsfeld, currentLanguageCode)
+                    result?.text?.let {
+                        translatedBerufsfelder.add(it)
+                        Log.d("translateBerufsfelder", "Übersetzt: $berufsfeld zu $it")
+                    }
+                } catch (e: Exception) {
+                    Log.e("translateBerufsfelder", "Fehler bei der Übersetzung von $berufsfeld", e)
+                }
+            }
+            onComplete(translatedBerufsfelder)
+        }
+    }
+
+    fun fetchArbeitsorte() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getArbeitsorte()
+                if (response.isSuccess) {
+                    Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
+                    _arbeitsorte.value = response.getOrNull()!!
+                } else {
+                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
+                    _arbeitsorte.value = listOf()
+                    Log.e(
+                        TAG,
+                        "Fehler beim Abrufen der Arbeitsorte: ${response.exceptionOrNull()?.message}"
+                    )
+                }
+            } catch (e: Exception) {
+                _arbeitsorte.value = listOf()
+                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${e.message}")
+            }
+        }
+    }// Brauhce Ich diese daten später nochmal ?
+
+    fun translateArbeitsorte(arbeitsorte: List<String>, onComplete: (List<String>) -> Unit) {
+        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        val currentLanguageCode =
+            _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+
+        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        if (currentLanguageCode == "de") {
+            onComplete(arbeitsorte) // Gebe die ursprünglichen Arbeitsorte zurück, ohne Übersetzung
+            return // Beende die Methode vorzeitig
+        }
+
+        viewModelScope.launch {
+            val translatedArbeitsorte = mutableListOf<String>()
+            arbeitsorte.forEach { arbeitsort ->
+                try {
+                    // Verwende currentLanguageCode als Ziel für die Übersetzung
+                    val result = repository.translateText(arbeitsort, currentLanguageCode)
+                    result?.text?.let {
+                        translatedArbeitsorte.add(it)
+                        Log.d("translateArbeitsorte", "Übersetzt: $arbeitsort zu $it")
+                    }
+                } catch (e: Exception) {
+                    Log.e("translateArbeitsorte", "Fehler bei der Übersetzung von $arbeitsort", e)
+                }
+            }
+            onComplete(translatedArbeitsorte)
+        }
+    }
+
+
+    fun saveProfileWithImage(
+        uri: Uri, name: String, age: String, fieldOfWork: String,
+        isDataProtected: Boolean, languageLevel: String,
+        desiredLocation: String, street: String, birthplace: String, maidenname: String,
+        firstname: String, lastname: String, phonenumber: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val userId =
+                    repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                val imageUrl = repository.uploadAndUpdateProfilePicture(uri, userId)
+                Log.d(TAG, "Profilbild erfolgreich aktualisiert: $imageUrl")
+
+                val ageInt = age.toIntOrNull() ?: 0
+
+                val profileData = mapOf(
+                    "name" to name,
+                    "age" to ageInt,
+                    "fieldOfWork" to fieldOfWork,
+                    "profilePicture" to imageUrl,
+                    "dataProtection" to isDataProtected,
+                    "languageLevel" to languageLevel,
+                    "desiredLocation" to desiredLocation,
+                    "street" to street,
+                    "birthplace" to birthplace,
+                    "maidenname" to maidenname,
+                    "firstname" to firstname,
+                    "lastname" to lastname,
+                    "phonenumber" to phonenumber
+                )
+
+                repository.updateUserProfile(userId, profileData)
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern des Profils", e)
+            }
+        }
+    }
+
+
+
+
     fun toggleJobSelection(jobTitle: String, hashId: String) {
         val currentProfile =
             _userProfileData.value ?: Profile().also { _userProfileData.value = it }
@@ -453,6 +498,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _userProfileData.value = currentProfile
 
         Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
+    }
+
+    // Im ViewModel
+    fun fetchJobs(berufsfeld: String, arbeitsort: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getJobs(berufsfeld, arbeitsort)
+                if (response.isSuccess) {
+                    Log.d(TAG, "Jobs erfolgreich abgerufen.")
+                    _jobs.value = response.getOrNull() ?: listOf()
+                } else {
+                    _jobs.value = listOf()
+                    Log.e(
+                        TAG,
+                        "Fehler beim Abrufen der Jobs: ${response.exceptionOrNull()?.message}"
+                    )
+                }
+            } catch (e: Exception) {
+                _jobs.value = listOf()
+                Log.e(TAG, "Fehler beim Abrufen der Jobs: ${e.message}")
+            }
+        }
     }
 
 
@@ -486,6 +553,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
+    //Logs beispielsweise , baue einen observer (todoListe)
+
+    fun fetchJobOffers(was: String, arbeitsort: String) {
+        viewModelScope.launch {
+            val response = repository.getJobOffers(was, arbeitsort)
+            if (response.isSuccess) {
+                // Angenommen, die API gibt eine Liste von Job-Objekten zurück
+                val jobPairs = response.getOrNull()?.map { it }?.toList() ?: listOf()
+                _jobOffers.postValue(jobPairs)
+            } else {
+                _jobOffers.postValue(listOf())
+                Log.e(
+                    TAG,
+                    "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}"
+                )
+            }
+        }
+    }
+
+
     // translate job offers to the selected language
     fun translateJobOffers(
         jobOffers: List<Pair<String, String>>,
@@ -518,6 +606,40 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             onComplete(translatedJobOffers)
         }
     }
+
+    fun updateJobOffers(was: String, arbeitsort: String) {
+        try {
+            fetchJobOffers(was, arbeitsort)
+            Log.d("updateJobOffers", "Successfully updated job offers for $was in $arbeitsort")
+        } catch (e: Exception) {
+            Log.e("updateJobOffers", "Error updating job offers for $was in $arbeitsort", e)
+        }
+    }
+
+
+    fun updateSelectedJobsAndPersist(newSelectedJobs: Map<String, String>) {
+        val currentProfile = _userProfileData.value ?: Profile()
+
+        // Ergänze die aktuellen ausgewählten Jobs mit den neuen
+        val updatedSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+        updatedSelectedJobs.putAll(newSelectedJobs)
+
+        currentProfile.selectedJobs = updatedSelectedJobs.toMap()
+
+        _userProfileData.value = currentProfile
+
+        saveSelectedJobsToFirebase(updatedSelectedJobs.toMap())
+
+    }
+
+
+    private fun saveSelectedJobsToFirebase(selectedJobs: Map<String, String>) {
+        val userId = auth.currentUser?.uid ?: return
+        repository.updateUserProfileField(userId, "selectedJobs", selectedJobs)
+    }
+
+
+
 
 
     fun translateJobDetails(
@@ -592,134 +714,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun fetchBerufsfelder() {
-        viewModelScope.launch {
-            try {
-                val response = repository.getBerufsfelder()
-                if (response.isSuccess) {
-                    Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
-                    _berufsfelder.value = response.getOrNull()!!
-                } else {
-                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
-                    _berufsfelder.value = listOf()
-                    Log.e(
-                        TAG,
-                        "Fehler beim Abrufen der Berufsfelder: ${response.exceptionOrNull()?.message}"
-                    )
-                }
-            } catch (e: Exception) {
-                _berufsfelder.value = listOf()
-                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${e.message}")
-            }
-        }
-    }
-
-    fun fetchArbeitsorte() {
-        viewModelScope.launch {
-            try {
-                val response = repository.getArbeitsorte()
-                if (response.isSuccess) {
-                    Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
-                    _arbeitsorte.value = response.getOrNull()!!
-                } else {
-                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
-                    _arbeitsorte.value = listOf()
-                    Log.e(
-                        TAG,
-                        "Fehler beim Abrufen der Arbeitsorte: ${response.exceptionOrNull()?.message}"
-                    )
-                }
-            } catch (e: Exception) {
-                _arbeitsorte.value = listOf()
-                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${e.message}")
-            }
-        }
-    }// Brauhce Ich diese daten später nochmal ?
-
-    // Im ViewModel
-    fun fetchJobs(berufsfeld: String, arbeitsort: String) {
-        viewModelScope.launch {
-            try {
-                val response = repository.getJobs(berufsfeld, arbeitsort)
-                if (response.isSuccess) {
-                    Log.d(TAG, "Jobs erfolgreich abgerufen.")
-                    _jobs.value = response.getOrNull() ?: listOf()
-                } else {
-                    _jobs.value = listOf()
-                    Log.e(
-                        TAG,
-                        "Fehler beim Abrufen der Jobs: ${response.exceptionOrNull()?.message}"
-                    )
-                }
-            } catch (e: Exception) {
-                _jobs.value = listOf()
-                Log.e(TAG, "Fehler beim Abrufen der Jobs: ${e.message}")
-            }
-        }
-    }
 
 
-    // Inside MainViewModel.kt
-    fun updateJobOffers(was: String, arbeitsort: String) {
-        try {
-            fetchJobOffers(was, arbeitsort)
-            Log.d("updateJobOffers", "Successfully updated job offers for $was in $arbeitsort")
-        } catch (e: Exception) {
-            Log.e("updateJobOffers", "Error updating job offers for $was in $arbeitsort", e)
-        }
-    }
 
 
-    fun updateSelectedJobsAndPersist(newSelectedJobs: Map<String, String>) {
-        val currentProfile = _userProfileData.value ?: Profile()
-
-        // Ergänze die aktuellen ausgewählten Jobs mit den neuen
-        val updatedSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
-        updatedSelectedJobs.putAll(newSelectedJobs)
-
-        currentProfile.selectedJobs = updatedSelectedJobs.toMap()
-
-        _userProfileData.value = currentProfile
-
-        saveSelectedJobsToFirebase(updatedSelectedJobs.toMap())
-        saveSelectedJobsToSharedPreferences(updatedSelectedJobs)
-    }
 
 
-    private fun saveSelectedJobsToFirebase(selectedJobs: Map<String, String>) {
-        val userId = auth.currentUser?.uid ?: return
-        repository.updateUserProfileField(userId, "selectedJobs", selectedJobs)
-    }
-
-
-    private fun saveSelectedJobsToSharedPreferences(selectedJobs: Map<String, String>) {
-        val editor = sharedPreferences.edit()
-        // Konvertiere die Map in einen JSON-String
-        val selectedJobsJson = Gson().toJson(selectedJobs)
-        editor.putString("selectedJobs", selectedJobsJson)
-        editor.apply()
-    }
-
-
-// Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
-    //Logs beispielsweise , baue einen observer (todoListe)
-
-    fun fetchJobOffers(was: String, arbeitsort: String) {
-        viewModelScope.launch {
-            val response = repository.getJobOffers(was, arbeitsort)
-            if (response.isSuccess) {
-                // Angenommen, die API gibt eine Liste von Job-Objekten zurück
-                val jobPairs = response.getOrNull()?.map { it }?.toList() ?: listOf()
-                _jobOffers.postValue(jobPairs)
-            } else {
-                _jobOffers.postValue(listOf())
-                Log.e(
-                    TAG,
-                    "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}"
-                )
-            }
-        }
-    }
 
 
     fun fetchJobDetails(encodedHashID: String) {

@@ -43,29 +43,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-
-
-
-
-    fun createUserProfile(userId: String, profile: Profile) {
-        val profileRef = firestore.collection("user").document(userId)
-        profileRef.set(profile)
-            .addOnSuccessListener { Log.d(TAG, "Profil erfolgreich erstellt.") }
-            .addOnFailureListener { e -> Log.e(TAG, "Fehler beim Erstellen des Profils", e) }
-    }
-
-
-
-
-    fun saveLanguageSetting(languageCode: String) {
-        try {
-            sharedPreferences.edit().putString("SelectedLanguage", languageCode).apply()
-            Log.d(TAG, "Spracheinstellung gespeichert: $languageCode")
-        } catch (e: Exception) {
-            Log.e(TAG, "Fehler beim Speichern der Spracheinstellung", e)
-        }
-    }
-
     fun loadLanguageSetting(): String {
         return try {
             val languageSetting = sharedPreferences.getString("SelectedLanguage",
@@ -77,6 +54,32 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Locale.getDefault().language
         }
     }
+
+
+    fun saveLanguageSetting(languageCode: String) {
+        try {
+            sharedPreferences.edit().putString("SelectedLanguage", languageCode).apply()
+            Log.d(TAG, "Spracheinstellung gespeichert: $languageCode")
+        } catch (e: Exception) {
+            Log.e(TAG, "Fehler beim Speichern der Spracheinstellung", e)
+        }
+    }
+
+
+
+    suspend fun translateText(text: String, targetLanguage: String): TranslationResult? {
+        Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
+        return try {
+            val response = deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
+            Log.d("translateText", "Übersetzung erfolgreich, Antwort = $response")
+            response.translations.first() // Annahme, dass nur ein Text übersetzt wird
+        } catch (e: Exception) {
+            Log.e("translateText", "Fehler bei der Übersetzung", e)
+            null
+        }
+    }
+
+
 
     fun getUserProfile(userId: String): MutableLiveData<Profile?> {
         val userProfileLiveData = MutableLiveData<Profile?>()
@@ -97,6 +100,26 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
         return userProfileLiveData
     }
+
+
+
+
+
+    fun createUserProfile(userId: String, profile: Profile) {
+        val profileRef = firestore.collection("user").document(userId)
+        profileRef.set(profile)
+            .addOnSuccessListener { Log.d(TAG, "Profil erfolgreich erstellt.") }
+            .addOnFailureListener { e -> Log.e(TAG, "Fehler beim Erstellen des Profils", e) }
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -136,17 +159,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
 
 
-    suspend fun translateText(text: String, targetLanguage: String): TranslationResult? {
-        Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
-        return try {
-            val response = deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
-            Log.d("translateText", "Übersetzung erfolgreich, Antwort = $response")
-            response.translations.first() // Annahme, dass nur ein Text übersetzt wird
-        } catch (e: Exception) {
-            Log.e("translateText", "Fehler bei der Übersetzung", e)
-            null
-        }
-    }
 
 
     suspend fun getBerufsfelder(): Result<List<String>> {
