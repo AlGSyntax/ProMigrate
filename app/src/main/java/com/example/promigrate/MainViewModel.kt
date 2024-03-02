@@ -50,6 +50,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _loginStatus = MutableLiveData<Boolean>()
     val loginStatus: LiveData<Boolean> = _loginStatus
 
+    private val _emailExists = MutableLiveData<Boolean>()
+    val emailExists: LiveData<Boolean> = _emailExists
+
     private val auth = Firebase.auth
 
 
@@ -165,6 +168,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Log.e(TAG, "Ausnahme in der LogIn-Methode", e)
             _loginStatus.value = false
         }
+    }
+
+
+    fun doesEmailExist(email: String) {
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val signInMethods = task.result?.signInMethods
+                    if (signInMethods.isNullOrEmpty()) {
+                        _emailExists.value = false
+                    } else {
+                        _emailExists.value = true
+                    }
+                } else {
+                    // Handle error
+                }
+            }
     }
 
     private fun fetchUserProfile() {

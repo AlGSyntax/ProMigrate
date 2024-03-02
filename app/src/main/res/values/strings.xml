@@ -101,6 +101,8 @@
     <string name="edit_todo_hint">Edit your To Do Object</string>
     <string name="add_todo_hint">Add your new To Do Object</string>
     <string name="employeraddress">Employer Address: %1$s</string>
+    <string name="emailnotexistserror">The email and password do not match</string>
+    <string name="googlesignupfailed">Google Sign Up failed: %1$d</string>
 
 
 </resources>

@@ -101,6 +101,7 @@
     <string name="employeraddress">Dirección del empleador: %1$s</string>
     <string name="edit_todo_hint">Editar tu objeto por hacer</string>
     <string name="add_todo_hint">Añadir tu nuevo objeto por hacer</string>
+    <string name="emailnotexisterror">El correo electrónico no existe</string>
 
 
 

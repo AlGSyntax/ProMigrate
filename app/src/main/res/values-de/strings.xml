@@ -102,6 +102,9 @@
     <string name="employeraddress">Arbeitgeberadresse: %1$s</string>
     <string name="edit_todo_hint">Ihr To-Do-Objekt bearbeiten</string>
     <string name="add_todo_hint">Ihr neues To-Do-Objekt hinzufügen</string>
+    <string name="emailnotexistserror">Die E-Mail-Adresse und das Passwort stimmen nicht überein</string>
+
+
 
 
 

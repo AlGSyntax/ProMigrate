@@ -49,6 +49,7 @@ class LogInFragment : Fragment() {
 
 
         binding.loginBTN.setOnClickListener {
+            viewModel.doesEmailExist(binding.emailET.text.toString())
             // Prüfe die Eingaben vor dem Login
             if (isValidInput()) {
                 viewModel.login(binding.emailET.text.toString(), binding.passwordET.text.toString())
@@ -122,10 +123,16 @@ class LogInFragment : Fragment() {
                 } else {
                     findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
                 }
-            } else {
-                Toast.makeText(context, "Benutzer erfolgreich ausgeloggt.", Toast.LENGTH_LONG).show()
             }
         }
+
+        viewModel.emailExists.observe(viewLifecycleOwner) { exists ->
+            if (!exists) {
+                binding.emailInputLayout.error = getString(R.string.emailnotexistserror)
+            }
+        }
+
+
         viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
             if (userProfile != null) {
                 // Wenn userProfileData geladen ist, extrahiere die Jobtitel und Hash-IDs
@@ -208,7 +215,7 @@ class LogInFragment : Fragment() {
             viewModel.onGoogleLoginClicked(account.idToken!!)
         } catch (e: ApiException) {
             // Der Google Sign-In ist fehlgeschlagen, handle den Fehler
-            Toast.makeText(context, "Google Sign-In fehlgeschlagen: ${e.statusCode}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.googlesignupfailed, e.statusCode), Toast.LENGTH_LONG).show()
         }
     }
 
