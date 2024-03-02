@@ -63,49 +63,30 @@ class LogInFragment : Fragment() {
         binding.resetPasswordTV.setOnClickListener {
             val email = binding.emailET.text.toString().trim()
 
-            if (email.isEmpty()) {
-                // Benutze Snackbar anstatt Toast
-                val snackbar = Snackbar.make(binding.root, R.string.pleaseputemailin, Snackbar.LENGTH_INDEFINITE)
-                val snackbarLayout = snackbar.view
-                snackbarLayout.setBackgroundResource(R.drawable.snackbar_custom_background)
+            fun showSnackbar(message: Int) {
+                val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
+                snackbar.view.setBackgroundResource(R.drawable.snackbar_custom_background)
                 snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
                 snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
                 snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
+                snackbar.setAction(R.string.close) {
+                    snackbar.dismiss()
+                }
                 snackbar.show()
+            }
+
+            if (email.isEmpty()) {
+                showSnackbar(R.string.pleaseputemailin)
             } else {
-                // Sendet die Anfrage zum Zurücksetzen des Passworts
                 FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                     .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // Benachrichtigung, dass die E-Mail gesendet wurde, mit Snackbar
-                            val message = R.string.resetpasswordsuccess
-                            val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
-                            val snackbarLayout = snackbar.view
-                            snackbarLayout.setBackgroundResource(R.drawable.snackbar_custom_background)
-                            snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
-                            snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
-                            snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
-                            snackbar.setAction(R.string.close) {
-                                snackbar.dismiss()
-                            }
-                            snackbar.show()
-                        } else {
-                            // Fehlerbehandlung mit Snackbar
-                            val errorMessage = R.string.resetpasswordfail
-                            val errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_INDEFINITE)
-                            val errorSnackbarLayout = errorSnackbar.view
-                            errorSnackbarLayout.setBackgroundResource(R.drawable.snackbar_custom_background)
-                            errorSnackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.elevation))
-                            errorSnackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.titles))
-                            errorSnackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorError))
-                            errorSnackbar.setAction(R.string.close) {
-                                errorSnackbar.dismiss()
-                            }
-                            errorSnackbar.show()
-                        }
+                        val message = if (task.isSuccessful) R.string.resetpasswordsuccess else R.string.resetpasswordfail
+                        showSnackbar(message)
                     }
             }
         }
+
+
 
 
 

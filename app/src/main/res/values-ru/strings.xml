@@ -102,6 +102,8 @@
     <string name="employeraddress">Адрес работодателя: %1$s</string>
     <string name="edit_todo_hint">Изменить ваш объект To Do</string>
     <string name="add_todo_hint">Добавить ваш новый объект To Do</string>
+    <string name="emailnotexistserror">Электронная почта и пароль не совпадают</string>
+    <string name="googlesignupfailed">Ошибка регистрации Google: %1$d</string>
 
 
 

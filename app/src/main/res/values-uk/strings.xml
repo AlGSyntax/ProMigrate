@@ -100,5 +100,7 @@
     <string name="employeraddress">Адреса роботодавця: %1$s</string>
     <string name="edit_todo_hint">Редагуйте свій об\'єкт To Do</string>
     <string name="add_todo_hint">Додайте свій новий об\'єкт To Do</string>
+    <string name="emailnotexistserror">Електронна пошта та пароль не збігаються</string>
+    <string name="googlesignupfailed">Реєстрація Google не вдалася: %1$d</string>
 
 </resources>

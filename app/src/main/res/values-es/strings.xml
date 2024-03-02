@@ -101,7 +101,8 @@
     <string name="employeraddress">Dirección del empleador: %1$s</string>
     <string name="edit_todo_hint">Editar tu objeto por hacer</string>
     <string name="add_todo_hint">Añadir tu nuevo objeto por hacer</string>
-    <string name="emailnotexisterror">El correo electrónico no existe</string>
+    <string name="emailnotexistserror">La dirección de correo electrónico y la contraseña no coinciden</string>
+    <string name="googlesignupfailed">Error en el registro de Google: %1$d</string>
 
 
 

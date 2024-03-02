@@ -100,6 +100,8 @@
     <string name="employeraddress">雇用主の住所：%1$s</string>
     <string name="edit_todo_hint">To Doオブジェクトを編集する</string>
     <string name="add_todo_hint">新しいTo Doオブジェクトを追加する</string>
+    <string name="emailnotexistserror">メールとパスワードが一致しません</string>
+    <string name ="googlesignupfailed">Googleサインアップに失敗しました：%1$d</string>
 
 
 
