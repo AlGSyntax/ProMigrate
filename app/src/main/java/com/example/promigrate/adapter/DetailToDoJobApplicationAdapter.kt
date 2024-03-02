@@ -12,23 +12,24 @@ import com.example.promigrate.databinding.ToDoApplicationItemBinding
 
 class DetailToDoJobApplicationAdapter(
     private val onItemAdd: (String) -> Unit,
-    private val onItemEdit: (String, String, String) -> Unit  // Änderung hier: zusätzlicher String-Parameter für den Text){}
+    private val onItemEdit: (String, String, String) -> Unit,
+    private val onItemDelete: (String, String) -> Unit
 ) : ListAdapter<JobWithToDoItems, DetailToDoJobApplicationAdapter.JobViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val binding = ToDoApplicationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return JobViewHolder(binding, onItemAdd, onItemEdit)
+        return JobViewHolder(binding, onItemAdd, onItemEdit, onItemDelete)
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-
     class JobViewHolder(
         private val binding: ToDoApplicationItemBinding,
         private val onItemAdd: (String) -> Unit,
-        private val onItemEdit: (String, String, String) -> Unit  // Parameter für die Funktion angepasst){}
+        private val onItemEdit: (String, String, String) -> Unit,
+        private val onItemDelete: (String, String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private var isListVisible = false
@@ -48,6 +49,10 @@ class DetailToDoJobApplicationAdapter(
 
             binding.addTodoItemButton.setOnClickListener {
                 onItemAdd(jobWithToDoItems.jobTitle)
+            }
+
+            binding.deleteTodoItemButton.setOnClickListener {
+                onItemDelete(jobWithToDoItems.jobTitle, "todoId")
             }
 
             binding.todoListRecyclerView.adapter = toDoListAdapter

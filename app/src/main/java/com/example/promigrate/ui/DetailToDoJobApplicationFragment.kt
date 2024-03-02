@@ -33,15 +33,29 @@ class DetailToDoJobApplicationFragment : Fragment() {
         initAdapter()
         return binding.root
     }
+
+
     private fun initAdapter() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser?.uid ?: ""
 
         adapter = DetailToDoJobApplicationAdapter(
-            { jobId -> addToDoItem(userId, jobId) }
+            { jobId -> addToDoItem(userId, jobId) },
+            { jobId, todoId, currentText -> editToDoItem(userId, jobId, todoId, currentText) },
+            { jobId, _ -> deleteJobItemItem(jobId) }
         )
-        // Übergeben Sie den aktuellen Text des ToDo-Items an die editToDoItem-Funktion.
-        { jobId, todoId, currentText -> editToDoItem(userId, jobId, todoId, currentText) }
+    }
+
+    private fun deleteJobItemItem(jobId: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.confirmdeletion))
+            .setMessage(getString(R.string.confirmdeletionmessage))
+            .setPositiveButton(getString(R.string.delete)) { dialog, which ->
+                // Benutzer bestätigt die Löschung, rufe die Löschmethode im ViewModel auf
+                viewModel.deleteJobSelection(jobId)
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
 
 
@@ -75,6 +89,10 @@ class DetailToDoJobApplicationFragment : Fragment() {
     }
 
 
+
+
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -106,8 +124,6 @@ class DetailToDoJobApplicationFragment : Fragment() {
             }
 
         }
-
-
 
 
         binding.restartOnboardingButton.setOnClickListener {

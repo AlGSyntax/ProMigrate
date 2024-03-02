@@ -504,7 +504,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    fun toggleJobSelection(jobTitle: String, hashId: String) {
+    fun toggleJobSelection(jobTitle: String, refNr: String) {
         val currentProfile =
             _userProfileData.value ?: Profile().also { _userProfileData.value = it }
         // Verwende eine mutable Map, um die Jobtitel und Hash-IDs zu speichern
@@ -513,7 +513,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (currentSelectedJobs.containsKey(jobTitle)) {
             currentSelectedJobs.remove(jobTitle)
         } else {
-            currentSelectedJobs[jobTitle] = hashId
+            currentSelectedJobs[jobTitle] = refNr
         }
 
         // Setze die aktualisierte Map zurück ins Profile-Objekt
@@ -522,6 +522,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
     }
+
+
+    fun deleteJobSelection(jobTitle: String) {
+        val currentProfile = _userProfileData.value ?: return // Beendet die Methode, falls kein Profil vorhanden ist.
+        val updatedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+
+        updatedJobs.remove(jobTitle) // Entfernt den Eintrag sicher aus der Map.
+
+        currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
+        _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
+    }
+
+
 
     // Im ViewModel
     fun fetchJobs(berufsfeld: String, arbeitsort: String) {
