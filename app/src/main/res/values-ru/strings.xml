@@ -99,10 +99,9 @@
     <string name="unlimited">Неограниченный</string>
     <string name="limited">Ограниченный</string>
     <string name="unknown">Неизвестный</string>
-        <string name="todo_item_1">Составление резюме для этой вакансии</string>
-    <string name="todo_item_2">Составление сопроводительного письма для этого предложения о работе</string>
-    <string name="todo_item_3">С любопытством расспрашиваю собеседника о ходе процесса подачи документов.</string>
-
+    <string name="employeraddress">Адрес работодателя: %1$s</string>
+    <string name="edit_todo_hint">Изменить ваш объект To Do</string>
+    <string name="add_todo_hint">Добавить ваш новый объект To Do</string>
 
 
 

@@ -97,9 +97,9 @@
     <string name="unlimited">無制限</string>
     <string name="limited">限定</string>
     <string name="unknown">不明</string>
-    <string name="todo_item_1">職務経歴書の書き方</string>
-    <string name="todo_item_2">この求人に対するカバーレターの書き方</string>
-    <string name="todo_item_3">不思議に思いながら、申請手続きの状況を間者に尋ねた。</string>
+    <string name="employeraddress">雇用主の住所：%1$s</string>
+    <string name="edit_todo_hint">To Doオブジェクトを編集する</string>
+    <string name="add_todo_hint">新しいTo Doオブジェクトを追加する</string>
 
 
 

@@ -98,9 +98,9 @@
     <string name="unlimited">Ilimitado</string>
     <string name="limited">Limitado</string>
     <string name="unknown">Desconocido</string>
-    <string name="todo_item_1">Redactar un CV para esta oferta de empleo</string>
-    <string name="todo_item_2">Redactar una carta de presentación para esta oferta de empleo</string>
-    <string name="todo_item_3">Preguntar con curiosidad a mi interlocutor sobre el estado del proceso de solicitud</string>
+    <string name="employeraddress">Dirección del empleador: %1$s</string>
+    <string name="edit_todo_hint">Editar tu objeto por hacer</string>
+    <string name="add_todo_hint">Añadir tu nuevo objeto por hacer</string>
 
 
 

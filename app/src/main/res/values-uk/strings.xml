@@ -97,8 +97,8 @@
     <string name="unlimited">Необмежений</string>
     <string name="limited">Обмежений</string>
     <string name="unknown">Невідомий</string>
-    <string name="todo_item_1">Написання резюме на цю вакансію</string>
-    <string name="todo_item_2">Складання супровідного листа до цієї пропозиції про роботу</string>
-    <string name="todo_item_3">З цікавістю запитую свого співрозмовника про стан процесу подачі заявок.</string>
+    <string name="employeraddress">Адреса роботодавця: %1$s</string>
+    <string name="edit_todo_hint">Редагуйте свій об\'єкт To Do</string>
+    <string name="add_todo_hint">Додайте свій новий об\'єкт To Do</string>
 
 </resources>

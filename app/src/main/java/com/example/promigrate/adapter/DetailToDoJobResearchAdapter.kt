@@ -52,6 +52,7 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
                 binding.textViewDescription.text = binding.root.context.getString(R.string.description, it.stellenbeschreibung ?: "N/A")
                 binding.textViewBranch.text = binding.root.context.getString(R.string.branch, it.branche ?: "N/A")
                 binding.textViewJob.text = binding.root.context.getString(R.string.job, it.beruf ?: "N/A")
+                binding.textViewEmployerAddress.text = binding.root.context.getString(R.string.employeraddress, it.arbeitgeberAdresse?.strasse ?: "N/A")
                 // Füge weitere Details nach Bedarf hinzu.
             }
 

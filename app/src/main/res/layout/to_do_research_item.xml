@@ -92,6 +92,14 @@
                 android:textColor="@color/textcolor"
                 android:paddingTop="4dp"/>
 
+            <TextView
+                android:id="@+id/textViewEmployerAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                android:paddingTop="4dp"/>
+
             <!-- Add more TextViews as needed -->
         </LinearLayout>
     </LinearLayout>

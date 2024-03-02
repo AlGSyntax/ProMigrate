@@ -99,9 +99,10 @@
     <string name="unlimited">Befristet</string>
     <string name="limited">Unbefristet</string>
     <string name="unknown">Unbekannt</string>
-    <string name="todo_item_1">Einen Lebenslauf für dieses Stellenangebot schreiben</string>
-    <string name="todo_item_2">Ein Anschreiben für dieses Stellenangebot schreiben</string>
-    <string name="todo_item_3">Einen Termin für das Vorstellungsgespräch vereinbaren</string>
+    <string name="employeraddress">Arbeitgeberadresse: %1$s</string>
+    <string name="edit_todo_hint">Ihr To-Do-Objekt bearbeiten</string>
+    <string name="add_todo_hint">Ihr neues To-Do-Objekt hinzufügen</string>
+
 
 
 

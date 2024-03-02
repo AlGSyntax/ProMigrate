@@ -65,7 +65,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.add_todo_hint))
             .setView(editText)
-            .setPositiveButton(getString(R.string.add_todo_hint)) { _, _ ->
+            .setPositiveButton(getString(R.string.save)) { _, _ ->
                 val newText = editText.text.toString()
                 val newToDoId = generateNewToDoId()
                 viewModel.updateToDoItemForJob(userId, jobId, newToDoId, false, newText)
