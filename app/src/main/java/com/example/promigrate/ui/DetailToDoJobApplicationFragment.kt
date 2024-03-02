@@ -33,20 +33,25 @@ class DetailToDoJobApplicationFragment : Fragment() {
         initAdapter()
         return binding.root
     }
-
     private fun initAdapter() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser?.uid ?: ""
 
         adapter = DetailToDoJobApplicationAdapter(
             { jobId, todoId, isCompleted -> viewModel.updateToDoItemForJob(userId, jobId, todoId, isCompleted, "Item Text") },
-            { jobId -> addToDoItem(userId, jobId) }
+            { jobId -> addToDoItem(userId, jobId) },
+            // Übergeben Sie den aktuellen Text des ToDo-Items an die editToDoItem-Funktion.
+            { jobId, todoId, currentText -> editToDoItem(userId, jobId, todoId, currentText) }
         )
     }
 
-    private fun editToDoItem(userId: String, jobId: String, todoId: String) {
+
+
+    private fun editToDoItem(userId: String, jobId: String, todoId: String, currentText: String) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_todo_item, null)
-        val editText = dialogView.findViewById<EditText>(R.id.editTextToDoEdit)
+        val editText = dialogView.findViewById<EditText>(R.id.editTextToDoEdit).apply {
+            setText(currentText)
+        }
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.edit_todo_hint))
@@ -58,6 +63,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
+
 
     private fun addToDoItem(userId: String, jobId: String) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_todo_item, null)
@@ -91,10 +97,10 @@ class DetailToDoJobApplicationFragment : Fragment() {
             // Initialisiere eine Map, um die ToDoItems für jeden Job zu speichern
             val jobWithToDoItemsMap = mutableMapOf<String, List<ToDoItem>>()
 
-            jobTitles.forEach { jobTitle ->
-                viewModel.getToDoItemsForJob(userId, jobTitle).observe(viewLifecycleOwner) { toDoItems ->
+            jobTitles.forEach { refNr ->
+                viewModel.getToDoItemsForJob(userId, refNr).observe(viewLifecycleOwner) { toDoItems ->
                     // Aktualisiere die Map mit den neuen ToDoItems
-                    jobWithToDoItemsMap[jobTitle] = toDoItems
+                    jobWithToDoItemsMap[refNr] = toDoItems
 
                     // Erstelle eine Liste von JobWithToDoItems basierend auf der aktualisierten Map
                     val jobWithToDoItemsList = jobWithToDoItemsMap.map { entry ->

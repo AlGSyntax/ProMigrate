@@ -12,32 +12,25 @@ import com.example.promigrate.databinding.ToDoListJobApplicationItemBinding
 
 class ToDoListAdapter(
     private val onItemCheckedChanged: (String, Boolean) -> Unit,
-    private val onItemEdit: (String) -> Unit
+    private val onItemEdit: (String, String, String) -> Unit  // Änderung hier: zusätzlicher String-Parameter für den Text
 ) : ListAdapter<ToDoItem, ToDoListAdapter.ToDoViewHolder>(ToDoDiffCallback) {
 
     class ToDoViewHolder(
         private val binding: ToDoListJobApplicationItemBinding,
         private val onItemCheckedChanged: (String, Boolean) -> Unit,
-        private val onItemEdit: (String) -> Unit,
-
+        private val onItemEdit: (String, String, String) -> Unit,  // Parameter für die Funktion angepasst
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(toDoItem: ToDoItem) {
             binding.todoItemTextView.text = toDoItem.text
             binding.todoItemCheckbox.isChecked = toDoItem.isCompleted
-            binding.todoItemCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                onItemCheckedChanged(toDoItem.id, isChecked)
-                toDoItem.isCompleted = isChecked
-            }
 
-            // Set up listeners for your edit and add buttons
             binding.editTodoItemButton.setOnClickListener {
-                onItemEdit(toDoItem.id)
+                onItemEdit(toDoItem.id, toDoItem.text, binding.todoItemTextView.text.toString())  // Text als Parameter hinzugefügt
             }
-
-
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
         val binding = ToDoListJobApplicationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

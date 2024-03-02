@@ -81,16 +81,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val jobDetails: LiveData<Result<JobDetailsResponse>> = _jobDetails
 
 
-
     private val sharedPreferences: SharedPreferences =
         application.getSharedPreferences("selectedJobs", Context.MODE_PRIVATE)
-
-
-
-
-
-
-
 
 
     //TODO LiveData = UI-Aktualisierungen ,Berechnungen = lokale Variablen, slider Int lokal speichern
@@ -130,11 +122,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
-
-
-
-
 
 
     fun setSelectedLanguageCode(languageCode: String) {
@@ -217,10 +204,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }// TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
 
 
-
     fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
         if (password != confirmPassword) {
-            _registrationStatus.value = RegistrationStatus(success = false, message = "Passwörter stimmen nicht überein")
+            _registrationStatus.value =
+                RegistrationStatus(success = false, message = "Passwörter stimmen nicht überein")
             return
         }
         Log.d(TAG, "Versuche, den Benutzer zu registrieren mit E-Mail: $email")
@@ -232,8 +219,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     firebaseUser?.let { user ->
                         // Erstelle das Benutzerprofil mit der User-ID und dem Profilobjekt
                         val userId = user.uid
-                        val userProfile = Profile(isPremium = false, username = email, languageCode = languageCode)
-                        repository.createUserProfile(userId, userProfile) // Rufe die Methode aus dem Repository auf
+                        val userProfile = Profile(
+                            isPremium = false,
+                            username = email,
+                            languageCode = languageCode
+                        )
+                        repository.createUserProfile(
+                            userId,
+                            userProfile
+                        ) // Rufe die Methode aus dem Repository auf
                     }
                     _registrationStatus.value = RegistrationStatus(success = true)
                 } else {
@@ -242,35 +236,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         else -> R.string.unkownregistererror
                     }
                     Log.e(TAG, message.toString(), task.exception)
-                    _registrationStatus.value = RegistrationStatus(success = false, message = message)
+                    _registrationStatus.value =
+                        RegistrationStatus(success = false, message = message)
                 }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Ausnahme in der Registrationsmethode", e)
-            _registrationStatus.value = RegistrationStatus(success = false, message = "Ausnahme in der Registrationsmethode: ${e.localizedMessage}")
+            _registrationStatus.value = RegistrationStatus(
+                success = false,
+                message = "Ausnahme in der Registrationsmethode: ${e.localizedMessage}"
+            )
         }
     }
 
 
+    // TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
 
 
-
-   // TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
-
-
-
-
-
-
-
-
-    fun saveProfileWithImage(uri: Uri, name: String, age: String, fieldOfWork: String,
-                             isDataProtected: Boolean, languageLevel: String,
-                             desiredLocation:String,street:String,birthplace:String,maidenname:String,
-                             firstname:String,lastname:String,phonenumber:String) {
+    fun saveProfileWithImage(
+        uri: Uri, name: String, age: String, fieldOfWork: String,
+        isDataProtected: Boolean, languageLevel: String,
+        desiredLocation: String, street: String, birthplace: String, maidenname: String,
+        firstname: String, lastname: String, phonenumber: String
+    ) {
         viewModelScope.launch {
             try {
-                val userId = repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                val userId =
+                    repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
                 val imageUrl = repository.uploadAndUpdateProfilePicture(uri, userId)
                 Log.d(TAG, "Profilbild erfolgreich aktualisiert: $imageUrl")
 
@@ -300,13 +292,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
-
-
     // Im ViewModel
     fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
         // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
-        val currentLanguageCode = _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+        val currentLanguageCode =
+            _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
 
         // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
         if (currentLanguageCode == "de") {
@@ -334,7 +324,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun translateArbeitsorte(arbeitsorte: List<String>, onComplete: (List<String>) -> Unit) {
         // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
-        val currentLanguageCode = _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+        val currentLanguageCode =
+            _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
 
         // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
         if (currentLanguageCode == "de") {
@@ -420,20 +411,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Unterricht an allgemeinbildenden Schulen" -> "Lehrtätigkeit an allgemeinbildenden Schulen"
                     "Unterricht an außerschulischen Bildungseinrichtungen" -> "Lehrtätigkeit an außerschulischen Bildungseinrichtungen"
                     "Unterricht in beruflichen Fächern und betriebliche Ausbildung" -> "Lehrtätigkeit berufsbildender Fächer und betriebliche Ausbildung"
-                    "Maschinenbau und Betriebstechnik"->"Maschinenbau- und Betriebstechnik"
-                    "Medien, Dokumentation und Informationsdienste"->"Medien-, Dokumentations- und Informationsdienste"
-                    "Medizinisches Labor"->"Medizinisches Laboratorium"
-                    "Oberflächenbehandlung von Metall"->"Metalloberflächenbehandlung"
-                    "Museumstechnik und -verwaltung"->"Museumstechnik und -management"
-                    "Musik, Gesang, Dirigentenarbeit"->"Musik-, Gesang-, Dirigententätigkeiten"
-                    "Naturstein- und Mineralienverarbeitung, Baumaterialproduktion"->"Naturstein- und Mineralaufbereitung, Baustoffherstellung"
-                    "Nichtmedizinische Therapie und Medizin"->"Nichtärztliche Therapie und Heilkunde"
-                    "Sach-, Personen- und Feuerschutz, Arbeitssicherheit"->"Objekt-, Personen-, Brandschutz, Arbeitssicherheit"
-                    "Beamte"->"Offiziere"
-                    "Verwaltung der Humanressourcen und Dienstleistungen"->"Personalwesen und -dienstleistung"
-
-
-
+                    "Maschinenbau und Betriebstechnik" -> "Maschinenbau- und Betriebstechnik"
+                    "Medien, Dokumentation und Informationsdienste" -> "Medien-, Dokumentations- und Informationsdienste"
+                    "Medizinisches Labor" -> "Medizinisches Laboratorium"
+                    "Oberflächenbehandlung von Metall" -> "Metalloberflächenbehandlung"
+                    "Museumstechnik und -verwaltung" -> "Museumstechnik und -management"
+                    "Musik, Gesang, Dirigentenarbeit" -> "Musik-, Gesang-, Dirigententätigkeiten"
+                    "Naturstein- und Mineralienverarbeitung, Baumaterialproduktion" -> "Naturstein- und Mineralaufbereitung, Baustoffherstellung"
+                    "Nichtmedizinische Therapie und Medizin" -> "Nichtärztliche Therapie und Heilkunde"
+                    "Sach-, Personen- und Feuerschutz, Arbeitssicherheit" -> "Objekt-, Personen-, Brandschutz, Arbeitssicherheit"
+                    "Beamte" -> "Offiziere"
+                    "Verwaltung der Humanressourcen und Dienstleistungen" -> "Personalwesen und -dienstleistung"
 
 
                     // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
@@ -449,7 +437,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun toggleJobSelection(jobTitle: String, hashId: String) {
-        val currentProfile = _userProfileData.value ?: Profile().also { _userProfileData.value = it }
+        val currentProfile =
+            _userProfileData.value ?: Profile().also { _userProfileData.value = it }
         // Verwende eine mutable Map, um die Jobtitel und Hash-IDs zu speichern
         val currentSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
 
@@ -470,7 +459,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // translate german to english
     fun translateJobTitles(jobTitles: List<String>, onComplete: (List<String>) -> Unit) {
         // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
-        val currentLanguageCode = _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
+        val currentLanguageCode =
+            _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
 
         // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
         if (currentLanguageCode == "de") {
@@ -497,7 +487,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // translate job offers to the selected language
-    fun translateJobOffers(jobOffers: List<Pair<String, String>>, onComplete: (List<Pair<String, String>>) -> Unit) {
+    fun translateJobOffers(
+        jobOffers: List<Pair<String, String>>,
+        onComplete: (List<Pair<String, String>>) -> Unit
+    ) {
         val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
         if (currentLanguageCode == "de") {
             onComplete(jobOffers)
@@ -509,11 +502,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             jobOffers.forEach { (jobTitle, hashId) ->
                 try {
                     val result = repository.translateText(jobTitle, currentLanguageCode)
-                    val translatedTitle = result?.text ?: jobTitle // Verwende den Originaltitel als Fallback
+                    val translatedTitle =
+                        result?.text ?: jobTitle // Verwende den Originaltitel als Fallback
                     translatedJobOffers.add(Pair(translatedTitle, hashId))
                 } catch (e: Exception) {
                     Log.e("translateJobOffers", "Fehler bei der Übersetzung von $jobTitle", e)
-                    translatedJobOffers.add(Pair(jobTitle, hashId)) // Füge den Originaltitel im Fehlerfall hinzu
+                    translatedJobOffers.add(
+                        Pair(
+                            jobTitle,
+                            hashId
+                        )
+                    ) // Füge den Originaltitel im Fehlerfall hinzu
                 }
             }
             onComplete(translatedJobOffers)
@@ -521,7 +520,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun translateJobDetails(jobDetails: JobDetailsResponse, onComplete: (JobDetailsResponse) -> Unit) {
+    fun translateJobDetails(
+        jobDetails: JobDetailsResponse,
+        onComplete: (JobDetailsResponse) -> Unit
+    ) {
         val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
         if (currentLanguageCode == "de") {
             onComplete(jobDetails)
@@ -530,13 +532,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                val translatedArbeitgeber = repository.translateText(jobDetails.arbeitgeber ?: "", currentLanguageCode)?.text ?: jobDetails.arbeitgeber
-                val translatedStellenbeschreibung = repository.translateText(jobDetails.stellenbeschreibung ?: "", currentLanguageCode)?.text ?: jobDetails.stellenbeschreibung
-                val translatedBranche = repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text ?: jobDetails.branche
-                val translatedAngebotsart = repository.translateText(jobDetails.angebotsart ?: "", currentLanguageCode)?.text ?: jobDetails.angebotsart
-                val translatedTitel = repository.translateText(jobDetails.titel ?: "", currentLanguageCode)?.text ?: jobDetails.titel
-                val translatedBeruf = repository.translateText(jobDetails.beruf ?: "", currentLanguageCode)?.text ?: jobDetails.beruf
-                val translatedVerguetung = repository.translateText(jobDetails.verguetung ?: "", currentLanguageCode)?.text ?: jobDetails.verguetung
+                val translatedArbeitgeber = repository.translateText(
+                    jobDetails.arbeitgeber ?: "",
+                    currentLanguageCode
+                )?.text ?: jobDetails.arbeitgeber
+                val translatedStellenbeschreibung = repository.translateText(
+                    jobDetails.stellenbeschreibung ?: "",
+                    currentLanguageCode
+                )?.text ?: jobDetails.stellenbeschreibung
+                val translatedBranche =
+                    repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.branche
+                val translatedAngebotsart = repository.translateText(
+                    jobDetails.angebotsart ?: "",
+                    currentLanguageCode
+                )?.text ?: jobDetails.angebotsart
+                val translatedTitel =
+                    repository.translateText(jobDetails.titel ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.titel
+                val translatedBeruf =
+                    repository.translateText(jobDetails.beruf ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.beruf
+                val translatedVerguetung =
+                    repository.translateText(jobDetails.verguetung ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.verguetung
 
 
                 val translatedArbeitszeitmodelle = jobDetails.arbeitszeitmodelle?.map { model ->
@@ -546,7 +565,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 // Übersetzung der Arbeitsorte, wenn nötig
                 val translatedArbeitsorte = jobDetails.arbeitsorte?.map { ort ->
                     ort.copy(
-                        ort = repository.translateText(ort.ort ?: "", currentLanguageCode)?.text ?: ort.ort
+                        ort = repository.translateText(ort.ort ?: "", currentLanguageCode)?.text
+                            ?: ort.ort
                     )
                 }
 
@@ -572,11 +592,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
-
-
-
-
     fun fetchBerufsfelder() {
         viewModelScope.launch {
             try {
@@ -587,7 +602,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
                     _berufsfelder.value = listOf()
-                    Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${response.exceptionOrNull()?.message}")
+                    Log.e(
+                        TAG,
+                        "Fehler beim Abrufen der Berufsfelder: ${response.exceptionOrNull()?.message}"
+                    )
                 }
             } catch (e: Exception) {
                 _berufsfelder.value = listOf()
@@ -606,7 +624,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
                     _arbeitsorte.value = listOf()
-                    Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${response.exceptionOrNull()?.message}")
+                    Log.e(
+                        TAG,
+                        "Fehler beim Abrufen der Arbeitsorte: ${response.exceptionOrNull()?.message}"
+                    )
                 }
             } catch (e: Exception) {
                 _arbeitsorte.value = listOf()
@@ -619,13 +640,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun fetchJobs(berufsfeld: String, arbeitsort: String) {
         viewModelScope.launch {
             try {
-                val response = repository.getJobs(berufsfeld,arbeitsort)
+                val response = repository.getJobs(berufsfeld, arbeitsort)
                 if (response.isSuccess) {
                     Log.d(TAG, "Jobs erfolgreich abgerufen.")
                     _jobs.value = response.getOrNull() ?: listOf()
                 } else {
                     _jobs.value = listOf()
-                    Log.e(TAG, "Fehler beim Abrufen der Jobs: ${response.exceptionOrNull()?.message}")
+                    Log.e(
+                        TAG,
+                        "Fehler beim Abrufen der Jobs: ${response.exceptionOrNull()?.message}"
+                    )
                 }
             } catch (e: Exception) {
                 _jobs.value = listOf()
@@ -685,19 +709,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val response = repository.getJobOffers(was, arbeitsort)
             if (response.isSuccess) {
                 // Angenommen, die API gibt eine Liste von Job-Objekten zurück
-                val jobPairs = response.getOrNull()?.map { it  }?.toList() ?: listOf()
+                val jobPairs = response.getOrNull()?.map { it }?.toList() ?: listOf()
                 _jobOffers.postValue(jobPairs)
             } else {
                 _jobOffers.postValue(listOf())
-                Log.e(TAG, "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}")
+                Log.e(
+                    TAG,
+                    "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}"
+                )
             }
         }
     }
-
-
-
-
-
 
 
     fun fetchJobDetails(encodedHashID: String) {
@@ -713,12 +735,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
-
-
-
-
-
     fun updateProfileImage(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -730,17 +746,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 // Direktes Hochladen des Bildes ohne Zuweisung zu einer Variable
                 imageRef.putFile(uri).await()
                 val imageUrl = imageRef.downloadUrl.await().toString()
-                firebaseFirestore.collection("user").document(userId).update("profilePicture", imageUrl).await()
+                firebaseFirestore.collection("user").document(userId)
+                    .update("profilePicture", imageUrl).await()
                 Log.d("MainViewModel", "Profilbild erfolgreich aktualisiert: $imageUrl")
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Fehler beim Aktualisieren des Profilbildes", e)
             }
         }
     }
-
-
-
-
 
 
     fun updateToDoItemForJob(userId: String, rawJobId: String, todoId: String, isCompleted: Boolean, text: String) {
@@ -823,6 +836,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return jobId.replace(Regex("[^A-Za-z0-9]"), "_")
     }
 
+
     fun updateToDoText(userId: String, jobId: String, todoId: String, newText: String) {
         val sanitizedJobId = sanitizeJobId(jobId)
         val todoDocRef = FirebaseFirestore.getInstance()
@@ -831,7 +845,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .collection("todos")
             .document(sanitizedJobId)
 
-        todoDocRef.update("todos.$todoId.text", newText)
+        // Hier aktualisierst du nicht das ganze Dokument, sondern nur das 'text'-Feld des spezifischen ToDo
+        val todoItemPath = "todos.$todoId.text"
+        todoDocRef.update(todoItemPath, newText)
             .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
     }
