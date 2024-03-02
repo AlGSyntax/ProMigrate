@@ -65,8 +65,76 @@ class CreateYourProfileFragment : Fragment() {
                 }
             }
 
+
+
+
         binding.ivProfilePicture.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        viewModel.berufsfelder.observe(viewLifecycleOwner) { berufsfelder ->
+            if (berufsfelder != null) {
+                Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
+                viewModel.translateBerufsfelder(berufsfelder) { translatedBerufsfelder ->
+                    // Setze den Adapter nach der Übersetzung
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        translatedBerufsfelder
+                    )
+                    binding.autoCompleteTextView.setAdapter(adapter)
+                }
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder.")
+            }
+        }
+        viewModel.fetchBerufsfelder()
+
+
+        viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
+            if (arbeitsorte != null) {
+                Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
+                viewModel.translateArbeitsorte(arbeitsorte) { translatedArbeitsorte ->
+                    // Setze den Adapter nach der Übersetzung
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        translatedArbeitsorte
+                    )
+                    binding.autoCompleteTextView2.setAdapter(adapter)
+                }
+            } else {
+                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte.")
+            }
+        }
+        viewModel.fetchArbeitsorte()
+
+
+        binding.btnAddContact.setOnClickListener {
+            val dialogBinding = AdditionalContactInfoBinding.inflate(LayoutInflater.from(it.context))
+            val dialogView = dialogBinding.root
+            val streetEditText = dialogBinding.etStreet
+            val birthPlaceEditText = dialogBinding.etBirthPlace
+            val maidenNameEditText = dialogBinding.etMaidenName
+            val firstNameEditText = dialogBinding.etFirstName
+            val lastNameEditText = dialogBinding.etLastName
+            val phoneNumEditText = dialogBinding.etPhoneNumber
+
+            AlertDialog.Builder(it.context, R.style.CustomAlertDialog)
+                .setView(dialogView)
+                .setTitle(R.string.additional_contact_info)
+                .setPositiveButton(R.string.save) { _, _ ->
+                    additionalStreet = streetEditText.text.toString()
+                    additionalBirthPlace = birthPlaceEditText.text.toString()
+                    additionalMaidenName = maidenNameEditText.text.toString()
+                    additionalFirstName = firstNameEditText.text.toString()
+                    additionalLastName = lastNameEditText.text.toString()
+                    additionalPhoneNum = phoneNumEditText.text.toString()
+
+
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
         }
 
         binding.btnSave.setOnClickListener {
@@ -121,32 +189,7 @@ class CreateYourProfileFragment : Fragment() {
             }
         }
 
-        binding.btnAddContact.setOnClickListener {
-            val dialogBinding = AdditionalContactInfoBinding.inflate(LayoutInflater.from(it.context))
-            val dialogView = dialogBinding.root
-            val streetEditText = dialogBinding.etStreet
-            val birthPlaceEditText = dialogBinding.etBirthPlace
-            val maidenNameEditText = dialogBinding.etMaidenName
-            val firstNameEditText = dialogBinding.etFirstName
-            val lastNameEditText = dialogBinding.etLastName
-            val phoneNumEditText = dialogBinding.etPhoneNumber
 
-            AlertDialog.Builder(it.context, R.style.CustomAlertDialog)
-                .setView(dialogView)
-                .setTitle(R.string.additional_contact_info)
-                .setPositiveButton(R.string.save) { _, _ ->
-                    additionalStreet = streetEditText.text.toString()
-                    additionalBirthPlace = birthPlaceEditText.text.toString()
-                    additionalMaidenName = maidenNameEditText.text.toString()
-                    additionalFirstName = firstNameEditText.text.toString()
-                    additionalLastName = lastNameEditText.text.toString()
-                    additionalPhoneNum = phoneNumEditText.text.toString()
-
-
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
-        }
 
 
 //TODO: Material outline für Buttons
@@ -166,42 +209,7 @@ class CreateYourProfileFragment : Fragment() {
             binding.languageLevelText.text = getString(languageLevel)
         }
 
-        viewModel.berufsfelder.observe(viewLifecycleOwner) { berufsfelder ->
-            if (berufsfelder != null) {
-                Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
-                viewModel.translateBerufsfelder(berufsfelder) { translatedBerufsfelder ->
-                    // Setze den Adapter nach der Übersetzung
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        translatedBerufsfelder
-                    )
-                    binding.autoCompleteTextView.setAdapter(adapter)
-                }
-            } else {
-                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder.")
-            }
-        }
-        viewModel.fetchBerufsfelder()
 
-
-        viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
-            if (arbeitsorte != null) {
-                Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
-                viewModel.translateArbeitsorte(arbeitsorte) { translatedArbeitsorte ->
-                    // Setze den Adapter nach der Übersetzung
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        translatedArbeitsorte
-                    )
-                    binding.autoCompleteTextView2.setAdapter(adapter)
-                }
-            } else {
-                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte.")
-            }
-        }
-        viewModel.fetchArbeitsorte()
     }
 
     private fun validateInput(

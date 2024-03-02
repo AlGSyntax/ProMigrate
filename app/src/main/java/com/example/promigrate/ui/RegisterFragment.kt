@@ -72,32 +72,26 @@ class RegisterFragment : Fragment() {
 
 
     private fun isValidInput(email: String, password: String, confirmPassword: String): Boolean {
-        var isValid = true
-
         // Reset errors
         binding.emailTextInputLayout.error = null
         binding.passwordTextInputLayout.error = null
         binding.confirmPasswordTextInputLayout.error = null
 
-        // E-Mail Validierung
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.emailTextInputLayout.error = getString(R.string.invalid_email_error)
-            isValid = false
+        return when {
+            email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                binding.emailTextInputLayout.error = getString(R.string.invalid_email_error)
+                false
+            }
+            password.isEmpty() || password.length < 8 -> {
+                binding.passwordTextInputLayout.error = getString(R.string.invalid_password_error)
+                false
+            }
+            confirmPassword != password -> {
+                binding.confirmPasswordTextInputLayout.error = getString(R.string.password_mismatch_error)
+                false
+            }
+            else -> true
         }
-
-        // Passwort Validierung
-        if (password.isEmpty() || password.length < 8) {
-            binding.passwordTextInputLayout.error = getString(R.string.invalid_password_error)
-            isValid = false
-        }
-
-        // Überprüfung, ob die Passwörter übereinstimmen
-        if (confirmPassword != password) {
-            binding.confirmPasswordTextInputLayout.error = getString(R.string.password_mismatch_error)
-            isValid = false
-        }
-
-        return isValid
     }
 
 
