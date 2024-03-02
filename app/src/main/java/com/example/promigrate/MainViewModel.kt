@@ -170,22 +170,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
-    fun doesEmailExist(email: String) {
-        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+    fun doesEmailExist(username: String) {
+        FirebaseFirestore.getInstance().collection("user").whereEqualTo("username", username).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val signInMethods = task.result?.signInMethods
-                    if (signInMethods.isNullOrEmpty()) {
-                        _emailExists.value = false
-                    } else {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        // E-Mail existiert bereits in der Datenbank
                         _emailExists.value = true
+                    } else {
+                        // E-Mail existiert nicht in der Datenbank
+                        _emailExists.value = false
                     }
                 } else {
-                    // Handle error
+                    // Handle error, zum Beispiel könnte ein Fehler-Status gesetzt werden
+                    Log.e(TAG, "Error checking email existence: ${task.exception}")
                 }
             }
     }
+
 
     private fun fetchUserProfile() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
