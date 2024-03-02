@@ -504,35 +504,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    fun toggleJobSelection(jobTitle: String, refNr: String) {
-        val currentProfile =
-            _userProfileData.value ?: Profile().also { _userProfileData.value = it }
-        // Verwende eine mutable Map, um die Jobtitel und Hash-IDs zu speichern
-        val currentSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
-
-        if (currentSelectedJobs.containsKey(jobTitle)) {
-            currentSelectedJobs.remove(jobTitle)
-        } else {
-            currentSelectedJobs[jobTitle] = refNr
-        }
-
-        // Setze die aktualisierte Map zurück ins Profile-Objekt
-        currentProfile.selectedJobs = currentSelectedJobs
-        _userProfileData.value = currentProfile
-
-        Log.d(TAG, "Jobauswahl aktualisiert: ${currentProfile.selectedJobs}")
-    }
 
 
-    fun deleteJobSelection(jobTitle: String) {
-        val currentProfile = _userProfileData.value ?: return // Beendet die Methode, falls kein Profil vorhanden ist.
-        val updatedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
 
-        updatedJobs.remove(jobTitle) // Entfernt den Eintrag sicher aus der Map.
 
-        currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
-        _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
-    }
+
+
 
 
 
@@ -672,6 +649,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun saveSelectedJobsToFirebase(selectedJobs: Map<String, String>) {
         val userId = auth.currentUser?.uid ?: return
         repository.updateUserProfileField(userId, "selectedJobs", selectedJobs)
+    }
+
+
+
+    fun deleteJobSelection(jobTitle: String) {
+        val currentProfile = _userProfileData.value ?: return // Beendet die Methode, falls kein Profil vorhanden ist.
+        val updatedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+
+        updatedJobs.remove(jobTitle) // Entfernt den Eintrag sicher aus der Map.
+
+        currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
+        _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
     }
 
 
