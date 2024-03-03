@@ -5,7 +5,7 @@
     <string name="email">メール</string>
     <string name="password">パスワード</string>
     <string name="confirmpassword">パスワードの確認入力</string>
-    <string name="languageselectionmessage">ドイツへの移住をお手伝いします！</string>
+    <string name="languageselectionmessage">ドイツでの冒険を始めましょう!</string>
     <string name="registrationinvitation">アカウントをお持ちでないですか？
         ここをクリックしてサインアップしてください！</string>
     <string name="login">ログイン</string>
@@ -102,6 +102,9 @@
     <string name="add_todo_hint">新しいTo Doオブジェクトを追加する</string>
     <string name="emailnotexistserror">メールとパスワードが一致しません</string>
     <string name ="googlesignupfailed">Googleサインアップに失敗しました：%1$d</string>
+    <string name="confirmdeletion">この求人情報を削除しますか？\n</string>
+    <string name="delete">削除</string>
+    <string name="editbutton">編集</string>
 
 
 

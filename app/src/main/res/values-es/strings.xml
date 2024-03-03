@@ -6,7 +6,7 @@
     <string name="email">Correo Electronico</string>
     <string name="password">Contraseña</string>
     <string name="confirmpassword">Confirmar contraseña</string>
-    <string name="languageselectionmessage">¡Te ayudamos a emigrar a Alemania!</string>
+    <string name="languageselectionmessage">¡Comienza tu aventura en Alemania!</string>
     <string name="registrationinvitation">¿No tienes una cuenta? ¡Haz clic aquí para registrarte!</string>
     <string name="login">Iniciar sesión</string>
     <string name="register">Registrar</string>
@@ -103,6 +103,9 @@
     <string name="add_todo_hint">Añadir tu nuevo objeto por hacer</string>
     <string name="emailnotexistserror">La dirección de correo electrónico y la contraseña no coinciden</string>
     <string name="googlesignupfailed">Error en el registro de Google: %1$d</string>
+    <string name="confirmdeletion">¿Desea eliminar esta oferta de trabajo?\n</string>
+    <string name="delete">Eliminar</string>
+    <string name="editbutton">Al presionar esto, puede personalizar su elemento por hacer</string>
 
 
 

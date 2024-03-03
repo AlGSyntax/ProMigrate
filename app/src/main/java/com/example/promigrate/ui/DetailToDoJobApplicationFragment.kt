@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.adapter.DetailToDoJobApplicationAdapter
-import com.example.promigrate.adapter.JobWithToDoItems
+import com.example.promigrate.data.model.JobWithToDoItems
 import com.example.promigrate.data.model.ToDoItem
 import com.example.promigrate.databinding.FragmentDetailToDoJobApplicationBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -48,8 +48,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
 
     private fun deleteJobItemItem(jobId: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.confirmdeletion))
-            .setMessage(getString(R.string.confirmdeletionmessage))
+            .setMessage(getString(R.string.confirmdeletion))
             .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 // Benutzer bestätigt die Löschung, rufe die Löschmethode im ViewModel auf
                 viewModel.deleteJobSelection(jobId)

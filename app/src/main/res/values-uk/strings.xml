@@ -6,7 +6,7 @@
     <string name="email">Електронна пошта</string>
     <string name="password">пароль</string>
     <string name="confirmpassword">Підтвердіть пароль</string>
-    <string name="languageselectionmessage">Ми допомагаємо вам переїхати до Німеччини!</string>
+    <string name="languageselectionmessage">Почніть свою пригоду в Німеччині!</string>
     <string name="registrationinvitation">Не маєте облікового запису? Натисніть тут, щоб зареєструватися!</string>
     <string name="login">Увійти</string>
     <string name="register">Зареєструватися</string>
@@ -102,5 +102,8 @@
     <string name="add_todo_hint">Додайте свій новий об\'єкт To Do</string>
     <string name="emailnotexistserror">Електронна пошта та пароль не збігаються</string>
     <string name="googlesignupfailed">Реєстрація Google не вдалася: %1$d</string>
+    <string name="confirmdeletion">Ви хочете видалити цю пропозицію про роботу?\n</string>
+    <string name="delete">видалити</string>
+    <string name="editbutton">редагувати</string>
 
 </resources>

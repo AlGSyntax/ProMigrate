@@ -5,7 +5,7 @@
     <string name="email">E-Mail</string>
     <string name="password">Passwort</string>
     <string name="confirmpassword">Passwort bestätigen</string>
-    <string name="languageselectionmessage">Wir helfen Ihnen bei der Auswanderung nach Deutschland!
+    <string name="languageselectionmessage">Beginn Ihres Deutschland-Abenteuers!
     </string>
     <string name="registrationinvitation">Haben Sie kein Konto? Klicken Sie hier, um sich anzumelden!
     </string>
@@ -104,6 +104,9 @@
     <string name="add_todo_hint">Ihr neues To-Do-Objekt hinzufügen</string>
     <string name="emailnotexistserror">Die E-Mail-Adresse und das Passwort stimmen nicht überein</string>
     <string name="googlesignupfailed">Google Sign-In fehlgeschlagen: %1$d</string>
+    <string name="confirmdeletion">Möchten Sie dieses Stellenangebot löschen?\n</string>
+    <string name="delete">Löschen</string>
+    <string name="editbutton">Durch Drücken dieser Schaltfläche können Sie Ihr To-Do-Element anpassen</string>
 
 
 
