@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.promigrate.data.model.ToDoItem
+import com.example.promigrate.data.model.JobWithToDoItems
 import com.example.promigrate.databinding.ToDoApplicationItemBinding
 
 class DetailToDoJobApplicationAdapter(
@@ -77,7 +77,3 @@ class DetailToDoJobApplicationAdapter(
     }
 }
 
-data class JobWithToDoItems(
-    val jobTitle: String,
-    val toDoItems: List<ToDoItem>
-)
