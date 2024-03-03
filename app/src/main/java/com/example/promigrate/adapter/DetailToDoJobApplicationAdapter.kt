@@ -55,6 +55,9 @@ class DetailToDoJobApplicationAdapter(
                 onItemDelete(jobWithToDoItems.jobTitle, "todoId")
             }
 
+            binding.addTodoItemButton.visibility = if (isListVisible) View.GONE else View.VISIBLE
+            binding.deleteTodoItemButton.visibility = if (isListVisible) View.GONE else View.VISIBLE
+
             binding.todoListRecyclerView.adapter = toDoListAdapter
             binding.todoListRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
             toDoListAdapter.submitList(jobWithToDoItems.toDoItems)
@@ -63,6 +66,8 @@ class DetailToDoJobApplicationAdapter(
         private fun toggleToDoListVisibility() {
             isListVisible = !isListVisible
             binding.todoListRecyclerView.visibility = if (isListVisible) View.VISIBLE else View.GONE
+            binding.addTodoItemButton.visibility = if (!isListVisible) View.VISIBLE else View.GONE
+            binding.deleteTodoItemButton.visibility = if (!isListVisible) View.VISIBLE else View.GONE
         }
     }
 

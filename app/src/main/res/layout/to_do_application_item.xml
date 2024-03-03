@@ -31,6 +31,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Job Title" />
 
+
         <ImageButton
             android:id="@+id/deleteTodoItemButton"
             android:layout_width="55dp"
@@ -40,12 +41,11 @@
             android:contentDescription="@string/confirm"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.949"
+            app:layout_constraintHorizontal_bias="0.961"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_bias="0.764"
             app:srcCompat="@drawable/baseline_delete_outline_24" />
-
 
         <ImageButton
             android:id="@+id/addTodoItemButton"

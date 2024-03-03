@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_edit"
         android:minWidth="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/confirm"
         android:layout_marginTop="16dp"
         android:minHeight="48dp"
