@@ -174,14 +174,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         FirebaseFirestore.getInstance().collection("user").whereEqualTo("username", username).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val documents = task.result
-                    if (documents != null && !documents.isEmpty) {
-                        // E-Mail existiert bereits in der Datenbank
-                        _emailExists.value = true
-                    } else {
-                        // E-Mail existiert nicht in der Datenbank
-                        _emailExists.value = false
-                    }
+                    val documents = task.result// E-Mail existiert nicht in der Datenbank
+                    // E-Mail existiert bereits in der Datenbank
+                    _emailExists.value = documents != null && !documents.isEmpty
                 } else {
                     // Handle error, zum Beispiel könnte ein Fehler-Status gesetzt werden
                     Log.e(TAG, "Error checking email existence: ${task.exception}")

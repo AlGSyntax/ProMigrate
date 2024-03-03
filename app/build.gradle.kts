@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -12,7 +14,19 @@ android {
     namespace = "com.example.promigrate"
     compileSdk = 34
 
+
+    val localProperties = Properties().apply {
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            load(localPropertiesFile.inputStream())
+        }
+    }
+
+    val deepLApiKey = localProperties.getProperty("DeepLApiKey") ?: ""
+
+
     defaultConfig {
+        buildConfigField("String", "DEEP_L_API_KEY", "\"$deepLApiKey\"")
         applicationId = "com.example.promigrate"
         minSdk = 28
         targetSdk = 34

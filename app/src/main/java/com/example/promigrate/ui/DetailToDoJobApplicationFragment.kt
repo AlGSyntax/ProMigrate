@@ -19,7 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import java.util.UUID
 
-const val TAG2 = "DetailToDoJobApplication"
+
 
 class DetailToDoJobApplicationFragment : Fragment() {
 
