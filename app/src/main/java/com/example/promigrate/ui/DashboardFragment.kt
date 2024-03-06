@@ -98,6 +98,15 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        binding.cardTopRight.setOnClickListener {
+
+                // Verwende Standardwerte oder zeige eine Fehlermeldung/Logik, wenn keine Daten vorhanden sind
+                val action = DashboardFragmentDirections.actionDashboardFragmentToVocabularyLearningFragment()
+                findNavController().navigate(action)
+            }
+
+
+
 
 
 

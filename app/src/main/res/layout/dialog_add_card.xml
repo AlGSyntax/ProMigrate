@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <EditText
+        android:id="@+id/frontEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Front text"/>
+
+    <EditText
+        android:id="@+id/backEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Back text"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

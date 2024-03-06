@@ -13,6 +13,7 @@ import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPIService
+import com.example.promigrate.data.remote.ProMigrateLangLearnAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -22,7 +23,7 @@ import java.util.Locale
 const val TAG = "Repository"
 class Repository (context: Context, val firebaseAuth: FirebaseAuth,
                   private val firestore: FirebaseFirestore,private val apiService: ProMigrateAPIService,
-    private val deepLApiService: DeepLApiService
+                  private val deepLApiService: DeepLApiService,private val langLearnAPIService: ProMigrateLangLearnAPIService
 ) {
 
     private val storage = FirebaseStorage.getInstance()
@@ -34,11 +35,9 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         private var INSTANCE: Repository? = null
 
         fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore,
-                        apiService: ProMigrateAPIService,deepLApiService: DeepLApiService):
+                        apiService: ProMigrateAPIService,deepLApiService: DeepLApiService, langLearnAPIService: ProMigrateLangLearnAPIService):
                 Repository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Repository(context, firebaseAuth, firestore,apiService,deepLApiService).also { INSTANCE = it }
-            }
+            return INSTANCE ?: Repository(context, firebaseAuth, firestore,apiService,deepLApiService, langLearnAPIService).also { INSTANCE = it }
         }
     }
 
@@ -271,24 +270,22 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
+// ... other code ...
 
     suspend fun getBildungsangebote(
-        systematiken: String,
+        systematiken: String?,
         orte: String,
-        page: Int,
-        umkreis: String,
         sprachniveau: String,
-        beginntermine: Int,
-        unterrichtsformen: String,
-        anbieter: Int
+        beginntermine: Int
     ): Result<List<TerminResponse>> {
         return try {
-            val response = apiService.getBildungsangebot(systematiken, orte, page, umkreis, sprachniveau, beginntermine, unterrichtsformen, anbieter)
-            if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!._embedded.termine)
+            val response = langLearnAPIService.getBildungsangebot(systematiken, orte, sprachniveau, beginntermine, "basc")
+            if (response.isSuccessful) {
+                val termine = response.body()?._embedded?.termine ?: listOf()
+                Result.success(termine)
             } else {
                 Log.e("Repository", "Fehler beim Abrufen der Bildungsangebote: ${response.message()}")
-                Result.failure(Exception("Fehler beim Abrufen der Bildungsangebote"))
+                Result.failure(Exception("Fehler beim Abrufen der Bildungsangebote: ${response.message()}"))
             }
         } catch (e: Exception) {
             Log.e("Repository", "Exception beim Abrufen der Bildungsangebote", e)
@@ -296,6 +293,9 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
+
+
+// ... other code ...
 
 
 

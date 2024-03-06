@@ -9,12 +9,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.promigrate.data.model.IndexCard
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.RegistrationStatus
+import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.data.model.ToDoItem
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPI
+import com.example.promigrate.data.remote.ProMigrateLangLearnAPI
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +39,9 @@ const val TAG = "MainViewModel"
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository = Repository.getInstance(
         application, FirebaseAuth.getInstance(),
-        FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService, DeepLApiService.create()
+        FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService, DeepLApiService.create(),
+        ProMigrateLangLearnAPI.retrofitService
+
     )
 
 
@@ -80,6 +85,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _jobDetails = MutableLiveData<Result<JobDetailsResponse>>()
     val jobDetails: LiveData<Result<JobDetailsResponse>> = _jobDetails
+
+    private val _bildungsangebote = MutableLiveData<List<TerminResponse>>()
+    val bildungsangebote: LiveData<List<TerminResponse>> = _bildungsangebote
 
 
 
@@ -753,7 +761,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
+    fun fetchBildungsangebote(systematiken: String, orte: String, sprachniveau: String, beginntermine: Int) {
+        viewModelScope.launch {
+            val response = repository.getBildungsangebote(systematiken, orte, sprachniveau, beginntermine)
+            if (response.isSuccess) {
+                _bildungsangebote.postValue(response.getOrNull() ?: listOf())
+            } else {
+                _bildungsangebote.postValue(listOf())
+                Log.e(TAG, "Fehler beim Abrufen der Bildungsangebote: ${response.exceptionOrNull()?.message}")
+            }
+        }
+    }
 
     fun updateProfileImage(uri: Uri) {
         viewModelScope.launch {
@@ -871,6 +889,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
     }
+
+
+
+    fun addFlashcard(userId: String, frontText: String, backText: String) {
+        val newCard = IndexCard(frontText = frontText, backText = backText)
+        FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").add(newCard)
+    }
+
+    fun updateFlashcard(userId: String, cardId: String, frontText: String, backText: String) {
+        val cardRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").document(cardId)
+        val updateMap = mapOf("frontText" to frontText, "backText" to backText)
+        cardRef.update(updateMap)
+    }
+
+    fun getFlashcards(userId: String): LiveData<List<IndexCard>> {
+        val liveData = MutableLiveData<List<IndexCard>>()
+        FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards")
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    // Handle the error
+                    liveData.value = emptyList()
+                } else {
+                    val flashcards = snapshot?.toObjects(IndexCard::class.java)
+                    liveData.value = flashcards ?: emptyList()
+                }
+            }
+        return liveData
+    }
+
 
 
 

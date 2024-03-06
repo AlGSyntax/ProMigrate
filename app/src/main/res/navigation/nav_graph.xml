@@ -115,6 +115,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_vocabularyLearningFragment"
+            app:destination="@id/vocabularyLearningFragment" />
     </fragment>
 
     <fragment
@@ -168,6 +171,27 @@
         <action
             android:id="@+id/action_settingsFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/vocabularyLearningFragment"
+        android:name="com.example.promigrate.ui.VocabularyLearningFragment"
+        android:label="fragment_vocabulary_learning"
+        tools:layout="@layout/fragment_vocabulary_learning" >
+        <action
+            android:id="@+id/action_vocabularyLearningFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_vocabularyLearningFragment_to_languageCourseFragment"
+            app:destination="@id/languageCourseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/languageCourseFragment"
+        android:name="com.example.promigrate.ui.LanguageCourseFragment"
+        android:label="fragment_language_course"
+        tools:layout="@layout/fragment_language_course" >
+        <action
+            android:id="@+id/action_languageCourseFragment_to_vocabularyLearningFragment"
+            app:destination="@id/vocabularyLearningFragment" />
     </fragment>
 
 
