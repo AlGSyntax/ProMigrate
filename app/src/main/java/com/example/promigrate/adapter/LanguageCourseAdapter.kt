@@ -2,6 +2,7 @@ package com.example.promigrate.adapter
 
 import android.text.Html
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -47,7 +48,17 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
             kurs.angebot?.inhalt?.let { bemerkung ->
                 val formattedText =
                     Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT)
-                binding.bemerkungTextView.text = formattedText
+                binding.contentTextView.text = formattedText
+            }
+
+            binding.expandableView.visibility = View.GONE
+
+            binding.langcourseTextView.setOnClickListener {
+                binding.expandableView.visibility = if (binding.expandableView.visibility == View.VISIBLE) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
             }
         }
     }

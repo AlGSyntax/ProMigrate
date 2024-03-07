@@ -21,40 +21,47 @@
             android:textStyle="bold"
             android:fontFamily="@font/quicksandvariablefontwght"
             android:textAlignment="center"
+            android:textColor="@color/textcolor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/beginnTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/beginnTextView" />
-
-        <TextView
-            android:id="@+id/beginnTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/langcourseTextView"
-            app:layout_constraintEnd_toStartOf="@+id/endeTextView"
-            app:layout_constraintTop_toBottomOf="@+id/langcourseTextView" />
-
-        <TextView
-            android:id="@+id/endeTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/beginnTextView"
-            app:layout_constraintEnd_toStartOf="@+id/bemerkungTextView"
-            app:layout_constraintTop_toBottomOf="@+id/beginnTextView" />
-
-        <TextView
-            android:id="@+id/bemerkungTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/endeTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/endeTextView" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/expandableView" />
 
+        <LinearLayout
+            android:id="@+id/expandableView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/langcourseTextView">
+
+            <TextView
+                android:id="@+id/beginnTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                 />
+
+            <TextView
+                android:id="@+id/endeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                 />
+
+            <TextView
+                android:id="@+id/contentTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                 />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -868,7 +868,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun translateBildungsangebote(// Muss wahrscheinlich angepasst werden
+    fun translateBildungsangebote(
         bildungsangebote: List<TerminResponse>,
         onComplete: (List<TerminResponse>) -> Unit
     ) {
@@ -879,20 +879,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         viewModelScope.launch {
-            val translatedBildungsangebote = bildungsangebote.map { angebot ->
-                try {
-                    // Annahme: repository.translateText übersetzt den Titel basierend auf dem gegebenen Sprachcode
-                    val result = repository.translateText(angebot.angebot?.titel ?: "", currentLanguageCode)
-                    val translatedTitle = result?.text ?: angebot.angebot?.titel // Fallback auf den Originaltitel
-                    angebot.copy(angebot = angebot.angebot?.copy(titel = translatedTitle))
-                } catch (e: Exception) {
-                    Log.e("translateBildungsangebote", "Fehler bei der Übersetzung von ${angebot.angebot?.titel}", e)
-                    angebot // Fallback auf das Originalangebot im Fehlerfall
+            try {
+                val translatedBildungsangebote = bildungsangebote.map { angebot ->
+                    val translatedTitel = repository.translateText(
+                        angebot.angebot?.titel ?: "",
+                        currentLanguageCode
+                    )?.text ?: angebot.angebot?.titel
+                    val translatedInhalt = repository.translateText(
+                        angebot.angebot?.inhalt ?: "",
+                        currentLanguageCode
+                    )?.text ?: angebot.angebot?.inhalt
+
+                    angebot.copy(angebot = angebot.angebot?.copy(
+                        titel = translatedTitel,
+                        inhalt = translatedInhalt
+                    ))
                 }
+                onComplete(translatedBildungsangebote)
+            } catch (e: Exception) {
+                Log.e("translateBildungsangebote", "Fehler bei der Übersetzung der Bildungsangebote", e)
+                onComplete(bildungsangebote) // Gebe die ursprünglichen Bildungsangebote zurück, falls ein Fehler auftritt
             }
-            onComplete(translatedBildungsangebote)
         }
     }
+
 
 
     fun updateProfileImage(uri: Uri) {
