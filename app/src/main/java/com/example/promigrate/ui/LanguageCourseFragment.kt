@@ -45,8 +45,11 @@ class LanguageCourseFragment : Fragment() {
         }
 
         viewModel.bildungsangebote.observe(viewLifecycleOwner) { angebote ->
-            languageCourseAdapter.submitList(angebote)
+            viewModel.translateBildungsangebote(angebote) { translatedAngebote ->
+                languageCourseAdapter.submitList(translatedAngebote)
+            }
         }
+
 
 
 

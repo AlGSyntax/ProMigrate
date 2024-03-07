@@ -773,6 +773,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    fun translateBildungsangebote(
+        bildungsangebote: List<TerminResponse>,
+        onComplete: (List<TerminResponse>) -> Unit
+    ) {
+        val currentLanguageCode = _selectedLanguageCode.value ?: "DE"
+        if (currentLanguageCode == "DE") {
+            onComplete(bildungsangebote)
+            return
+        }
+
+        viewModelScope.launch {
+            val translatedBildungsangebote = bildungsangebote.map { angebot ->
+                try {
+                    // Annahme: repository.translateText übersetzt den Titel basierend auf dem gegebenen Sprachcode
+                    val result = repository.translateText(angebot.angebot?.titel ?: "", currentLanguageCode)
+                    val translatedTitle = result?.text ?: angebot.angebot?.titel // Fallback auf den Originaltitel
+                    angebot.copy(angebot = angebot.angebot?.copy(titel = translatedTitle))
+                } catch (e: Exception) {
+                    Log.e("translateBildungsangebote", "Fehler bei der Übersetzung von ${angebot.angebot?.titel}", e)
+                    angebot // Fallback auf das Originalangebot im Fehlerfall
+                }
+            }
+            onComplete(translatedBildungsangebote)
+        }
+    }
+
+
     fun updateProfileImage(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -947,30 +975,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    /**
-    fun saveUserProfile(userId: String, languageCode: String) {
-    viewModelScope.launch {
-    try {
-    repository.saveUserProfile(UserProfile(userId, languageCode))
-    Log.d(TAG, "Benutzerprofil erfolgreich gespeichert: $userId")
-    } catch (e: Exception) {
-    Log.e(TAG, "Fehler beim Speichern des Benutzerprofils", e)
-    }
-    }
-    }
 
-    fun loadUserProfile(userId: String): LiveData<UserProfile> {
-    return try {
-    val userProfile = repository.getUserProfile(userId)
-    Log.d(TAG, "Benutzerprofil erfolgreich geladen: $userId")
-    userProfile
-    } catch (e: Exception) {
-    Log.e(TAG, "Fehler beim Laden des Benutzerprofils", e)
-    MutableLiveData() // Rückgabe eines leeren LiveData-Objekts im Fehlerfall
-    }
-    }
-
-     */
 
 
     fun logout() {
