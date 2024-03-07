@@ -3,21 +3,19 @@ package com.example.promigrate.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.promigrate.R
 import com.example.promigrate.data.model.IndexCard
+import com.example.promigrate.databinding.VocabularyLearningItemBinding
 
 class VocabularyLearningAdapter(
     private val onEdit: (IndexCard) -> Unit
 ) : ListAdapter<IndexCard, VocabularyLearningAdapter.VocabularyLearningViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VocabularyLearningViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.vocabulary_learning_item, parent, false)
-        return VocabularyLearningViewHolder(view, onEdit)
+        val binding = VocabularyLearningItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return VocabularyLearningViewHolder(binding, onEdit)
     }
 
     override fun onBindViewHolder(holder: VocabularyLearningViewHolder, position: Int) {
@@ -26,23 +24,20 @@ class VocabularyLearningAdapter(
     }
 
     class VocabularyLearningViewHolder(
-        itemView: View,
+        private val binding: VocabularyLearningItemBinding,
         private val onEdit: (IndexCard) -> Unit
-    ) : RecyclerView.ViewHolder(itemView) {
-        private val frontTextView: TextView = itemView.findViewById(R.id.card_front)
-        private val backTextView: TextView = itemView.findViewById(R.id.card_back)
-        private val editButton: ImageButton = itemView.findViewById(R.id.editFlashcardButton)
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(indexCard: IndexCard) {
-            frontTextView.text = indexCard.frontText
-            backTextView.text = indexCard.backText
-            // Setzt die Sichtbarkeit basierend auf dem Zustand der Karteikarte
-            frontTextView.visibility = if (indexCard.isFlipped) View.GONE else View.VISIBLE
-            backTextView.visibility = if (indexCard.isFlipped) View.VISIBLE else View.GONE
+            binding.cardFront.text = indexCard.frontText
+            binding.cardBack.text = indexCard.backText
+            // Set visibility based on the state of the index card
+            binding.cardFront.visibility = if (indexCard.isFlipped) View.GONE else View.VISIBLE
+            binding.cardBack.visibility = if (indexCard.isFlipped) View.VISIBLE else View.GONE
 
-            editButton.setOnClickListener { onEdit(indexCard) }
+            binding.editFlashcardButton.setOnClickListener { onEdit(indexCard) }
 
-            itemView.setOnClickListener {
+            binding.root.setOnClickListener {
                 indexCard.isFlipped = !indexCard.isFlipped
                 bind(indexCard)
             }
