@@ -1,6 +1,5 @@
 package com.example.promigrate.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,21 +14,22 @@ import com.example.promigrate.R
 import com.example.promigrate.adapter.VocabularyLearningAdapter
 import com.example.promigrate.data.model.IndexCard
 import com.example.promigrate.databinding.FragmentVocabularyLearningBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 
 class VocabularyLearningFragment : Fragment() {
 
-    private var _binding: FragmentVocabularyLearningBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: FragmentVocabularyLearningBinding
     private lateinit var adapter: VocabularyLearningAdapter
     private val viewModel: MainViewModel by activityViewModels()
-    private var userId: String = ""
+    private val userId: String by lazy {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser?.uid ?: ""
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentVocabularyLearningBinding.inflate(inflater, container, false)
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        userId = currentUser?.uid ?: ""
+        binding = FragmentVocabularyLearningBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -39,8 +39,11 @@ class VocabularyLearningFragment : Fragment() {
         adapter = VocabularyLearningAdapter { indexCard ->
             editIndexCard(indexCard)
         }
+
         binding.rvLanguageCourses.layoutManager = LinearLayoutManager(context)
         binding.rvLanguageCourses.adapter = adapter
+
+
 
         viewModel.getFlashcards(userId).observe(viewLifecycleOwner) { flashcards ->
             adapter.submitList(flashcards)
@@ -59,54 +62,47 @@ class VocabularyLearningFragment : Fragment() {
         }
     }
 
-
-
     private fun addNewIndexCard() {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_card, null)
-        val frontEditText = dialogView.findViewById<EditText>(R.id.frontEditText)
-        val backEditText = dialogView.findViewById<EditText>(R.id.backEditText)
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_card, null)
+        val frontEditText = view.findViewById<EditText>(R.id.frontEditText)
+        val backEditText = view.findViewById<EditText>(R.id.backEditText)
 
-        AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .setPositiveButton("Add") { _, _ ->
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(view)
+            .setPositiveButton("Add") { dialog, _ ->
                 val frontText = frontEditText.text.toString()
                 val backText = backEditText.text.toString()
-                viewModel.addFlashcard(userId, frontText = frontText, backText = backText)
+                viewModel.addFlashcard(userId, frontText, backText)
+                dialog.dismiss()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
     }
 
     private fun editIndexCard(indexCard: IndexCard) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_card, null)
-        val frontEditText = dialogView.findViewById<EditText>(R.id.frontEditText)
-        val backEditText = dialogView.findViewById<EditText>(R.id.backEditText)
-
-        if (indexCard.isFlipped) {
-            // Bearbeitungsmodus für die Rückseite
-            frontEditText.visibility = View.GONE
-            backEditText.setText(indexCard.backText)
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_card, null)
+        val editText = if (indexCard.isFlipped) {
+            view.findViewById<EditText>(R.id.backEditText).apply {
+                setText(indexCard.backText)
+            }
         } else {
-            // Bearbeitungsmodus für die Vorderseite
-            backEditText.visibility = View.GONE
-            frontEditText.setText(indexCard.frontText)
+            view.findViewById<EditText>(R.id.frontEditText).apply {
+                setText(indexCard.frontText)
+            }
         }
 
-        AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .setPositiveButton("Save") { _, _ ->
-                val newFrontText = if (!indexCard.isFlipped) frontEditText.text.toString() else indexCard.frontText
-                val newBackText = if (indexCard.isFlipped) backEditText.text.toString() else indexCard.backText
-                viewModel.updateFlashcard(userId, indexCard.id!!, newFrontText, newBackText)
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(view)
+            .setPositiveButton("Save") { dialog, _ ->
+                val newText = editText.text.toString()
+                if (indexCard.isFlipped) {
+                    viewModel.updateFlashcard(userId, indexCard.id!!, indexCard.frontText, newText)
+                } else {
+                    viewModel.updateFlashcard(userId, indexCard.id!!, newText, indexCard.backText)
+                }
+                dialog.dismiss()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
-    }
-
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
