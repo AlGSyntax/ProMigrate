@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
-import com.example.promigrate.R
 import com.example.promigrate.adapter.VocabularyLearningAdapter
 import com.example.promigrate.data.model.IndexCard
+import com.example.promigrate.databinding.DialogAddCardBinding
+import com.example.promigrate.databinding.DialogEditCardBinding
 import com.example.promigrate.databinding.FragmentVocabularyLearningBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +29,6 @@ class VocabularyLearningFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentVocabularyLearningBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -63,9 +62,9 @@ class VocabularyLearningFragment : Fragment() {
     }
 
     private fun addNewIndexCard() {
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_card, null)
-        val frontEditText = view.findViewById<EditText>(R.id.frontEditText)
-        val backEditText = view.findViewById<EditText>(R.id.backEditText)
+        val dialogBinding = DialogAddCardBinding.inflate(layoutInflater)
+        val frontEditText = dialogBinding.frontEditText
+        val backEditText = dialogBinding.backEditText
 
         MaterialAlertDialogBuilder(requireContext())
             .setView(view)
@@ -80,19 +79,20 @@ class VocabularyLearningFragment : Fragment() {
     }
 
     private fun editIndexCard(indexCard: IndexCard) {
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_card, null)
+        val binding = DialogEditCardBinding.inflate(LayoutInflater.from(context))
+
         val editText = if (indexCard.isFlipped) {
-            view.findViewById<EditText>(R.id.backEditText).apply {
+            binding.backEditText.apply {
                 setText(indexCard.backText)
             }
         } else {
-            view.findViewById<EditText>(R.id.frontEditText).apply {
+            binding.frontEditText.apply {
                 setText(indexCard.frontText)
             }
         }
 
         MaterialAlertDialogBuilder(requireContext())
-            .setView(view)
+            .setView(binding.root)
             .setPositiveButton("Save") { dialog, _ ->
                 val newText = editText.text.toString()
                 if (indexCard.isFlipped) {
@@ -105,4 +105,5 @@ class VocabularyLearningFragment : Fragment() {
             .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
 }
