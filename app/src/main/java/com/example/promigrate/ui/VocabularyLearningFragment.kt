@@ -79,26 +79,31 @@ class VocabularyLearningFragment : Fragment() {
 
     private fun editIndexCard(indexCard: IndexCard) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_card, null)
-        val frontEditText = dialogView.findViewById<EditText>(R.id.frontEditText).apply {
-            setText(indexCard.frontText)
-        }
-        val backEditText = dialogView.findViewById<EditText>(R.id.backEditText).apply {
-            setText(indexCard.backText)
+        val frontEditText = dialogView.findViewById<EditText>(R.id.frontEditText)
+        val backEditText = dialogView.findViewById<EditText>(R.id.backEditText)
+
+        if (indexCard.isFlipped) {
+            // Bearbeitungsmodus für die Rückseite
+            frontEditText.visibility = View.GONE
+            backEditText.setText(indexCard.backText)
+        } else {
+            // Bearbeitungsmodus für die Vorderseite
+            backEditText.visibility = View.GONE
+            frontEditText.setText(indexCard.frontText)
         }
 
         AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setPositiveButton("Save") { _, _ ->
-                val newFrontText = frontEditText.text.toString()
-                val newBackText = backEditText.text.toString()
-                indexCard.id?.let {
-                    viewModel.updateFlashcard(userId,
-                        it, newFrontText, newBackText)
-                }
+                val newFrontText = if (!indexCard.isFlipped) frontEditText.text.toString() else indexCard.frontText
+                val newBackText = if (indexCard.isFlipped) backEditText.text.toString() else indexCard.backText
+                viewModel.updateFlashcard(userId, indexCard.id!!, newFrontText, newBackText)
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

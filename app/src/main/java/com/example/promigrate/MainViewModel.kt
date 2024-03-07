@@ -894,14 +894,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun addFlashcard(userId: String, frontText: String, backText: String) {
         val newCard = IndexCard(frontText = frontText, backText = backText)
-        FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").add(newCard)
+        val docRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").document()
+        newCard.id = docRef.id  // Setze die Firestore-ID als die ID der Karte
+        docRef.set(newCard)
     }
 
-    fun updateFlashcard(userId: String, cardId: String, frontText: String, backText: String) {
+
+    fun updateFlashcard(userId: String, cardId: String, frontText: String?, backText: String?) {
         val cardRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").document(cardId)
-        val updateMap = mapOf("frontText" to frontText, "backText" to backText)
+        val updateMap = mutableMapOf<String, Any>()
+        frontText?.let { updateMap["frontText"] = it }
+        backText?.let { updateMap["backText"] = it }
+
         cardRef.update(updateMap)
     }
+
 
     fun getFlashcards(userId: String): LiveData<List<IndexCard>> {
         val liveData = MutableLiveData<List<IndexCard>>()
