@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
+import com.example.promigrate.R
 import com.example.promigrate.adapter.VocabularyLearningAdapter
 import com.example.promigrate.data.model.IndexCard
 import com.example.promigrate.databinding.DialogAddCardBinding
@@ -68,13 +69,14 @@ class VocabularyLearningFragment : Fragment() {
 
         MaterialAlertDialogBuilder(requireContext())
             .setView(view)
-            .setPositiveButton("Add") { dialog, _ ->
+            .setTitle(R.string.addflashcard)
+            .setPositiveButton(R.string.save) { dialog, _ ->
                 val frontText = frontEditText.text.toString()
                 val backText = backEditText.text.toString()
                 viewModel.addFlashcard(userId, frontText, backText)
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .show()
     }
 
@@ -91,9 +93,10 @@ class VocabularyLearningFragment : Fragment() {
             }
         }
 
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(),R.style.CustomAlertDialog)
+            .setTitle(R.string.editflashcard)
             .setView(binding.root)
-            .setPositiveButton("Save") { dialog, _ ->
+            .setPositiveButton(R.string.save) { dialog, _ ->
                 val newText = editText.text.toString()
                 if (indexCard.isFlipped) {
                     viewModel.updateFlashcard(userId, indexCard.id!!, indexCard.frontText, newText)
@@ -102,7 +105,7 @@ class VocabularyLearningFragment : Fragment() {
                 }
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .show()
     }
 

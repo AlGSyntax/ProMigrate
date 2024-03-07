@@ -9,5 +9,8 @@
         android:id="@+id/editTextToDoAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/add_todo_hint" />
+        android:hint="@string/add_todo_hint"
+        android:textStyle="bold"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:textColor="@color/textcolor"/>
 </LinearLayout>

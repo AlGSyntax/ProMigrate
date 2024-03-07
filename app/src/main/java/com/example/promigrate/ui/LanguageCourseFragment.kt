@@ -28,7 +28,7 @@ class LanguageCourseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        languageCourseAdapter = LanguageCourseAdapter { _, _ -> }
+
         binding.rvLanguageCourses.apply {
             adapter = languageCourseAdapter
             layoutManager = LinearLayoutManager(context)

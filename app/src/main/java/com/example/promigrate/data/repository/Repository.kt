@@ -20,12 +20,13 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.util.Locale
 
-const val TAG = "Repository"
 class Repository (context: Context, val firebaseAuth: FirebaseAuth,
                   private val firestore: FirebaseFirestore,private val apiService: ProMigrateAPIService,
                   private val deepLApiService: DeepLApiService,private val langLearnAPIService: ProMigrateLangLearnAPIService
 ) {
 
+
+    private val TAG = "Repository"
     private val storage = FirebaseStorage.getInstance()
 
     private val sharedPreferences: SharedPreferences =

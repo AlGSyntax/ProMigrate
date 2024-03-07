@@ -15,6 +15,8 @@ import com.example.promigrate.databinding.FragmentJobOffersSelectionBinding
 
 class JobOffersSelectionFragment : Fragment() {
 
+    private val TAG = "JobOffersSelectionFragment"
+
     private lateinit var binding: FragmentJobOffersSelectionBinding
     private val viewModel: MainViewModel by activityViewModels()
     private var selectedJobs = mutableMapOf<String, String>()

@@ -9,13 +9,20 @@
         android:id="@+id/frontEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Front text"/>
+        android:hint="@string/fronttext"
+        android:textStyle="bold"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:textColor="@color/textcolor"
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/backEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Back text"
+        android:hint="@string/backtext"
+        android:textStyle="bold"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:textColor="@color/textcolor"
         android:layout_marginTop="16dp"/>
 
 </LinearLayout>

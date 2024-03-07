@@ -110,6 +110,10 @@
     <string name="languagecourse">Sprachkurse Für dich</string>
     <string name="findlangcourse">Finde Sprachkurse in deiner Nähe</string>
     <string name ="vocabularylearning">Vokabeln lernen</string>
+    <string name="fronttext">Vorderer Text</string>
+    <string name="backtext">Hinterer Text</string>
+    <string name="addflashcard">Füge deine personalisierte Flashcard hinzu</string>
+    <string name="editflashcard">Bearbeite deine personalisierte Flashcard</string>
 
 
 

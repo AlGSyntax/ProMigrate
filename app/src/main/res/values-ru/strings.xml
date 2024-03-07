@@ -110,6 +110,10 @@
     <string name="languagecourse">Языковые курсы для вас</string>
     <string name="findlangcourse">Найти языковой курс</string>
     <string name="vocabularylearning">Изучение словарного запаса</string>
+    <string name="fronttext">Передний текст</string>
+    <string name="backtext">Текст назад</string>
+    <string name="addflashcard">Добавьте вашу персонализированную карточку памяти</string>
+    <string name="editflashcard">Измените вашу персонализированную карточку памяти</string>
 
 
 

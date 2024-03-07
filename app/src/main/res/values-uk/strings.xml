@@ -108,5 +108,9 @@
     <string name="languagecourse">Мовні курси для вас</string>
     <string name="findlangcourse">Знайдіть мовний курс!</string>
     <string name="vocabularylearning">Вивчення словникового запасу</string>
+    <string name="fronttext">Фронтальний текст</string>
+    <string name="backtext">Зворотний текст</string>
+    <string name="addflashcard">Додайте свою персоналізовану картку пам\'яті</string>
+    <string name="editflashcard">Редагуйте свою персоналізовану картку пам\'яті</string>
 
 </resources>

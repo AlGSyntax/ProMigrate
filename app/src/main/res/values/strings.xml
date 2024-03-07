@@ -109,6 +109,13 @@
     <string name="languagecourse">Language courses for You</string>
     <string name="findlangcourse">Find a language course!</string>
     <string name="vocabularylearning">Vocabulary Learning</string>
+    <string name="fronttext">Front text</string>
+    <string name="backtext">Back text</string>
+    <string name="addflashcard">Add your personalized Flashcard</string>
+    <string name="editflashcard">Change the desired side of your Flashcard</string>
+    <string name="begin">Start: %1$s</string>
+    <string name="end">End: %1$s</string>
+    <string name="bemerkung">bemerkung: %1$s</string>
 
 
 </resources>

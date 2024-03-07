@@ -108,6 +108,10 @@
     <string name="languagecourse">あなたのための言語コース</string>
     <string name="findlangcourse">あなたの近くの言語コースを見つける</string>
     <string name="vocabularylearning">単語学習</string>
+    <string name="fronttext">フロントテキスト</string>
+    <string name="backtext">バックテキスト</string>
+    <string name="addflashcard">あなたのカスタマイズされたフラッシュカードを追加する</string>
+    <string name="editflashcard">あなたのカスタマイズされたフラッシュカードを編集する</string>
 
 
 

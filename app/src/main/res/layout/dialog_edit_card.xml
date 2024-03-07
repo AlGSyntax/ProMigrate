@@ -8,10 +8,16 @@
     <EditText
         android:id="@+id/frontEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:textColor="@color/textcolor"/>
     <EditText
         android:id="@+id/backEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:fontFamily="@font/quicksandvariablefontwght"
+        android:textColor="@color/textcolor" />
 
 </LinearLayout>

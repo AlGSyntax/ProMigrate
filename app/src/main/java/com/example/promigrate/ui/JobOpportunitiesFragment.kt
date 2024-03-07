@@ -17,6 +17,8 @@ import com.example.promigrate.databinding.FragmentJobOportunitiesBinding
 
 class JobOpportunitiesFragment : Fragment() {
 
+    private val TAG = "JobOpportunitiesFragment"
+
     private lateinit var binding: FragmentJobOportunitiesBinding
     private val viewModel: MainViewModel by activityViewModels()
 

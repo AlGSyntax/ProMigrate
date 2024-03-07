@@ -22,9 +22,11 @@ import com.example.promigrate.databinding.AdditionalContactInfoBinding
 import com.example.promigrate.databinding.FragmentCreateYourProfileBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-const val TAG = "CreateYourProfileFragment"
+
 
 class CreateYourProfileFragment : Fragment() {
+
+    private val TAG = "CreateYourProfileFragment"
 
     private lateinit var binding: FragmentCreateYourProfileBinding
     private val viewModel: MainViewModel by activityViewModels()

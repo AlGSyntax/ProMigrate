@@ -34,7 +34,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
-const val TAG = "MainViewModel"
+
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository = Repository.getInstance(
@@ -44,7 +44,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     )
 
-
+    private val TAG = "MainViewModel"
 
     private val _localeList = MutableLiveData<LocaleListCompat>()
     val localeList: LiveData<LocaleListCompat> = _localeList
@@ -655,173 +655,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
-    fun deleteJobSelection(jobTitle: String) {
-        val currentProfile = _userProfileData.value ?: return // Beendet die Methode, falls kein Profil vorhanden ist.
-        val updatedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
-
-        updatedJobs.remove(jobTitle) // Entfernt den Eintrag sicher aus der Map.
-
-        currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
-        _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
-    }
-
-
-
-
-
-    fun translateJobDetails(
-        jobDetails: JobDetailsResponse,
-        onComplete: (JobDetailsResponse) -> Unit
-    ) {
-        val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
-        if (currentLanguageCode == "de") {
-            onComplete(jobDetails)
-            return
-        }
-
-        viewModelScope.launch {
-            try {
-                val translatedArbeitgeber = repository.translateText(
-                    jobDetails.arbeitgeber ?: "",
-                    currentLanguageCode
-                )?.text ?: jobDetails.arbeitgeber
-                val translatedStellenbeschreibung = repository.translateText(
-                    jobDetails.stellenbeschreibung ?: "",
-                    currentLanguageCode
-                )?.text ?: jobDetails.stellenbeschreibung
-                val translatedBranche =
-                    repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.branche
-                val translatedAngebotsart = repository.translateText(
-                    jobDetails.angebotsart ?: "",
-                    currentLanguageCode
-                )?.text ?: jobDetails.angebotsart
-                val translatedTitel =
-                    repository.translateText(jobDetails.titel ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.titel
-                val translatedBeruf =
-                    repository.translateText(jobDetails.beruf ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.beruf
-                val translatedVerguetung =
-                    repository.translateText(jobDetails.verguetung ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.verguetung
-
-
-                val translatedArbeitszeitmodelle = jobDetails.arbeitszeitmodelle?.map { model ->
-                    repository.translateText(model, currentLanguageCode)?.text ?: model
-                } ?: listOf()
-
-                // Übersetzung der Arbeitsorte, wenn nötig
-                val translatedArbeitsorte = jobDetails.arbeitsorte?.map { ort ->
-                    ort.copy(
-                        ort = repository.translateText(ort.ort ?: "", currentLanguageCode)?.text
-                            ?: ort.ort
-                    )
-                }
-
-                // Erstelle ein neues JobDetailsResponse-Objekt mit den übersetzten Werten
-                val translatedJobDetails = jobDetails.copy(
-                    arbeitgeber = translatedArbeitgeber,
-                    stellenbeschreibung = translatedStellenbeschreibung,
-                    branche = translatedBranche,
-                    angebotsart = translatedAngebotsart,
-                    titel = translatedTitel,
-                    beruf = translatedBeruf,
-                    arbeitszeitmodelle = translatedArbeitszeitmodelle,
-                    arbeitsorte = translatedArbeitsorte,
-                    verguetung = translatedVerguetung,
-                )
-
-                onComplete(translatedJobDetails)
-            } catch (e: Exception) {
-                Log.e("translateJobDetails", "Fehler bei der Übersetzung der Jobdetails", e)
-                onComplete(jobDetails) // Gebe die ursprünglichen Jobdetails zurück, falls ein Fehler auftritt
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-    fun fetchJobDetails(encodedHashID: String) {
-        viewModelScope.launch {
-            try {
-                val result = repository.getJobDetails(encodedHashID)
-                _jobDetails.value = result
-            } catch (e: Exception) {
-                // Du könntest auch eine spezifischere Fehlerbehandlung hier einbauen
-                _jobDetails.value = Result.failure(e)
-            }
-        }
-    }
-    fun fetchBildungsangebote(systematiken: String, orte: String, sprachniveau: String, beginntermine: Int) {
-        viewModelScope.launch {
-            val response = repository.getBildungsangebote(systematiken, orte, sprachniveau, beginntermine)
-            if (response.isSuccess) {
-                _bildungsangebote.postValue(response.getOrNull() ?: listOf())
-            } else {
-                _bildungsangebote.postValue(listOf())
-                Log.e(TAG, "Fehler beim Abrufen der Bildungsangebote: ${response.exceptionOrNull()?.message}")
-            }
-        }
-    }
-
-
-    fun translateBildungsangebote(
-        bildungsangebote: List<TerminResponse>,
-        onComplete: (List<TerminResponse>) -> Unit
-    ) {
-        val currentLanguageCode = _selectedLanguageCode.value ?: "DE"
-        if (currentLanguageCode == "DE") {
-            onComplete(bildungsangebote)
-            return
-        }
-
-        viewModelScope.launch {
-            val translatedBildungsangebote = bildungsangebote.map { angebot ->
-                try {
-                    // Annahme: repository.translateText übersetzt den Titel basierend auf dem gegebenen Sprachcode
-                    val result = repository.translateText(angebot.angebot?.titel ?: "", currentLanguageCode)
-                    val translatedTitle = result?.text ?: angebot.angebot?.titel // Fallback auf den Originaltitel
-                    angebot.copy(angebot = angebot.angebot?.copy(titel = translatedTitle))
-                } catch (e: Exception) {
-                    Log.e("translateBildungsangebote", "Fehler bei der Übersetzung von ${angebot.angebot?.titel}", e)
-                    angebot // Fallback auf das Originalangebot im Fehlerfall
-                }
-            }
-            onComplete(translatedBildungsangebote)
-        }
-    }
-
-
-    fun updateProfileImage(uri: Uri) {
-        viewModelScope.launch {
-            try {
-                val userId = auth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
-                val firebaseStorage = Firebase.storage
-                val firebaseFirestore = Firebase.firestore
-
-                val imageRef = firebaseStorage.reference.child("images/$userId/profilePicture")
-                // Direktes Hochladen des Bildes ohne Zuweisung zu einer Variable
-                imageRef.putFile(uri).await()
-                val imageUrl = imageRef.downloadUrl.await().toString()
-                firebaseFirestore.collection("user").document(userId)
-                    .update("profilePicture", imageUrl).await()
-                Log.d("MainViewModel", "Profilbild erfolgreich aktualisiert: $imageUrl")
-            } catch (e: Exception) {
-                Log.e("MainViewModel", "Fehler beim Aktualisieren des Profilbildes", e)
-            }
-        }
-    }
-
-
     fun updateToDoItemForJob(userId: String, rawJobId: String, todoId: String, isCompleted: Boolean, text: String) {
         val jobId = sanitizeJobId(rawJobId)
         val userDocRef = FirebaseFirestore.getInstance().collection("user").document(userId)
@@ -920,6 +753,173 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
+
+    fun deleteJobSelection(jobTitle: String) {
+        val currentProfile = _userProfileData.value ?: return // Beendet die Methode, falls kein Profil vorhanden ist.
+        val updatedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+
+        updatedJobs.remove(jobTitle) // Entfernt den Eintrag sicher aus der Map.
+
+        currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
+        _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
+    }
+
+
+
+
+
+
+    fun fetchJobDetails(encodedHashID: String) {
+        viewModelScope.launch {
+            try {
+                val result = repository.getJobDetails(encodedHashID)
+                _jobDetails.value = result
+            } catch (e: Exception) {
+                // Du könntest auch eine spezifischere Fehlerbehandlung hier einbauen
+                _jobDetails.value = Result.failure(e)
+            }
+        }
+    }
+
+
+    fun translateJobDetails(
+        jobDetails: JobDetailsResponse,
+        onComplete: (JobDetailsResponse) -> Unit
+    ) {
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
+        if (currentLanguageCode == "de") {
+            onComplete(jobDetails)
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val translatedArbeitgeber = repository.translateText(
+                    jobDetails.arbeitgeber ?: "",
+                    currentLanguageCode
+                )?.text ?: jobDetails.arbeitgeber
+                val translatedStellenbeschreibung = repository.translateText(
+                    jobDetails.stellenbeschreibung ?: "",
+                    currentLanguageCode
+                )?.text ?: jobDetails.stellenbeschreibung
+                val translatedBranche =
+                    repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.branche
+                val translatedAngebotsart = repository.translateText(
+                    jobDetails.angebotsart ?: "",
+                    currentLanguageCode
+                )?.text ?: jobDetails.angebotsart
+                val translatedTitel =
+                    repository.translateText(jobDetails.titel ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.titel
+                val translatedBeruf =
+                    repository.translateText(jobDetails.beruf ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.beruf
+                val translatedVerguetung =
+                    repository.translateText(jobDetails.verguetung ?: "", currentLanguageCode)?.text
+                        ?: jobDetails.verguetung
+
+
+                val translatedArbeitszeitmodelle = jobDetails.arbeitszeitmodelle?.map { model ->
+                    repository.translateText(model, currentLanguageCode)?.text ?: model
+                } ?: listOf()
+
+                // Übersetzung der Arbeitsorte, wenn nötig
+                val translatedArbeitsorte = jobDetails.arbeitsorte?.map { ort ->
+                    ort.copy(
+                        ort = repository.translateText(ort.ort ?: "", currentLanguageCode)?.text
+                            ?: ort.ort
+                    )
+                }
+
+                // Erstelle ein neues JobDetailsResponse-Objekt mit den übersetzten Werten
+                val translatedJobDetails = jobDetails.copy(
+                    arbeitgeber = translatedArbeitgeber,
+                    stellenbeschreibung = translatedStellenbeschreibung,
+                    branche = translatedBranche,
+                    angebotsart = translatedAngebotsart,
+                    titel = translatedTitel,
+                    beruf = translatedBeruf,
+                    arbeitszeitmodelle = translatedArbeitszeitmodelle,
+                    arbeitsorte = translatedArbeitsorte,
+                    verguetung = translatedVerguetung,
+                )
+
+                onComplete(translatedJobDetails)
+            } catch (e: Exception) {
+                Log.e("translateJobDetails", "Fehler bei der Übersetzung der Jobdetails", e)
+                onComplete(jobDetails) // Gebe die ursprünglichen Jobdetails zurück, falls ein Fehler auftritt
+            }
+        }
+    }
+
+
+
+    fun fetchBildungsangebote(systematiken: String, orte: String, sprachniveau: String, beginntermine: Int) {
+        viewModelScope.launch {
+            val response = repository.getBildungsangebote(systematiken, orte, sprachniveau, beginntermine)
+            if (response.isSuccess) {
+                _bildungsangebote.postValue(response.getOrNull() ?: listOf())
+            } else {
+                _bildungsangebote.postValue(listOf())
+                Log.e(TAG, "Fehler beim Abrufen der Bildungsangebote: ${response.exceptionOrNull()?.message}")
+            }
+        }
+    }
+
+
+    fun translateBildungsangebote(// Muss wahrscheinlich angepasst werden
+        bildungsangebote: List<TerminResponse>,
+        onComplete: (List<TerminResponse>) -> Unit
+    ) {
+        val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
+        if (currentLanguageCode == "de") {
+            onComplete(bildungsangebote)
+            return
+        }
+
+        viewModelScope.launch {
+            val translatedBildungsangebote = bildungsangebote.map { angebot ->
+                try {
+                    // Annahme: repository.translateText übersetzt den Titel basierend auf dem gegebenen Sprachcode
+                    val result = repository.translateText(angebot.angebot?.titel ?: "", currentLanguageCode)
+                    val translatedTitle = result?.text ?: angebot.angebot?.titel // Fallback auf den Originaltitel
+                    angebot.copy(angebot = angebot.angebot?.copy(titel = translatedTitle))
+                } catch (e: Exception) {
+                    Log.e("translateBildungsangebote", "Fehler bei der Übersetzung von ${angebot.angebot?.titel}", e)
+                    angebot // Fallback auf das Originalangebot im Fehlerfall
+                }
+            }
+            onComplete(translatedBildungsangebote)
+        }
+    }
+
+
+    fun updateProfileImage(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val userId = auth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                val firebaseStorage = Firebase.storage
+                val firebaseFirestore = Firebase.firestore
+
+                val imageRef = firebaseStorage.reference.child("images/$userId/profilePicture")
+                // Direktes Hochladen des Bildes ohne Zuweisung zu einer Variable
+                imageRef.putFile(uri).await()
+                val imageUrl = imageRef.downloadUrl.await().toString()
+                firebaseFirestore.collection("user").document(userId)
+                    .update("profilePicture", imageUrl).await()
+                Log.d("MainViewModel", "Profilbild erfolgreich aktualisiert: $imageUrl")
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Fehler beim Aktualisieren des Profilbildes", e)
+            }
+        }
+    }
+
+
+
+
+
+
     fun addFlashcard(userId: String, frontText: String, backText: String) {
         val newCard = IndexCard(frontText = frontText, backText = backText)
         val docRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").document()
@@ -952,30 +952,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         return liveData
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     fun logout() {

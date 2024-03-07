@@ -19,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class SettingsFragment : Fragment() {
 
+    private val TAG = "SettingsFragment"
+
     private lateinit var binding: FragmentSettingsBinding
     private val viewModel: MainViewModel by activityViewModels()
 

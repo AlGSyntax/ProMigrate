@@ -62,7 +62,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
     private fun editToDoItem(userId: String, jobId: String, todoId: String, currentText: String) {
         val editText = EditText(context).apply { setText(currentText) }
 
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(),R.style.CustomAlertDialog)
             .setTitle(getString(R.string.edit_todo_hint))
             .setView(editText)
             .setPositiveButton(getString(R.string.save)) { _, _ ->
@@ -75,7 +75,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
     private fun addToDoItem(userId: String, jobId: String) {
         val editText = EditText(context)
 
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(),R.style.CustomAlertDialog)
             .setTitle(getString(R.string.add_todo_hint))
             .setView(editText)
             .setPositiveButton(getString(R.string.save)) { _, _ ->

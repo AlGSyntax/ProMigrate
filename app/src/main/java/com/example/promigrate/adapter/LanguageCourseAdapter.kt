@@ -1,18 +1,23 @@
 package com.example.promigrate.adapter
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.promigrate.R
 import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.databinding.LanguageCourseItemBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class LanguageCourseAdapter(private val onItemChecked: (TerminResponse, Boolean) -> Unit) : ListAdapter<TerminResponse, LanguageCourseAdapter.LanguageCourseViewHolder>(DiffCallback) {
+class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.LanguageCourseViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageCourseViewHolder {
         val binding = LanguageCourseItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return LanguageCourseViewHolder(binding, onItemChecked)
+        return LanguageCourseViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: LanguageCourseViewHolder, position: Int) {
@@ -20,17 +25,29 @@ class LanguageCourseAdapter(private val onItemChecked: (TerminResponse, Boolean)
         holder.bind(kurs)
     }
 
-    class LanguageCourseViewHolder(val binding: LanguageCourseItemBinding, private val onItemChecked: (TerminResponse, Boolean) -> Unit) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(kurs: TerminResponse) {
-            binding.langcourseTextView.text = kurs.angebot?.titel // Stellen Sie sicher, dass kursTitel existiert in TerminResponse
-            binding.itemCheckbox.isChecked =
-                kurs.isChecked == true // Stellen Sie sicher, dass isChecked existiert in TerminResponse
+    class LanguageCourseViewHolder(
+        val binding: LanguageCourseItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-            // Setzen des ClickListeners
-            binding.itemCheckbox.setOnClickListener {
-                val currentChecked = binding.itemCheckbox.isChecked
-                kurs.isChecked = currentChecked
-                onItemChecked(kurs, currentChecked)
+        fun bind(kurs: TerminResponse) {
+            // Titel
+            binding.langcourseTextView.text = kurs.angebot?.titel
+
+            // Beginn und Ende
+            kurs.beginn?.let {
+                val beginnString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
+                binding.beginnTextView.text = itemView.context.getString(R.string.begin, beginnString)
+            }
+            kurs.ende?.let {
+                val endeString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
+                binding.endeTextView.text = itemView.context.getString(R.string.end, endeString)
+            }
+
+            // Bemerkung
+            kurs.angebot?.inhalt?.let { bemerkung ->
+                val formattedText =
+                    Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT)
+                binding.bemerkungTextView.text = formattedText
             }
         }
     }
