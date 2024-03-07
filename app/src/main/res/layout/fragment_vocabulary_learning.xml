@@ -15,7 +15,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/quicksandvariablefontwght"
-        android:text="@string/languagecourse"
+        android:text="@string/vocabularylearning"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="40sp"
@@ -26,27 +26,26 @@
 
     <ImageButton
         android:id="@+id/addFlashcardButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="348dp"
-        android:layout_marginTop="145dp"
-        android:layout_marginBottom="543dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/add_flashcard"
         android:src="@drawable/ic_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/tvLanguageCoursesForYou"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvLanguageCoursesForYou"
+        app:layout_constraintBottom_toTopOf="@id/cardView" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         app:cardCornerRadius="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/findLanguageCourseButton"
+        app:layout_constraintBottom_toTopOf="@id/findLanguageCourseButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addFlashcardButton">
@@ -55,45 +54,42 @@
             android:id="@+id/rvLanguageCourses"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </com.google.android.material.card.MaterialCardView>
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/findLanguageCourseButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="641dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/background"
         android:fontFamily="@font/quicksandvariablefontwght"
         android:text="@string/findlangcourse"
         android:textColor="@color/textcolor"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/white"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="2dp"
+        app:layout_constraintBottom_toTopOf="@id/backButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/backButton"
-        android:layout_width="370dp"
-        android:layout_height="17dp"
-        android:layout_margin="16dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="698dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/background"
+        android:fontFamily="@font/quicksandvariablefontwght"
         android:text="@string/back"
+        android:textColor="@color/textcolor"
+        android:textStyle="bold"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

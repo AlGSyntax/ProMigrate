@@ -108,6 +108,7 @@
     <string name="editbutton">By pressing this , you can customize your todo item</string>
     <string name="languagecourse">Language courses for You</string>
     <string name="findlangcourse">Find a language course!</string>
+    <string name="vocabularylearning">Vocabulary Learning</string>
 
 
 </resources>

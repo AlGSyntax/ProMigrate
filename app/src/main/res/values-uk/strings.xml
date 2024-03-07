@@ -107,5 +107,6 @@
     <string name="editbutton">редагувати</string>
     <string name="languagecourse">Мовні курси для вас</string>
     <string name="findlangcourse">Знайдіть мовний курс!</string>
+    <string name="vocabularylearning">Вивчення словникового запасу</string>
 
 </resources>
