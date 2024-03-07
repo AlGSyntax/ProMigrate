@@ -105,5 +105,7 @@
     <string name="confirmdeletion">Ви хочете видалити цю пропозицію про роботу?\n</string>
     <string name="delete">видалити</string>
     <string name="editbutton">редагувати</string>
+    <string name="languagecourse">Мовні курси для вас</string>
+    <string name="findlangcourse">Знайдіть мовний курс!</string>
 
 </resources>

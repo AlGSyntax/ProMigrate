@@ -48,10 +48,14 @@
             android:layout_marginStart="332dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/ic_edit"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:minHeight="48dp"
+            android:minWidth="48dp"
+            android:padding="12dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

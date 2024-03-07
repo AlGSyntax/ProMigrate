@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.adapter.LanguageCourseAdapter
@@ -34,7 +35,8 @@ class LanguageCourseFragment : Fragment() {
 
         viewModel.fetchBildungsangebote(systematiken = "MC", orte = "Hannover_30159_9.741932_52.375891", sprachniveau = "MC01 2", beginntermine = 1)
         binding.backToDashboardButton.setOnClickListener {
-            requireActivity().onBackPressed()
+            val action = LanguageCourseFragmentDirections.actionLanguageCourseFragmentToVocabularyLearningFragment()
+            findNavController().navigate(action)
         }
 
     }
