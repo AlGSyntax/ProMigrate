@@ -1,6 +1,5 @@
 package com.example.promigrate.ui
 
-import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +20,7 @@ import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.databinding.AdditionalContactInfoBinding
 import com.example.promigrate.databinding.FragmentCreateYourProfileBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 const val TAG = "CreateYourProfileFragment"
 
@@ -120,7 +120,7 @@ class CreateYourProfileFragment : Fragment() {
             val lastNameEditText = dialogBinding.etLastName
             val phoneNumEditText = dialogBinding.etPhoneNumber
 
-            AlertDialog.Builder(it.context, R.style.CustomAlertDialog)
+            MaterialAlertDialogBuilder(it.context, R.style.CustomAlertDialog)
                 .setView(dialogView)
                 .setTitle(R.string.additional_contact_info)
                 .setPositiveButton(R.string.save) { _, _ ->
@@ -130,8 +130,6 @@ class CreateYourProfileFragment : Fragment() {
                     additionalFirstName = firstNameEditText.text.toString()
                     additionalLastName = lastNameEditText.text.toString()
                     additionalPhoneNum = phoneNumEditText.text.toString()
-
-
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
