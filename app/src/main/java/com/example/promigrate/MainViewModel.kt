@@ -1025,9 +1025,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .collection("relocationTodos")
             .document(todoId)
 
-        todoDocRef.update("text", newText)
-            .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
+        todoDocRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document.exists()) {
+                    todoDocRef.update("text", newText)
+                        .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
+                } else {
+                    val toDoData = mapOf(
+                        "erledigt" to false,
+                        "text" to newText
+                    )
+                    todoDocRef.set(toDoData)
+                        .addOnSuccessListener { Log.d(TAG, "ToDo item created successfully") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error creating ToDo item", e) }
+                }
+            } else {
+                Log.w(TAG, "Error getting document", task.exception)
+            }
+        }
     }
 
     fun deleteToDoItem(userId: String, todoId: String) {
@@ -1037,11 +1054,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .collection("relocationTodos")
             .document(todoId)
 
-        todoDocRef.delete()
-            .addOnSuccessListener { Log.d(TAG, "ToDo item deleted successfully") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting ToDo item", e) }
+        todoDocRef.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    todoDocRef.delete()
+                        .addOnSuccessListener { Log.d(TAG, "ToDo item deleted successfully") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error deleting ToDo item", e) }
+                } else {
+                    Log.w(TAG, "ToDo item does not exist")
+                }
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "Error getting ToDo item", e) }
     }
-
 
 
     fun logout() {

@@ -38,21 +38,22 @@ class RelocationAndIntegrationFragment : Fragment() {
         val userId = currentUser?.uid ?: ""
         toDoListAdapter = RelocationToDoListAdapter(
             onItemClicked = { /* Hier könnte eine Detailansicht für das To-Do-Item implementiert werden */ },
-            onItemEdit = { toDoItem -> editToDoItem(toDoItem, userId) },
-            onItemDelete = { toDoItem -> toDoItem.id.let { viewModel.deleteToDoItem(it, userId) } }
+            onItemEdit = { toDoItem -> editToDoItem(userId, toDoItem) },
+            onItemDelete = { toDoItem -> viewModel.deleteToDoItem(userId, toDoItem.id) }
         )
 
         binding.rvtodoreloc.layoutManager = LinearLayoutManager(context)
         binding.rvtodoreloc.adapter = toDoListAdapter
     }
 
-    private fun editToDoItem(toDoItem: ToDoItemRelocation, userId: String) {
-        val editText = EditText(context).apply { setText(toDoItem.text) }
+    private fun editToDoItem(userId: String, toDoItem: ToDoItemRelocation) {
+        val editText = EditText(context)
         MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
             .setTitle(getString(R.string.edit_todo_hint))
             .setView(editText)
             .setPositiveButton(getString(R.string.save)) { _, _ ->
-                toDoItem.id.let { viewModel.updateToDoTextRelocation(it, editText.text.toString(), userId) }
+                val todoId = toDoItem.id
+                viewModel.updateToDoTextRelocation(userId, todoId, editText.text.toString())
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
@@ -72,6 +73,8 @@ class RelocationAndIntegrationFragment : Fragment() {
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
