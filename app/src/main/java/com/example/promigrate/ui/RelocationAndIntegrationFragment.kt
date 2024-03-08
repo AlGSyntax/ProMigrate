@@ -37,7 +37,6 @@ class RelocationAndIntegrationFragment : Fragment() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser?.uid ?: ""
         toDoListAdapter = RelocationToDoListAdapter(
-            onItemClicked = { /* Hier könnte eine Detailansicht für das To-Do-Item implementiert werden */ },
             onItemEdit = { toDoItem -> editToDoItem(userId, toDoItem) },
             onItemDelete = { toDoItem -> viewModel.deleteToDoItem(userId, toDoItem.id) }
         )

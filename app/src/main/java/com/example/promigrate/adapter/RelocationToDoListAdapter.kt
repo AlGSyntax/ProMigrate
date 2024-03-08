@@ -9,14 +9,13 @@ import com.example.promigrate.data.model.ToDoItemRelocation
 import com.example.promigrate.databinding.RelocationTodoItemBinding
 
 class RelocationToDoListAdapter(
-    private val onItemClicked: (ToDoItemRelocation) -> Unit,
     private val onItemEdit: (ToDoItemRelocation) -> Unit,
     private val onItemDelete: (ToDoItemRelocation) -> Unit
 ) : ListAdapter<ToDoItemRelocation, RelocationToDoListAdapter.ToDoViewHolder>(ToDoDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
         val binding = RelocationTodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ToDoViewHolder(binding, onItemClicked, onItemEdit, onItemDelete)
+        return ToDoViewHolder(binding,  onItemEdit, onItemDelete)
     }
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
@@ -25,7 +24,6 @@ class RelocationToDoListAdapter(
 
     class ToDoViewHolder(
         private val binding: RelocationTodoItemBinding,
-        private val onItemClicked: (ToDoItemRelocation) -> Unit,
         private val onItemEdit: (ToDoItemRelocation) -> Unit,
         private val onItemDelete: (ToDoItemRelocation) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -38,8 +36,11 @@ class RelocationToDoListAdapter(
             binding.editTodoItemButton.setOnClickListener { onItemEdit(toDoItem) }
             binding.deleteTodoItemButton.setOnClickListener { onItemDelete(toDoItem) }
 
+            binding.todoItemCheckbox.isChecked = toDoItem.isCompleted
+
+
             // Set up the main item click listener
-            itemView.setOnClickListener { onItemClicked(toDoItem) }
+
         }
     }
 
