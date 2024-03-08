@@ -39,7 +39,7 @@
                 android:id="@+id/beginnTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
                 android:fontFamily="@font/quicksandvariablefontwght"
                 android:textColor="@color/textcolor"
                  />
@@ -48,7 +48,7 @@
                 android:id="@+id/endeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:paddingTop="4dp"
                 android:fontFamily="@font/quicksandvariablefontwght"
                 android:textColor="@color/textcolor"
                  />
@@ -57,7 +57,7 @@
                 android:id="@+id/contentTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:paddingTop="4dp"
                 android:fontFamily="@font/quicksandvariablefontwght"
                 android:textColor="@color/textcolor"
                  />

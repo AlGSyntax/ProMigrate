@@ -1,5 +1,6 @@
 package com.example.promigrate.adapter
 
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +50,10 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
                 binding.textViewWorkModel.text = binding.root.context.getString(R.string.work_model, it.arbeitszeitmodelle?.joinToString(", ") ?: "N/A")
                 binding.textViewContract.text = binding.root.context.getString(R.string.contract, getBefristung(details.befristung))
                 binding.textViewSalary.text = binding.root.context.getString(R.string.salary, it.verguetung ?: "N/A")
-                binding.textViewDescription.text = binding.root.context.getString(R.string.description, it.stellenbeschreibung ?: "N/A")
+                binding.textViewDescription.apply {
+                    text = binding.root.context.getString(R.string.description, it.stellenbeschreibung ?: "N/A")
+                    movementMethod = LinkMovementMethod.getInstance()
+                }
                 binding.textViewBranch.text = binding.root.context.getString(R.string.branch, it.branche ?: "N/A")
                 binding.textViewJob.text = binding.root.context.getString(R.string.job, it.beruf ?: "N/A")
                 binding.textViewEmployerAddress.text = binding.root.context.getString(R.string.employeraddress, it.arbeitgeberAdresse?.strasse ?: "N/A")
@@ -73,6 +77,9 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
                 else -> binding.root.context.getString(R.string.unknown)
             }
         }
+
+
+
 
 
     }

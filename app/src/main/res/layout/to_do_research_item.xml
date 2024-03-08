@@ -73,7 +73,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/quicksandvariablefontwght"
                 android:textColor="@color/textcolor"
-                android:paddingTop="4dp"/>
+                android:textColorLink="@color/textcolor"
+                 android:paddingTop="4dp"
+                android:autoLink="email"/>
 
             <!-- Add more TextViews for other details from JobDetailsResponse -->
             <TextView

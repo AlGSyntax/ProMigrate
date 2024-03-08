@@ -1,6 +1,14 @@
 package com.example.promigrate.adapter
 
+import android.content.Intent
+import android.net.Uri
 import android.text.Html
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,34 +33,50 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
         val kurs = getItem(position)
         holder.bind(kurs)
     }
-
-    class LanguageCourseViewHolder(
+    inner class LanguageCourseViewHolder(
         val binding: LanguageCourseItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(kurs: TerminResponse) {
             // Titel
-            binding.langcourseTextView.text = kurs.angebot?.titel
+            binding.langcourseTextView.text = kurs.angebot?.titel ?: "N/A"
 
             // Beginn und Ende
             kurs.beginn?.let {
                 val beginnString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
-                binding.beginnTextView.text = itemView.context.getString(R.string.begin, beginnString)
+                binding.beginnTextView.text = binding.root.context.getString(R.string.begin, beginnString)
+            } ?: run {
+                binding.beginnTextView.text = binding.root.context.getString(R.string.begin, "N/A")
             }
+
             kurs.ende?.let {
                 val endeString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
-                binding.endeTextView.text = itemView.context.getString(R.string.end, endeString)
+                binding.endeTextView.text = binding.root.context.getString(R.string.end, endeString)
+            } ?: run {
+                binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
             }
 
-            // Bemerkung
+            // Bemerkung mit möglichen Links
             kurs.angebot?.inhalt?.let { bemerkung ->
-                val formattedText =
-                    Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT)
-                binding.contentTextView.text = formattedText
-            }
+                val spannableContent = SpannableString(Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT))
+                Patterns.WEB_URL.matcher(spannableContent).apply {
+                    while (find()) {
+                        val url = spannableContent.substring(start(), end())
+                        spannableContent.setSpan(object : ClickableSpan() {
+                            override fun onClick(widget: View) = widget.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                            override fun updateDrawState(ds: TextPaint) {
+                                super.updateDrawState(ds)
+                                ds.isUnderlineText = true
+                            }
+                        }, start(), end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                }
+                binding.contentTextView.apply {
+                    text = spannableContent
+                    movementMethod = LinkMovementMethod.getInstance()
+                }
 
-            binding.expandableView.visibility = View.GONE
-
+            // Toggle-Verhalten für die Erweiterungsansicht
             binding.langcourseTextView.setOnClickListener {
                 binding.expandableView.visibility = if (binding.expandableView.visibility == View.VISIBLE) {
                     View.GONE
@@ -60,8 +84,12 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
                     View.VISIBLE
                 }
             }
+
+            }
         }
+
     }
+
 
     companion object DiffCallback : DiffUtil.ItemCallback<TerminResponse>() {
         override fun areItemsTheSame(oldItem: TerminResponse, newItem: TerminResponse): Boolean {
