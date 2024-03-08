@@ -15,6 +15,7 @@ import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.RegistrationStatus
 import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.data.model.ToDoItem
+import com.example.promigrate.data.model.ToDoItemRelocation
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPI
 import com.example.promigrate.data.remote.ProMigrateLangLearnAPI
@@ -32,8 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-
-
 
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -962,6 +961,87 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         return liveData
     }
+
+
+    fun updateToDoItem(userId: String, todoId: String, isCompleted: Boolean, text: String) {
+        val todoDocRef = FirebaseFirestore.getInstance()
+            .collection("user")
+            .document(userId)
+            .collection("relocationTodos")
+            .document(todoId)
+
+        val toDoData = mapOf(
+            "erledigt" to isCompleted,
+            "text" to text
+        )
+
+        todoDocRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document.exists()) {
+                    todoDocRef.update(toDoData)
+                        .addOnSuccessListener { Log.d(TAG, "ToDo item updated successfully") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo item", e) }
+                } else {
+                    todoDocRef.set(toDoData)
+                        .addOnSuccessListener { Log.d(TAG, "ToDo item created successfully") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error creating ToDo item", e) }
+                }
+            } else {
+                Log.w(TAG, "Error getting document", task.exception)
+            }
+        }
+    }
+
+
+
+    fun getToDoItems(userId: String): LiveData<List<ToDoItemRelocation>> {
+        val liveData = MutableLiveData<List<ToDoItemRelocation>>()
+
+        val todoDocRef = FirebaseFirestore.getInstance()
+            .collection("user")
+            .document(userId)
+            .collection("relocationTodos")
+
+        todoDocRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.e(TAG, "Error fetching todo items", e)
+                liveData.value = emptyList()
+            } else {
+                val toDoItems = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(ToDoItemRelocation::class.java)?.apply { id = doc.id }
+                } ?: emptyList()
+                liveData.value = toDoItems
+            }
+        }
+
+        return liveData
+    }
+
+    fun updateToDoTextRelocation(userId: String, todoId: String, newText: String) {
+        val todoDocRef = FirebaseFirestore.getInstance()
+            .collection("user")
+            .document(userId)
+            .collection("relocationTodos")
+            .document(todoId)
+
+        todoDocRef.update("text", newText)
+            .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
+    }
+
+    fun deleteToDoItem(userId: String, todoId: String) {
+        val todoDocRef = FirebaseFirestore.getInstance()
+            .collection("user")
+            .document(userId)
+            .collection("relocationTodos")
+            .document(todoId)
+
+        todoDocRef.delete()
+            .addOnSuccessListener { Log.d(TAG, "ToDo item deleted successfully") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting ToDo item", e) }
+    }
+
 
 
     fun logout() {

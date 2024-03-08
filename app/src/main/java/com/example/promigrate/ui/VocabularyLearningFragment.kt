@@ -68,7 +68,7 @@ class VocabularyLearningFragment : Fragment() {
         val backEditText = dialogBinding.backEditText
 
         MaterialAlertDialogBuilder(requireContext())
-            .setView(view)
+            .setView(dialogBinding.root.apply { parent?.let { (it as ViewGroup).removeView(this) } }) // Remove the view from its parent before setting it
             .setTitle(R.string.addflashcard)
             .setPositiveButton(R.string.save) { dialog, _ ->
                 val frontText = frontEditText.text.toString()
@@ -79,6 +79,7 @@ class VocabularyLearningFragment : Fragment() {
             .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
 
     private fun editIndexCard(indexCard: IndexCard) {
         val binding = DialogEditCardBinding.inflate(LayoutInflater.from(context))

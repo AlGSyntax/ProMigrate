@@ -105,6 +105,11 @@ class DashboardFragment : Fragment() {
                 findNavController().navigate(action)
             }
 
+        binding.cardBottomRight.setOnClickListener {
+            val action= DashboardFragmentDirections.actionDashboardFragmentToRelocationAndIntegrationFragment()
+            findNavController().navigate(action)
+        }
+
 
 
 

@@ -118,6 +118,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_vocabularyLearningFragment"
             app:destination="@id/vocabularyLearningFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_relocationAndIntegrationFragment"
+            app:destination="@id/relocationAndIntegrationFragment" />
     </fragment>
 
     <fragment
@@ -192,6 +195,27 @@
         <action
             android:id="@+id/action_languageCourseFragment_to_vocabularyLearningFragment"
             app:destination="@id/vocabularyLearningFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/relocationAndIntegrationFragment"
+        android:name="com.example.promigrate.ui.RelocationAndIntegrationFragment"
+        android:label="fragment_relocation_and_integration"
+        tools:layout="@layout/fragment_relocation_and_integration" >
+        <action
+            android:id="@+id/action_relocationAndIntegrationFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_relocationAndIntegrationFragment_to_integrationCourseFragment"
+            app:destination="@id/integrationCourseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/integrationCourseFragment"
+        android:name="com.example.promigrate.ui.IntegrationCourseFragment"
+        android:label="fragment_integration_course"
+        tools:layout="@layout/fragment_integration_course" >
+        <action
+            android:id="@+id/action_integrationCourseFragment_to_relocationAndIntegrationFragment"
+            app:destination="@id/relocationAndIntegrationFragment" />
     </fragment>
 
 

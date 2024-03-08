@@ -116,6 +116,9 @@
     <string name="begin">Start: %1$s</string>
     <string name="end">End: %1$s</string>
     <string name="bemerkung">bemerkung: %1$s</string>
+    <string name="relocandinte"><![CDATA[Relocation & Integration]]></string>
+    <string name="findintecourse">Find a Integration Course !</string>
+    <string name="integrationcourse">Integration Courses For You</string>
 
 
 </resources>
