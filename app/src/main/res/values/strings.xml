@@ -120,6 +120,11 @@
     <string name="integrationcourse">Integration Courses For You</string>
     <string name="faq">FAQ</string>
     <string name="givefeedback">Give me your feedback!</string>
+    <string name="feedback">You can give your feedback here !</string>
+    <string name="sendfeedback">Send Feedback</string>
+    <string name="design">Design:</string>
+    <string name="functionality">Functionality:</string>
+    <string name="generalopinion">General opinion</string>
 
 
 </resources>

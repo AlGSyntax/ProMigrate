@@ -69,9 +69,9 @@ class SettingsFragment : Fragment() {
             val feedbackBinding = FeedbackDialogLayoutBinding.inflate(layoutInflater)
 
             MaterialAlertDialogBuilder(it.context)
-                .setTitle("Feedback geben")
+                .setTitle(R.string.feedback)
                 .setView(feedbackBinding.root)
-                .setPositiveButton("Senden") { _, _ ->
+                .setPositiveButton(R.string.sendfeedback) { _, _ ->
                     val designFeedback = feedbackBinding.ratingBarDesign.rating
                     val functionalityFeedback = feedbackBinding.ratingBarFunctionality.rating
                     val generalOpinion = feedbackBinding.editTextGeneralOpinion.text.toString()
@@ -92,7 +92,7 @@ class SettingsFragment : Fragment() {
                     )
                     Toast.makeText(context, "Feedback wird gesendet", Toast.LENGTH_SHORT).show()
                 }
-                .setNegativeButton("Abbrechen", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show()
         }
 
