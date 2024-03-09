@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
@@ -1066,6 +1067,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             .addOnFailureListener { e -> Log.w(TAG, "Error getting ToDo item", e) }
     }
+
+
+    fun saveFeedback(userId: String, designRating: Float, functionalityRating: Float, overallRating: Float, generalFeedback: String) {
+        val feedbackDocRef = FirebaseFirestore.getInstance()
+            .collection("user")
+            .document(userId)
+            .collection("feedback")
+            .document()  // Erstellt ein neues Dokument mit einer einzigartigen ID
+
+        val feedbackData = mapOf(
+            "designRating" to designRating,
+            "functionalityRating" to functionalityRating,
+            "overallRating" to overallRating,
+            "generalFeedback" to generalFeedback,
+            "timestamp" to FieldValue.serverTimestamp()  // Speichert den Zeitstempel des Feedbacks
+        )
+
+        feedbackDocRef.set(feedbackData)
+            .addOnSuccessListener { Log.d(TAG, "Feedback successfully saved") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error saving feedback", e) }
+    }
+
 
 
     fun logout() {

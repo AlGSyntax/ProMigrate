@@ -112,6 +112,11 @@
     <string name="backtext">バックテキスト</string>
     <string name="addflashcard">あなたのカスタマイズされたフラッシュカードを追加する</string>
     <string name="editflashcard">あなたのカスタマイズされたフラッシュカードを編集する</string>
+    <string name="begin">開始：%1$s</string>
+    <string name="end">終了：%1$s</string>
+    <string name="relocandinte"><![CDATA[移動と統合]]></string>
+    <string name="findintecourse">統合コースを見つける！</string>
+    <string name="integrationcourse">あなたのための統合コース</string>
 
 
 

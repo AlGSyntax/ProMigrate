@@ -112,5 +112,11 @@
     <string name="backtext">Зворотний текст</string>
     <string name="addflashcard">Додайте свою персоналізовану картку пам\'яті</string>
     <string name="editflashcard">Редагуйте свою персоналізовану картку пам\'яті</string>
+    <string name="begin">Початок: %1$s</string>
+    <string name="end">Кінець: %1$s</string>
+    <string name="relocandinte">Переїзд та інтеграція</string>
+    <string name="findintecourse">Знайдіть курс інтеграції!</string>
+    <string name="integrationcourse">Курси інтеграції для вас</string>
+
 
 </resources>

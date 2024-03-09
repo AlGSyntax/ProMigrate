@@ -57,8 +57,8 @@ class IntegrationCourseAdapter : ListAdapter<TerminResponse, IntegrationCourseAd
             }
 
             // Bemerkung mit möglichen Links
-            kurs.angebot?.inhalt?.let { bemerkung ->
-                val spannableContent = SpannableString(Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT))
+            kurs.angebot?.inhalt?.let { description ->
+                val spannableContent = SpannableString(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT))
                 Patterns.WEB_URL.matcher(spannableContent).apply {
                     while (find()) {
                         val url = spannableContent.substring(start(), end())

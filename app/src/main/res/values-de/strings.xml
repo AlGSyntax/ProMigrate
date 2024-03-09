@@ -114,6 +114,12 @@
     <string name="backtext">Hinterer Text</string>
     <string name="addflashcard">Füge deine personalisierte Flashcard hinzu</string>
     <string name="editflashcard">Bearbeite deine personalisierte Flashcard</string>
+    <string name="begin">Start: %1$s</string>
+    <string name="end">Ende: %1$s</string>
+    <string name="relocandinte"><![CDATA[Umzug & Integration]]></string>
+    <string name="findintecourse">Finde Integrationskurse in deiner Nähe!</string>
+    <string name="integrationcourse">Integrationskurse für Dich</string>
+
 
 
 

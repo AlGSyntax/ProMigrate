@@ -113,6 +113,11 @@
     <string name="backtext">Texto de fondo</string>
     <string name="addflashcard">Añade tu tarjeta de memoria personalizada</string>
     <string name="editflashcard">Edita tu tarjeta de memoria personalizada</string>
+    <string name="begin">Comienzo: %1$s</string>
+    <string name="end">Fin: %1$s</string>
+    <string name="relocandinte"><![CDATA[Mudanza e Integración]]></string>
+    <string name="findintecourse">Encuentra un curso de integración!</string>
+    <string name="integrationcourse">Cursos de integración para ti</string>
 
 
 

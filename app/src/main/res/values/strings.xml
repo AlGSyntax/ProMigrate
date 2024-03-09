@@ -107,7 +107,7 @@
     <string name="delete">delete</string>
     <string name="editbutton">By pressing this , you can customize your todo item</string>
     <string name="languagecourse">Language courses for You</string>
-    <string name="findlangcourse">Find a language course!</string>
+    <string name="findlangcourse">Find a Language Course!</string>
     <string name="vocabularylearning">Vocabulary Learning</string>
     <string name="fronttext">Front text</string>
     <string name="backtext">Back text</string>
@@ -115,10 +115,11 @@
     <string name="editflashcard">Change the desired side of your Flashcard</string>
     <string name="begin">Start: %1$s</string>
     <string name="end">End: %1$s</string>
-    <string name="bemerkung">bemerkung: %1$s</string>
     <string name="relocandinte"><![CDATA[Relocation & Integration]]></string>
     <string name="findintecourse">Find a Integration Course !</string>
     <string name="integrationcourse">Integration Courses For You</string>
+    <string name="faq">FAQ</string>
+    <string name="givefeedback">Give me your feedback!</string>
 
 
 </resources>

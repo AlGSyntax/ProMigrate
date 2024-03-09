@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -13,7 +14,9 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
+import com.example.promigrate.databinding.FeedbackDialogLayoutBinding
 import com.example.promigrate.databinding.FragmentSettingsBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -59,6 +62,42 @@ class SettingsFragment : Fragment() {
                 binding.userGreeting.text = getString(R.string.hellouser, userName)
             }
         }
+
+
+
+        binding.gotofeedbackbtn.setOnClickListener {
+            val feedbackBinding = FeedbackDialogLayoutBinding.inflate(layoutInflater)
+
+            MaterialAlertDialogBuilder(it.context)
+                .setTitle("Feedback geben")
+                .setView(feedbackBinding.root)
+                .setPositiveButton("Senden") { _, _ ->
+                    val designFeedback = feedbackBinding.ratingBarDesign.rating
+                    val functionalityFeedback = feedbackBinding.ratingBarFunctionality.rating
+                    val generalOpinion = feedbackBinding.editTextGeneralOpinion.text.toString()
+
+                    // Calculate the overall rating as the average of design and functionality ratings
+                    val overallRating = (designFeedback + functionalityFeedback) / 2
+
+                    // Die UserID sollte dynamisch aus dem Benutzerkontext abgerufen werden
+                    val currentUser = FirebaseAuth.getInstance().currentUser
+                    val userId = currentUser?.uid ?: ""
+
+                    viewModel.saveFeedback(
+                        userId = userId,
+                        designRating = designFeedback,
+                        functionalityRating = functionalityFeedback,
+                        overallRating = overallRating,
+                        generalFeedback = generalOpinion
+                    )
+                    Toast.makeText(context, "Feedback wird gesendet", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Abbrechen", null)
+                .show()
+        }
+
+
+
 
 
         binding.backtodashbtn3.setOnClickListener{

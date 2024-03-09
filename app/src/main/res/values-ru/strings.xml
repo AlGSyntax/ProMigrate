@@ -114,6 +114,12 @@
     <string name="backtext">Текст назад</string>
     <string name="addflashcard">Добавьте вашу персонализированную карточку памяти</string>
     <string name="editflashcard">Измените вашу персонализированную карточку памяти</string>
+    <string name="begin">Начало: %1$s</string>
+    <string name="end">Конец: %1$s</string>
+    <string name="relocandinte"><![CDATA[Переезд и интеграция]]></string>
+    <string name="findintecourse">Найти курс интеграции!</string>
+    <string name="integrationcourse">Курсы интеграции для вас</string>
+
 
 
 
