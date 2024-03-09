@@ -47,7 +47,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
     }
 
     private fun deleteJobItemItem(jobId: String) {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(),R.style.CustomAlertDialog)
             .setMessage(getString(R.string.confirmdeletion))
             .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 // Benutzer bestätigt die Löschung, rufe die Löschmethode im ViewModel auf

@@ -117,6 +117,14 @@
     <string name="relocandinte"><![CDATA[移動と統合]]></string>
     <string name="findintecourse">統合コースを見つける！</string>
     <string name="integrationcourse">あなたのための統合コース</string>
+    <string name="faq">よくある質問</string>
+    <string name="givefeedback">フィードバックをください！</string>
+    <string name="feedback">ここでフィードバックを提供できます！</string>
+    <string name="sendfeedback">フィードバックを送信する</string>
+    <string name="design">デザイン：</string>
+    <string name="functionality">機能：</string>
+    <string name="generalopinion">一般的な意見</string>
+    <string name="feedbacksent">フィードバックが正常に送信されました</string>
 
 
 

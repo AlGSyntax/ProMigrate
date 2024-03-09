@@ -118,6 +118,14 @@
     <string name="relocandinte"><![CDATA[Mudanza e Integración]]></string>
     <string name="findintecourse">Encuentra un curso de integración!</string>
     <string name="integrationcourse">Cursos de integración para ti</string>
+    <string name="faq">FAQ</string>
+    <string name="givefeedback">¡Dame tu opinión!</string>
+    <string name="feedback">¡Aquí puedes dar tu opinión!</string>
+    <string name="sendfeedback">Enviar comentarios</string>
+    <string name="design">Diseño:</string>
+    <string name="functionality">Funcionalidad:</string>
+    <string name="generalopinion">Opinión general</string>
+    <string name="feedbacksent">Comentarios enviados con éxito</string>
 
 
 

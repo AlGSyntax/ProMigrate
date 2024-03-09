@@ -67,7 +67,7 @@ class VocabularyLearningFragment : Fragment() {
         val frontEditText = dialogBinding.frontEditText
         val backEditText = dialogBinding.backEditText
 
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(),R.style.CustomAlertDialog)
             .setView(dialogBinding.root.apply { parent?.let { (it as ViewGroup).removeView(this) } }) // Remove the view from its parent before setting it
             .setTitle(R.string.addflashcard)
             .setPositiveButton(R.string.save) { dialog, _ ->

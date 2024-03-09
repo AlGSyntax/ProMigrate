@@ -119,6 +119,14 @@
     <string name="relocandinte"><![CDATA[Переезд и интеграция]]></string>
     <string name="findintecourse">Найти курс интеграции!</string>
     <string name="integrationcourse">Курсы интеграции для вас</string>
+    <string name="faq">FAQ</string>
+    <string name="givefeedback">Дайте мне свой отзыв!</string>
+    <string name="feedback">Здесь вы можете оставить свой отзыв!</string>
+    <string name="sendfeedback">Отправить отзыв</string>
+    <string name="design">Дизайн:</string>
+    <string name="functionality">Функциональность:</string>
+    <string name="generalopinion">Общее мнение</string>
+    <string name="feedbacksent">Ваш отзыв успешно отправлен</string>
 
 
 

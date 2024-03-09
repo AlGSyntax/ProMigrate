@@ -119,6 +119,14 @@
     <string name="relocandinte"><![CDATA[Umzug & Integration]]></string>
     <string name="findintecourse">Finde Integrationskurse in deiner Nähe!</string>
     <string name="integrationcourse">Integrationskurse für Dich</string>
+    <string name="faq">FAQ</string>
+    <string name="givefeedback">Gib mir dein Feedback!</string>
+    <string name="feedback">Hier kannst du dein Feedback geben!</string>
+    <string name="sendfeedback">Feedback senden</string>
+    <string name="design">Design:</string>
+    <string name="functionality">Funktionalität:</string>
+    <string name="generalopinion">Allgemeine Meinung</string>
+    <string name="feedbacksent">Feedback erfolgreich gesendet</string>
 
 
 

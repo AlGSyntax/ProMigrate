@@ -117,6 +117,14 @@
     <string name="relocandinte">Переїзд та інтеграція</string>
     <string name="findintecourse">Знайдіть курс інтеграції!</string>
     <string name="integrationcourse">Курси інтеграції для вас</string>
+    <string name="faq">FAQ</string>
+    <string name="givefeedback">Дайте нам зворотний зв\'язок</string>
+    <string name="feedback">Зворотний зв\'язок</string>
+    <string name="sendfeedback">Надіслати зворотний зв\'язок</string>
+    <string name="design">Дизайн:</string>
+    <string name="functionality">Функціональність:</string>
+    <string name="generalopinion">Загальна думка</string>
+    <string name="feedbacksent">Ваш відгук успішно надіслано</string>
 
 
 </resources>

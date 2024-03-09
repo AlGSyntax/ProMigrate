@@ -125,6 +125,7 @@
     <string name="design">Design:</string>
     <string name="functionality">Functionality:</string>
     <string name="generalopinion">General opinion</string>
+    <string name="feedbacksent">Your feedback has been sent successfully</string>
 
 
 </resources>
