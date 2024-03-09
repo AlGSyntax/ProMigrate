@@ -126,6 +126,20 @@
     <string name="functionality">Functionality:</string>
     <string name="generalopinion">General opinion</string>
     <string name="feedbacksent">Your feedback has been sent successfully</string>
+    <string name="question1">1.What does this app do?</string>
+    <string name="answer1">1.The Project stemmed from a fervent desire to fill a gap in the current recruitment system.My role was comprehensive , initiating with the identification of this gap through market analysis and user research.</string>
+    <string name="question2">2.How to create an account?</string>
+    <string name="answer2">2.Creating an account in our app is a straightforward process. Here\'s how you can do it:\n\n1. Select Language: When you launch the app, you\'ll first be directed to the LanguageSelectionFragment where you can choose your preferred language.\n\n2. Login or Sign Up: Next, you\'ll be taken to the Login-Screen. If you already have an account that hasn\'t been set up yet, you can log in here. If you don\'t have an account, simply click on \"Don\'t have an Account? Click here to sign up!\" to proceed to the account creation process.\n\n3. Register: You\'ll then be directed to the Register-Screen. Here, you need to provide your email address, create a password, and confirm your password to ensure it\'s typed correctly.\n\n4. Create Your Profile: Once your account is set up, you\'ll be navigated to the CreateYourProfileFragment. This is where you can add personal details to complete your profile setup.\n\nBy following these steps, you\'ll have your account ready and set up in no time.</string>
+    <string name="question3">3."How can I get in touch with Costumer Support ? "</string>
+    <string name="answer3">3.Write an Email to : promigratecostumersupport@protonmail.com</string>
+    <string name="question4">4.Is the use of the app free of charge?</string>
+    <string name="answer4">4.Yes, the app itself is free to use. However, to access translations in languages other than German, you will need to obtain a DeepL API key. You can do this by creating a free account on DeepL. Once you have your API key, you will need to clone the corresponding public repository at https://github.com/SI-Classroom-Batch-012/batch12-abschlussprojekt-android-AlGSyntax. From there, you can build your own APK to utilize the app fully. This process enables you to enjoy the translation features in your preferred language at no extra cost.</string>
+    <string name="question5">5..How can I reset my password?</string>
+    <string name="answer5">5.If you need to reset your password, you can easily do so from the Login screen. There, you will find a clickable text that says: \'Forgotten your password? Please click here to reset your password.\' By clicking this link, you will be guided through the steps to securely reset your password.</string>
+    <string name="question6">6.Does the app support multiple languages?</string>
+    <string name="answer6">6.Yes, in addition to German and English, it also supports Spanish, Japanese, Ukrainian and Russian.</string>
+    <string name="question7">7.Where can I provide feedback on the app?</string>
+    <string name="answer7">7.Under the FAQ button that led you here, you will find a button that you can press to give feedback</string>
 
 
 </resources>

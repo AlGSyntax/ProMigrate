@@ -63,6 +63,10 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        binding.gotofaqbtn.setOnClickListener {
+            findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToFAQFragment())
+        }
+
 
 
         binding.gotofeedbackbtn.setOnClickListener {
