@@ -1,5 +1,6 @@
 package com.example.promigrate.adapter
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.text.Html
@@ -12,6 +13,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +38,8 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
     inner class LanguageCourseViewHolder(
         val binding: LanguageCourseItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+
+
 
         fun bind(kurs: TerminResponse) {
             // Titel
@@ -85,6 +89,17 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
                 }
             }
 
+            }
+
+            animateBounce()
+        }
+
+        private fun animateBounce() {
+            // Animiere die Y-Position des ViewHolders
+            ObjectAnimator.ofFloat(itemView, "translationY", -100f, 0f).apply {
+                duration = 1000  // Dauer der Animation in Millisekunden
+                interpolator = BounceInterpolator()  // Verwendet den BounceInterpolator für den Bounce-Effekt
+                start()
             }
         }
 
