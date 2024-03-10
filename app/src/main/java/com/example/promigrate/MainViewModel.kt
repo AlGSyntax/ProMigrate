@@ -89,6 +89,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _bildungsangebote = MutableLiveData<List<TerminResponse>>()
     val bildungsangebote: LiveData<List<TerminResponse>> = _bildungsangebote
 
+    private val _deleteAccountStatus = MutableLiveData<Boolean?>()
+    val deleteAccountStatus: LiveData<Boolean?>  = _deleteAccountStatus
+
 
 
 
@@ -1092,6 +1095,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      fun saveLanguageLevelToFirebase(languageLevel: String) {
         val userId = auth.currentUser?.uid ?: return
         repository.updateUserProfileField(userId, "languageLevel", languageLevel)
+    }
+
+    fun deleteAccount() {
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.delete()?.addOnCompleteListener { task ->
+            _deleteAccountStatus.value = task.isSuccessful
+        }
     }
 
 

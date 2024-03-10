@@ -141,6 +141,12 @@
     <string name="question7">7.Where can I provide feedback on the app?</string>
     <string name="answer7">7.Under the FAQ button that led you here, you will find a button that you can press to give feedback</string>
     <string name="adjustyourlanguagelevel">"Adjust your language level here "</string>
+    <string name="delete_account_question">How can I delete my account?</string>
+    <string name="delete_account">Delete account</string>
+    <string name="account_deletion_failed">Account deletion failed</string>
+    <string name="delete_account_confirmation">Please affirm your Account deletion</string>
+    <string name="delete_account_header">It is sad that you are leaving us </string>
+    <string name="account_deleted">Your account has been successfully deleted</string>
 
 
 </resources>

@@ -129,6 +129,19 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/question8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_account_question"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/answer7"
+                app:layout_constraintStart_toStartOf="parent" />
+
 
             <TextView
                 android:id="@+id/answer1"

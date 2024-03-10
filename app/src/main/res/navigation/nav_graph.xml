@@ -227,6 +227,9 @@
         <action
             android:id="@+id/action_FAQFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_FAQFragment_to_languageSelectionFragment"
+            app:destination="@id/languageSelectionFragment" />
     </fragment>
 
 

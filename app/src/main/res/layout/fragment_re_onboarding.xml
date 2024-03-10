@@ -25,7 +25,7 @@
 
     <AutoCompleteTextView
         android:id="@+id/arbeitsortEditText"
-        android:layout_width="379dp"
+        android:layout_width="343dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="288dp"
@@ -43,7 +43,7 @@
 
     <AutoCompleteTextView
         android:id="@+id/berufEditText"
-        android:layout_width="379dp"
+        android:layout_width="343dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="373dp"
@@ -61,7 +61,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitButton"
-        android:layout_width="411dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="482dp"
         android:layout_marginBottom="201dp"
