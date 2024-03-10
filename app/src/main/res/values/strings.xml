@@ -140,6 +140,7 @@
     <string name="answer6">6.Yes, in addition to German and English, it also supports Spanish, Japanese, Ukrainian and Russian.</string>
     <string name="question7">7.Where can I provide feedback on the app?</string>
     <string name="answer7">7.Under the FAQ button that led you here, you will find a button that you can press to give feedback</string>
+    <string name="adjustyourlanguagelevel">"Adjust your language level here "</string>
 
 
 </resources>

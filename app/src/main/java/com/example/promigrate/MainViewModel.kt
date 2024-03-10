@@ -1089,6 +1089,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .addOnFailureListener { e -> Log.w(TAG, "Error saving feedback", e) }
     }
 
+     fun saveLanguageLevelToFirebase(languageLevel: String) {
+        val userId = auth.currentUser?.uid ?: return
+        repository.updateUserProfileField(userId, "languageLevel", languageLevel)
+    }
+
+
 
 
     fun logout() {

@@ -7,8 +7,8 @@
 
     <ImageButton
         android:id="@+id/backtodashbtn3"
-        android:layout_width="47dp"
-        android:layout_height="38dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="329dp"
@@ -52,7 +52,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/gotofaqbtn"
-        android:layout_width="347dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="329dp"
         android:layout_marginBottom="354dp"
@@ -71,7 +71,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/gotofeedbackbtn"
-        android:layout_width="347dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="405dp"
         android:layout_marginBottom="278dp"
@@ -87,6 +87,50 @@
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/white"
         app:strokeWidth="2dp" />
+
+    <TextView
+        android:id="@+id/sliderHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/adjustyourlanguagelevel"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gotofeedbackbtn" />
+
+
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/languageLevelSlider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:stepSize="1"
+        android:valueFrom="0"
+        android:valueTo="5"
+        app:trackHeight="4dp"
+        app:thumbRadius="12dp"
+        app:trackColorActive="@color/titles"
+        app:trackColorInactive="@color/icons"
+        app:thumbColor="@color/textcolor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sliderHint" />
+
+    <TextView
+        android:id="@+id/languageLevelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/undefined"
+        app:layout_constraintEnd_toEndOf="@id/languageLevelSlider"
+        app:layout_constraintStart_toStartOf="@id/languageLevelSlider"
+        app:layout_constraintTop_toBottomOf="@id/languageLevelSlider"
+        app:layout_constraintVertical_bias="0.1" />
+
 
     <ImageButton
         android:id="@+id/logoutbtn"

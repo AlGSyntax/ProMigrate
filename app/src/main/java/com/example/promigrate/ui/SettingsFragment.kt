@@ -62,6 +62,20 @@ class SettingsFragment : Fragment() {
                 val userName = it.name ?: getString(R.string.unknownuser)
                 binding!!.userGreeting.text = getString(R.string.hellouser, userName)
             }
+            userProfile?.languageLevel?.let { languageLevel ->
+                // Setze den Slider auf den Wert, der dem Sprachniveau des Benutzers entspricht
+                val sliderValue = when (languageLevel) {
+                    getString(R.string.beginner) -> 1f
+                    getString(R.string.basic_knowledge) -> 2f
+                    getString(R.string.intermediate) -> 3f
+                    getString(R.string.independent) -> 4f
+                    getString(R.string.proficient) -> 5f
+                    getString(R.string.near_native) -> 6f
+                    else -> 0f // oder ein anderer Default-Wert
+                }
+                binding!!.languageLevelSlider.value = sliderValue
+                binding!!.languageLevelText.text = languageLevel
+            }
         }
 
         binding!!.gotofaqbtn.setOnClickListener {
@@ -100,6 +114,26 @@ class SettingsFragment : Fragment() {
                 .setNegativeButton(R.string.cancel, null)
                 .show()
         }
+
+
+        binding!!.languageLevelSlider.addOnChangeListener { _, value, _ ->
+
+            viewModel.saveLanguageLevelToFirebase(value.toString())
+            // Aktualisiere die TextView mit dem ausgewählten Sprachniveau
+            // Angenommen, du hast eine TextView mit der ID tvLanguageLevel
+            val languageLevel = when (value.toInt()) {
+                1 -> R.string.beginner
+                2 -> R.string.basic_knowledge
+                3 -> R.string.intermediate
+                4 -> R.string.independent
+                5 -> R.string.proficient
+                6 -> R.string.near_native
+                else -> R.string.undefined
+            }
+            binding!!.languageLevelText.text = getString(languageLevel)
+
+        }
+
 
 
 
