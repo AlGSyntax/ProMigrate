@@ -87,7 +87,7 @@
             app:argType="string[]"
             app:nullable="true" />
         <argument
-            android:name="selectedJobHashIds"
+            android:name="selectedJobRefNrs"
             android:defaultValue="@null"
             app:argType="string[]"
             app:nullable="true" />
@@ -103,7 +103,7 @@
                 android:name="selectedJobTitles"
                 app:argType="string[]" />
             <argument
-                android:name="selectedJobHashIds"
+                android:name="selectedJobRefNrs"
                 app:argType="string[]" />
             <argument
                 android:name="arbeitsort"
@@ -154,7 +154,7 @@
             android:name="selectedJobTitles"
             app:argType="string[]" />
         <argument
-            android:name="selectedJobHashIds"
+            android:name="selectedJobRefNrs"
             app:argType="string[]" />
         <argument
             android:name="arbeitsort"

@@ -30,9 +30,9 @@ class JobOffersSelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
 
-        val adapter = JobOffersSelectionAdapter { jobTitle, hashId, isChecked ->
+        val adapter = JobOffersSelectionAdapter { jobTitle, refNr, isChecked ->
             if (isChecked) {
-                selectedJobs[jobTitle] = hashId
+                selectedJobs[jobTitle] = refNr
             } else {
                 selectedJobs.remove(jobTitle)
             }

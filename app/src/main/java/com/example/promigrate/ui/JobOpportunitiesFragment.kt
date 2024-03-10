@@ -22,14 +22,14 @@ class JobOpportunitiesFragment : Fragment() {
     private lateinit var binding: FragmentJobOportunitiesBinding
     private val viewModel: MainViewModel by activityViewModels()
 
-    private var selectedJobHashIds = mutableMapOf<String, String>()
+    private var selectedJobRefNrs = mutableMapOf<String, String>()
 
 
-    private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, hashId, isChecked ->
+    private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, refNr, isChecked ->
         if (isChecked) {
-            selectedJobHashIds[jobTitle] = hashId
+            selectedJobRefNrs[jobTitle] = refNr
         } else {
-            selectedJobHashIds.remove(jobTitle)
+            selectedJobRefNrs.remove(jobTitle)
         }
     }
 
@@ -56,12 +56,12 @@ class JobOpportunitiesFragment : Fragment() {
 
             // Navigate to the DashboardFragment with the collected data
             val action = JobOpportunitiesFragmentDirections.actionJobOpportunitiesFragmentToDashboardFragment(
-                selectedJobTitles = selectedJobHashIds.keys.toTypedArray(),
-                selectedJobHashIds = selectedJobHashIds.values.toTypedArray(),
+                selectedJobTitles = selectedJobRefNrs.keys.toTypedArray(),
+                selectedJobRefNrs = selectedJobRefNrs.values.toTypedArray(),
                 arbeitsort = arbeitsort
             )
 
-            viewModel.updateSelectedJobsAndPersist(selectedJobHashIds)
+            viewModel.updateSelectedJobsAndPersist(selectedJobRefNrs)
 
             // Check if the current destination is not the dashboardFragment before navigating
             if (findNavController().currentDestination?.id != R.id.dashboardFragment) {

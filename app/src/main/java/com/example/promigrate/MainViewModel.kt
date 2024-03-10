@@ -603,18 +603,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             val translatedJobOffers = mutableListOf<Pair<String, String>>()
-            jobOffers.forEach { (jobTitle, hashId) ->
+            jobOffers.forEach { (jobTitle, refNr) ->
                 try {
                     val result = repository.translateText(jobTitle, currentLanguageCode)
                     val translatedTitle =
                         result?.text ?: jobTitle // Verwende den Originaltitel als Fallback
-                    translatedJobOffers.add(Pair(translatedTitle, hashId))
+                    translatedJobOffers.add(Pair(translatedTitle, refNr))
                 } catch (e: Exception) {
                     Log.e("translateJobOffers", "Fehler bei der Übersetzung von $jobTitle", e)
                     translatedJobOffers.add(
                         Pair(
                             jobTitle,
-                            hashId
+                            refNr
                         )
                     ) // Füge den Originaltitel im Fehlerfall hinzu
                 }

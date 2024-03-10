@@ -35,8 +35,8 @@ class DetailToDoJobResearchFragment : Fragment() {
         binding.rvJobs.layoutManager = LinearLayoutManager(context)
         binding.rvJobs.adapter = adapter
 
-        args.selectedJobHashIds.let { hashIds ->
-            adapter.submitList(args.selectedJobTitles.zip(hashIds))
+        args.selectedJobRefNrs.let { refNrs ->
+            adapter.submitList(args.selectedJobTitles.zip(refNrs))
         }
 
         viewModel.jobDetails.observe(viewLifecycleOwner) { result ->

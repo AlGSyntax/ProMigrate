@@ -22,14 +22,14 @@ class JobOpportunitiesAdapter(private val onItemChecked: (String, String, Boolea
 
     class JobViewHolder(val binding: JobOportunitiesItemBinding, private val onItemChecked: (String, String, Boolean) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobTitle: String, hashId: String, isChecked: Boolean) {
+        fun bind(jobTitle: String, refNr: String, isChecked: Boolean) {
             binding.jobTitleTextView.text = jobTitle
             binding.itemCheckbox.isChecked = isChecked
 
             // Setze einen neuen Click-Listener, der den aktuellen Zustand der Checkbox und die Hash-ID zurückgibt
             binding.itemCheckbox.setOnClickListener {
                 val currentChecked = binding.itemCheckbox.isChecked
-                onItemChecked(jobTitle, hashId, currentChecked)
+                onItemChecked(jobTitle, refNr, currentChecked)
             }
         }
     }

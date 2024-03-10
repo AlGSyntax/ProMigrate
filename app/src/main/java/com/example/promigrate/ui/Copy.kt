@@ -1,4 +1,285 @@
 /**
+ *        <TextView
+ *                 android:id="@+id/answer8"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question9"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer9"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question10"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer10"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question11"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer11"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question12"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer12"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question13"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer13"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question14"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer14"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question15"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer15"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question16"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer16"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question17"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer17"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/question18"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer18"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *
+ *             <TextView
+ *                 android:id="@+id/question19"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer19"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *
+ *             <TextView
+ *                 android:id="@+id/question20"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Frage 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ *
+ *             <TextView
+ *                 android:id="@+id/answer20"
+ *                 android:layout_width="wrap_content"
+ *                 android:layout_height="wrap_content"
+ *                 android:fontFamily="@font/quicksandvariablefontwght"
+ *                 android:padding="6dp"
+ *                 android:text="Antwort 1"
+ *                 android:textColor="@color/black"
+ *                 android:textSize="14sp"
+ *                 android:textStyle="bold" />
+ */
+
+
+
+/**
  *
  *package com.example.promigrate.data.remote
  *

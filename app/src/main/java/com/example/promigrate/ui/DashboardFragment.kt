@@ -42,25 +42,25 @@ class DashboardFragment : Fragment() {
             if (userProfile?.selectedJobs != null) {
                 // If userProfileData is loaded, use it
                 val jobTitlesArray = userProfile.selectedJobs!!.keys.toTypedArray()
-                val hashIdsArray = userProfile.selectedJobs!!.values.toTypedArray()
+                val refNrsArray = userProfile.selectedJobs!!.values.toTypedArray()
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
                 val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
                     selectedJobTitles = jobTitlesArray,
-                    selectedJobHashIds = hashIdsArray,
+                    selectedJobRefNrs = refNrsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)
             }else {
                 // Im 'else'-Teil: Verwende die Argumente aus den FragmentArgs
                 val selectedJobsArray = args.selectedJobTitles ?: arrayOf()
-                val hashIdsArray = args.selectedJobHashIds ?: arrayOf()
+                val refNrsArray = args.selectedJobRefNrs ?: arrayOf()
 
                 val arbeitsort = args.arbeitsort ?: ""
 
                 val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
                     selectedJobTitles = selectedJobsArray,
-                    selectedJobHashIds = hashIdsArray,
+                    selectedJobRefNrs = refNrsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)
@@ -73,25 +73,25 @@ class DashboardFragment : Fragment() {
             if (userProfile?.selectedJobs != null) {
                 // If userProfileData is loaded, use it
                 val jobTitlesArray = userProfile.selectedJobs!!.keys.toTypedArray()
-                val hashIdsArray = userProfile.selectedJobs!!.values.toTypedArray()
+                val refNrsArray = userProfile.selectedJobs!!.values.toTypedArray()
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
                 val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
                     selectedJobTitles = jobTitlesArray,
-                    selectedJobHashIds = hashIdsArray,
+                    selectedJobRefNrs = refNrsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)
             } else {
                 // Im 'else'-Teil: Verwende die Argumente aus den FragmentArgs
                 val selectedJobsArray = args.selectedJobTitles ?: arrayOf()
-                val hashIdsArray = args.selectedJobHashIds ?: arrayOf()
+                val refNrsArray = args.selectedJobRefNrs ?: arrayOf()
 
                 val arbeitsort = args.arbeitsort ?: ""
 
                 val action = DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobResearchFragment(
                     selectedJobTitles = selectedJobsArray,
-                    selectedJobHashIds = hashIdsArray,
+                    selectedJobRefNrs = refNrsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)

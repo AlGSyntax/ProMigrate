@@ -118,12 +118,12 @@ class LogInFragment : Fragment() {
             if (userProfile != null) {
                 // Wenn userProfileData geladen ist, extrahiere die Jobtitel und Hash-IDs
                 val jobTitlesArray = userProfile.selectedJobs?.keys?.toList()?.toTypedArray() ?: arrayOf()
-                val hashIdsArray = userProfile.selectedJobs?.values?.toList()?.toTypedArray() ?: arrayOf()
+                val refNrsArray = userProfile.selectedJobs?.values?.toList()?.toTypedArray() ?: arrayOf()
                 val arbeitsort = userProfile.desiredLocation ?: ""
 
                 val action = LogInFragmentDirections.actionLoginFragmentToDashboardFragment(
                     selectedJobTitles = jobTitlesArray,
-                    selectedJobHashIds = hashIdsArray,
+                    selectedJobRefNrs = refNrsArray,
                     arbeitsort = arbeitsort
                 )
                 findNavController().navigate(action)

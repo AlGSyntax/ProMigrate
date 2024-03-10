@@ -19,9 +19,9 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
 
     private var jobDetailsMap = mutableMapOf<String, JobDetailsResponse>()
 
-    fun setJobDetails(hashId: String, details: JobDetailsResponse) {
-        jobDetailsMap[hashId] = details
-        val position = currentList.indexOfFirst { it.second == hashId }
+    fun setJobDetails(refNr: String, details: JobDetailsResponse) {
+        jobDetailsMap[refNr] = details
+        val position = currentList.indexOfFirst { it.second == refNr }
         if (position != -1) {
             notifyItemChanged(position)
         }
