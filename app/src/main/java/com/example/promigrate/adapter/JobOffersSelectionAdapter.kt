@@ -1,7 +1,12 @@
 package com.example.promigrate.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.ScaleAnimation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,9 +25,27 @@ class JobOffersSelectionAdapter(private val onItemChecked: (String, String, Bool
         holder.bind(job) { isChecked ->
             onItemChecked(job.first, job.second, isChecked)
         }
+
+        setScaleAndFadeAnimation(holder.itemView)
+    }
+
+    private fun setScaleAndFadeAnimation(view: View) {
+        val scaleAnimation = ScaleAnimation(
+            0.2f, 1f, 0.2f, 1f,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
+        val fadeAnimation = AlphaAnimation(0.2f, 1.0f)
+        val animationSet = AnimationSet(true).apply {
+            addAnimation(scaleAnimation)
+            addAnimation(fadeAnimation)
+            duration = 700
+        }
+        view.startAnimation(animationSet)
     }
 
     class JobViewHolder(private val binding: JobItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(job: Pair<String, String>, onCheckedChanged: (Boolean) -> Unit) {
             binding.jobTitleTextView.text = job.first
             binding.itemCheckbox.setOnCheckedChangeListener(null)
@@ -43,4 +66,7 @@ class JobOffersSelectionAdapter(private val onItemChecked: (String, String, Bool
         }
     }
 }
+
+
+
 

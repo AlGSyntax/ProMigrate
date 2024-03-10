@@ -1,7 +1,12 @@
 package com.example.promigrate.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.ScaleAnimation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +23,23 @@ class JobOpportunitiesAdapter(private val onItemChecked: (String, String, Boolea
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val jobPair = getItem(position)
         holder.bind(jobPair.first, jobPair.second, holder.binding.itemCheckbox.isChecked)
+        setScaleAndFadeAnimation(holder.itemView)
+    }
+
+
+    private fun setScaleAndFadeAnimation(view: View) {
+        val scaleAnimation = ScaleAnimation(
+            0.2f, 1f, 0.2f, 1f,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
+        val fadeAnimation = AlphaAnimation(0.2f, 1.0f)
+        val animationSet = AnimationSet(true).apply {
+            addAnimation(scaleAnimation)
+            addAnimation(fadeAnimation)
+            duration = 700
+        }
+        view.startAnimation(animationSet)
     }
 
     class JobViewHolder(val binding: JobOportunitiesItemBinding, private val onItemChecked: (String, String, Boolean) -> Unit) :
