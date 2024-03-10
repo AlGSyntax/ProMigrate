@@ -28,7 +28,7 @@
         android:id="@+id/addtodoButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/outline_add_box_24"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
