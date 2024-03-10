@@ -17,12 +17,12 @@ import com.google.android.material.snackbar.Snackbar
 class RegisterFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
-    private lateinit var binding: FragmentRegisterBinding
+    private  var binding: FragmentRegisterBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:
     Bundle?): View {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
 
@@ -57,10 +57,10 @@ class RegisterFragment : Fragment() {
 
 
         viewModel.selectedLanguageCode.observe(viewLifecycleOwner) { selectedLanguageCode ->
-            binding.registerBTN.setOnClickListener {
-                val email = binding.emailEditText.text.toString()
-                val password = binding.passwordEditText.text.toString()
-                val confirmPassword = binding.confirmPasswordEditText.text.toString()
+            binding!!.registerBTN.setOnClickListener {
+                val email = binding!!.emailEditText.text.toString()
+                val password = binding!!.passwordEditText.text.toString()
+                val confirmPassword = binding!!.confirmPasswordEditText.text.toString()
 
                 // Überprüfung der Eingaben und Registrierung mit dem ausgewählten Sprachcode
                 if (isValidInput(email, password, confirmPassword)) {
@@ -73,25 +73,30 @@ class RegisterFragment : Fragment() {
 
     private fun isValidInput(email: String, password: String, confirmPassword: String): Boolean {
         // Reset errors
-        binding.emailTextInputLayout.error = null
-        binding.passwordTextInputLayout.error = null
-        binding.confirmPasswordTextInputLayout.error = null
+        binding!!.emailTextInputLayout.error = null
+        binding!!.passwordTextInputLayout.error = null
+        binding!!.confirmPasswordTextInputLayout.error = null
 
         return when {
             email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                binding.emailTextInputLayout.error = getString(R.string.invalid_email_error)
+                binding!!.emailTextInputLayout.error = getString(R.string.invalid_email_error)
                 false
             }
             password.isEmpty() || password.length < 8 -> {
-                binding.passwordTextInputLayout.error = getString(R.string.invalid_password_error)
+                binding!!.passwordTextInputLayout.error = getString(R.string.invalid_password_error)
                 false
             }
             confirmPassword != password -> {
-                binding.confirmPasswordTextInputLayout.error = getString(R.string.password_mismatch_error)
+                binding!!.confirmPasswordTextInputLayout.error = getString(R.string.password_mismatch_error)
                 false
             }
             else -> true
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
 

@@ -23,15 +23,16 @@ import java.util.UUID
 
 class DetailToDoJobApplicationFragment : Fragment() {
 
-    private lateinit var binding: FragmentDetailToDoJobApplicationBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private  var binding: FragmentDetailToDoJobApplicationBinding? = null
 
     private lateinit var adapter: DetailToDoJobApplicationAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDetailToDoJobApplicationBinding.inflate(inflater, container, false)
         initAdapter()
-        return binding.root
+        return binding!!.root
     }
 
 
@@ -95,8 +96,8 @@ class DetailToDoJobApplicationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvJobs.layoutManager = LinearLayoutManager(context)
-        binding.rvJobs.adapter = adapter
+        binding!!.rvJobs.layoutManager = LinearLayoutManager(context)
+        binding!!.rvJobs.adapter = adapter
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser?.uid ?: ""
@@ -125,11 +126,11 @@ class DetailToDoJobApplicationFragment : Fragment() {
         }
 
 
-        binding.restartOnboardingButton.setOnClickListener {
+        binding!!.restartOnboardingButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_viewPagerFragment)
         }
 
-        binding.backtodashbtn.setOnClickListener {
+        binding!!.backtodashbtn.setOnClickListener {
             if (findNavController().currentDestination?.id == R.id.detailToDoJobApplicationFragment) {
                 findNavController().navigate(R.id.action_detailToDoJobApplicationFragment_to_dashboardFragment)
             }
@@ -139,5 +140,10 @@ class DetailToDoJobApplicationFragment : Fragment() {
     private fun generateNewToDoId(): String {
         // Implementieren Sie eine Methode, um eine eindeutige ID zu generieren
         return UUID.randomUUID().toString()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

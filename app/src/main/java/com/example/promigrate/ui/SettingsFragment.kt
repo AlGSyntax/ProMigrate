@@ -24,12 +24,13 @@ class SettingsFragment : Fragment() {
 
     private val TAG = "SettingsFragment"
 
-    private lateinit var binding: FragmentSettingsBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private var binding: FragmentSettingsBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,14 +40,14 @@ class SettingsFragment : Fragment() {
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                Glide.with(this).load(uri).circleCrop().into(binding.profileImage)
+                Glide.with(this).load(uri).circleCrop().into(binding!!.profileImage)
                 viewModel.updateProfileImage(uri)
             } else {
                 Log.d(TAG, "No image selected")
             }
         }
 
-        binding.profileImage.setOnClickListener {
+        binding!!.profileImage.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
@@ -56,20 +57,20 @@ class SettingsFragment : Fragment() {
                 Glide.with(this)
                     .load(it.profileImageUrl)
                     .circleCrop()
-                    .into(binding.profileImage)
+                    .into(binding!!.profileImage)
 
                 val userName = it.name ?: getString(R.string.unknownuser)
-                binding.userGreeting.text = getString(R.string.hellouser, userName)
+                binding!!.userGreeting.text = getString(R.string.hellouser, userName)
             }
         }
 
-        binding.gotofaqbtn.setOnClickListener {
+        binding!!.gotofaqbtn.setOnClickListener {
             findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToFAQFragment())
         }
 
 
 
-        binding.gotofeedbackbtn.setOnClickListener {
+        binding!!.gotofeedbackbtn.setOnClickListener {
             val feedbackBinding = FeedbackDialogLayoutBinding.inflate(layoutInflater)
 
             MaterialAlertDialogBuilder(it.context,R.style.CustomAlertDialog)
@@ -104,12 +105,12 @@ class SettingsFragment : Fragment() {
 
 
 
-        binding.backtodashbtn3.setOnClickListener{
+        binding!!.backtodashbtn3.setOnClickListener{
             findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToDashboardFragment())
         }
 
 
-        binding.logoutbtn.setOnClickListener{
+        binding!!.logoutbtn.setOnClickListener{
             viewModel.logout()
             findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToLoginFragment())
         }
@@ -127,7 +128,7 @@ class SettingsFragment : Fragment() {
                         Glide.with(this)
                             .load(imageUrl)
                             .circleCrop()
-                            .into(binding.profileImage)
+                            .into(binding!!.profileImage)
                     } else {
                         R.drawable.elevationtodolistrelocation// passendes palceholder suchen
                     }
@@ -136,5 +137,10 @@ class SettingsFragment : Fragment() {
                 Log.e(TAG, "Fehler beim Laden des Profilbildes", it)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

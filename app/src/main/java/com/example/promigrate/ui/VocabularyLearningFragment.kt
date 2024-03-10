@@ -20,9 +20,11 @@ import com.google.firebase.auth.FirebaseAuth
 
 class VocabularyLearningFragment : Fragment() {
 
-    private lateinit var binding: FragmentVocabularyLearningBinding
-    private lateinit var adapter: VocabularyLearningAdapter
+
     private val viewModel: MainViewModel by activityViewModels()
+    private  var binding: FragmentVocabularyLearningBinding? = null
+    private lateinit var adapter: VocabularyLearningAdapter
+
     private val userId: String by lazy {
         val currentUser = FirebaseAuth.getInstance().currentUser
         currentUser?.uid ?: ""
@@ -30,7 +32,7 @@ class VocabularyLearningFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentVocabularyLearningBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,8 +42,8 @@ class VocabularyLearningFragment : Fragment() {
             editIndexCard(indexCard)
         }
 
-        binding.rvLanguageCourses.layoutManager = LinearLayoutManager(context)
-        binding.rvLanguageCourses.adapter = adapter
+        binding!!.rvLanguageCourses.layoutManager = LinearLayoutManager(context)
+        binding!!.rvLanguageCourses.adapter = adapter
 
 
 
@@ -49,15 +51,15 @@ class VocabularyLearningFragment : Fragment() {
             adapter.submitList(flashcards)
         }
 
-        binding.addFlashcardButton.setOnClickListener {
+        binding!!.addFlashcardButton.setOnClickListener {
             addNewIndexCard()
         }
 
-        binding.findLanguageCourseButton.setOnClickListener {
+        binding!!.findLanguageCourseButton.setOnClickListener {
             findNavController().navigate(VocabularyLearningFragmentDirections.actionVocabularyLearningFragmentToLanguageCourseFragment())
         }
 
-        binding.backButton.setOnClickListener {
+        binding!!.backButton.setOnClickListener {
             findNavController().navigate(VocabularyLearningFragmentDirections.actionVocabularyLearningFragmentToDashboardFragment())
         }
     }
@@ -108,6 +110,11 @@ class VocabularyLearningFragment : Fragment() {
             }
             .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             .show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
 }

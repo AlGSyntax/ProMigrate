@@ -17,8 +17,9 @@ class JobsForYouFragment : Fragment() {
 
     private val TAG = "JobsForYouFragment"
 
-    private lateinit var binding: FragmentJobsForYouBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private var binding: FragmentJobsForYouBinding? = null
     private var selectedJobs = mutableSetOf<String>()
 
     private val jobsAdapter = JobsAdapter { jobTitle, isChecked ->
@@ -35,16 +36,16 @@ class JobsForYouFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentJobsForYouBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.rvJobs.layoutManager = LinearLayoutManager(context)
-        binding.rvJobs.adapter = jobsAdapter
-        binding.saveandnextbtn.setOnClickListener {
+        binding!!.rvJobs.layoutManager = LinearLayoutManager(context)
+        binding!!.rvJobs.adapter = jobsAdapter
+        binding!!.saveandnextbtn.setOnClickListener {
 
                 val selectedJobsArray = selectedJobs.toTypedArray()
                 val arbeitsort = arguments?.getString("wo") ?: ""
@@ -74,5 +75,10 @@ class JobsForYouFragment : Fragment() {
                 Log.e(TAG, "Fehler beim Abrufen der Jobs.")
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

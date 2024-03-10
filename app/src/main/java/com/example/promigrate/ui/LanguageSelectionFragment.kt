@@ -18,7 +18,7 @@ import com.example.promigrate.databinding.FragmentLanguageSelectionBinding
 class LanguageSelectionFragment : Fragment() {
 
     private val  viewModel: MainViewModel by activityViewModels()
-    private lateinit var binding: FragmentLanguageSelectionBinding
+    private  var binding: FragmentLanguageSelectionBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -30,7 +30,7 @@ class LanguageSelectionFragment : Fragment() {
         setupConfirmButton()
         observeViewModel()
 
-        return binding.root
+        return binding!!.root
     }
 
     private fun observeViewModel() {
@@ -41,7 +41,7 @@ class LanguageSelectionFragment : Fragment() {
     }
 
     private fun setupLanguageSpinner() {
-        binding.spinnerLanguageSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding!!.spinnerLanguageSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 if (view is TextView) {
                     view.setTextColor(resources.getColor(R.color.white, null))
@@ -66,13 +66,16 @@ class LanguageSelectionFragment : Fragment() {
 
 
     private fun setupConfirmButton() {
-        binding.btnConfirmLanguage.setOnClickListener {
+        binding!!.btnConfirmLanguage.setOnClickListener {
             val action = LanguageSelectionFragmentDirections.actionLanguageSelectionFragmentToLoginFragment()
             findNavController().navigate(action)
         }
     }
 
-
+     override fun onDestroyView() {
+          super.onDestroyView()
+          binding = null
+     }
 
 
 

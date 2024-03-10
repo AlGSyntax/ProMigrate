@@ -20,8 +20,9 @@ import java.util.UUID
 
 class RelocationAndIntegrationFragment : Fragment() {
 
-    private lateinit var binding: FragmentRelocationAndIntegrationBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private var binding: FragmentRelocationAndIntegrationBinding? = null
     private lateinit var toDoListAdapter: RelocationToDoListAdapter
 
     override fun onCreateView(
@@ -30,7 +31,7 @@ class RelocationAndIntegrationFragment : Fragment() {
     ): View {
         binding = FragmentRelocationAndIntegrationBinding.inflate(inflater, container, false)
         initToDoListAdapter()
-        return binding.root
+        return binding!!.root
     }
 
     private fun initToDoListAdapter() {
@@ -41,8 +42,8 @@ class RelocationAndIntegrationFragment : Fragment() {
             onItemDelete = { toDoItem -> viewModel.deleteToDoItem(userId, toDoItem.id) }
         )
 
-        binding.rvtodoreloc.layoutManager = LinearLayoutManager(context)
-        binding.rvtodoreloc.adapter = toDoListAdapter
+        binding!!.rvtodoreloc.layoutManager = LinearLayoutManager(context)
+        binding!!.rvtodoreloc.adapter = toDoListAdapter
     }
 
     private fun editToDoItem(userId: String, toDoItem: ToDoItemRelocation) {
@@ -85,17 +86,22 @@ class RelocationAndIntegrationFragment : Fragment() {
             toDoListAdapter.submitList(toDoItems)
         }
 
-        binding.addtodoButton.setOnClickListener {
+        binding!!.addtodoButton.setOnClickListener {
             addToDoItem(userId)
         }
 
-        binding.findIntegrationCourseButton.setOnClickListener {
+        binding!!.findIntegrationCourseButton.setOnClickListener {
             findNavController().navigate(RelocationAndIntegrationFragmentDirections.actionRelocationAndIntegrationFragmentToIntegrationCourseFragment())
         }
 
-        binding.backButton.setOnClickListener {
+        binding!!.backButton.setOnClickListener {
             val action = RelocationAndIntegrationFragmentDirections.actionRelocationAndIntegrationFragmentToDashboardFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

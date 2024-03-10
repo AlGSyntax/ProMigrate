@@ -17,18 +17,19 @@ class JobOffersSelectionFragment : Fragment() {
 
     private val TAG = "JobOffersSelectionFragment"
 
-    private lateinit var binding: FragmentJobOffersSelectionBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private var binding: FragmentJobOffersSelectionBinding? = null
     private var selectedJobs = mutableMapOf<String, String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentJobOffersSelectionBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvJobs.layoutManager = LinearLayoutManager(context)
+        binding!!.rvJobs.layoutManager = LinearLayoutManager(context)
 
         val adapter = JobOffersSelectionAdapter { jobTitle, refNr, isChecked ->
             if (isChecked) {
@@ -38,7 +39,7 @@ class JobOffersSelectionFragment : Fragment() {
             }
         }
 
-        binding.rvJobs.adapter = adapter
+        binding!!.rvJobs.adapter = adapter
 
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             if (jobOffers != null) {
@@ -51,9 +52,14 @@ class JobOffersSelectionFragment : Fragment() {
         }
 
 
-        binding.backtodashbtn.setOnClickListener {
+        binding!!.backtodashbtn.setOnClickListener {
             viewModel.updateSelectedJobsAndPersist(selectedJobs)
             findNavController().navigateUp()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

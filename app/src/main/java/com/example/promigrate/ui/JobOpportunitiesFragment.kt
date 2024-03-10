@@ -19,8 +19,9 @@ class JobOpportunitiesFragment : Fragment() {
 
     private val TAG = "JobOpportunitiesFragment"
 
-    private lateinit var binding: FragmentJobOportunitiesBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private var binding: FragmentJobOportunitiesBinding? = null
 
     private var selectedJobRefNrs = mutableMapOf<String, String>()
 
@@ -38,7 +39,7 @@ class JobOpportunitiesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentJobOportunitiesBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,9 +47,9 @@ class JobOpportunitiesFragment : Fragment() {
 
 
 
-        binding.rvJobs.layoutManager = LinearLayoutManager(context)
-        binding.rvJobs.adapter = jobsAdapter
-        binding.finishbtn.setOnClickListener {
+        binding!!.rvJobs.layoutManager = LinearLayoutManager(context)
+        binding!!.rvJobs.adapter = jobsAdapter
+        binding!!.finishbtn.setOnClickListener {
             // Get the currently selected jobs from the ViewModel
             // Get the workplace from the fragment arguments
             val args = JobOpportunitiesFragmentArgs.fromBundle(requireArguments())
@@ -94,5 +95,10 @@ class JobOpportunitiesFragment : Fragment() {
 
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

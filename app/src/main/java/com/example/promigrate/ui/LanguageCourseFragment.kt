@@ -15,21 +15,23 @@ import com.example.promigrate.databinding.FragmentLanguageCourseBinding
 
 class LanguageCourseFragment : Fragment() {
 
-    private lateinit var binding: FragmentLanguageCourseBinding
+    private val viewModel: MainViewModel by activityViewModels()
+
+    private  var binding: FragmentLanguageCourseBinding? = null
 
     private lateinit var languageCourseAdapter: LanguageCourseAdapter
-    private val viewModel: MainViewModel by activityViewModels()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentLanguageCourseBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         languageCourseAdapter = LanguageCourseAdapter()
-        binding.rvLanguageCourses.apply {
+        binding!!.rvLanguageCourses.apply {
             adapter = languageCourseAdapter
             layoutManager = LinearLayoutManager(context)
         }
@@ -55,7 +57,7 @@ class LanguageCourseFragment : Fragment() {
 
 
 
-        binding.backToDashboardButton.setOnClickListener {
+        binding!!.backToDashboardButton.setOnClickListener {
             val action = LanguageCourseFragmentDirections.actionLanguageCourseFragmentToVocabularyLearningFragment()
             findNavController().navigate(action)
         }
@@ -180,6 +182,11 @@ class LanguageCourseFragment : Fragment() {
             getString(R.string.near_native) -> "MC01 6" // Konvertierung für C2.
             else -> "MC01 2" // Standard-/Fallback-Konvertierung.
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
 

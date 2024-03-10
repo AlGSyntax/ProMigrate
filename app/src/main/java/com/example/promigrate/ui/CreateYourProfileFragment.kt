@@ -28,8 +28,9 @@ class CreateYourProfileFragment : Fragment() {
 
     private val TAG = "CreateYourProfileFragment"
 
-    private lateinit var binding: FragmentCreateYourProfileBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private var binding: FragmentCreateYourProfileBinding? = null
 
     private var selectedImageUri: Uri? = null
     private var additionalStreet: String? = null
@@ -45,7 +46,7 @@ class CreateYourProfileFragment : Fragment() {
         Bundle?
     ): View {
         binding = FragmentCreateYourProfileBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class CreateYourProfileFragment : Fragment() {
                         Glide.with(context)
                             .load(uri)
                             .apply(RequestOptions.circleCropTransform())
-                            .into(binding.ivProfilePicture)
+                            .into(binding!!.ivProfilePicture)
                     }
                     Log.d(TAG, "Selected URI: $uri")
                 } else {
@@ -70,7 +71,7 @@ class CreateYourProfileFragment : Fragment() {
 
 
 
-        binding.ivProfilePicture.setOnClickListener {
+        binding!!.ivProfilePicture.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
@@ -84,7 +85,7 @@ class CreateYourProfileFragment : Fragment() {
                         android.R.layout.simple_dropdown_item_1line,
                         translatedBerufsfelder
                     )
-                    binding.autoCompleteTextView.setAdapter(adapter)
+                    binding!!.autoCompleteTextView.setAdapter(adapter)
                 }
             } else {
                 Log.e(TAG, "Fehler beim Abrufen der Berufsfelder.")
@@ -103,7 +104,7 @@ class CreateYourProfileFragment : Fragment() {
                         android.R.layout.simple_dropdown_item_1line,
                         translatedArbeitsorte
                     )
-                    binding.autoCompleteTextView2.setAdapter(adapter)
+                    binding!!.autoCompleteTextView2.setAdapter(adapter)
                 }
             } else {
                 Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte.")
@@ -112,7 +113,7 @@ class CreateYourProfileFragment : Fragment() {
         viewModel.fetchArbeitsorte()
 
 
-        binding.btnAddContact.setOnClickListener {
+        binding!!.btnAddContact.setOnClickListener {
             val dialogBinding = AdditionalContactInfoBinding.inflate(LayoutInflater.from(it.context))
             val dialogView = dialogBinding.root
             val streetEditText = dialogBinding.etStreet
@@ -137,14 +138,14 @@ class CreateYourProfileFragment : Fragment() {
                 .show()
         }
 
-        binding.btnSave.setOnClickListener {
-            val name = binding.etName.text.toString()
-            val age = binding.etAge.text.toString()
-            val fieldOfWork = binding.autoCompleteTextView.text.toString()
-            val isDataProtected = binding.cbDataProtection.isChecked
+        binding!!.btnSave.setOnClickListener {
+            val name = binding!!.etName.text.toString()
+            val age = binding!!.etAge.text.toString()
+            val fieldOfWork = binding!!.autoCompleteTextView.text.toString()
+            val isDataProtected = binding!!.cbDataProtection.isChecked
             // Erfasse den Wert des Sprachniveaus und den gewünschten Ort
-            val languageLevel = binding.languageLevelSlider.value.toString()
-            val desiredLocation = binding.autoCompleteTextView2.text.toString()
+            val languageLevel = binding!!.languageLevelSlider.value.toString()
+            val desiredLocation = binding!!.autoCompleteTextView2.text.toString()
 
             // Prüfe, ob alle notwendigen Informationen vorhanden sind
             val validationResponse = validateInput(
@@ -194,7 +195,7 @@ class CreateYourProfileFragment : Fragment() {
 
 //TODO: Material outline für Buttons
 
-        binding.languageLevelSlider.addOnChangeListener { _, value, _ ->
+        binding!!.languageLevelSlider.addOnChangeListener { _, value, _ ->
             // Aktualisiere die TextView mit dem ausgewählten Sprachniveau
             // Angenommen, du hast eine TextView mit der ID tvLanguageLevel
             val languageLevel = when (value.toInt()) {
@@ -206,7 +207,7 @@ class CreateYourProfileFragment : Fragment() {
                 6 -> R.string.near_native
                 else -> R.string.undefined
             }
-            binding.languageLevelText.text = getString(languageLevel)
+            binding!!.languageLevelText.text = getString(languageLevel)
         }
 
 
@@ -244,43 +245,47 @@ class CreateYourProfileFragment : Fragment() {
         }
 
         if (additionalFirstName.isNullOrEmpty()) {
-            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            binding!!.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptyfirstname))
         }
 
         if (additionalLastName.isNullOrEmpty()) {
-            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            binding!!.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptylastname))
         }
 
         if (additionalPhoneNum.isNullOrEmpty()) {
-            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            binding!!.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptyphonenumber))
         }
 
 
         if (additionalStreet.isNullOrEmpty()) {
-            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            binding!!.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.errorvoidaddress))
         }
 
         if (additionalBirthPlace.isNullOrEmpty()) {
-            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            binding!!.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptybirthplace))
         }
 
         if (additionalMaidenName.isNullOrEmpty()) {
-            binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
+            binding!!.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorError))
             return Pair(false, requireContext().getString(R.string.emptymaidenname))
         }
 
 
 
         // Wenn alle Prüfungen bestanden sind
-        binding.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background))
+        binding!!.btnAddContact.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background))
         return Pair(true, "")
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
 
 
 

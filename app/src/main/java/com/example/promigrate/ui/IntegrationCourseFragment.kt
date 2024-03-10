@@ -15,21 +15,23 @@ import com.example.promigrate.databinding.FragmentIntegrationCourseBinding
 
 class IntegrationCourseFragment : Fragment() {
 
-    private lateinit var binding: FragmentIntegrationCourseBinding
+    private val viewModel: MainViewModel by activityViewModels()
+
+    private  var binding: FragmentIntegrationCourseBinding? = null
 
     private lateinit var integrationCourseAdapter: IntegrationCourseAdapter
-    private val viewModel: MainViewModel by activityViewModels()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentIntegrationCourseBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
        integrationCourseAdapter = IntegrationCourseAdapter()
-        binding.rvIntegrationCourses.apply {
+        binding!!.rvIntegrationCourses.apply {
             adapter = integrationCourseAdapter
             layoutManager = LinearLayoutManager(context)
         }
@@ -55,7 +57,7 @@ class IntegrationCourseFragment : Fragment() {
 
 
 
-        binding.backButton.setOnClickListener {
+        binding!!.backButton.setOnClickListener {
             val action = IntegrationCourseFragmentDirections.actionIntegrationCourseFragmentToRelocationAndIntegrationFragment()
             findNavController().navigate(action)
         }
@@ -180,6 +182,11 @@ class IntegrationCourseFragment : Fragment() {
             getString(R.string.near_native) -> "MC01 6" // Konvertierung für C2.
             else -> "MC01 2" // Standard-/Fallback-Konvertierung.
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
 

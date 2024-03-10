@@ -14,11 +14,11 @@ import com.example.promigrate.databinding.FragmentReOnboardingBinding
 class ReOnboardingFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
-    private lateinit var binding : FragmentReOnboardingBinding
+    private  var binding : FragmentReOnboardingBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding= FragmentReOnboardingBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class ReOnboardingFragment : Fragment() {
                     android.R.layout.simple_dropdown_item_1line,
                     arbeitsorte
                 )
-                binding.arbeitsortEditText.setAdapter(adapter)
+                binding!!.arbeitsortEditText.setAdapter(adapter)
 
                 // Stelle sicher, dass der Adapter benachrichtigt wird, wenn sich die Daten ändern
                 adapter.notifyDataSetChanged()
@@ -41,7 +41,7 @@ class ReOnboardingFragment : Fragment() {
         }
 
 
-        binding.arbeitsortEditText.setOnItemClickListener { adapterView, _, position, _ ->
+        binding!!.arbeitsortEditText.setOnItemClickListener { adapterView, _, position, _ ->
             val selectedArbeitsort = adapterView.getItemAtPosition(position) as String
             viewModel.translateToGerman(selectedArbeitsort) { translatedArbeitsort ->
                 val berufsfeld = viewModel.userProfileData.value?.fieldOfWork ?: ""
@@ -64,7 +64,7 @@ class ReOnboardingFragment : Fragment() {
                         android.R.layout.simple_dropdown_item_1line,
                         translatedJobs
                     )
-                    binding.berufEditText.setAdapter(jobsAdapter)
+                    binding!!.berufEditText.setAdapter(jobsAdapter)
                 }
             } else {
                 Toast.makeText(context, "Keine Jobangebote gefunden", Toast.LENGTH_SHORT).show()
@@ -72,9 +72,9 @@ class ReOnboardingFragment : Fragment() {
         }
 
 
-        binding.submitButton.setOnClickListener {
-            val arbeitsort = binding.arbeitsortEditText.text.toString()
-            val beruf = binding.berufEditText.text.toString()
+        binding!!.submitButton.setOnClickListener {
+            val arbeitsort = binding!!.arbeitsortEditText.text.toString()
+            val beruf = binding!!.berufEditText.text.toString()
 
             if (arbeitsort.isNotBlank() && beruf.isNotBlank()) {
                 viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
@@ -91,5 +91,10 @@ class ReOnboardingFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

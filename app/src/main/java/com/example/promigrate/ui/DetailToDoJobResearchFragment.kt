@@ -16,13 +16,14 @@ import com.example.promigrate.databinding.FragmentDetailToDoJobResearchBinding
 
 class DetailToDoJobResearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentDetailToDoJobResearchBinding
+
     private val viewModel: MainViewModel by activityViewModels()
+    private  var binding: FragmentDetailToDoJobResearchBinding? = null
     private val args: DetailToDoJobResearchFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDetailToDoJobResearchBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,8 +33,8 @@ class DetailToDoJobResearchFragment : Fragment() {
             viewModel.fetchJobDetails(refnr)
         }
 
-        binding.rvJobs.layoutManager = LinearLayoutManager(context)
-        binding.rvJobs.adapter = adapter
+        binding!!.rvJobs.layoutManager = LinearLayoutManager(context)
+        binding!!.rvJobs.adapter = adapter
 
         args.selectedJobRefNrs.let { refNrs ->
             adapter.submitList(args.selectedJobTitles.zip(refNrs))
@@ -52,13 +53,18 @@ class DetailToDoJobResearchFragment : Fragment() {
         }
 
 
-        binding.backtodashbtn2.setOnClickListener {
+        binding!!.backtodashbtn2.setOnClickListener {
             findNavController().navigate(DetailToDoJobResearchFragmentDirections.actionDetailToDoJobResearchFragmentToDashboardFragment())
         }
     }
 
     companion object {
         private const val TAG = "DetailToDoJobResearchFragment"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }
 
