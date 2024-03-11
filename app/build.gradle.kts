@@ -25,6 +25,7 @@ android {
     val deepLApiKey = localProperties.getProperty("DeepLApiKey") ?: ""
 
 
+
     defaultConfig {
         buildConfigField("String", "DEEP_L_API_KEY", "\"$deepLApiKey\"")
         applicationId = "com.example.promigrate"

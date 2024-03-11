@@ -78,6 +78,7 @@ class ReOnboardingFragment : Fragment() {
 
             if (arbeitsort.isNotBlank() && beruf.isNotBlank()) {
                 viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
+                    viewModel.savedesiredLocationToFirebase(translatedArbeitsort)
                     viewModel.translateToGerman(beruf) { translatedBeruf ->
                         // Verwende die übersetzten Daten, um das ViewModel zu aktualisieren und zum nächsten Schritt zu navigieren.
                         (parentFragment as? ViewPagerFragment)?.let {

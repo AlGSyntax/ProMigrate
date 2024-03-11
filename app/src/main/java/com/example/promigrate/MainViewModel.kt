@@ -767,6 +767,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
     }
 
+    fun savedesiredLocationToFirebase(desiredLocation: String) {
+        val userId = auth.currentUser?.uid ?: return
+        repository.updateUserProfileField(userId, "desiredLocation", desiredLocation)
+    }
+
 
 
 
