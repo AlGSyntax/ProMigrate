@@ -126,6 +126,40 @@
     <string name="functionality">Funcionalidad:</string>
     <string name="generalopinion">Opinión general</string>
     <string name="feedbacksent">Comentarios enviados con éxito</string>
+    <string name="question1">1.¿Qué hace esta aplicación?</string>
+    <string name="answer1">1.El proyecto surgió de un ferviente deseo de llenar un vacío en el sistema de contratación actual.Mi papel fue integral , iniciando con la identificación de este vacío a través del análisis de mercado y la investigación de usuarios.</string>
+    <string name="question2">2.¿Cómo crear una cuenta?</string>
+    <string name="answer2">2.Crear una cuenta en nuestra aplicación es un proceso sencillo. Así es como puedes hacerlo:\n\n1. Selecciona el idioma: Cuando inicie la aplicación, primero se le dirigirá a LanguageSelectionFragment, donde podrá elegir su idioma preferido. Inicie sesión o regístrese: A continuación, accederá a la pantalla de inicio de sesión. Si ya tiene una cuenta que aún no se ha configurado, puede iniciar sesión aquí. Si no tiene una cuenta, simplemente haga clic en "¿No tiene una cuenta? Haga clic aquí para registrarse" para continuar con el proceso de creación de la cuenta. Regístrese: Accederá a la pantalla de registro. Aquí deberá introducir su dirección de correo electrónico, crear una contraseña y confirmarla para asegurarse de que la ha escrito correctamente. Cree su perfil: Una vez que haya configurado su cuenta, accederá a la sección Crear su perfil. Aquí es donde puede añadir detalles personales para completar la configuración de su perfil. Siguiendo estos pasos, tendrá su cuenta lista y configurada en muy poco tiempo.</string>
+    <string name="question3">3.¿Cómo puedo ponerme en contacto con el Servicio de Atención al Cliente?</string>
+    <string name="answer3">3.Escribe un correo electrónico a : promigratecostumersupport@protonmail.com</string>
+    <string name="question4">4.¿El uso de la app es gratuito?</string>
+    <string name="answer4">4.Sí, la aplicación es gratuita. Sin embargo, para acceder a las traducciones en otros idiomas distintos del alemán, deberá obtener una clave API en DeepL. Puedes hacerlo creando una cuenta gratuita en DeepL. Una vez que tengas tu clave API, tendrás que clonar el repositorio público correspondiente en https://github.com/SI-Classroom-Batch-012/batch12-abschlussprojekt-android-AlGSyntax. A partir de ahí, puedes crear tu propio APK para utilizar la aplicación al completo. Este proceso te permite disfrutar de las funciones de traducción en tu idioma preferido sin coste adicional. </string>
+    <string name="question5">5.¿Cómo puedo cambiar mi contraseña?</string>
+    <string name="answer5">5.Cambiar tu contraseña es un proceso sencillo. Así es como puedes hacerlo:\n\n1. Inicie sesión en su cuenta: Cuando inicie la aplicación, primero se le dirigirá a LanguageSelectionFragment, donde podrá elegir su idioma preferido. Inicie sesión o regístrese: A continuación, accederá a la pantalla de inicio de sesión. Si ya tiene una cuenta que aún no se ha configurado, puede iniciar sesión aquí. Si no tiene una cuenta, simplemente haga clic en "¿No tiene una cuenta? Haga clic aquí para registrarse" para continuar con el proceso de creación de la cuenta. Cambiar contraseña: Una vez que haya iniciado sesión, accederá a la pantalla de inicio. Aquí, haga clic en el icono de perfil en la esquina superior derecha de la pantalla. A continuación, seleccione "Cambiar contraseña" en el menú desplegable. Cambiar contraseña: Aquí deberá introducir su contraseña actual, seguida de su nueva contraseña y confirmarla para asegurarse de que la ha escrito correctamente. Una vez que haya completado estos pasos, su contraseña se habrá cambiado con éxito.</string>
+    <string name="question6">6.¿Admite la aplicación varios idiomas?</string>
+    <string name="answer6">6.Sí, además de alemán e inglés, también admite español, japonés, ucraniano y ruso.</string>
+    <string name="question7">7.¿Dónde puedo dar mi opinión sobre la aplicación?</string>
+    <string name="answer7">7.Debajo del botón de preguntas frecuentes que te ha llevado hasta aquí, encontrarás un botón que puedes pulsar para dar tu opinión</string>
+    <string name="adjustyourlanguagelevel">Ajusta tu nivel de idioma aquí</string>
+    <string name="delete_account_question">¿Cómo puedo eliminar mi cuenta?</string>
+    <string name="delete_account">Eliminar cuenta</string>
+    <string name="account_deletion_failed">Fallo en la eliminación de la cuenta</string>
+    <string name="delete_account_confirmation">Por favor, confirme la eliminación de su cuenta</string>
+    <string name="delete_account_header">Es triste que nos dejes </string>
+    <string name="account_deleted">Su cuenta se ha eliminado correctamente</string>
+    <string name="funded">El curso está patrocinado.</string>
+    <string name="not_funded">El curso no está financiado.</string>
+    <string name="typeofdegree">Tipo de titulación: %s</string>
+    <string name="targetgroup">Grupo objetivo: %s</string>
+    <string name="cost">Costes: %1$s</string>
+    <string name="anmeldeschluss_format">Fecha límite de solicitud: %1$s</string>
+
+
+
+
+
+
+
 
 
 

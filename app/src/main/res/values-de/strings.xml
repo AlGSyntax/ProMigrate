@@ -127,6 +127,43 @@
     <string name="functionality">Funktionalität:</string>
     <string name="generalopinion">Allgemeine Meinung</string>
     <string name="feedbacksent">Feedback erfolgreich gesendet</string>
+    <string name="question1">1.Was tut diese App?</string>
+    <string name="answer1">1.Das Projekt entstand aus dem sehnlichen Wunsch, eine Lücke im
+        derzeitigen Rekrutierungssystem zu schließen. Meine Rolle war umfassend, beginnend mit der
+        Identifizierung dieser Lücke durch Marktanalyse und Nutzerforschung.</string>
+    <string name="question2">2.Wie erstellt man ein Konto?</string>
+    <string name="answer2">2.Die Erstellung eines Kontos in unserer App ist ein unkomplizierter Prozess. So geht\'s:\n\n1. Wählen Sie die Sprache aus: Wenn Sie die App starten, werden Sie zunächst zum Sprachauswahl-Fragment weitergeleitet, wo Sie Ihre bevorzugte Sprache auswählen können.\n\n2. Anmelden oder Registrieren: Als nächstes werden Sie zum Anmeldebildschirm weitergeleitet. Wenn Sie bereits ein Konto haben, das noch nicht eingerichtet wurde, können Sie sich hier anmelden. Wenn Sie noch kein Konto haben, klicken Sie einfach auf \"Don\'t have an Account? Klicken Sie hier, um sich anzumelden!\", um mit dem Prozess der Kontoerstellung fortzufahren.\n\n3. Registrieren: Sie werden dann zum Registrierungsbildschirm weitergeleitet. Hier müssen Sie Ihre E-Mail-Adresse angeben, ein Passwort erstellen und Ihr Passwort bestätigen, um sicherzustellen, dass es richtig eingegeben wurde.\n\n4. Erstellen Sie Ihr Profil: Sobald Ihr Konto eingerichtet ist, werden Sie zum Abschnitt "Erstellen Sie Ihr Profil" weitergeleitet. Hier können Sie persönliche Daten hinzufügen, um die Einrichtung Ihres Profils zu vervollständigen.\n\nWenn Sie diese Schritte befolgen, haben Sie Ihr Konto in kürzester Zeit fertig und eingerichtet.</string>
+    <string name="question3">3.Wie kann Ich den Kunden Service kontaktieren?</string>
+    <string name="answer3">3.Schreibe eine Email an : promigratecostumersupport@protonmail.com</string>
+    <string name="question4">4.Ist die Nutzung der App kostenlos?</string>
+    <string name="answer4">4.Ja, die Nutzung der App selbst ist kostenlos. Um jedoch auf
+        Übersetzungen in anderen Sprachen als Deutsch zugreifen zu können, müssen Sie
+        einen DeepL API-Schlüssel erhalten. Dazu müssen Sie ein kostenloses Konto auf DeepL
+        einrichten. Sobald Sie Ihren API-Schlüssel haben, müssen Sie das entsprechende öffentliche
+        Repository auf https://github.com/SI-Classroom-Batch-012/batch12-abschlussprojekt-android-AlGSyntax klonen.
+        Von dort aus können Sie Ihre eigene APK erstellen, um die App vollständig zu nutzen. Dieser Prozess
+        ermöglicht es Ihnen, die Übersetzungsfunktionen in Ihrer bevorzugten Sprache ohne zusätzliche Kosten zu nutzen.</string>
+    <string name="question5">5.Wie kann ich mein Passwort zurücksetzen?</string>
+    <string name="answer5">5.Wenn Sie Ihr Passwort vergessen haben, können Sie es ganz einfach zurücksetzen. So geht\'s:\n\n1. Klicken Sie auf "Passwort vergessen? Bitte klicken Sie hier, um Ihr Passwort zurückzusetzen." auf dem Anmeldebildschirm.\n\n2. Geben Sie Ihre E-Mail-Adresse ein: Sie werden dann aufgefordert, Ihre E-Mail-Adresse einzugeben. Geben Sie die E-Mail-Adresse ein, die Sie bei der Registrierung verwendet haben.\n\n3. Überprüfen Sie Ihre E-Mails: Nachdem Sie Ihre E-Mail-Adresse eingegeben haben, wird eine E-Mail an die angegebene Adresse gesendet. Öffnen Sie Ihre E-Mails und suchen Sie nach einer E-Mail von ProMigrate. Klicken Sie auf den Link in der E-Mail, um Ihr Passwort zurückzusetzen.\n\n4. Passwort zurücksetzen: Sie werden dann aufgefordert, ein neues Passwort einzugeben. Geben Sie ein neues Passwort ein und bestätigen Sie es. Ihr Passwort wurde erfolgreich zurückgesetzt.</string>
+    <string name="question6">6.Unterstützt die App mehrere Sprachen?</string>
+    <string name="answer6">6.Ja, neben Deutsch und Englisch unterstützt Sie auch Spanisch, Japanisch, Ukrainisch und Russisch</string>
+    <string name="question7">7.Wo kann ich Feedback zur App geben?</string>
+    <string name="answer7">7.Unter der FAQ-Schaltfläche, die Sie hierher geführt hat, finden Sie eine Schaltfläche, die Sie drücken können, um Feedback zu geben</string>
+    <string name="adjustyourlanguagelevel">Passen Sie Ihr Sprachniveau hier an</string>
+    <string name="delete_account_question">Wie kann Ich mein Konto löschen?</string>
+    <string name="delete_account">Account löschen</string>
+    <string name="account_deletion_failed">Konto konnte nicht gelöscht werden</string>
+    <string name="delete_account_confirmation">Bitte bestätigen Sie ihre Löschung</string>
+    <string name="delete_account_header">Es ist traurig das du uns verlässt</string>
+    <string name="account_deleted">Konto erfolgreich gelöscht</string>
+    <string name="funded">Der Kurs wird gefördert.</string>
+    <string name="not_funded">Der Kurs wird nicht gefördert.</string>
+    <string name="typeofdegree">Art des Abschlusses: %s</string>
+    <string name="targetgroup">Zielgruppe: %s</string>
+    <string name="cost">Kosten: %s</string>
+    <string name="anmeldeschluss_format">Anmeldeschluss: %1$s</string>
+
+
 
 
 

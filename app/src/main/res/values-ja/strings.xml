@@ -125,6 +125,34 @@
     <string name="functionality">機能：</string>
     <string name="generalopinion">一般的な意見</string>
     <string name="feedbacksent">フィードバックが正常に送信されました</string>
+    <string name="question1">1.このアプリは何をするものですか</string>。
+    <string name="answer1">1.プロジェクトは、現在のリクルートシステムのギャップを埋めたいという熱烈な願望から始まりました。私の役割は包括的で、市場分析とユーザーリサーチを通じてこのギャップを特定することから始まりました。</string>
+    <string name="question2">2.アカウントを作成するには？</string>
+    <string name="answer2">2.私たちのアプリでアカウントを作成するのは簡単なプロセスです。手順は次のとおりです。言語を選択する： アプリを起動すると、まずLanguageSelectionFragmentが表示され、好きな言語を選択できます。ログインまたはサインアップ： 次に、ログイン画面が表示されます。すでにアカウントをお持ちで、まだ設定されていない場合は、ここでログインできます。アカウントを持ってない場合、「Don\'t have an Account? Click here to sign up!"をクリックして、アカウント作成に進んでください。登録する： すると、登録画面になります。ここで、メールアドレスを入力し、パスワードを作成し、パスワードが正しく入力されているか確認します。プロフィールを作成する： アカウントが設定されると、CreateYourProfileFragmentに移動します。ここで個人情報を追加して、プロフィールの設定を完了します。</string>
+    <string name="question3">3. "カスタマーサポートと連絡を取るにはどうしたらいいですか？「</string>
+    <string name="answer3">3.Eメールを書く : promigratecostumersupport@protonmail.com</string>
+    <string name="question4">4.アプリの利用は無料ですか？</string>
+    <string name="answer4">4.はい、アプリ自体は無料でご利用いただけます。ただし、ドイツ語以外の言語の翻訳にアクセスするには、DeepL APIキーを取得する必要があります。これは、DeepLで無料アカウントを作成することで可能です。APIキーを取得したら、https://github.com/SI-Classroom-Batch-012/batch12-abschlussprojekt-android-AlGSyntax、対応するパブリック・リポジトリをクローンする必要があります。そこから、アプリを完全に利用するために独自のAPKをビルドすることができます。このプロセスにより、追加費用なしでお好みの言語で翻訳機能を楽しむことができます。</string>
+    <string name="question5">5.How can I reset my password?</string>
+    <string name="answer5">5.パスワードのリセットが必要な場合は、ログイン画面から簡単に行えます。ログイン画面には、クリック可能なテキストがあります： \パスワードをお忘れですか？ここをクリックしてパスワードをリセットしてください。このリンクをクリックすると、パスワードを安全にリセットするための手順が表示されます。</string>
+    <string name="question6">6.アプリは多言語に対応していますか？</string>
+    <string name="answer6">6.はい、ドイツ語、英語に加えて、スペイン語、日本語、ウクライナ語、ロシア語にも対応しています</string>。
+    <string name="question7">7.アプリのフィードバックはどこでできますか？</string>
+    <string name="answer7">7.よくある質問のボタンの下に、フィードバックをするためのボタンがあります</string>。
+    <string name="adjustyourlanguagelevel">ここで言語レベルを調整してください</string>。
+    <string name="delete_account_question">アカウントを削除するには？</string>
+    <string name="delete_account">アカウントを削除します</string>。
+    <string name="account_deletion_failed">アカウントの削除に失敗しました</string>
+    <string name="delete_account_confirmation">アカウント削除を承認してください</string>。
+    <string name="delete_account_header">退会されるのは残念です</string>。
+    <string name="account_deleted">アカウントは正常に削除されました</string>。
+    <string name="funded">このコースはスポンサー付きです。</string>
+    <string name="not_funded">このコースは資金提供を受けていません。</string>
+    <string name="typeofdegree">学位の種類: %s</string>
+    <string name="targetgroup">対象グループ: %s</string>
+    <string name="cost">費用： 1$s</string>
+    <string name="anmeldeschluss_format">申込締切日：%1$s</string>
+
 
 
 
