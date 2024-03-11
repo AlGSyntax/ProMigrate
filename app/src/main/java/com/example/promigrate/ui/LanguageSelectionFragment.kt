@@ -58,6 +58,13 @@ class LanguageSelectionFragment : Fragment() {
     }
 
 
+    /**
+     * Wird aufgerufen, nachdem die Ansicht des Fragments und seine hierarchische Struktur instanziiert wurden.
+     * In dieser Methode werden weitere UI-Initialisierungen vorgenommen und Listener für UI-Elemente eingerichtet.
+     *
+     * @param view: Die erstellte Ansicht des Fragments.
+     * @param savedInstanceState: Ein Bundle, das den Zustand des Fragments gespeichert hat.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

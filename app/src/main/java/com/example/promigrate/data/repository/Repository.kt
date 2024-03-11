@@ -66,13 +66,23 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-
+    /**
+     * Übersetzt einen gegebenen Text in die angegebene Zielsprache mithilfe eines Übersetzungsdienstes (z. B. DeepL API).
+     * Diese Funktion wird asynchron ausgeführt und liefert das Ergebnis der Übersetzung zurück.
+     * Im Fehlerfall wird null zurückgegeben und ein entsprechender Fehler wird geloggt.
+     *
+     * @param text: Der Text, der übersetzt werden soll.
+     * @param targetLanguage: Der Sprachcode der Zielsprache, in die der Text übersetzt werden soll.
+     * @return: Ein Objekt vom Typ TranslationResult, das das Ergebnis der Übersetzung enthält, oder null bei einem Fehler.
+     */
     suspend fun translateText(text: String, targetLanguage: String): TranslationResult? {
         Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
         return try {
+            // Ruft den Übersetzungsdienst mit dem gegebenen Text und Zielsprachcode auf.
             val response = deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
             Log.d("translateText", "Übersetzung erfolgreich, Antwort = $response")
-            response.translations.first() // Annahme, dass nur ein Text übersetzt wird
+            // Gibt das erste Übersetzungsergebnis zurück, da hier immer nur ein Text übersetzt wird.
+            response.translations.first() // Gibt das erste Übersetzungsergebnis zurück
         } catch (e: Exception) {
             Log.e("translateText", "Fehler bei der Übersetzung", e)
             null

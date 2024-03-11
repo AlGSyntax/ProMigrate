@@ -420,16 +420,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
+    /**
+     * Holt die Liste der Berufsfelder asynchron aus der Datenquelle (Repository) und speichert sie in einer LiveData-Variable.
+     * Diese Methode nutzt Coroutines, um den asynchronen Aufruf zu handhaben und Fehlertoleranz zu gewährleisten.
+     */
     fun fetchBerufsfelder() {
+        // Start einer Coroutine im ViewModelScope, um asynchrone Operationen zu ermöglichen.
         viewModelScope.launch {
             try {
+                // Versucht, die Berufsfelder vom Repository zu erhalten.
                 val response = repository.getBerufsfelder()
                 if (response.isSuccess) {
                     Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
+                    // Bei Erfolg werden die Berufsfelder in der LiveData-Variable gespeichert.
                     _berufsfelder.value = response.getOrNull()!!
                 } else {
-                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
+                    // Im Fehlerfall wird eine leere Liste gesetzt, um die Fehlerbehandlung in der UI zu ermöglichen.
                     _berufsfelder.value = listOf()
                     Log.e(
                         TAG,
@@ -437,6 +443,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
             } catch (e: Exception) {
+                // Fängt jegliche Ausnahmen beim Abrufen der Berufsfelder ab und setzt die LiveData-Variable auf eine leere Liste.
                 _berufsfelder.value = listOf()
                 Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${e.message}")
             }
@@ -444,23 +451,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    // Im ViewModel
+    /**
+     * Übersetzt eine Liste von Berufsfeldern in die im ViewModel ausgewählte Sprache.
+     * Die Methode prüft zuerst, ob eine Übersetzung notwendig ist (d.h. der aktuelle Sprachcode ist nicht "de").
+     * Wenn eine Übersetzung erforderlich ist, wird jedes Berufsfeld asynchron übersetzt.
+     * Nachdem alle Berufsfelder übersetzt wurden, wird eine Callback-Funktion aufgerufen.
+     *
+     * @param berufsfelder: Die Liste der Berufsfelder, die übersetzt werden sollen.
+     * @param onComplete: Die Callback-Funktion, die mit der Liste der übersetzten Berufsfelder aufgerufen wird.
+     */
     fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
-        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        // Erfasst den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
         val currentLanguageCode =
             _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
 
-        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        // Prüft, ob der aktuelle Sprachcode "de" ist. Falls ja, führt es die Methode nicht aus.
         if (currentLanguageCode == "de") {
-            onComplete(berufsfelder) // Gebe die ursprünglichen Berufsfelder zurück, ohne Übersetzung
-            return // Beende die Methode vorzeitig
+            onComplete(berufsfelder) // Gibt die ursprünglichen Berufsfelder zurück, ohne Übersetzung
+            return // Beendet die Methode vorzeitig
         }
 
         viewModelScope.launch {
             val translatedBerufsfelder = mutableListOf<String>()
             berufsfelder.forEach { berufsfeld ->
                 try {
-                    // Verwende currentLanguageCode als Ziel für die Übersetzung
+                    // Verwendet currentLanguageCode als Ziel für die Übersetzung.
                     val result = repository.translateText(berufsfeld, currentLanguageCode)
                     result?.text?.let {
                         translatedBerufsfelder.add(it)
@@ -474,15 +489,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * Holt die Liste der Arbeitsorte asynchron aus der Datenquelle (Repository) und speichert sie in einer LiveData-Variable.
+     * Diese Methode nutzt Coroutines, um den asynchronen Aufruf zu handhaben und Fehlertoleranz zu gewährleisten.
+     */
     fun fetchArbeitsorte() {
+        // Start einer Coroutine im ViewModelScope, um asynchrone Operationen zu ermöglichen.
         viewModelScope.launch {
             try {
+                // Versuch, Arbeitsorte vom Repository zu erhalten
                 val response = repository.getArbeitsorte()
                 if (response.isSuccess) {
+                    // Bei Erfolg werden die erhaltenen Arbeitsorte in _arbeitsorte LiveData gesetzt.
                     Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
                     _arbeitsorte.value = response.getOrNull()!!
                 } else {
-                    // Im Fehlerfall könnte ein vordefinierter Fehlerwert oder eine leere Liste gesetzt werden
+                    // Bei Misserfolg wird eine leere Liste gesetzt..
                     _arbeitsorte.value = listOf()
                     Log.e(
                         TAG,
@@ -490,28 +512,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
             } catch (e: Exception) {
+                // Bei einer Ausnahme wird ebenfalls eine leere Liste gesetzt
                 _arbeitsorte.value = listOf()
                 Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${e.message}")
             }
         }
-    }// Brauhce Ich diese daten später nochmal ?
+    }
 
+    /**
+     * Übersetzt eine Liste von Arbeitsorten in die im ViewModel ausgewählte Sprache.
+     * Die Methode prüft zuerst, ob eine Übersetzung notwendig ist (d.h. der aktuelle Sprachcode ist nicht "de").
+     * Wenn eine Übersetzung erforderlich ist, wird jedes Berufsfeld asynchron übersetzt.
+     * Nachdem alle Berufsfelder übersetzt wurden, wird eine Callback-Funktion aufgerufen.
+     *
+     * @param arbeitsorte: Die Liste der Berufsfelder, die übersetzt werden sollen.
+     * @param onComplete: Die Callback-Funktion, die mit der Liste der übersetzten Berufsfelder aufgerufen wird.
+     */
     fun translateArbeitsorte(arbeitsorte: List<String>, onComplete: (List<String>) -> Unit) {
-        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        // Erfasst den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
         val currentLanguageCode =
             _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
 
-        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        // Prüft, ob der aktuelle Sprachcode "de" ist. Falls ja, führt es die Methode nicht aus.
         if (currentLanguageCode == "de") {
-            onComplete(arbeitsorte) // Gebe die ursprünglichen Arbeitsorte zurück, ohne Übersetzung
-            return // Beende die Methode vorzeitig
+            onComplete(arbeitsorte) // Gibt die ursprünglichen Arbeitsorte zurück, ohne Übersetzung.
+            return // Beendet die Methode vorzeitig.
         }
 
         viewModelScope.launch {
             val translatedArbeitsorte = mutableListOf<String>()
             arbeitsorte.forEach { arbeitsort ->
                 try {
-                    // Verwende currentLanguageCode als Ziel für die Übersetzung
+                    // Verwendet currentLanguageCode als Ziel für die Übersetzung
                     val result = repository.translateText(arbeitsort, currentLanguageCode)
                     result?.text?.let {
                         translatedArbeitsorte.add(it)
@@ -525,7 +557,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+    /**
+     * Speichert das Benutzerprofil mit einem Bild asynchron.
+     * Diese Methode lädt das Bild hoch, erhält dessen URL und aktualisiert dann das Benutzerprofil
+     * mit den bereitgestellten Informationen.
+     *
+     * @param uri: Uri des Profilbildes.
+     * @param name: Name des Benutzers.
+     * @param age: Alter des Benutzers als String.
+     * @param fieldOfWork: Berufsfeld des Benutzers.
+     * @param isDataProtected: Datenschutzzustimmung des Benutzers.
+     * @param languageLevel: Sprachniveau des Benutzers.
+     * @param desiredLocation: Gewünschter Arbeitsort des Benutzers.
+     * @param street: Straßenadresse des Benutzers.
+     * @param birthplace: Geburtsort des Benutzers.
+     * @param maidenname: Mädchenname des Benutzers.
+     * @param firstname: Vorname des Benutzers.
+     * @param lastname: Nachname des Benutzers.
+     * @param phonenumber: Telefonnummer des Benutzers.
+     */
     fun saveProfileWithImage(
         uri: Uri, name: String, age: String, fieldOfWork: String,
         isDataProtected: Boolean, languageLevel: String,
@@ -534,13 +584,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     ) {
         viewModelScope.launch {
             try {
+                // Prüft, ob der Benutzer angemeldet ist und eine User-ID vorhanden ist.
                 val userId =
                     repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
+                // Hochladen des Bildes und Erhalten der URL.
                 val imageUrl = repository.uploadAndUpdateProfilePicture(uri, userId)
                 Log.d(TAG, "Profilbild erfolgreich aktualisiert: $imageUrl")
 
+                // Konvertiere das Alter in einen Integer. Bei ungültiger Eingabe wird 0 verwendet.
                 val ageInt = age.toIntOrNull() ?: 0
 
+                // Erstellen einer Map mit Profildaten.
                 val profileData = mapOf(
                     "name" to name,
                     "age" to ageInt,
@@ -556,7 +610,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "lastname" to lastname,
                     "phonenumber" to phonenumber
                 )
-
+                // Aktualisiert das Benutzerprofil mit den neuen Daten.
                 repository.updateUserProfile(userId, profileData)
             } catch (e: Exception) {
                 Log.e(TAG, "Fehler beim Speichern des Profils", e)
