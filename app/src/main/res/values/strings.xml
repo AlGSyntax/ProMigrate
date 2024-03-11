@@ -147,6 +147,12 @@
     <string name="delete_account_confirmation">Please affirm your Account deletion</string>
     <string name="delete_account_header">It is sad that you are leaving us </string>
     <string name="account_deleted">Your account has been successfully deleted</string>
+    <string name="funded">The course is sponsored.</string>
+    <string name="not_funded">The course is not funded.</string>
+    <string name="typeofdegree">Type of degree: %s</string>
+    <string name="targetgroup">Target group: %s</string>
+    <string name="cost">Costs: %1$s</string>
+    <string name="anmeldeschluss_format">Application deadline: %1$s</string>
 
 
 </resources>

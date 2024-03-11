@@ -78,9 +78,60 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
                 binding.contentTextView.apply {
                     text = spannableContent
                     movementMethod = LinkMovementMethod.getInstance()
+
                 }
 
-            // Toggle-Verhalten für die Erweiterungsansicht
+
+                // Im Adapter, innerhalb Ihrer bind-Funktion:
+                kurs.kostenWert?.let { kosten ->
+                    val kostenText = "${kosten}€"
+                    binding.kostenTextView.text = binding.root.context.getString(R.string.cost, kostenText)
+                } ?: run {
+                    binding.kostenTextView.text = binding.root.context.getString(R.string.cost, "N/A")
+                }
+
+
+
+
+                binding.foerderungTextView.text = if (kurs.foerderung == true) {
+                    binding.root.context.getString(R.string.funded)
+                } else {
+                    binding.root.context.getString(R.string.not_funded)
+                }
+
+                kurs.angebot.abschlussart?.let { abschlussart ->
+                    val formattedHtml = Html.fromHtml(abschlussart, Html.FROM_HTML_MODE_COMPACT)
+                    binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree, formattedHtml)
+                } ?: run {
+                    binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree, "N/A")
+                }
+
+                kurs.angebot.zielgruppe?.let { zielgruppe ->
+                    val formattedHtml = Html.fromHtml(zielgruppe, Html.FROM_HTML_MODE_COMPACT)
+                    binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, formattedHtml)
+                } ?: run {
+                    binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, "N/A")
+                }
+
+
+
+
+
+
+
+                kurs.anmeldeschluss?.let {
+                    val anmeldeschlussString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
+                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(R.string.anmeldeschluss_format, anmeldeschlussString)
+                } ?: run {
+                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(R.string.anmeldeschluss_format, "N/A")
+                }
+
+
+
+
+
+
+                // Toggle-Verhalten für die Erweiterungsansicht
             binding.langcourseTextView.setOnClickListener {
                 binding.expandableView.visibility = if (binding.expandableView.visibility == View.VISIBLE) {
                     View.GONE
@@ -90,6 +141,10 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
             }
 
             }
+
+
+
+
 
             animateBounce()
         }

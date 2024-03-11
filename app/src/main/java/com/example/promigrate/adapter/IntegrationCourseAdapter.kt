@@ -78,6 +78,49 @@ class IntegrationCourseAdapter : ListAdapter<TerminResponse, IntegrationCourseAd
                     movementMethod = LinkMovementMethod.getInstance()
                 }
 
+
+                kurs.kostenWert?.let { kosten ->
+                    val kostenText = "${kosten}€"
+                    binding.kostenTextView.text = binding.root.context.getString(R.string.cost, kostenText)
+                } ?: run {
+                    binding.kostenTextView.text = binding.root.context.getString(R.string.cost, "N/A")
+                }
+
+
+
+
+                binding.foerderungTextView.text = if (kurs.foerderung == true) {
+                    binding.root.context.getString(R.string.funded)
+                } else {
+                    binding.root.context.getString(R.string.not_funded)
+                }
+
+                kurs.angebot.abschlussart?.let { abschlussart ->
+                    binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree,abschlussart)
+                } ?: run {
+                    binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree, "N/A")
+                }
+
+                kurs.angebot.zielgruppe?.let { zielgruppe ->
+                    binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, zielgruppe)
+                } ?: run {
+                    binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, "N/A")
+                }
+
+
+
+
+
+
+                kurs.anmeldeschluss?.let {
+                    val anmeldeschlussString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
+                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(R.string.anmeldeschluss_format, anmeldeschlussString)
+                } ?: run {
+                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(R.string.anmeldeschluss_format, "N/A")
+                }
+
+
+
                 // Toggle-Verhalten für die Erweiterungsansicht
                 binding.intecourseTextView.setOnClickListener {
                     binding.expandableView.visibility = if (binding.expandableView.visibility == View.VISIBLE) {
