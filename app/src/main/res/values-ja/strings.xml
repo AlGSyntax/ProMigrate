@@ -150,7 +150,7 @@
     <string name="not_funded">このコースは資金提供を受けていません。</string>
     <string name="typeofdegree">学位の種類: %s</string>
     <string name="targetgroup">対象グループ: %s</string>
-    <string name="cost">費用： 1$s</string>
+    <string name="cost">費用： %1$s</string>
     <string name="anmeldeschluss_format">申込締切日：%1$s</string>
 
 

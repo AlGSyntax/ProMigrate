@@ -42,10 +42,10 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
 
 
         fun bind(kurs: TerminResponse) {
-            // Titel
+
             binding.langcourseTextView.text = kurs.angebot?.titel ?: "N/A"
 
-            // Beginn und Ende
+
             kurs.beginn?.let {
                 val beginnString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
                 binding.beginnTextView.text = binding.root.context.getString(R.string.begin, beginnString)
@@ -60,7 +60,7 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
                 binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
             }
 
-            // Bemerkung mit möglichen Links
+
             kurs.angebot?.inhalt?.let { bemerkung ->
                 val spannableContent = SpannableString(Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT))
                 Patterns.WEB_URL.matcher(spannableContent).apply {
@@ -82,7 +82,7 @@ class LanguageCourseAdapter : ListAdapter<TerminResponse, LanguageCourseAdapter.
                 }
 
 
-                // Im Adapter, innerhalb Ihrer bind-Funktion:
+
                 kurs.kostenWert?.let { kosten ->
                     val kostenText = "${kosten}€"
                     binding.kostenTextView.text = binding.root.context.getString(R.string.cost, kostenText)

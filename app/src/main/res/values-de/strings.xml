@@ -160,7 +160,7 @@
     <string name="not_funded">Der Kurs wird nicht gefördert.</string>
     <string name="typeofdegree">Art des Abschlusses: %s</string>
     <string name="targetgroup">Zielgruppe: %s</string>
-    <string name="cost">Kosten: %s</string>
+    <string name="cost">Kosten: %1$s</string>
     <string name="anmeldeschluss_format">Anmeldeschluss: %1$s</string>
 
 

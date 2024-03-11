@@ -40,10 +40,10 @@ class IntegrationCourseAdapter : ListAdapter<TerminResponse, IntegrationCourseAd
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(kurs: TerminResponse) {
-            // Titel
+
             binding.intecourseTextView.text = kurs.angebot?.titel ?: "N/A"
 
-            // Beginn und Ende
+
             kurs.beginn?.let {
                 val beginnString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
                 binding.beginnTextView.text = binding.root.context.getString(R.string.begin, beginnString)
@@ -58,7 +58,7 @@ class IntegrationCourseAdapter : ListAdapter<TerminResponse, IntegrationCourseAd
                 binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
             }
 
-            // Bemerkung mit möglichen Links
+
             kurs.angebot?.inhalt?.let { description ->
                 val spannableContent = SpannableString(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT))
                 Patterns.WEB_URL.matcher(spannableContent).apply {
