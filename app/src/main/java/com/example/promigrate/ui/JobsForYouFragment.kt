@@ -13,6 +13,11 @@ import com.example.promigrate.MainViewModel
 import com.example.promigrate.adapter.JobsAdapter
 import com.example.promigrate.databinding.FragmentJobsForYouBinding
 
+
+/**
+ * Ein Fragment, das die für den Benutzer relevanten Jobs anzeigt. Es ermöglicht dem Benutzer,
+ * verschiedene Jobs auszuwählen und seine Präferenzen für zukünftige Jobvorschläge zu speichern.
+ */
 class JobsForYouFragment : Fragment() {
 
     private val TAG = "JobsForYouFragment"
@@ -118,14 +123,14 @@ class JobsForYouFragment : Fragment() {
             }
         }
 
-        // Beobachte Änderungen an den Jobtiteln im ViewModel. Wenn Jobtitel verfügbar sind, werden diese verarbeitet.
+        // Beobachtet Änderungen an den Jobtiteln im MainViewModel. Wenn Jobtitel verfügbar sind, werden diese verarbeitet.
         viewModel.jobs.observe(viewLifecycleOwner) { jobs ->
-            // Überprüft, ob Jobdaten erfolgreich abgerufen wurden.
+            // Überprüft, ob die Jobdaten erfolgreich abgerufen wurden.
             if (jobs != null) {
                 Log.d(TAG, "Jobs erfolgreich abgerufen.")
                 // Übersetzt die Jobtitel mithilfe der im ViewModel definierten Funktion translateJobTitles.
                 viewModel.translateJobTitles(jobs) { translatedJobs ->
-                    // Aktualisiere die Liste im Adapter mit den ggf. übersetzten Jobtiteln.
+                    // Aktualisiert die Liste im Adapter mit den ggf. übersetzten Jobtiteln.
                     jobsAdapter.submitList(translatedJobs)
                 }
             } else {
