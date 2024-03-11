@@ -52,6 +52,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedLanguageCode = MutableLiveData<String>()
     val selectedLanguageCode: LiveData<String> = _selectedLanguageCode
 
+
+    /**
+     * Die MutableLiveData _loginStatus wird verwendet, um den Anmeldestatus intern im ViewModel zu halten.
+     * Diese Variable ist privat, um die Datenkapselung zu gewährleisten.
+     * Änderungen an _loginStatus sollen ausschließlich innerhalb des ViewModels erfolgen.
+     *
+     * Die LiveData loginStatus ist eine öffentlich zugängliche, unveränderliche Version von _loginStatus.
+     * Sie erlaubt es den UI-Komponenten, auf Änderungen des Anmeldestatus zu reagieren, ohne den Status direkt ändern zu können.
+     * Dies fördert eine klare Trennung von Zuständigkeiten zwischen dem ViewModel und der UI.
+     */
     private val _loginStatus = MutableLiveData<Boolean>()
     val loginStatus: LiveData<Boolean> = _loginStatus
 
@@ -70,6 +80,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _arbeitsorte = MutableLiveData<List<String>>()
     val arbeitsorte: LiveData<List<String>> = _arbeitsorte
+
+
 
     private var _userProfileData = MutableLiveData<Profile?>()
     val userProfileData: LiveData<Profile?> = _userProfileData
@@ -157,6 +169,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+
+
+
+    /**
+     * Versucht, den Benutzer mit E-Mail und Passwort anzumelden.
+     * Bei erfolgreicher Anmeldung wird das Benutzerprofil geladen und die
+     * Spracheinstellungen des Benutzers werden über 'loadUserLanguageSetting'.
+     * Bei Misserfolg oder einem Fehler wird der Login-Status entsprechend aktualisiert.
+     *
+     * @param email: Die E-Mail-Adresse des Benutzers.
+     * @param password: Das Passwort des Benutzers.
+     */
     fun login(email: String, password: String) {
         Log.d(TAG, "Versuche, Benutzer einzuloggen mit E-Mail: $email")
         try {
@@ -181,6 +205,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    /**
+     * Überprüft, ob eine E-Mail-Adresse bereits in der Firestore-Datenbank existiert.
+     * Aktualisiert den LiveData-Status '_emailExists' basierend auf der Überprüfung.
+     *
+     * @param username: Die zu überprüfende E-Mail-Adresse.
+     */
     fun doesEmailExist(username: String) {
         FirebaseFirestore.getInstance().collection("user").whereEqualTo("username", username).get()
             .addOnCompleteListener { task ->
@@ -213,16 +244,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * Verarbeitet den Login-Vorgang mit Google. Diese Methode wird aufgerufen,
+     * wenn der Benutzer erfolgreich ein Google-Konto ausgewählt hat und das ID-Token
+     * vom Google-SignIn-Prozess erhalten wurde.
+     *
+     * @param idToken: Das ID-Token, das von Google beim SignIn erhalten wurde.
+     */
     fun onGoogleLoginClicked(idToken: String) {
+        // Erstellt ein Authentifizierungs-credential mit dem ID-Token von Google.
         val credential = GoogleAuthProvider.getCredential(idToken, null)
+        // Verwendet das credential, um sich mit Firebase zu authentifizieren.
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Anmeldung erfolgreich
+                    // Wenn die Authentifizierung erfolgreich ist, setzt es den Login-Status auf true
+                    // und lädt die Benutzerspracheinstellungen.
                     _loginStatus.value = true
                     loadUserLanguageSetting(auth.currentUser?.uid)
                 } else {
-                    // Anmeldung fehlgeschlagen
+                    // Bei Misserfolg setzt es den Login-Status auf false.
                     _loginStatus.value = false
                 }
             }
