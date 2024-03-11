@@ -1,6 +1,7 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,7 @@ class FAQFragment : Fragment() {
         )
 
         val answers = listOf(
-            binding!!.answer1, binding!!.answer2, binding!!.answer3, binding!!.answer4,
+            binding!!.answer1, binding!!.answer2, binding!!.answer4,
             binding!!.answer5, binding!!.answer6, binding!!.answer7
         )
 
@@ -64,6 +65,12 @@ class FAQFragment : Fragment() {
                 }
                 .show()
         }
+
+        binding!!.answer3.apply {
+            text = getString(R.string.answer3)
+            movementMethod = LinkMovementMethod.getInstance()
+        }
+
 
         viewModel.deleteAccountStatus.observe(viewLifecycleOwner) { isSuccess ->
             isSuccess?.let {
