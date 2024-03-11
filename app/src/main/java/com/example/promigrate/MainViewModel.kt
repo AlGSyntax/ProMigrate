@@ -270,20 +270,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }// TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
 
 
+
+    /**
+     * Führt die Registrierung eines neuen Benutzers mit der angegebenen E-Mail und dem Passwort durch.
+     * Überprüft zunächst, ob die Passwörter übereinstimmen. Ist dies der Fall, wird versucht,
+     * einen neuen Benutzer mit Firebase Authentication zu erstellen.
+     *
+     * @param email: Die E-Mail-Adresse des Benutzers.
+     * @param password: Das Passwort des Benutzers.
+     * @param confirmPassword: Das zur Überprüfung eingegebene Passwort.
+     * @param languageCode: Der Sprachcode für die Sprachpräferenz des Benutzers.
+     */
     fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
+        // Überprüft, ob die Passwörter übereinstimmen.
         if (password != confirmPassword) {
             _registrationStatus.value =
                 RegistrationStatus(success = false, message = "Passwörter stimmen nicht überein")
             return
         }
         Log.d(TAG, "Versuche, den Benutzer zu registrieren mit E-Mail: $email")
+        // Versucht, den Benutzer mit der angegebenen E-Mail und dem Passwort zu registrieren.
         try {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                // Behandelt den Erfolg oder Misserfolg der Registrierung.
                 if (task.isSuccessful) {
                     Log.d(TAG, "Benutzer erfolgreich registriert mit E-Mail: $email")
                     val firebaseUser = auth.currentUser
                     firebaseUser?.let { user ->
-                        // Erstelle das Benutzerprofil mit der User-ID und dem Profilobjekt
+                        // Registrierung erfolgreich: Erstellt und speichert das Benutzerprofil.
                         val userId = user.uid
                         val userProfile = Profile(
                             isPremium = false,
@@ -297,6 +311,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     }
                     _registrationStatus.value = RegistrationStatus(success = true)
                 } else {
+                    // Registrierung fehlgeschlagen: Setzt den Registrierungsstatus entsprechend.
                     val message = when (task.exception) {
                         is FirebaseAuthUserCollisionException -> R.string.emailinuse
                         else -> R.string.unkownregistererror
@@ -307,6 +322,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         } catch (e: Exception) {
+            // Bei einer Ausnahme wird der Registrierungsstatus entsprechend gesetzt.
             Log.e(TAG, "Ausnahme in der Registrationsmethode", e)
             _registrationStatus.value = RegistrationStatus(
                 success = false,

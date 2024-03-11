@@ -104,7 +104,15 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
 
 
-
+    /**
+     * Erstellt ein neues Benutzerprofil in der Firestore-Datenbank.
+     *
+     * Diese Methode speichert ein Profile-Objekt in der Firestore-Datenbank unter der
+     * spezifischen Benutzer-ID.
+     *
+     * @param userId: Die eindeutige Benutzer-ID, unter der das Profil gespeichert wird.
+     * @param profile: Das Profile-Objekt, das in der Datenbank gespeichert werden soll.
+     */
     fun createUserProfile(userId: String, profile: Profile) {
         val profileRef = firestore.collection("user").document(userId)
         profileRef.set(profile)
