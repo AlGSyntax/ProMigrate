@@ -1,10 +1,10 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -22,7 +22,6 @@ import com.example.promigrate.databinding.FragmentJobOportunitiesBinding
  */
 class JobOpportunitiesFragment : Fragment() {
 
-    private val TAG = "JobOpportunitiesFragment"
 
     // Die Verwendung von activityViewModels() bietet Zugriff auf das ViewModel, das von der
     // zugehörigen Activity genutzt wird.
@@ -135,14 +134,13 @@ class JobOpportunitiesFragment : Fragment() {
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             // Überprüft, ob die Stellenangebotsdaten erfolgreich abgerufen wurden.
             if (jobOffers != null) {
-                Log.d(TAG, "Jobangebote erfolgreich abgerufen.")
                 // Übersetzt die Jobtitel mithilfe der im ViewModel definierten Funktion translateJobTitles.
                 viewModel.translateJobOffers(jobOffers) { translatedJobOffers ->
                     // Aktualisiert die Liste im Adapter mit den ggf. übersetzten Jobtiteln.
                     jobsAdapter.submitList(translatedJobOffers)
                 }
             } else {
-                Log.e(TAG, "Fehler beim Abrufen der Jobangebote.")
+                Toast.makeText(context, R.string.unkownjobserror, Toast.LENGTH_SHORT).show()
             }
         }
 

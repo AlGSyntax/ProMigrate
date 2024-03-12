@@ -61,6 +61,7 @@ class JobOpportunitiesAdapter(private val onItemChecked: (String, String, Boolea
         // Erstellt eine Skalierungsanimation, die die View von 20% ihrer Größe auf 100% vergrößert.
         val scaleAnimation = ScaleAnimation(
             0.2f, 1f, 0.2f, 1f,
+            // Definiert den Punkt, um den die View skaliert werden soll.
             Animation.RELATIVE_TO_SELF, 0.5f,
             Animation.RELATIVE_TO_SELF, 0.5f
         )
