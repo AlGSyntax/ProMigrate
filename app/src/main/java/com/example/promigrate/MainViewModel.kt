@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-//start MainViewModel
+
 /**
  * MainViewModel ist eine Klasse, die AndroidViewModel erweitert und für die Vorbereitung und Verwaltung der Daten für eine Aktivität oder ein Fragment verantwortlich ist.
  * Sie behandelt auch die Kommunikation der Aktivität / des Fragments mit dem Rest der Anwendung (z.B. Aufruf der Geschäftslogikklassen).
@@ -52,7 +52,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         ProMigrateCourseAPI.retrofitService
 
     )
-//end MainViewModel
+
 
     /**
      * _localeList ist eine private MutableLiveData, die eine LocaleListCompat enthält.
