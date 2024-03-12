@@ -300,6 +300,7 @@ class LogInFragment : Fragment() {
      */
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
+            // Erfolgreicher SignIn mit Google, es wird mit Firebase authentifiziert.
             val account = completedTask.getResult(ApiException::class.java)
             viewModel.onGoogleLoginClicked(account.idToken!!)
         } catch (e: ApiException) {
