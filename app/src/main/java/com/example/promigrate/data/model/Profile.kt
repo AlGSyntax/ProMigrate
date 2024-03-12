@@ -1,6 +1,10 @@
 package com.example.promigrate.data.model
 
-
+/**
+ * Diese Datenklasse repräsentiert ein Benutzerprofil in deiner Firebase-Datenbank.
+ * Jedes Attribut speichert spezifische Informationen über den Benutzer, die für die Anwendungslogik
+ * oder das Benutzerinterface wichtig sind.
+ */
 data class Profile(
     val isPremium: Boolean = false,
     val username: String? = "",

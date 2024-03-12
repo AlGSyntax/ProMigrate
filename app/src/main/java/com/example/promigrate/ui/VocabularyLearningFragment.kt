@@ -79,7 +79,7 @@ class VocabularyLearningFragment : Fragment() {
         // Wenn ein Benutzer die Bearbeitung einer Indexkarte anfordert, wird editIndexCard aufgerufen.
         adapter = VocabularyLearningAdapter { indexCard ->
             // Hier wird die Methode aufgerufen, die die Bearbeitungslogik für die Indexkarte beinhaltet.
-            editIndexCard(indexCard)
+            editFlashCard(indexCard)
         }
 
         // Setzt den LayoutManager für das RecyclerView, der bestimmt, wie die Elemente angeordnet werden.
@@ -103,7 +103,7 @@ class VocabularyLearningFragment : Fragment() {
         // Wenn der Button geklickt wird, wird die Methode addNewIndexCard aufgerufen.
         binding!!.addFlashcardButton.setOnClickListener {
             // Ruft die Methode auf, die die Logik zum Hinzufügen einer neuen Indexkarte beinhaltet.
-            addNewIndexCard()
+            addNewFlashCard()
         }
 
 
@@ -122,12 +122,12 @@ class VocabularyLearningFragment : Fragment() {
     }
 
     /**
-     * Diese Funktion wird verwendet, um eine neue Indexkarte zum Vokabellernsystem hinzuzufügen.
+     * Diese Funktion wird verwendet, um eine neue Flashcard zum Vokabellernsystem hinzuzufügen.
      * Sie erstellt einen Dialog mit zwei Textfeldern, in die der Benutzer den Vorder- und Rücktext der Indexkarte eingeben kann.
      * Nachdem der Benutzer auf die Schaltfläche "Speichern" geklickt hat, ruft die Funktion die Eingabe aus den Textfeldern ab und ruft die addFlashcard-Methode des ViewModels auf.
      * Wenn der Benutzer auf die Schaltfläche "Abbrechen" klickt, wird der Dialog abgebrochen.
      */
-    private fun addNewIndexCard() {
+    private fun addNewFlashCard() {
         // Aufblasen des Dialoglayouts
         val dialogBinding = DialogAddCardBinding.inflate(layoutInflater)
         // Referenzen auf die Vorder- und Rückseite der EditText-Felder
@@ -158,7 +158,7 @@ class VocabularyLearningFragment : Fragment() {
 
 
     /**
-     * Diese Funktion wird verwendet, um eine bestehende Indexkarte im Vokabellernsystem zu bearbeiten.
+     * Diese Funktion wird verwendet, um eine bestehende Flashcard im Vokabellernsystem zu bearbeiten.
      * Sie erstellt einen Dialog mit einem Textfeld, in das der Benutzer den neuen Text der Indexkarte eingeben kann.
      * Der Text, der bearbeitet wird, hängt davon ab, ob die Karte umgedreht ist oder nicht.
      * Nachdem der Benutzer auf die Schaltfläche "Speichern" geklickt hat, ruft die Funktion die Eingabe aus dem Textfeld ab und ruft die updateFlashcard-Methode des ViewModels auf.
@@ -166,7 +166,7 @@ class VocabularyLearningFragment : Fragment() {
      *
      * @param flashCard: Die Indexkarte, die bearbeitet werden soll.
      */
-    private fun editIndexCard(flashCard: FlashCard) {
+    private fun editFlashCard(flashCard: FlashCard) {
         // Aufblasen des Dialoglayouts
         val binding = DialogEditCardBinding.inflate(LayoutInflater.from(context))
 

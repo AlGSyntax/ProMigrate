@@ -1,7 +1,7 @@
 package com.example.promigrate.data.remote
 
 import android.content.Context
-import com.example.promigrate.data.model.BildungsangebotResponse
+import com.example.promigrate.data.model.EducationalOfferResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -24,7 +24,7 @@ interface ProMigrateCourseAPIService {
         @Query("beginntermine") beginntermine: Int,  // Filtert nach Beginnterminen.
         @Query("sort") sort: String = "basc",  // Sortierreihenfolge.
         @Query("umkreis") umkreis: String = "50"  // Suchumkreis.
-    ): Response<BildungsangebotResponse>
+    ): Response<EducationalOfferResponse>
 }
 
 // Objekt zur Initialisierung und Bereitstellung des ProMigrateCourseAPIService.

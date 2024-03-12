@@ -1,5 +1,10 @@
 package com.example.promigrate.data.model
 
+
+/**
+ * Diese Klasse beinhaltet Datenklassen, die als Antwortmodelle für den ProMigrateAPI-Service
+ * dienen. Die Struktur ermöglicht die Verarbeitung und Darstellung der Daten, die von der API geliefert werden.
+ */
 data class JobDetailsResponse(
     val aktuelleVeroeffentlichungsdatum: String?,
     val angebotsart: String?,

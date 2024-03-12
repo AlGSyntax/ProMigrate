@@ -1,6 +1,11 @@
  package com.example.promigrate.data.model
 
- data class BildungsangebotResponse(
+
+ /**
+  * Diese Klasse beinhaltet Datenklassen, die als Antwortmodelle für den ProMigrateCourseAPI-Service
+  * dienen. Die Struktur ermöglicht die Verarbeitung und Darstellung der Daten, die von der API geliefert werden.
+  */
+ data class EducationalOfferResponse(
          val _embedded: EmbeddedResponse?,
          val page: PageResponse
      )
