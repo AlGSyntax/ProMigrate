@@ -30,11 +30,11 @@ interface ProMigrateAPIService {
 
     // Abrufen verfügbarer Berufsfelder.
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
-    suspend fun getBerufsfelder(): Response<JobResponse>
+    suspend fun getOccupationalFields(): Response<JobResponse>
 
     // Abrufen verfügbarer Arbeitsorte.
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
-    suspend fun getArbeitsorte(): Response<JobResponse>
+    suspend fun getWorkLocations(): Response<JobResponse>
 
     // Abrufen von Jobangeboten basierend auf einer spezifischen Suche.
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")

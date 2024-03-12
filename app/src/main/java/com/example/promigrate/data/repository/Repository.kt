@@ -184,7 +184,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             val startTime = System.currentTimeMillis()
             Log.d(TAG, "Starte Abruf der Berufsfelder um: $startTime")
 
-            val response = apiService.getBerufsfelder()
+            val response = apiService.getOccupationalFields()
             val endTime = System.currentTimeMillis()
             Log.d(TAG, "Berufsfelder-Anfrage abgeschlossen um: $endTime, Dauer: ${endTime - startTime} ms")
 
@@ -206,7 +206,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     suspend fun getWorkLocations(): Result<List<String>> {
         return try {
             Log.d(TAG, "Starte Abruf der Arbeitsorte.")
-            val response = apiService.getArbeitsorte()
+            val response = apiService.getWorkLocations()
             if (response.isSuccessful && response.body() != null) {
                 Log.e(TAG, "Arbeitsorte erfolgreich abgerufen: ${response.body()}")
                 // Hier wird angenommen, dass du nur die Arbeitsorte extrahieren möchtest.
@@ -298,7 +298,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         beginntermine: Int
     ): Result<List<TerminResponse>> {
         return try {
-            val response = courseAPIService.getBildungsangebot(systematiken, orte, sprachniveau, beginntermine, "basc")
+            val response = courseAPIService.getEducationalOffer(systematiken, orte, sprachniveau, beginntermine, "basc")
             if (response.isSuccessful) {
                 val termine = response.body()?._embedded?.termine ?: listOf()
                 Result.success(termine)
