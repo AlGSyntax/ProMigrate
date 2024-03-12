@@ -18,6 +18,14 @@ import com.example.promigrate.databinding.FragmentVocabularyLearningBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 
+
+/**
+ * VocabularyLearningFragment ist eine Unterklasse von Fragment.
+ * Dieses Fragment ist verantwortlich für die Darstellung und Interaktion mit der Vokabellernfunktion der Anwendung.
+ * Es stellt eine Liste von Indexkarten dar, die der Benutzer zum Lernen verwenden kann.
+ * Der Benutzer kann neue Indexkarten hinzufügen und bestehende Indexkarten bearbeiten.
+ * Die Daten für die Indexkarten werden von einem ViewModel bereitgestellt.
+ */
 class VocabularyLearningFragment : Fragment() {
 
     // Die Verwendung von activityViewModels() bietet Zugriff auf das ViewModel, das von der
