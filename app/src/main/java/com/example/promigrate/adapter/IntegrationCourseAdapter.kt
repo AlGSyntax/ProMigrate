@@ -20,9 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.R
 import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.databinding.IntegrationCourseItemBinding
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * Wird aufgerufen, wenn die View-Hierarchie des Fragments zerstört wird.
@@ -78,17 +75,16 @@ class IntegrationCourseAdapter :
 
             // Formatierung und Anzeige des Beginndatums des Kurses.
             kurs.beginn?.let {
-                val beginnString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
+
                 binding.beginnTextView.text =
-                    binding.root.context.getString(R.string.begin, beginnString)
+                    binding.root.context.getString(R.string.begin)
             } ?: run {
                 binding.beginnTextView.text = binding.root.context.getString(R.string.begin, "N/A")
             }
 
             // Formatierung und Anzeige des Enddatums des Kurses.
             kurs.ende?.let {
-                val endeString = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
-                binding.endeTextView.text = binding.root.context.getString(R.string.end, endeString)
+                binding.endeTextView.text = binding.root.context.getString(R.string.end)
             } ?: run {
                 binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
             }
@@ -163,11 +159,9 @@ class IntegrationCourseAdapter :
 
                 // Formatierung und Anzeige des Anmeldeschlusses des Kurses.
                 kurs.anmeldeschluss?.let {
-                    val anmeldeschlussString =
-                        SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(Date(it))
                     binding.anmeldeSchlussTextView.text = binding.root.context.getString(
-                        R.string.anmeldeschluss_format,
-                        anmeldeschlussString
+                        R.string.anmeldeschluss_format
+
                     )
                 } ?: run {
                     binding.anmeldeSchlussTextView.text =
