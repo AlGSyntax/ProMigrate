@@ -10,7 +10,7 @@
  import org.json.JSONObject
 import java.io.IOException
 
- class LanguageCourseAuthTokenInterceptor(context: Context) : Interceptor {
+ class CourseAuthTokenInterceptor(context: Context) : Interceptor {
 
          private val applicationContext = context.applicationContext
 
@@ -19,7 +19,7 @@ import java.io.IOException
                          val tokenShouldRefresh = checkIfTokenNeedsRefresh(applicationContext)
                          if (tokenShouldRefresh) {
                              refreshTokenSynchronously(applicationContext)
-                             Log.d("LanguageCourseAuthTokenInterceptor", "Token was refreshed.")
+                             Log.d("CourseAuthTokenInterceptor", "Token was refreshed.")
                         }
                      }
 

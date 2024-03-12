@@ -15,48 +15,48 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+// Basis-URL für die API-Endpunkte.
 const val BASE_URL = "https://rest.arbeitsagentur.de/"
 
+// API-Schnittstellendefinition für ProMigrate.
 interface ProMigrateAPIService {
 
+    // Abrufen von Jobs basierend auf Standort und Berufsfeld.
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
     suspend fun getJobs(
         @Query("wo") wo: String?,
         @Query("berufsfeld") berufsfeld: String?
     ): Response<JobResponse>
 
-
+    // Abrufen verfügbarer Berufsfelder.
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
     suspend fun getBerufsfelder(): Response<JobResponse>
 
+    // Abrufen verfügbarer Arbeitsorte.
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
     suspend fun getArbeitsorte(): Response<JobResponse>
 
+    // Abrufen von Jobangeboten basierend auf einer spezifischen Suche.
     @GET("jobboerse/jobsuche-service/pc/v4/jobs")
     suspend fun getJobOffers(
         @Query("was") was: String,
-        @Query("wo") wo: String,
-        // Hinzufügen des Arbeitsorts als Parameter
+        @Query("wo") wo: String
     ): Response<JobResponse>
 
+    // Abrufen von Details zu einem spezifischen Job.
     @GET("jobboerse/jobsuche-service/pc/v2/jobdetails/{encodedHashID}")
     suspend fun getJobDetails(@Path("encodedHashID") encodedHashID: String?): Response<JobDetailsResponse>
-
-
-
-
-
 }
 
+// Singleton für die API-Initialisierung und -Konfiguration.
 object ProMigrateAPI {
     private lateinit var okHttpClient: OkHttpClient
-
     private lateinit var moshi: Moshi
 
-    // Verschiebe die Deklaration von retrofitService außerhalb der init Methode
+    // Service-Instanz für den Zugriff auf die API.
     lateinit var retrofitService: ProMigrateAPIService
 
-
+    // Initialisiert die API mit Konfigurationen.
     fun init(context: Context) {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
@@ -75,10 +75,6 @@ object ProMigrateAPI {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-        // Initialisiere retrofitService hier
         retrofitService = retrofit.create(ProMigrateAPIService::class.java)
     }
 }
-
-
-

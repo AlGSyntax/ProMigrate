@@ -12,7 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ProMigrateLangLearnAPIService {
+interface ProMigrateCourseAPIService {
 
     @GET("infosysbub/sprachfoerderung/pc/v1/bildungsangebot")
     suspend fun getBildungsangebot(
@@ -28,7 +28,7 @@ interface ProMigrateLangLearnAPIService {
 
 }
 
-object ProMigrateLangLearnAPI {
+object ProMigrateCourseAPI {
 
 
     private const val BASE_URL = "https://rest.arbeitsagentur.de/"
@@ -38,7 +38,7 @@ object ProMigrateLangLearnAPI {
 
     private lateinit var moshi: Moshi
 
-    lateinit var retrofitService: ProMigrateLangLearnAPIService
+    lateinit var retrofitService: ProMigrateCourseAPIService
     fun init(context: Context) {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -48,7 +48,7 @@ object ProMigrateLangLearnAPI {
 
         okHttpClient = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(LanguageCourseAuthTokenInterceptor(context.applicationContext))
+            .addInterceptor(CourseAuthTokenInterceptor(context.applicationContext))
             .build()
 
         val retrofit = Retrofit.Builder()
@@ -58,6 +58,6 @@ object ProMigrateLangLearnAPI {
             .build()
 
 
-        retrofitService = retrofit.create(ProMigrateLangLearnAPIService::class.java)
+        retrofitService = retrofit.create(ProMigrateCourseAPIService::class.java)
     }
 }

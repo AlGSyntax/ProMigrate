@@ -18,7 +18,7 @@ import com.example.promigrate.data.model.ToDoItem
 import com.example.promigrate.data.model.ToDoItemRelocation
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPI
-import com.example.promigrate.data.remote.ProMigrateLangLearnAPI
+import com.example.promigrate.data.remote.ProMigrateCourseAPI
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -40,7 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository = Repository.getInstance(
         application, FirebaseAuth.getInstance(),
         FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService, DeepLApiService.create(),
-        ProMigrateLangLearnAPI.retrofitService
+        ProMigrateCourseAPI.retrofitService
 
     )
 

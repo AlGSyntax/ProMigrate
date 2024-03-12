@@ -10,10 +10,22 @@ import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
 
+/**
+ * Ein Interceptor, der für jeden Netzwerkanruf einen Authentifizierungstoken hinzufügt.
+ * Erneuert den Token automatisch, wenn er abgelaufen ist.
+ *
+ * @property applicationContext Der Applikationskontext.
+ */
 class AuthTokenInterceptor(context: Context) : Interceptor {
 
     private val applicationContext = context.applicationContext
 
+    /**
+     * Interzeptiert den ausgehenden Anruf und fügt den Authentifizierungstoken hinzu.
+     *
+     * @param chain: Die Interceptor-Kette.
+     * @return: Die Antwort des Anrufs.
+     */
     override fun intercept(chain: Interceptor.Chain): Response {
         synchronized(this) {
             val tokenShouldRefresh = checkIfTokenNeedsRefresh(applicationContext)
@@ -28,14 +40,23 @@ class AuthTokenInterceptor(context: Context) : Interceptor {
         return chain.proceed(request)
     }
 
+    /**
+     * Überprüft, ob der Token erneuert werden muss.
+     *
+     * @param context: Der Kontext.
+     * @return: True, wenn der Token erneuert werden muss, sonst false.
+     */
     private fun checkIfTokenNeedsRefresh(context: Context): Boolean {
         val sharedPref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val expiryDateMillis = sharedPref.getLong("expiry_date_millis", 0)
-        // Wenn das aktuelle Datum größer ist als das Ablaufdatum, muss der Token erneuert werden
         return System.currentTimeMillis() > expiryDateMillis
     }
 
-
+    /**
+     * Erneuert den Token synchron.
+     *
+     * @param context: Der Kontext.
+     */
     private fun refreshTokenSynchronously(context: Context) {
         val client = OkHttpClient()
         val requestBody = FormBody.Builder()
@@ -44,12 +65,12 @@ class AuthTokenInterceptor(context: Context) : Interceptor {
             .add("client_secret", "32a39620-32b3-4307-9aa1-511e3d7f48a8")
             .build()
         val request = Request.Builder()
-            .url(" https://rest.arbeitsagentur.de/oauth/gettoken_cc")
+            .url("https://rest.arbeitsagentur.de/oauth/gettoken_cc")
             .post(requestBody)
             .build()
 
         try {
-            val response = client.newCall(request).execute() // Führe den Call synchron aus
+            val response = client.newCall(request).execute()
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
                 val jsonObject = JSONObject(responseBody ?: "")
@@ -58,21 +79,31 @@ class AuthTokenInterceptor(context: Context) : Interceptor {
                 val expiryDateMillis = System.currentTimeMillis() + expiresIn * 1000
                 saveTokenAndExpiryDate(context, token, expiryDateMillis)
             } else {
-                // Handle Fehlerfall
                 Log.e("AuthTokenInterceptor", "Token konnte nicht erneuert werden: ${response.message}")
             }
         } catch (e: IOException) {
-            // Handle IO Fehler
             Log.e("AuthTokenInterceptor", "Fehler beim Erneuern des Tokens: ${e.message}")
         }
     }
 
-
+    /**
+     * Ruft den gespeicherten Token ab.
+     *
+     * @param context: Der Kontext.
+     * @return: Der gespeicherte Token.
+     */
     private fun getToken(context: Context): String {
         val sharedPref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         return sharedPref.getString("token", "") ?: ""
     }
 
+    /**
+     * Speichert den Token und sein Ablaufdatum.
+     *
+     * @param context: Der Kontext.
+     * @param token: Der Token.
+     * @param expiryDateMillis: Das Ablaufdatum in Millisekunden.
+     */
     private fun saveTokenAndExpiryDate(context: Context, token: String, expiryDateMillis: Long) {
         val sharedPref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
@@ -82,4 +113,3 @@ class AuthTokenInterceptor(context: Context) : Interceptor {
         }
     }
 }
-//https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v2/jobdetails/{encodedHashID}

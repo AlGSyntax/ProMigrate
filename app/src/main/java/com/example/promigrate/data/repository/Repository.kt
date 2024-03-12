@@ -13,7 +13,7 @@ import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPIService
-import com.example.promigrate.data.remote.ProMigrateLangLearnAPIService
+import com.example.promigrate.data.remote.ProMigrateCourseAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -22,7 +22,7 @@ import java.util.Locale
 
 class Repository (context: Context, val firebaseAuth: FirebaseAuth,
                   private val firestore: FirebaseFirestore,private val apiService: ProMigrateAPIService,
-                  private val deepLApiService: DeepLApiService,private val langLearnAPIService: ProMigrateLangLearnAPIService
+                  private val deepLApiService: DeepLApiService,private val courseAPIService: ProMigrateCourseAPIService
 ) {
 
 
@@ -36,7 +36,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         private var INSTANCE: Repository? = null
 
         fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore,
-                        apiService: ProMigrateAPIService,deepLApiService: DeepLApiService, langLearnAPIService: ProMigrateLangLearnAPIService):
+                        apiService: ProMigrateAPIService,deepLApiService: DeepLApiService, langLearnAPIService: ProMigrateCourseAPIService):
                 Repository {
             return INSTANCE ?: Repository(context, firebaseAuth, firestore,apiService,deepLApiService, langLearnAPIService).also { INSTANCE = it }
         }
@@ -298,7 +298,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         beginntermine: Int
     ): Result<List<TerminResponse>> {
         return try {
-            val response = langLearnAPIService.getBildungsangebot(systematiken, orte, sprachniveau, beginntermine, "basc")
+            val response = courseAPIService.getBildungsangebot(systematiken, orte, sprachniveau, beginntermine, "basc")
             if (response.isSuccessful) {
                 val termine = response.body()?._embedded?.termine ?: listOf()
                 Result.success(termine)
