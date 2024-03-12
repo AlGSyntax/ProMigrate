@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
-import com.example.promigrate.adapter.JobsAdapter
+import com.example.promigrate.adapter.JobsForYouAdapter
 import com.example.promigrate.databinding.FragmentJobsForYouBinding
 
 
@@ -36,11 +36,11 @@ class JobsForYouFragment : Fragment() {
 
 
     /**
-     * Der Adapter für die Job-Liste. Hier wird eine Instanz von JobsAdapter erstellt,
+     * Der Adapter für die Job-Liste. Hier wird eine Instanz von JobsForYouAdapter erstellt,
      * die eine Lambda-Funktion als Argument nimmt. Diese Lambda-Funktion definiert, was passieren soll,
      * wenn ein Item in der Liste angeklickt wird.
      */
-    private val jobsAdapter = JobsAdapter { jobTitle, isChecked ->
+    private val jobsForYouAdapter = JobsForYouAdapter { jobTitle, isChecked ->
         if (isChecked) {
             selectedJobs.add(jobTitle)
         } else {
@@ -80,10 +80,10 @@ class JobsForYouFragment : Fragment() {
         // Hier wird ein LinearLayoutManager verwendet, der die Elemente in einer vertikalen Liste anordnet.
         binding!!.rvJobs.layoutManager = LinearLayoutManager(context)
 
-        // Weist dem zuvor erstellten jobsAdapter die RecyclerView zu.
+        // Weist dem zuvor erstellten jobsForYouAdapter die RecyclerView zu.
         // Dieser Adapter ist verantwortlich für die Bereitstellung der Ansichten
         // (View-Objekte), die die Daten des RecyclerView repräsentieren.
-        binding!!.rvJobs.adapter = jobsAdapter
+        binding!!.rvJobs.adapter = jobsForYouAdapter
 
 
         // Setzt einen OnClickListener auf den Button "saveandnextbtn".
@@ -131,7 +131,7 @@ class JobsForYouFragment : Fragment() {
                 // Übersetzt die Jobtitel mithilfe der im ViewModel definierten Funktion translateJobTitles.
                 viewModel.translateJobTitles(jobs) { translatedJobs ->
                     // Aktualisiert die Liste im Adapter mit den ggf. übersetzten Jobtiteln.
-                    jobsAdapter.submitList(translatedJobs)
+                    jobsForYouAdapter.submitList(translatedJobs)
                 }
             } else {
                 Toast.makeText(context, R.string.unkownjobserror, Toast.LENGTH_SHORT).show()

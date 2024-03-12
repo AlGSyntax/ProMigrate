@@ -18,8 +18,8 @@ import com.example.promigrate.databinding.JobItemBinding
  *
  * @property onItemChecked: Eine Funktion, die aufgerufen wird, wenn ein Item angeklickt wird.
  */
-class JobsAdapter(private val onItemChecked: (String, Boolean) -> Unit) :
-    ListAdapter<String, JobsAdapter.JobViewHolder>(DiffCallback) {
+class JobsForYouAdapter(private val onItemChecked: (String, Boolean) -> Unit) :
+    ListAdapter<String, JobsForYouAdapter.JobViewHolder>(DiffCallback) {
 
     /**
      * Erstellt einen neuen ViewHolder, wenn der RecyclerView einen benötigt.
