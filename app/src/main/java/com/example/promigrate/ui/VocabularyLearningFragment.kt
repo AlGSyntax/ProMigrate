@@ -107,13 +107,18 @@ class VocabularyLearningFragment : Fragment() {
         }
 
 
+        // Listener für den "Find Language Course"-Button. Bei Klick navigiert der Benutzer zum LanguageCourseFragment.
         binding!!.findLanguageCourseButton.setOnClickListener {
+            // Die Navigation erfolgt durch Verwendung der generierten Directions-Klasse, die sicherstellt, dass die korrekten Argumente übergeben werden.
             findNavController().navigate(VocabularyLearningFragmentDirections.actionVocabularyLearningFragmentToLanguageCourseFragment())
         }
 
+        // Listener für den "Back"-Button. Bei Klick navigiert der Benutzer zurück zum DashboardFragment.
         binding!!.backButton.setOnClickListener {
+            // Auch hier wird die Navigation durch Verwendung der generierten Directions-Klasse durchgeführt, was Typsicherheit und Klarheit gewährleistet.
             findNavController().navigate(VocabularyLearningFragmentDirections.actionVocabularyLearningFragmentToDashboardFragment())
         }
+
     }
 
     /**
