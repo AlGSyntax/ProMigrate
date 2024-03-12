@@ -2,7 +2,6 @@ package com.example.promigrate.ui
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
  */
 class CreateYourProfileFragment : Fragment() {
 
-    private val TAG = "CreateYourProfileFragment"
 
     // Die Verwendung von activityViewModels() bietet Zugriff auf das ViewModel, das von der
     // zugehörigen Activity genutzt wird.
@@ -92,10 +90,10 @@ class CreateYourProfileFragment : Fragment() {
                             .apply(RequestOptions.circleCropTransform())
                             .into(binding!!.ivProfilePicture)
                     }
-                    Log.d(TAG, "Selected URI: $uri")
+
                 } else {
-                    // Falls kein Bild ausgewählt wurde, loggt diese Information.
-                    Log.d(TAG, "No media selected")//TODO
+                    // Wenn keine URI vorhanden ist, wird ein Fehler angezeigt.
+                    Toast.makeText(context, R.string.error_image, Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -112,7 +110,6 @@ class CreateYourProfileFragment : Fragment() {
          */
         viewModel.occupationalfields.observe(viewLifecycleOwner) { berufsfelder ->
             if (berufsfelder != null) {
-                Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
                 // Wenn Berufsfelder erfolgreich geladen wurden, übersetzt es sie und setzt sie im AutoCompleteTextView.
                 viewModel.translateOccupationalFields(berufsfelder) { translatedBerufsfelder ->
                     // Setzt den Adapter nach der Übersetzung
@@ -124,7 +121,8 @@ class CreateYourProfileFragment : Fragment() {
                     binding!!.autoCompleteTextView.setAdapter(adapter)
                 }
             } else {
-                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder.")
+                Toast.makeText(context, R.string.error_occupational_fields, Toast.LENGTH_LONG)
+                    .show()
             }
         }
         // Startet den Abrufprozess der Berufsfelder aus dem ViewModel.
@@ -137,7 +135,6 @@ class CreateYourProfileFragment : Fragment() {
          */
         viewModel.worklocations.observe(viewLifecycleOwner) { arbeitsorte ->
             if (arbeitsorte != null) {
-                Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
                 // Wenn Arbeitsorte erfolgreich geladen wurden, übersetzt es sie und setzt sie im AutoCompleteTextView2.
                 viewModel.translateWorkLocations(arbeitsorte) { translatedArbeitsorte ->
                     // Setzt den Adapter nach der Übersetzung
@@ -149,7 +146,7 @@ class CreateYourProfileFragment : Fragment() {
                     binding!!.autoCompleteTextView2.setAdapter(adapter)
                 }
             } else {
-                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte.")
+                Toast.makeText(context, R.string.error_work_locations, Toast.LENGTH_LONG).show()
             }
         }
         // Startet den Abrufprozess der Arbeitsorte im ViewModel.
@@ -244,7 +241,6 @@ class CreateYourProfileFragment : Fragment() {
                     phonenumber = additionalPhoneNum.toString()
 
                 )
-                Log.d(TAG, fieldOfWork)
                 // Navigiert zum nächsten Fragment
                 val action = CreateYourProfileFragmentDirections
                     .actionCreateYourProfileFragmentToJobsForYouFragment(
@@ -418,7 +414,5 @@ class CreateYourProfileFragment : Fragment() {
         super.onDestroyView()
         binding = null
     }
-
-
 }
 

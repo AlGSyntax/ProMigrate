@@ -153,6 +153,9 @@
     <string name="targetgroup">Target group: %s</string>
     <string name="cost">Costs: %1$s</string>
     <string name="anmeldeschluss_format">Application deadline: %1$s</string>
+    <string name="error_image">No Image available</string>
+    <string name="error_occupational_fields">Error loading the fields</string>
+    <string name="error_work_locations">Error loading Location</string>
 
 
 </resources>
