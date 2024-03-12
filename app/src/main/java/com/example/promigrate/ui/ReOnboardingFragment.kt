@@ -26,7 +26,7 @@ class ReOnboardingFragment : Fragment() {
 
 
 
-        viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
+        viewModel.worklocations.observe(viewLifecycleOwner) { arbeitsorte ->
             if (arbeitsorte != null) {
                 val adapter = ArrayAdapter(
                     requireContext(),
@@ -47,7 +47,7 @@ class ReOnboardingFragment : Fragment() {
                 val berufsfeld = viewModel.userProfileData.value?.fieldOfWork ?: ""
                 if (berufsfeld.isNotBlank()) {
                     viewModel.translateToGerman(berufsfeld) { translatedBerufsfeld ->
-                        viewModel.fetchJobs(translatedBerufsfeld, translatedArbeitsort)
+                        viewModel.fetchJobNomination(translatedBerufsfeld, translatedArbeitsort)
                     }
                 } else {
                     Toast.makeText(context, "Berufsfeld im Profil nicht gesetzt", Toast.LENGTH_SHORT).show()

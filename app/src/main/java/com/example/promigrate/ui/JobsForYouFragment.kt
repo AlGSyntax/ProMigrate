@@ -116,7 +116,7 @@ class JobsForYouFragment : Fragment() {
             // Übersetzt den Arbeitsort aus den Argumenten ins Deutsche.
             viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
                 // Ruft Jobdaten ab, indem die übersetzten Werte von Berufsfeld und Arbeitsort verwendet werden.
-                viewModel.fetchJobs(
+                viewModel.fetchJobNomination(
                     berufsfeld = translatedBerufsfeld,
                     arbeitsort = translatedArbeitsort
                 )

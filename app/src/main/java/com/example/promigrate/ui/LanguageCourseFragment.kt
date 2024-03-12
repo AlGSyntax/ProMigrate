@@ -41,13 +41,13 @@ class LanguageCourseFragment : Fragment() {
             val sprachniveau = userProfile?.languageLevel?.let { convertLanguageLevel(it) }
             if (location != null) {
                 if (sprachniveau != null) {
-                    viewModel.fetchBildungsangebote("MC", location, sprachniveau, 0)
+                    viewModel.fetchEducationalOffers("MC", location, sprachniveau, 0)
                 }
             }
         }
 
-        viewModel.bildungsangebote.observe(viewLifecycleOwner) { angebote ->
-            viewModel.translateBildungsangebote(angebote) { translatedAngebote ->
+        viewModel.educationaloffers.observe(viewLifecycleOwner) { angebote ->
+            viewModel.translateEducationalOffers(angebote) { translatedAngebote ->
                 languageCourseAdapter.submitList(translatedAngebote)
             }
         }

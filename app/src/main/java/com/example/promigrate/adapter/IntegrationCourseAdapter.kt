@@ -96,13 +96,15 @@ class IntegrationCourseAdapter : ListAdapter<TerminResponse, IntegrationCourseAd
                 }
 
                 kurs.angebot.abschlussart?.let { abschlussart ->
-                    binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree,abschlussart)
+                    val formattedHtml = Html.fromHtml(abschlussart, Html.FROM_HTML_MODE_COMPACT)
+                    binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree, formattedHtml)
                 } ?: run {
                     binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree, "N/A")
                 }
 
                 kurs.angebot.zielgruppe?.let { zielgruppe ->
-                    binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, zielgruppe)
+                    val formattedHtml = Html.fromHtml(zielgruppe, Html.FROM_HTML_MODE_COMPACT)
+                    binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, formattedHtml)
                 } ?: run {
                     binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, "N/A")
                 }

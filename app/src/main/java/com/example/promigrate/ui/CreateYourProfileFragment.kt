@@ -110,11 +110,11 @@ class CreateYourProfileFragment : Fragment() {
          * werden sie durch die `translateArbeitsorte` Methode übersetzt. Ein ArrayAdapter wird dann mit den übersetzten
          * Arbeitsorten initialisiert und dem autoCompleteTextView zugewiesen.
          */
-        viewModel.berufsfelder.observe(viewLifecycleOwner) { berufsfelder ->
+        viewModel.occupationalfields.observe(viewLifecycleOwner) { berufsfelder ->
             if (berufsfelder != null) {
                 Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
                 // Wenn Berufsfelder erfolgreich geladen wurden, übersetzt es sie und setzt sie im AutoCompleteTextView.
-                viewModel.translateBerufsfelder(berufsfelder) { translatedBerufsfelder ->
+                viewModel.translateOccupationalFields(berufsfelder) { translatedBerufsfelder ->
                     // Setzt den Adapter nach der Übersetzung
                     val adapter = ArrayAdapter(
                         requireContext(),
@@ -128,18 +128,18 @@ class CreateYourProfileFragment : Fragment() {
             }
         }
         // Startet den Abrufprozess der Berufsfelder aus dem ViewModel.
-        viewModel.fetchBerufsfelder()
+        viewModel.fetchOccupationalFields()
 
         /**
          * Beobachtet die LiveData `arbeitsorte` aus dem ViewModel. Sobald die Arbeitsorte erfolgreich abgerufen sind,
          * werden sie durch die `translateArbeitsorte` Methode übersetzt. Ein ArrayAdapter wird dann mit den übersetzten
          * Arbeitsorten initialisiert und dem autoCompleteTextView2 zugewiesen.
          */
-        viewModel.arbeitsorte.observe(viewLifecycleOwner) { arbeitsorte ->
+        viewModel.worklocations.observe(viewLifecycleOwner) { arbeitsorte ->
             if (arbeitsorte != null) {
                 Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
                 // Wenn Arbeitsorte erfolgreich geladen wurden, übersetzt es sie und setzt sie im AutoCompleteTextView2.
-                viewModel.translateArbeitsorte(arbeitsorte) { translatedArbeitsorte ->
+                viewModel.translateWorkLocations(arbeitsorte) { translatedArbeitsorte ->
                     // Setzt den Adapter nach der Übersetzung
                     val adapter = ArrayAdapter(
                         requireContext(),
@@ -153,7 +153,7 @@ class CreateYourProfileFragment : Fragment() {
             }
         }
         // Startet den Abrufprozess der Arbeitsorte im ViewModel.
-        viewModel.fetchArbeitsorte()
+        viewModel.fetchWorkLocations()
 
 
         /**

@@ -75,12 +75,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val registrationStatus: LiveData<RegistrationStatus> = _registrationStatus
 
 
-    private val _berufsfelder = MutableLiveData<List<String>>()
-    val berufsfelder: LiveData<List<String>> = _berufsfelder
+    private val _occupationalfields = MutableLiveData<List<String>>()
+    val occupationalfields: LiveData<List<String>> = _occupationalfields
 
-    private val _arbeitsorte = MutableLiveData<List<String>>()
-    val arbeitsorte: LiveData<List<String>> = _arbeitsorte
-
+    private val _worklocations = MutableLiveData<List<String>>()
+    val worklocations: LiveData<List<String>> = _worklocations
 
 
     private var _userProfileData = MutableLiveData<Profile?>()
@@ -98,26 +97,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _jobDetails = MutableLiveData<Result<JobDetailsResponse>>()
     val jobDetails: LiveData<Result<JobDetailsResponse>> = _jobDetails
 
-    private val _bildungsangebote = MutableLiveData<List<TerminResponse>>()
-    val bildungsangebote: LiveData<List<TerminResponse>> = _bildungsangebote
+    private val _educationaloffers = MutableLiveData<List<TerminResponse>>()
+    val educationaloffers: LiveData<List<TerminResponse>> = _educationaloffers
 
     private val _deleteAccountStatus = MutableLiveData<Boolean?>()
-    val deleteAccountStatus: LiveData<Boolean?>  = _deleteAccountStatus
-
-
-
+    val deleteAccountStatus: LiveData<Boolean?> = _deleteAccountStatus
 
 
     //TODO LiveData = UI-Aktualisierungen ,Berechnungen = lokale Variablen, slider Int lokal speichern
 
 
-
     init {
         loadUserLanguageSetting()
     }
-
-
-
 
 
     private fun loadUserLanguageSetting(userId: String? = null) {
@@ -138,16 +130,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 AppCompatDelegate.setApplicationLocales(localeListCompat)
                 _localeList.postValue(localeListCompat)
 
-                Log.d(TAG, "Sprache aktualisiert zu: $languageCode")
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Aktualisieren der Spracheinstellung", e)
+
+            } catch (_: Exception) {
+
             }
         }
     }
 
 
     fun setSelectedLanguageCode(languageCode: String) {
-        _selectedLanguageCode.value = languageCode
+        viewModelScope.launch {
+            try {
+                _selectedLanguageCode.value = languageCode
+            } catch (_: Exception) {
+            }
+        }
     }
 
     fun changeLanguage(languageCode: String) {
@@ -156,20 +153,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 withContext(Dispatchers.IO) {
                     // Speichere die Spracheinstellung
                     repository.saveLanguageSetting(languageCode)
-                    Log.d(TAG, "Spracheinstellung gespeichert: $languageCode")
+
                 }
                 val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
                 AppCompatDelegate.setApplicationLocales(localeListCompat)
                 _localeList.postValue(localeListCompat)
-                Log.d(TAG, "Sprache geändert zu: $languageCode")
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Ändern der Sprache", e)
+
+            } catch (_: Exception) {
             }
         }
     }
-
-
-
 
 
     /**
@@ -182,26 +175,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param password: Das Passwort des Benutzers.
      */
     fun login(email: String, password: String) {
-        Log.d(TAG, "Versuche, Benutzer einzuloggen mit E-Mail: $email")
-        try {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "Benutzer erfolgreich eingeloggt mit E-Mail: $email")
-
-                    fetchUserProfile()
-                    loadUserLanguageSetting(auth.currentUser?.uid)
-                    _loginStatus.value =
-                        true // Du müsstest eine LiveData hinzufügen, ähnlich wie bei der Registrierung
-                } else {
-                    task.exception?.let {
-                        Log.e(TAG, "Fehler beim Einloggen des Benutzers", it)
+        viewModelScope.launch {
+            try {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        fetchUserProfile()
+                        loadUserLanguageSetting(auth.currentUser?.uid)
+                        _loginStatus.value = true
+                    } else {
+                        _loginStatus.value = false
                     }
-                    _loginStatus.value = false // Setze den Status entsprechend
                 }
+            } catch (e: Exception) {
+                _loginStatus.value = false
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Ausnahme in der LogIn-Methode", e)
-            _loginStatus.value = false
         }
     }
 
@@ -213,34 +200,45 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param username: Die zu überprüfende E-Mail-Adresse.
      */
     fun doesEmailExist(username: String) {
-        FirebaseFirestore.getInstance().collection("user").whereEqualTo("username", username).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val documents = task.result// E-Mail existiert nicht in der Datenbank
-                    // E-Mail existiert bereits in der Datenbank
-                    _emailExists.value = documents != null && !documents.isEmpty
-                } else {
-                    // Handle error, zum Beispiel könnte ein Fehler-Status gesetzt werden
-                    Log.e(TAG, "Error checking email existence: ${task.exception}")
-                }
+        viewModelScope.launch {
+            try {
+                FirebaseFirestore.getInstance().collection("user")
+                    .whereEqualTo("username", username).get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val documents = task.result
+                            _emailExists.value = documents != null && !documents.isEmpty
+                        } else {
+                            _emailExists.value = false
+                        }
+                    }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in doesEmailExist", e)
+                _emailExists.value = false
             }
+        }
     }
 
 
     private fun fetchUserProfile() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId != null) {
-            val docRef = Firebase.firestore.collection("user").document(userId)
-            docRef.get().addOnSuccessListener { documentSnapshot ->
-                val userProfile = documentSnapshot.toObject<Profile>()
-                _userProfileData.value = userProfile
-            }.addOnFailureListener { e ->
-                Log.w(TAG, "Error fetching user profile", e)
+        viewModelScope.launch {
+            try {
+                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                if (userId != null) {
+                    val docRef = Firebase.firestore.collection("user").document(userId)
+                    docRef.get().addOnSuccessListener { documentSnapshot ->
+                        val userProfile = documentSnapshot.toObject<Profile>()
+                        _userProfileData.value = userProfile
+                    }.addOnFailureListener {
+                        _userProfileData.value = null
+                    }
+                } else {
+                    _userProfileData.value = null
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in fetchUserProfile", e)
                 _userProfileData.value = null
             }
-        } else {
-            Log.w(TAG, "User ID is null, can't fetch user profile")
-            _userProfileData.value = null
         }
     }
 
@@ -252,23 +250,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param idToken: Das ID-Token, das von Google beim SignIn erhalten wurde.
      */
     fun onGoogleLoginClicked(idToken: String) {
-        // Erstellt ein Authentifizierungs-credential mit dem ID-Token von Google.
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        // Verwendet das credential, um sich mit Firebase zu authentifizieren.
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Wenn die Authentifizierung erfolgreich ist, setzt es den Login-Status auf true
-                    // und lädt die Benutzerspracheinstellungen.
-                    _loginStatus.value = true
-                    loadUserLanguageSetting(auth.currentUser?.uid)
-                } else {
-                    // Bei Misserfolg setzt es den Login-Status auf false.
-                    _loginStatus.value = false
-                }
+        viewModelScope.launch {
+            try {
+                // Erstellt ein Authentifizierungs-credential mit dem ID-Token von Google.
+                val credential = GoogleAuthProvider.getCredential(idToken, null)
+                // Verwendet das credential, um sich mit Firebase zu authentifizieren.
+                auth.signInWithCredential(credential)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Wenn die Authentifizierung erfolgreich ist, setzt es den Login-Status auf true
+                            // und lädt die Benutzerspracheinstellungen.
+                            _loginStatus.value = true
+                            loadUserLanguageSetting(auth.currentUser?.uid)
+                        } else {
+                            // Bei Misserfolg setzt es den Login-Status auf false.
+                            _loginStatus.value = false
+                        }
+                    }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in onGoogleLoginClicked", e)
+                _loginStatus.value = false
             }
+        }
     }// TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
-
 
 
     /**
@@ -282,52 +286,54 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param languageCode: Der Sprachcode für die Sprachpräferenz des Benutzers.
      */
     fun register(email: String, password: String, confirmPassword: String, languageCode: String) {
-        // Überprüft, ob die Passwörter übereinstimmen.
-        if (password != confirmPassword) {
-            _registrationStatus.value =
-                RegistrationStatus(success = false, message = "Passwörter stimmen nicht überein")
-            return
-        }
-        Log.d(TAG, "Versuche, den Benutzer zu registrieren mit E-Mail: $email")
-        // Versucht, den Benutzer mit der angegebenen E-Mail und dem Passwort zu registrieren.
-        try {
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                // Behandelt den Erfolg oder Misserfolg der Registrierung.
-                if (task.isSuccessful) {
-                    Log.d(TAG, "Benutzer erfolgreich registriert mit E-Mail: $email")
-                    val firebaseUser = auth.currentUser
-                    firebaseUser?.let { user ->
-                        // Registrierung erfolgreich: Erstellt und speichert das Benutzerprofil.
-                        val userId = user.uid
-                        val userProfile = Profile(
-                            isPremium = false,
-                            username = email,
-                            languageCode = languageCode
-                        )
-                        repository.createUserProfile(
-                            userId,
-                            userProfile
-                        ) // Rufe die Methode aus dem Repository auf
-                    }
-                    _registrationStatus.value = RegistrationStatus(success = true)
-                } else {
-                    // Registrierung fehlgeschlagen: Setzt den Registrierungsstatus entsprechend.
-                    val message = when (task.exception) {
-                        is FirebaseAuthUserCollisionException -> R.string.emailinuse
-                        else -> R.string.unkownregistererror
-                    }
-                    Log.e(TAG, message.toString(), task.exception)
-                    _registrationStatus.value =
-                        RegistrationStatus(success = false, message = message)
-                }
+        viewModelScope.launch {
+            // Überprüft, ob die Passwörter übereinstimmen.
+            if (password != confirmPassword) {
+                _registrationStatus.value =
+                    RegistrationStatus(
+                        success = false,
+                        message = "Passwörter stimmen nicht überein"
+                    )
+                return@launch
             }
-        } catch (e: Exception) {
-            // Bei einer Ausnahme wird der Registrierungsstatus entsprechend gesetzt.
-            Log.e(TAG, "Ausnahme in der Registrationsmethode", e)
-            _registrationStatus.value = RegistrationStatus(
-                success = false,
-                message = "Ausnahme in der Registrationsmethode: ${e.localizedMessage}"
-            )
+            // Versucht, den Benutzer mit der angegebenen E-Mail und dem Passwort zu registrieren.
+            try {
+                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    // Behandelt den Erfolg oder Misserfolg der Registrierung.
+                    if (task.isSuccessful) {
+                        val firebaseUser = auth.currentUser
+                        firebaseUser?.let { user ->
+                            // Registrierung erfolgreich: Erstellt und speichert das Benutzerprofil.
+                            val userId = user.uid
+                            val userProfile = Profile(
+                                isPremium = false,
+                                username = email,
+                                languageCode = languageCode
+                            )
+                            repository.createUserProfile(
+                                userId,
+                                userProfile
+                            ) // Rufe die Methode aus dem Repository auf
+                        }
+                        _registrationStatus.value = RegistrationStatus(success = true)
+                    } else {
+                        // Registrierung fehlgeschlagen: Setzt den Registrierungsstatus entsprechend.
+                        val message = when (task.exception) {
+                            is FirebaseAuthUserCollisionException -> R.string.emailinuse
+                            else -> R.string.unkownregistererror
+                        }
+                        Log.e(TAG, message.toString(), task.exception)
+                        _registrationStatus.value =
+                            RegistrationStatus(success = false, message = message)
+                    }
+                }
+            } catch (e: Exception) {
+                // Bei einer Ausnahme wird der Registrierungsstatus entsprechend gesetzt.
+                _registrationStatus.value = RegistrationStatus(
+                    success = false,
+                    message = "Ausnahme in der Registrationsmethode: ${e.localizedMessage}"
+                )
+            }
         }
     }
 
@@ -424,19 +430,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * Holt die Liste der Berufsfelder asynchron aus der Datenquelle (Repository) und speichert sie in einer LiveData-Variable.
      * Diese Methode nutzt Coroutines, um den asynchronen Aufruf zu handhaben und Fehlertoleranz zu gewährleisten.
      */
-    fun fetchBerufsfelder() {
+    fun fetchOccupationalFields() {
         // Start einer Coroutine im ViewModelScope, um asynchrone Operationen zu ermöglichen.
         viewModelScope.launch {
             try {
                 // Versucht, die Berufsfelder vom Repository zu erhalten.
-                val response = repository.getBerufsfelder()
+                val response = repository.getOccupationalFields()
                 if (response.isSuccess) {
                     Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
                     // Bei Erfolg werden die Berufsfelder in der LiveData-Variable gespeichert.
-                    _berufsfelder.value = response.getOrNull()!!
+                    _occupationalfields.value = response.getOrNull()!!
                 } else {
                     // Im Fehlerfall wird eine leere Liste gesetzt, um die Fehlerbehandlung in der UI zu ermöglichen.
-                    _berufsfelder.value = listOf()
+                    _occupationalfields.value = listOf()
                     Log.e(
                         TAG,
                         "Fehler beim Abrufen der Berufsfelder: ${response.exceptionOrNull()?.message}"
@@ -444,7 +450,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             } catch (e: Exception) {
                 // Fängt jegliche Ausnahmen beim Abrufen der Berufsfelder ab und setzt die LiveData-Variable auf eine leere Liste.
-                _berufsfelder.value = listOf()
+                _occupationalfields.value = listOf()
                 Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${e.message}")
             }
         }
@@ -460,7 +466,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param berufsfelder: Die Liste der Berufsfelder, die übersetzt werden sollen.
      * @param onComplete: Die Callback-Funktion, die mit der Liste der übersetzten Berufsfelder aufgerufen wird.
      */
-    fun translateBerufsfelder(berufsfelder: List<String>, onComplete: (List<String>) -> Unit) {
+    fun translateOccupationalFields(
+        berufsfelder: List<String>,
+        onComplete: (List<String>) -> Unit
+    ) {
         // Erfasst den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
         val currentLanguageCode =
             _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
@@ -472,20 +481,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         viewModelScope.launch {
-            val translatedBerufsfelder = mutableListOf<String>()
+            val translatedOccupationalFields = mutableListOf<String>()
             berufsfelder.forEach { berufsfeld ->
                 try {
                     // Verwendet currentLanguageCode als Ziel für die Übersetzung.
                     val result = repository.translateText(berufsfeld, currentLanguageCode)
                     result?.text?.let {
-                        translatedBerufsfelder.add(it)
+                        translatedOccupationalFields.add(it)
                         Log.d("translateBerufsfelder", "Übersetzt: $berufsfeld zu $it")
                     }
                 } catch (e: Exception) {
                     Log.e("translateBerufsfelder", "Fehler bei der Übersetzung von $berufsfeld", e)
                 }
             }
-            onComplete(translatedBerufsfelder)
+            onComplete(translatedOccupationalFields)
         }
     }
 
@@ -493,19 +502,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * Holt die Liste der Arbeitsorte asynchron aus der Datenquelle (Repository) und speichert sie in einer LiveData-Variable.
      * Diese Methode nutzt Coroutines, um den asynchronen Aufruf zu handhaben und Fehlertoleranz zu gewährleisten.
      */
-    fun fetchArbeitsorte() {
+    fun fetchWorkLocations() {
         // Start einer Coroutine im ViewModelScope, um asynchrone Operationen zu ermöglichen.
         viewModelScope.launch {
             try {
                 // Versuch, Arbeitsorte vom Repository zu erhalten
-                val response = repository.getArbeitsorte()
+                val response = repository.getWorkLocations()
                 if (response.isSuccess) {
                     // Bei Erfolg werden die erhaltenen Arbeitsorte in _arbeitsorte LiveData gesetzt.
                     Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
-                    _arbeitsorte.value = response.getOrNull()!!
+                    _worklocations.value = response.getOrNull()!!
                 } else {
                     // Bei Misserfolg wird eine leere Liste gesetzt..
-                    _arbeitsorte.value = listOf()
+                    _worklocations.value = listOf()
                     Log.e(
                         TAG,
                         "Fehler beim Abrufen der Arbeitsorte: ${response.exceptionOrNull()?.message}"
@@ -513,7 +522,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             } catch (e: Exception) {
                 // Bei einer Ausnahme wird ebenfalls eine leere Liste gesetzt
-                _arbeitsorte.value = listOf()
+                _worklocations.value = listOf()
                 Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${e.message}")
             }
         }
@@ -528,7 +537,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param arbeitsorte: Die Liste der Berufsfelder, die übersetzt werden sollen.
      * @param onComplete: Die Callback-Funktion, die mit der Liste der übersetzten Berufsfelder aufgerufen wird.
      */
-    fun translateArbeitsorte(arbeitsorte: List<String>, onComplete: (List<String>) -> Unit) {
+    fun translateWorkLocations(arbeitsorte: List<String>, onComplete: (List<String>) -> Unit) {
         // Erfasst den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
         val currentLanguageCode =
             _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
@@ -540,20 +549,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         viewModelScope.launch {
-            val translatedArbeitsorte = mutableListOf<String>()
+            val translatedWorkLocations = mutableListOf<String>()
             arbeitsorte.forEach { arbeitsort ->
                 try {
                     // Verwendet currentLanguageCode als Ziel für die Übersetzung
                     val result = repository.translateText(arbeitsort, currentLanguageCode)
                     result?.text?.let {
-                        translatedArbeitsorte.add(it)
+                        translatedWorkLocations.add(it)
                         Log.d("translateArbeitsorte", "Übersetzt: $arbeitsort zu $it")
                     }
                 } catch (e: Exception) {
                     Log.e("translateArbeitsorte", "Fehler bei der Übersetzung von $arbeitsort", e)
                 }
             }
-            onComplete(translatedArbeitsorte)
+            onComplete(translatedWorkLocations)
         }
     }
 
@@ -589,7 +598,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     repository.firebaseAuth.currentUser?.uid ?: throw Exception("Nicht angemeldet")
                 // Hochladen des Bildes und Erhalten der URL.
                 val imageUrl = repository.uploadAndUpdateProfilePicture(uri, userId)
-                Log.d(TAG, "Profilbild erfolgreich aktualisiert: $imageUrl")
+
 
                 // Konvertiere das Alter in einen Integer. Bei ungültiger Eingabe wird 0 verwendet.
                 val ageInt = age.toIntOrNull() ?: 0
@@ -612,42 +621,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 )
                 // Aktualisiert das Benutzerprofil mit den neuen Daten.
                 repository.updateUserProfile(userId, profileData)
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern des Profils", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     // Im ViewModel
-    fun fetchJobs(berufsfeld: String, arbeitsort: String) {
+    fun fetchJobNomination(berufsfeld: String, arbeitsort: String) {
         viewModelScope.launch {
             try {
                 val response = repository.getJobs(berufsfeld, arbeitsort)
                 if (response.isSuccess) {
-                    Log.d(TAG, "Jobs erfolgreich abgerufen.")
+
                     _jobs.value = response.getOrNull() ?: listOf()
                 } else {
                     _jobs.value = listOf()
-                    Log.e(
-                        TAG,
-                        "Fehler beim Abrufen der Jobs: ${response.exceptionOrNull()?.message}"
-                    )
+
                 }
             } catch (e: Exception) {
                 _jobs.value = listOf()
-                Log.e(TAG, "Fehler beim Abrufen der Jobs: ${e.message}")
+
             }
         }
     }
@@ -673,10 +668,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val result = repository.translateText(jobTitle, currentLanguageCode)
                     result?.text?.let {
                         translatedJobTitles.add(it)
-                        Log.d("translateJobTitles", "Übersetzt: $jobTitle zu $it")
+
                     }
-                } catch (e: Exception) {
-                    Log.e("translateJobTitles", "Fehler bei der Übersetzung von $jobTitle", e)
+                } catch (_: Exception) {
+
                 }
             }
             onComplete(translatedJobTitles)
@@ -738,70 +733,97 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateJobOffers(was: String, arbeitsort: String) {
-        try {
-            fetchJobOffers(was, arbeitsort)
-            Log.d("updateJobOffers", "Successfully updated job offers for $was in $arbeitsort")
-        } catch (e: Exception) {
-            Log.e("updateJobOffers", "Error updating job offers for $was in $arbeitsort", e)
+        viewModelScope.launch {
+            try {
+                fetchJobOffers(was, arbeitsort)
+                Log.d("updateJobOffers", "Successfully updated job offers for $was in $arbeitsort")
+            } catch (e: Exception) {
+                Log.e("updateJobOffers", "Error updating job offers for $was in $arbeitsort", e)
+            }
         }
     }
 
 
     fun updateSelectedJobsAndPersist(newSelectedJobs: Map<String, String>) {
-        val currentProfile = _userProfileData.value ?: Profile()
+        viewModelScope.launch {
+            try {
+                val currentProfile = _userProfileData.value ?: Profile()
 
-        // Ergänze die aktuellen ausgewählten Jobs mit den neuen
-        val updatedSelectedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
-        updatedSelectedJobs.putAll(newSelectedJobs)
+                // Ergänze die aktuellen ausgewählten Jobs mit den neuen
+                val updatedSelectedJobs =
+                    currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+                updatedSelectedJobs.putAll(newSelectedJobs)
 
-        currentProfile.selectedJobs = updatedSelectedJobs.toMap()
+                currentProfile.selectedJobs = updatedSelectedJobs.toMap()
 
-        _userProfileData.value = currentProfile
+                _userProfileData.value = currentProfile
 
-        saveSelectedJobsToFirebase(updatedSelectedJobs.toMap())
-
+                saveSelectedJobsToFirebase(updatedSelectedJobs.toMap())
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in updateSelectedJobsAndPersist", e)
+            }
+        }
     }
 
 
     private fun saveSelectedJobsToFirebase(selectedJobs: Map<String, String>) {
-        val userId = auth.currentUser?.uid ?: return
-        repository.updateUserProfileField(userId, "selectedJobs", selectedJobs)
+        viewModelScope.launch {
+            try {
+                val userId = auth.currentUser?.uid ?: return@launch
+                repository.updateUserProfileField(userId, "selectedJobs", selectedJobs)
+            } catch (e: Exception) {
+                // Hier können Sie den Fehler loggen oder behandeln
+                Log.e(TAG, "Fehler beim Speichern der ausgewählten Jobs in Firebase", e)
+            }
+        }
     }
 
 
-    fun updateToDoItemForJob(userId: String, rawJobId: String, todoId: String, isCompleted: Boolean, text: String) {
-        val jobId = sanitizeJobId(rawJobId)
-        val userDocRef = FirebaseFirestore.getInstance().collection("user").document(userId)
-        val todoDocRef = userDocRef.collection("todos").document(jobId)
+    fun updateToDoItemForJob(
+        userId: String,
+        rawJobId: String,
+        todoId: String,
+        isCompleted: Boolean,
+        text: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val jobId = sanitizeJobId(rawJobId)
+                val userDocRef = FirebaseFirestore.getInstance().collection("user").document(userId)
+                val todoDocRef = userDocRef.collection("todos").document(jobId)
 
-        val toDoData = mapOf(
-            "erledigt" to isCompleted,
-            "text" to text
-        )
+                val toDoData = mapOf(
+                    "erledigt" to isCompleted,
+                    "text" to text
+                )
 
-        todoDocRef.get().addOnSuccessListener { document ->
-            if (document.exists()) {
-                // Wenn das Dokument existiert, aktualisiere das spezifische To-Do-Item
-                todoDocRef.update("todos.$todoId", toDoData)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "ToDo item updated successfully")
+                todoDocRef.get().addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        // Wenn das Dokument existiert, aktualisiere das spezifische To-Do-Item
+                        todoDocRef.update("todos.$todoId", toDoData)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "ToDo item updated successfully")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e(TAG, "Error updating ToDo item", e)
+                            }
+                    } else {
+                        // Wenn das Dokument nicht existiert, erstelle ein neues mit dem To-Do-Item
+                        val newTodo = mapOf("todos" to mapOf(todoId to toDoData))
+                        todoDocRef.set(newTodo)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "New ToDo item created successfully")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e(TAG, "Error creating new ToDo item", e)
+                            }
                     }
-                    .addOnFailureListener { e ->
-                        Log.e(TAG, "Error updating ToDo item", e)
-                    }
-            } else {
-                // Wenn das Dokument nicht existiert, erstelle ein neues mit dem To-Do-Item
-                val newTodo = mapOf("todos" to mapOf(todoId to toDoData))
-                todoDocRef.set(newTodo)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "New ToDo item created successfully")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e(TAG, "Error creating new ToDo item", e)
-                    }
+                }.addOnFailureListener { e ->
+                    Log.e(TAG, "Error checking if ToDo item exists", e)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in updateToDoItemForJob", e)
             }
-        }.addOnFailureListener { e ->
-            Log.e(TAG, "Error checking if ToDo item exists", e)
         }
     }
 
@@ -823,9 +845,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         Log.e(TAG, "Error fetching todo items", e)
                         liveData.value = emptyList()
                     } else {
-                        val todos = snapshot?.get("todos") as? Map<String, Map<String, Any>> ?: emptyMap()
+                        val todos =
+                            snapshot?.get("todos") as? Map<String, Map<String, Any>> ?: emptyMap()
                         val toDoItems = todos.map { (id, data) ->
-                            ToDoItem(id, data["text"] as? String ?: "", data["erledigt"] as? Boolean ?: false)
+                            ToDoItem(
+                                id,
+                                data["text"] as? String ?: "",
+                                data["erledigt"] as? Boolean ?: false
+                            )
                         }
                         liveData.value = toDoItems
                     }
@@ -840,8 +867,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
-
     /**
      * Bereinigt die jobId, indem sie alle nicht alphanumerischen Zeichen durch Unterstriche ersetzt.
      */
@@ -851,41 +876,56 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun updateToDoText(userId: String, jobId: String, todoId: String, newText: String) {
-        val sanitizedJobId = sanitizeJobId(jobId)
-        val todoDocRef = FirebaseFirestore.getInstance()
-            .collection("user")
-            .document(userId)
-            .collection("todos")
-            .document(sanitizedJobId)
+        viewModelScope.launch {
+            try {
+                val sanitizedJobId = sanitizeJobId(jobId)
+                val todoDocRef = FirebaseFirestore.getInstance()
+                    .collection("user")
+                    .document(userId)
+                    .collection("todos")
+                    .document(sanitizedJobId)
 
-        // Hier aktualisierst du nicht das ganze Dokument, sondern nur das 'text'-Feld des spezifischen ToDo
-        val todoItemPath = "todos.$todoId.text"
-        todoDocRef.update(todoItemPath, newText)
-            .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
+                // Hier aktualisierst du nicht das ganze Dokument, sondern nur das 'text'-Feld des spezifischen ToDo
+                val todoItemPath = "todos.$todoId.text"
+                todoDocRef.update(todoItemPath, newText)
+                    .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
+            } catch (e: Exception) {
+                // Hier können Sie den Fehler loggen oder behandeln
+                Log.e(TAG, "Fehler beim Aktualisieren des ToDo-Textes", e)
+            }
+        }
     }
-
-
 
 
     fun deleteJobSelection(jobTitle: String) {
-        val currentProfile = _userProfileData.value ?: return // Beendet die Methode, falls kein Profil vorhanden ist.
-        val updatedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
+        viewModelScope.launch {
+            try {
+                val currentProfile = _userProfileData.value
+                    ?: return@launch // Beendet die Methode, falls kein Profil vorhanden ist.
+                val updatedJobs = currentProfile.selectedJobs?.toMutableMap() ?: mutableMapOf()
 
-        updatedJobs.remove(jobTitle) // Entfernt den Eintrag sicher aus der Map.
+                updatedJobs.remove(jobTitle) // Entfernt den Eintrag sicher aus der Map.
 
-        currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
-        _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
+                currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
+                _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
+            } catch (e: Exception) {
+                // Hier können Sie den Fehler loggen oder behandeln
+                Log.e(TAG, "Fehler beim Löschen der Jobauswahl", e)
+            }
+        }
     }
 
     fun savedesiredLocationToFirebase(desiredLocation: String) {
-        val userId = auth.currentUser?.uid ?: return
-        repository.updateUserProfileField(userId, "desiredLocation", desiredLocation)
+        viewModelScope.launch {
+            try {
+                val userId = auth.currentUser?.uid ?: return@launch
+                repository.updateUserProfileField(userId, "desiredLocation", desiredLocation)
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern des gewünschten Standorts in Firebase", e)
+            }
+        }
     }
-
-
-
-
 
 
     fun fetchJobDetails(encodedHashID: String) {
@@ -913,38 +953,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                val translatedArbeitgeber = repository.translateText(
+                val translatedEmployer = repository.translateText(
                     jobDetails.arbeitgeber ?: "",
                     currentLanguageCode
                 )?.text ?: jobDetails.arbeitgeber
-                val translatedStellenbeschreibung = repository.translateText(
+                val translatedJobOfferDescription = repository.translateText(
                     jobDetails.stellenbeschreibung ?: "",
                     currentLanguageCode
                 )?.text ?: jobDetails.stellenbeschreibung
-                val translatedBranche =
+                val translatedBranch =
                     repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text
                         ?: jobDetails.branche
-                val translatedAngebotsart = repository.translateText(
+                val translatedOfferType = repository.translateText(
                     jobDetails.angebotsart ?: "",
                     currentLanguageCode
                 )?.text ?: jobDetails.angebotsart
-                val translatedTitel =
+                val translatedTitle =
                     repository.translateText(jobDetails.titel ?: "", currentLanguageCode)?.text
                         ?: jobDetails.titel
-                val translatedBeruf =
+                val translatedProfession =
                     repository.translateText(jobDetails.beruf ?: "", currentLanguageCode)?.text
                         ?: jobDetails.beruf
-                val translatedVerguetung =
+                val translatedRemuneration =
                     repository.translateText(jobDetails.verguetung ?: "", currentLanguageCode)?.text
                         ?: jobDetails.verguetung
 
 
-                val translatedArbeitszeitmodelle = jobDetails.arbeitszeitmodelle?.map { model ->
+                val translatedWorkingTimeModels = jobDetails.arbeitszeitmodelle?.map { model ->
                     repository.translateText(model, currentLanguageCode)?.text ?: model
                 } ?: listOf()
 
                 // Übersetzung der Arbeitsorte, wenn nötig
-                val translatedArbeitsorte = jobDetails.arbeitsorte?.map { ort ->
+                val translatedWorkLocations = jobDetails.arbeitsorte?.map { ort ->
                     ort.copy(
                         ort = repository.translateText(ort.ort ?: "", currentLanguageCode)?.text
                             ?: ort.ort
@@ -953,41 +993,53 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 // Erstelle ein neues JobDetailsResponse-Objekt mit den übersetzten Werten
                 val translatedJobDetails = jobDetails.copy(
-                    arbeitgeber = translatedArbeitgeber,
-                    stellenbeschreibung = translatedStellenbeschreibung,
-                    branche = translatedBranche,
-                    angebotsart = translatedAngebotsart,
-                    titel = translatedTitel,
-                    beruf = translatedBeruf,
-                    arbeitszeitmodelle = translatedArbeitszeitmodelle,
-                    arbeitsorte = translatedArbeitsorte,
-                    verguetung = translatedVerguetung,
+                    arbeitgeber = translatedEmployer,
+                    stellenbeschreibung = translatedJobOfferDescription,
+                    branche = translatedBranch,
+                    angebotsart = translatedOfferType,
+                    titel = translatedTitle,
+                    beruf = translatedProfession,
+                    arbeitszeitmodelle = translatedWorkingTimeModels,
+                    arbeitsorte = translatedWorkLocations,
+                    verguetung = translatedRemuneration,
                 )
 
                 onComplete(translatedJobDetails)
             } catch (e: Exception) {
-                Log.e("translateJobDetails", "Fehler bei der Übersetzung der Jobdetails", e)
+
                 onComplete(jobDetails) // Gebe die ursprünglichen Jobdetails zurück, falls ein Fehler auftritt
             }
         }
     }
 
 
-
-    fun fetchBildungsangebote(systematiken: String, orte: String, sprachniveau: String, beginntermine: Int) {
+    fun fetchEducationalOffers(
+        systematiken: String,
+        orte: String,
+        sprachniveau: String,
+        beginntermine: Int
+    ) {
         viewModelScope.launch {
-            val response = repository.getBildungsangebote(systematiken, orte, sprachniveau, beginntermine)
-            if (response.isSuccess) {
-                _bildungsangebote.postValue(response.getOrNull() ?: listOf())
-            } else {
-                _bildungsangebote.postValue(listOf())
-                Log.e(TAG, "Fehler beim Abrufen der Bildungsangebote: ${response.exceptionOrNull()?.message}")
+            try {
+                val response =
+                    repository.getEducationalOffers(systematiken, orte, sprachniveau, beginntermine)
+                if (response.isSuccess) {
+                    _educationaloffers.postValue(response.getOrNull() ?: listOf())
+                } else {
+                    _educationaloffers.postValue(listOf())
+                    Log.e(
+                        TAG,
+                        "Fehler beim Abrufen der Bildungsangebote: ${response.exceptionOrNull()?.message}"
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Ausnahme beim Abrufen der Bildungsangebote", e)
             }
         }
     }
 
 
-    fun translateBildungsangebote(
+    fun translateEducationalOffers(
         bildungsangebote: List<TerminResponse>,
         onComplete: (List<TerminResponse>) -> Unit
     ) {
@@ -999,7 +1051,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                val translatedBildungsangebote = bildungsangebote.map { angebot ->
+                val translatedEducationalOffers = bildungsangebote.map { angebot ->
                     val translatedTitel = repository.translateText(
                         angebot.angebot?.titel ?: "",
                         currentLanguageCode
@@ -1009,19 +1061,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         currentLanguageCode
                     )?.text ?: angebot.angebot?.inhalt
 
-                    angebot.copy(angebot = angebot.angebot?.copy(
-                        titel = translatedTitel,
-                        inhalt = translatedInhalt
-                    ))
+                    angebot.copy(
+                        angebot = angebot.angebot?.copy(
+                            titel = translatedTitel,
+                            inhalt = translatedInhalt
+                        )
+                    )
                 }
-                onComplete(translatedBildungsangebote)
+                onComplete(translatedEducationalOffers)
             } catch (e: Exception) {
-                Log.e("translateBildungsangebote", "Fehler bei der Übersetzung der Bildungsangebote", e)
+
                 onComplete(bildungsangebote) // Gebe die ursprünglichen Bildungsangebote zurück, falls ein Fehler auftritt
             }
         }
     }
-
 
 
     fun updateProfileImage(uri: Uri) {
@@ -1037,101 +1090,150 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val imageUrl = imageRef.downloadUrl.await().toString()
                 firebaseFirestore.collection("user").document(userId)
                     .update("profilePicture", imageUrl).await()
-                Log.d("MainViewModel", "Profilbild erfolgreich aktualisiert: $imageUrl")
-            } catch (e: Exception) {
-                Log.e("MainViewModel", "Fehler beim Aktualisieren des Profilbildes", e)
+
+            } catch (_: Exception) {
+
             }
         }
     }
 
 
-
-
-
-
     fun addFlashcard(userId: String, frontText: String, backText: String) {
-        val newCard = IndexCard(frontText = frontText, backText = backText)
-        val docRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").document()
-        newCard.id = docRef.id  // Setze die Firestore-ID als die ID der Karte
-        docRef.set(newCard)
+        viewModelScope.launch {
+            try {
+                val newCard = IndexCard(frontText = frontText, backText = backText)
+                val docRef = FirebaseFirestore.getInstance().collection("user").document(userId)
+                    .collection("flashcards").document()
+                newCard.id = docRef.id  // Setze die Firestore-ID als die ID der Karte
+                docRef.set(newCard)
+            } catch (_: Exception) {
+
+            }
+        }
     }
 
 
     fun updateFlashcard(userId: String, cardId: String, frontText: String?, backText: String?) {
-        val cardRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards").document(cardId)
-        val updateMap = mutableMapOf<String, Any>()
-        frontText?.let { updateMap["frontText"] = it }
-        backText?.let { updateMap["backText"] = it }
+        viewModelScope.launch {
+            try {
+                val cardRef = FirebaseFirestore.getInstance().collection("user").document(userId)
+                    .collection("flashcards").document(cardId)
+                val updateMap = mutableMapOf<String, Any>()
+                frontText?.let { updateMap["frontText"] = it }
+                backText?.let { updateMap["backText"] = it }
 
-        cardRef.update(updateMap)
+                cardRef.update(updateMap)
+            } catch (_: Exception) {
+
+            }
+        }
     }
 
 
     fun getFlashcards(userId: String): LiveData<List<IndexCard>> {
         val liveData = MutableLiveData<List<IndexCard>>()
-        FirebaseFirestore.getInstance().collection("user").document(userId).collection("flashcards")
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    // Handle the error
-                    liveData.value = emptyList()
-                } else {
-                    val flashcards = snapshot?.toObjects(IndexCard::class.java)
-                    liveData.value = flashcards ?: emptyList()
-                }
+        viewModelScope.launch {
+            try {
+                FirebaseFirestore.getInstance().collection("user").document(userId)
+                    .collection("flashcards")
+                    .addSnapshotListener { snapshot, e ->
+                        if (e != null) {
+                            // Handle the error
+                            liveData.postValue(emptyList())
+                        } else {
+                            val flashcards = snapshot?.toObjects(IndexCard::class.java)
+                            liveData.postValue(flashcards ?: emptyList())
+                        }
+                    }
+            } catch (_: Exception) {
             }
+        }
         return liveData
     }
 
 
     fun updateToDoItem(userId: String, todoId: String, isCompleted: Boolean, text: String) {
-        val todoDocRef = FirebaseFirestore.getInstance()
-            .collection("user")
-            .document(userId)
-            .collection("relocationTodos")
-            .document(todoId)
+        viewModelScope.launch {
+            try {
+                val todoDocRef = FirebaseFirestore.getInstance()
+                    .collection("user")
+                    .document(userId)
+                    .collection("relocationTodos")
+                    .document(todoId)
 
-        val toDoData = mapOf(
-            "erledigt" to isCompleted,
-            "text" to text
-        )
+                val toDoData = mapOf(
+                    "erledigt" to isCompleted,
+                    "text" to text
+                )
 
-        todoDocRef.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val document = task.result
-                if (document.exists()) {
-                    todoDocRef.update(toDoData)
-                        .addOnSuccessListener { Log.d(TAG, "ToDo item updated successfully") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo item", e) }
-                } else {
-                    todoDocRef.set(toDoData)
-                        .addOnSuccessListener { Log.d(TAG, "ToDo item created successfully") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error creating ToDo item", e) }
+                todoDocRef.get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val document = task.result
+                        if (document.exists()) {
+                            todoDocRef.update(toDoData)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        TAG,
+                                        "ToDo item updated successfully"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        TAG,
+                                        "Error updating ToDo item",
+                                        e
+                                    )
+                                }
+                        } else {
+                            todoDocRef.set(toDoData)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        TAG,
+                                        "ToDo item created successfully"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        TAG,
+                                        "Error creating ToDo item",
+                                        e
+                                    )
+                                }
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting document", task.exception)
+                    }
                 }
-            } else {
-                Log.w(TAG, "Error getting document", task.exception)
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception in updateToDoItem", e)
             }
         }
     }
 
 
-
     fun getToDoItems(userId: String): LiveData<List<ToDoItemRelocation>> {
         val liveData = MutableLiveData<List<ToDoItemRelocation>>()
 
-        val todoDocRef = FirebaseFirestore.getInstance()
-            .collection("user")
-            .document(userId)
-            .collection("relocationTodos")
+        viewModelScope.launch {
+            try {
+                val todoDocRef = FirebaseFirestore.getInstance()
+                    .collection("user")
+                    .document(userId)
+                    .collection("relocationTodos")
 
-        todoDocRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.e(TAG, "Error fetching todo items", e)
-                liveData.value = emptyList()
-            } else {
-                val toDoItems = snapshot?.documents?.mapNotNull { doc ->
-                    doc.toObject(ToDoItemRelocation::class.java)?.apply { id = doc.id }
-                } ?: emptyList()
-                liveData.value = toDoItems
+                todoDocRef.addSnapshotListener { snapshot, e ->
+                    if (e != null) {
+                        Log.e(TAG, "Error fetching todo items", e)
+                        liveData.postValue(emptyList())
+                    } else {
+                        val toDoItems = snapshot?.documents?.mapNotNull { doc ->
+                            doc.toObject(ToDoItemRelocation::class.java)?.apply { id = doc.id }
+                        } ?: emptyList()
+                        liveData.postValue(toDoItems)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception in getToDoItems", e)
             }
         }
 
@@ -1139,98 +1241,155 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateToDoTextRelocation(userId: String, todoId: String, newText: String) {
-        val todoDocRef = FirebaseFirestore.getInstance()
-            .collection("user")
-            .document(userId)
-            .collection("relocationTodos")
-            .document(todoId)
+        viewModelScope.launch {
+            try {
+                val todoDocRef = FirebaseFirestore.getInstance()
+                    .collection("user")
+                    .document(userId)
+                    .collection("relocationTodos")
+                    .document(todoId)
 
-        todoDocRef.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val document = task.result
-                if (document.exists()) {
-                    todoDocRef.update("text", newText)
-                        .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
-                } else {
-                    val toDoData = mapOf(
-                        "erledigt" to false,
-                        "text" to newText
-                    )
-                    todoDocRef.set(toDoData)
-                        .addOnSuccessListener { Log.d(TAG, "ToDo item created successfully") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error creating ToDo item", e) }
+                todoDocRef.get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val document = task.result
+                        if (document.exists()) {
+                            todoDocRef.update("text", newText)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        TAG,
+                                        "ToDo text updated successfully"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        TAG,
+                                        "Error updating ToDo text",
+                                        e
+                                    )
+                                }
+                        } else {
+                            val toDoData = mapOf(
+                                "erledigt" to false,
+                                "text" to newText
+                            )
+                            todoDocRef.set(toDoData)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        TAG,
+                                        "ToDo item created successfully"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        TAG,
+                                        "Error creating ToDo item",
+                                        e
+                                    )
+                                }
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting document", task.exception)
+                    }
                 }
-            } else {
-                Log.w(TAG, "Error getting document", task.exception)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in updateToDoTextRelocation", e)
             }
         }
     }
 
     fun deleteToDoItem(userId: String, todoId: String) {
-        val todoDocRef = FirebaseFirestore.getInstance()
-            .collection("user")
-            .document(userId)
-            .collection("relocationTodos")
-            .document(todoId)
+        viewModelScope.launch {
+            try {
+                val todoDocRef = FirebaseFirestore.getInstance()
+                    .collection("user")
+                    .document(userId)
+                    .collection("relocationTodos")
+                    .document(todoId)
 
-        todoDocRef.get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    todoDocRef.delete()
-                        .addOnSuccessListener { Log.d(TAG, "ToDo item deleted successfully") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error deleting ToDo item", e) }
-                } else {
-                    Log.w(TAG, "ToDo item does not exist")
+                todoDocRef.get().addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        todoDocRef.delete()
+                            .addOnSuccessListener { Log.d(TAG, "ToDo item deleted successfully") }
+                            .addOnFailureListener { e -> Log.w(TAG, "Error deleting ToDo item", e) }
+                    } else {
+                        Log.w(TAG, "ToDo item does not exist")
+                    }
                 }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error getting ToDo item", e) }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in deleteToDoItem", e)
             }
-            .addOnFailureListener { e -> Log.w(TAG, "Error getting ToDo item", e) }
-    }
-
-
-    fun saveFeedback(userId: String, designRating: Float, functionalityRating: Float, overallRating: Float, generalFeedback: String) {
-        val feedbackDocRef = FirebaseFirestore.getInstance()
-            .collection("user")
-            .document(userId)
-            .collection("feedback")
-            .document()  // Erstellt ein neues Dokument mit einer einzigartigen ID
-
-        val feedbackData = mapOf(
-            "designRating" to designRating,
-            "functionalityRating" to functionalityRating,
-            "overallRating" to overallRating,
-            "generalFeedback" to generalFeedback,
-            "timestamp" to FieldValue.serverTimestamp()  // Speichert den Zeitstempel des Feedbacks
-        )
-
-        feedbackDocRef.set(feedbackData)
-            .addOnSuccessListener { Log.d(TAG, "Feedback successfully saved") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error saving feedback", e) }
-    }
-
-     fun saveLanguageLevelToFirebase(languageLevel: String) {
-        val userId = auth.currentUser?.uid ?: return
-        repository.updateUserProfileField(userId, "languageLevel", languageLevel)
-    }
-
-    fun deleteAccount() {
-        val user = FirebaseAuth.getInstance().currentUser
-        user?.delete()?.addOnCompleteListener { task ->
-            _deleteAccountStatus.value = task.isSuccessful
         }
     }
 
 
+    fun saveFeedback(
+        userId: String,
+        designRating: Float,
+        functionalityRating: Float,
+        overallRating: Float,
+        generalFeedback: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val feedbackDocRef = FirebaseFirestore.getInstance()
+                    .collection("user")
+                    .document(userId)
+                    .collection("feedback")
+                    .document()  // Erstellt ein neues Dokument mit einer einzigartigen ID
+
+                val feedbackData = mapOf(
+                    "designRating" to designRating,
+                    "functionalityRating" to functionalityRating,
+                    "overallRating" to overallRating,
+                    "generalFeedback" to generalFeedback,
+                    "timestamp" to FieldValue.serverTimestamp()  // Speichert den Zeitstempel des Feedbacks
+                )
+
+                feedbackDocRef.set(feedbackData)
+                    .addOnSuccessListener { Log.d(TAG, "Feedback successfully saved") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error saving feedback", e) }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in saveFeedback", e)
+            }
+        }
+    }
+
+    fun saveLanguageLevelToFirebase(languageLevel: String) {
+        viewModelScope.launch {
+            try {
+                val userId = auth.currentUser?.uid ?: return@launch
+                repository.updateUserProfileField(userId, "languageLevel", languageLevel)
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Speichern des Sprachniveaus in Firebase", e)
+            }
+        }
+    }
+
+    fun deleteAccount() {
+        viewModelScope.launch {
+            try {
+                val user = FirebaseAuth.getInstance().currentUser
+                user?.delete()?.addOnCompleteListener { task ->
+                    _deleteAccountStatus.value = task.isSuccessful
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Fehler beim Löschen des Kontos", e)
+            }
+        }
+    }
 
 
     fun logout() {
-        try {
-            auth.signOut()
-            _userProfileData.value = null
-            _loginStatus.value = false
-            Log.d("logout", "Benutzer erfolgreich ausgeloggt")
-        } catch (e: Exception) {
-            Log.e("logout", "Fehler in der LogOut-Methode", e)
+        viewModelScope.launch {
+            try {
+                auth.signOut()
+                _userProfileData.value = null
+                _loginStatus.value = false
+                Log.d("logout", "Benutzer erfolgreich ausgeloggt")
+            } catch (e: Exception) {
+                Log.e("logout", "Fehler in der LogOut-Methode", e)
+            }
         }
     }
 

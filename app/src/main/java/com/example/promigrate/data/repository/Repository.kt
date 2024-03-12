@@ -179,7 +179,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
 
 
-    suspend fun getBerufsfelder(): Result<List<String>> {
+    suspend fun getOccupationalFields(): Result<List<String>> {
         return try {
             val startTime = System.currentTimeMillis()
             Log.d(TAG, "Starte Abruf der Berufsfelder um: $startTime")
@@ -203,7 +203,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-    suspend fun getArbeitsorte(): Result<List<String>> {
+    suspend fun getWorkLocations(): Result<List<String>> {
         return try {
             Log.d(TAG, "Starte Abruf der Arbeitsorte.")
             val response = apiService.getArbeitsorte()
@@ -289,9 +289,9 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         }
     }
 
-// ... other code ...
 
-    suspend fun getBildungsangebote(
+
+    suspend fun getEducationalOffers(
         systematiken: String?,
         orte: String,
         sprachniveau: String,
@@ -314,7 +314,7 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
 
 
 
-// ... other code ...
+
 
 
 
