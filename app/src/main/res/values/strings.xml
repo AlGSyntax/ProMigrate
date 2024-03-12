@@ -156,6 +156,7 @@
     <string name="error_image">No Image available</string>
     <string name="error_occupational_fields">Error loading the fields</string>
     <string name="error_work_locations">Error loading Location</string>
+    <string name="unkownjobserror">Unkown Jobs Errror</string>
 
 
 </resources>

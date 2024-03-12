@@ -1,15 +1,16 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
+import com.example.promigrate.R
 import com.example.promigrate.adapter.JobsAdapter
 import com.example.promigrate.databinding.FragmentJobsForYouBinding
 
@@ -20,7 +21,7 @@ import com.example.promigrate.databinding.FragmentJobsForYouBinding
  */
 class JobsForYouFragment : Fragment() {
 
-    private val TAG = "JobsForYouFragment"
+
 
     // Die Verwendung von activityViewModels() bietet Zugriff auf das ViewModel, das von der
     // zugehörigen Activity genutzt wird.
@@ -127,14 +128,13 @@ class JobsForYouFragment : Fragment() {
         viewModel.jobs.observe(viewLifecycleOwner) { jobs ->
             // Überprüft, ob die Jobdaten erfolgreich abgerufen wurden.
             if (jobs != null) {
-                Log.d(TAG, "Jobs erfolgreich abgerufen.")
                 // Übersetzt die Jobtitel mithilfe der im ViewModel definierten Funktion translateJobTitles.
                 viewModel.translateJobTitles(jobs) { translatedJobs ->
                     // Aktualisiert die Liste im Adapter mit den ggf. übersetzten Jobtiteln.
                     jobsAdapter.submitList(translatedJobs)
                 }
             } else {
-                Log.e(TAG, "Fehler beim Abrufen der Jobs.")
+                Toast.makeText(context, R.string.unkownjobserror, Toast.LENGTH_SHORT).show()
             }
         }
     }
