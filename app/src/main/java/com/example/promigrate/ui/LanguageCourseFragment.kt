@@ -13,6 +13,13 @@ import com.example.promigrate.R
 import com.example.promigrate.adapter.LanguageCourseAdapter
 import com.example.promigrate.databinding.FragmentLanguageCourseBinding
 
+/**
+ * LanguageCourseFragment ist ein Fragment, das die Sprachkurse anzeigt.
+ * Es beobachtet die userProfileData und educationaloffers im ViewModel und aktualisiert die Liste der Sprachkurse entsprechend.
+ * Es ermöglicht dem Benutzer auch, zum VocabularyLearningFragment zu navigieren, indem er auf den "backToDashboardButton" klickt.
+ *
+ * Es verwendet ein Binding-Objekt, um auf die im XML definierten Views zuzugreifen, und einen LanguageCourseAdapter, um die Liste der Sprachkurse anzuzeigen.
+ */
 class LanguageCourseFragment : Fragment() {
 
     // Die Verwendung von activityViewModels() bietet Zugriff auf das ViewModel, das von der
@@ -103,7 +110,6 @@ class LanguageCourseFragment : Fragment() {
      *         Wenn der gewünschte Standort nicht in der Liste der unterstützten Städte enthalten ist, wird eine leere Zeichenkette zurückgegeben.
      */
     private fun convertLocation(desiredLocation: String): String {
-        // Beispiel für eine einfache Konvertierung
         return when (desiredLocation) {
             "Aachen" -> "Aachen_52062_6.08342_50.77535"
             "Aschaffenburg" -> "Aschaffenburg_63739_9.15448_49.97823"
