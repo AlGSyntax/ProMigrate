@@ -103,7 +103,10 @@ class DetailToDoJobApplicationFragment : Fragment() {
                 // um das entsprechende Job-Element basierend auf seiner ID zu löschen.
                 viewModel.deleteJobSelection(jobId)
             }
-            .setNegativeButton(getString(R.string.cancel), null)
+            .setNegativeButton(
+                getString(R.string.cancel),
+                null
+            )// Wenn der Benutzer auf "Abbrechen" klickt, wird der Dialog geschlossen.
             .show()// Zeigt den Dialog an.
     }
 

@@ -81,15 +81,31 @@ class ToDoListAdapter(
     }
 
     /**
-     * Ein DiffUtil.ItemCallback, der zwei ToDoItem Objekte vergleicht.
+     * Ein DiffUtil.ItemCallback, der zwei ToDoItem Objekte vergleicht, um effiziente Updates in der RecyclerView zu ermöglichen.
+     * Dieser Callback erleichtert die Bestimmung, welche Items in der Liste geändert, hinzugefügt oder entfernt wurden.
      */
     companion object ToDoDiffCallback : DiffUtil.ItemCallback<ToDoItem>() {
-        // Prüft, ob die beiden ToDoItem Objekte identisch sind.
+        /**
+         * Prüft, ob zwei ToDoItem Objekte dieselbe ID haben.
+         * Wird verwendet, um festzustellen, ob ein Item an der gleichen Position bleibt oder verschoben wird.
+         *
+         * @param oldItem Das ToDoItem aus der alten Liste.
+         * @param newItem Das ToDoItem aus der neuen Liste.
+         * @return True, wenn die IDs der Items übereinstimmen, andernfalls false.
+         */
         override fun areItemsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean =
             oldItem.id == newItem.id
 
-        // Prüft, ob die Inhalte der beiden ToDoItem Objekte identisch sind.
+        /**
+         * Prüft, ob die Inhalte zweier ToDoItem Objekte identisch sind.
+         * Diese Methode hilft festzustellen, ob sich die Details eines Items geändert haben und ein Update notwendig ist.
+         *
+         * @param oldItem Das ToDoItem aus der alten Liste.
+         * @param newItem Das ToDoItem aus der neuen Liste.
+         * @return True, wenn die Inhalte der Items gleich sind, andernfalls false.
+         */
         override fun areContentsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean =
             oldItem == newItem
     }
+
 }

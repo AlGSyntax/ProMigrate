@@ -140,20 +140,36 @@ class DetailToDoJobApplicationAdapter(
     }
 
     /**
-     * Ein DiffUtil.ItemCallback, der zwei JobWithToDoItems Objekte vergleicht.
+     * Ein DiffUtil.ItemCallback, der zwei JobWithToDoItems Objekte vergleicht, um effiziente Updates in der RecyclerView zu ermöglichen.
+     * Dieser Callback optimiert die Aktualisierungen, indem er nur die geänderten Elemente neu rendert.
      */
     companion object DiffCallback : DiffUtil.ItemCallback<JobWithToDoItems>() {
-        // Prüft, ob die beiden JobWithToDoItems Objekte identisch sind.
+        /**
+         * Prüft, ob zwei JobWithToDoItems Objekte dieselbe Job-ID repräsentieren.
+         * Wird verwendet, um zu bestimmen, ob ein Item ersetzt wurde oder ob sich sein Inhalt geändert hat.
+         *
+         * @param oldItem Das Item in der alten Liste.
+         * @param newItem Das Item in der neuen Liste.
+         * @return True, wenn die Items dieselbe ID haben, andernfalls false.
+         */
         override fun areItemsTheSame(
             oldItem: JobWithToDoItems,
             newItem: JobWithToDoItems
         ): Boolean = oldItem.jobTitle == newItem.jobTitle
 
-        // Prüft, ob die Inhalte der beiden JobWithToDoItems Objekte identisch sind.
+        /**
+         * Prüft, ob die Inhalte zweier JobWithToDoItems Objekte identisch sind.
+         * Wird verwendet, um zu bestimmen, ob ein Item aktualisiert werden muss.
+         *
+         * @param oldItem Das Item in der alten Liste.
+         * @param newItem Das Item in der neuen Liste.
+         * @return True, wenn die Inhalte der Items identisch sind, andernfalls false.
+         */
         override fun areContentsTheSame(
             oldItem: JobWithToDoItems,
             newItem: JobWithToDoItems
         ): Boolean = oldItem == newItem
     }
+
 }
 
