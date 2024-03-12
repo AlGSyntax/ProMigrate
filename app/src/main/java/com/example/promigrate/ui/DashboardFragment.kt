@@ -56,41 +56,6 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        // Setzt einen OnClickListener für die untere linke Karte im Dashboard.
-        binding.cardBottomLeft.setOnClickListener {
-            // Überprüft, ob userProfileData bereits geladen ist.
-            val userProfile = viewModel.userProfileData.value
-            if (userProfile?.selectedJobs != null) {
-                // Verwendet die geladenen Benutzerprofildaten, wenn verfügbar.
-                val jobTitlesArray = userProfile.selectedJobs!!.keys.toTypedArray()
-                val refNrsArray = userProfile.selectedJobs!!.values.toTypedArray()
-                val arbeitsort = userProfile.desiredLocation ?: ""
-
-                // Erstellt eine Navigationsaktion mit den gesammelten Informationen.
-                val action =
-                    DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
-                        selectedJobTitles = jobTitlesArray,
-                        selectedJobRefNrs = refNrsArray,
-                        arbeitsort = arbeitsort
-                    )
-                findNavController().navigate(action)
-            } else {
-                // Verwendet die Argumente des Fragments als Fallback, wenn keine Benutzerdaten vorhanden sind
-                val selectedJobsArray = args.selectedJobTitles ?: arrayOf()
-                val refNrsArray = args.selectedJobRefNrs ?: arrayOf()
-                val arbeitsort = args.arbeitsort ?: ""
-
-
-                // Erstellt eine Navigationsaktion mit den Argumenten des Fragments.
-                val action =
-                    DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
-                        selectedJobTitles = selectedJobsArray,
-                        selectedJobRefNrs = refNrsArray,
-                        arbeitsort = arbeitsort
-                    )
-                findNavController().navigate(action)
-            }
-        }
 
         // Setzt einen OnClickListener für die obere linke Karte im Dashboard.
         binding.cardTopLeft.setOnClickListener {
@@ -127,7 +92,6 @@ class DashboardFragment : Fragment() {
             }
         }
 
-
         // Setzt einen OnClickListener für die obere rechte Karte im Dashboard.
         binding.cardTopRight.setOnClickListener {
 
@@ -144,6 +108,43 @@ class DashboardFragment : Fragment() {
             val action =
                 DashboardFragmentDirections.actionDashboardFragmentToRelocationAndIntegrationFragment()
             findNavController().navigate(action)
+        }
+
+
+        // Setzt einen OnClickListener für die untere linke Karte im Dashboard.
+        binding.cardBottomLeft.setOnClickListener {
+            // Überprüft, ob userProfileData bereits geladen ist.
+            val userProfile = viewModel.userProfileData.value
+            if (userProfile?.selectedJobs != null) {
+                // Verwendet die geladenen Benutzerprofildaten, wenn verfügbar.
+                val jobTitlesArray = userProfile.selectedJobs!!.keys.toTypedArray()
+                val refNrsArray = userProfile.selectedJobs!!.values.toTypedArray()
+                val arbeitsort = userProfile.desiredLocation ?: ""
+
+                // Erstellt eine Navigationsaktion mit den gesammelten Informationen.
+                val action =
+                    DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                        selectedJobTitles = jobTitlesArray,
+                        selectedJobRefNrs = refNrsArray,
+                        arbeitsort = arbeitsort
+                    )
+                findNavController().navigate(action)
+            } else {
+                // Verwendet die Argumente des Fragments als Fallback, wenn keine Benutzerdaten vorhanden sind
+                val selectedJobsArray = args.selectedJobTitles ?: arrayOf()
+                val refNrsArray = args.selectedJobRefNrs ?: arrayOf()
+                val arbeitsort = args.arbeitsort ?: ""
+
+
+                // Erstellt eine Navigationsaktion mit den Argumenten des Fragments.
+                val action =
+                    DashboardFragmentDirections.actionDashboardFragmentToDetailToDoJobApplicationFragment(
+                        selectedJobTitles = selectedJobsArray,
+                        selectedJobRefNrs = refNrsArray,
+                        arbeitsort = arbeitsort
+                    )
+                findNavController().navigate(action)
+            }
         }
 
 
