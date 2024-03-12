@@ -133,7 +133,7 @@ class ReOnboardingFragment : Fragment() {
                 viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
                     viewModel.savedesiredLocationToFirebase(translatedArbeitsort)
                     viewModel.translateToGerman(beruf) { translatedBeruf ->
-                        // Verwende die übersetzten Daten, um das ViewModel zu aktualisieren und zum nächsten Schritt zu navigieren.
+                        // Verwendet die übersetzten Daten, um das ViewModel zu aktualisieren und zum nächsten Schritt zu navigieren.
                         (parentFragment as? ViewPagerFragment)?.let {
                             it.viewModel.updateJobOffers(translatedBeruf, translatedArbeitsort)
                             it.moveToNextPage()
