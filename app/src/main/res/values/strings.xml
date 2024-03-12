@@ -157,6 +157,9 @@
     <string name="error_occupational_fields">Error loading the fields</string>
     <string name="error_work_locations">Error loading Location</string>
     <string name="unkownjobserror">Unkown Jobs Errror</string>
+    <string name="notfoundjobs">No jobs found</string>
+    <string name="notfoundoccu">Occupational field not set in profile</string>
+    <string name="fillfields">Please fill in all fields</string>
 
 
 </resources>
