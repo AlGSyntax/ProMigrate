@@ -38,7 +38,11 @@ class ReOnboardingFragment : Fragment() {
      * @param savedInstanceState: Ein Bundle, das den Zustand des Fragments gespeichert hat.
      * @return :Die erstellte Ansicht des Fragments.
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentReOnboardingBinding.inflate(inflater, container, false)
 
         /**
