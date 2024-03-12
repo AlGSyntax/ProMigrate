@@ -1,7 +1,6 @@
 package com.example.promigrate.adapter
 
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,33 @@ import com.example.promigrate.R
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.databinding.ToDoResearchItemBinding
 
+
+/**
+ * Ein Adapter für die RecyclerView, der eine Liste von Paaren, bestehend aus einem Jobtitel und einer Referenznummer,
+ * verwaltet. Jeder Eintrag in der Liste repräsentiert einen Job, auf den der Benutzer klicken kann, um weitere
+ * Details zu erhalten.
+ *
+ * @param onItemClicked: Ein Lambda-Ausdruck, der aufgerufen wird, wenn auf ein Item in der Liste geklickt wird.
+ *                      Der Lambda-Ausdruck übergibt die Referenznummer des angeklickten Jobs.
+ */
 class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) :
     ListAdapter<Pair<String, String>, DetailToDoJobResearchAdapter.DetailToDoJobResearchViewHolder>(
         JobDiffCallback
     ) {
 
+    // Diese Map speichert die Details zu den Jobangeboten, die aus der API abgerufen wurden.
+    // Der Schlüssel ist die Referenznummer des Jobangebots (refNr), und der Wert ist ein JobDetailsResponse-Objekt,
+    // das alle relevanten Details zu dem spezifischen Jobangebot enthält.
     private var jobDetailsMap = mutableMapOf<String, JobDetailsResponse>()
 
+    /**
+     * Aktualisiert die Detailinformationen für einen spezifischen Job im Adapter. Wenn die Referenznummer
+     * eines Jobs in der aktuellen Liste gefunden wird, werden die zugehörigen Details aktualisiert und
+     * die Ansicht für diesen spezifischen Eintrag in der RecyclerView wird benachrichtigt, um die Änderungen anzuzeigen.
+     *
+     * @param refNr: Die Referenznummer des Jobs, dessen Details aktualisiert werden sollen.
+     * @param details: Die detaillierten Informationen zum Job, die aktualisiert werden sollen.
+     */
     fun setJobDetails(refNr: String, details: JobDetailsResponse) {
         jobDetailsMap[refNr] = details
         val position = currentList.indexOfFirst { it.second == refNr }
@@ -27,69 +46,163 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailToDoJobResearchViewHolder {
-        val binding = ToDoResearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    /**
+     * Erstellt einen neuen ViewHolder für den Adapter. Diese Methode wird von der RecyclerView aufgerufen,
+     * wenn ein neuer ViewHolder benötigt wird. Dies passiert, wenn die RecyclerView zum ersten Mal angezeigt wird
+     * oder wenn neue Items in die Liste eingefügt werden.
+     *
+     * @param parent: Die ViewGroup, zu der die neue View hinzugefügt wird, nachdem sie an eine Position gebunden wurde.
+     * @param viewType: Der View-Typ der neuen View.
+     * @return: Eine neue Instanz des DetailToDoJobResearchViewHolder, die die gebundene Ansicht enthält.
+     */
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): DetailToDoJobResearchViewHolder {
+        val binding =
+            ToDoResearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DetailToDoJobResearchViewHolder(binding, onItemClicked)
     }
 
+    /**
+     * Bindet die Daten eines Job-Elements an den gegebenen ViewHolder, einschließlich der Aktualisierung
+     * mit spezifischen Jobdetails, falls verfügbar.
+     *
+     * @param holder:   Der ViewHolder, der die Job-Daten halten soll.
+     * @param position: Die Position des Job-Elements in der Datenliste.
+     */
     override fun onBindViewHolder(holder: DetailToDoJobResearchViewHolder, position: Int) {
         val job = getItem(position)
         holder.bind(job, jobDetailsMap[job.second])
     }
 
+
+    /**
+     * Der ViewHolder für ein Jobelement im DetailToDoJobResearchAdapter.
+     * Diese innere Klasse bindet die Jobdaten und Jobdetails an die entsprechenden Views.
+     *
+     * @property binding: Das Binding-Objekt für das Item-Layout, das den Zugriff auf die UI-Komponenten ermöglicht.
+     * @property onItemClicked: Ein Callback, das ausgelöst wird, wenn auf ein Element geklickt wird.
+     */
     inner class DetailToDoJobResearchViewHolder(
         private val binding: ToDoResearchItemBinding,
         private val onItemClicked: (String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        /**
+         * Bindet die Daten eines Jobs und die zugehörigen Details (falls vorhanden) an die Ansicht.
+         *
+         * @param job: Die Basisinformationen des Jobs (Titel und Referenznummer).
+         * @param details: Die Details des Jobs, wie z.B. Arbeitgeber, Ort, Arbeitszeitmodell usw.
+         */
         fun bind(job: Pair<String, String>, details: JobDetailsResponse?) {
             binding.textViewTitle.text = job.first
             details?.let {
-                binding.textViewEmployer.text = binding.root.context.getString(R.string.employer, it.arbeitgeber ?: "N/A")
-                binding.textViewLocation.text = binding.root.context.getString(R.string.location, it.arbeitgeberAdresse?.ort ?: "N/A")
-                binding.textViewWorkModel.text = binding.root.context.getString(R.string.work_model, it.arbeitszeitmodelle?.joinToString(", ") ?: "N/A")
-                binding.textViewContract.text = binding.root.context.getString(R.string.contract, getBefristung(details.befristung))
-                binding.textViewSalary.text = binding.root.context.getString(R.string.salary, it.verguetung ?: "N/A")
+                binding.textViewEmployer.text =
+                    binding.root.context.getString(R.string.employer, it.arbeitgeber ?: "N/A")
+                binding.textViewLocation.text = binding.root.context.getString(
+                    R.string.location,
+                    it.arbeitgeberAdresse?.ort ?: "N/A"
+                )
+                binding.textViewWorkModel.text = binding.root.context.getString(
+                    R.string.work_model,
+                    it.arbeitszeitmodelle?.joinToString(", ") ?: "N/A"
+                )
+                binding.textViewContract.text = binding.root.context.getString(
+                    R.string.contract,
+                    getBefristung(details.befristung)
+                )
+                binding.textViewSalary.text =
+                    binding.root.context.getString(R.string.salary, it.verguetung ?: "N/A")
                 binding.textViewDescription.apply {
-                    text = binding.root.context.getString(R.string.description, it.stellenbeschreibung ?: "N/A")
+                    text = binding.root.context.getString(
+                        R.string.description,
+                        it.stellenbeschreibung ?: "N/A"
+                    )
                     movementMethod = LinkMovementMethod.getInstance()
                 }
-                binding.textViewBranch.text = binding.root.context.getString(R.string.branch, it.branche ?: "N/A")
-                binding.textViewJob.text = binding.root.context.getString(R.string.job, it.beruf ?: "N/A")
-                binding.textViewEmployerAddress.text = binding.root.context.getString(R.string.employeraddress, it.arbeitgeberAdresse?.strasse ?: "N/A")
-                // Füge weitere Details nach Bedarf hinzu.
+                binding.textViewBranch.text =
+                    binding.root.context.getString(R.string.branch, it.branche ?: "N/A")
+                binding.textViewJob.text =
+                    binding.root.context.getString(R.string.job, it.beruf ?: "N/A")
+                binding.textViewEmployerAddress.text = binding.root.context.getString(
+                    R.string.employeraddress,
+                    it.arbeitgeberAdresse?.strasse ?: "N/A"
+                )
+
             }
 
 
-
-            // Initial set the visibility to GONE
+            /**
+             * Setzt einen OnClickListener für das gesamte Item, um auf Klickereignisse zu reagieren.
+             * Wenn auf ein Item geklickt wird, wird die Sichtbarkeit des versteckten Views umgeschaltet,
+             * und der Callback onItemClicked wird mit der Referenznummer des Jobs aufgerufen.
+             */
             binding.root.setOnClickListener {
-                // Toggle die Sichtbarkeit der Detailansicht.
-                Log.e("Adappaa", "Clicked on item: ${job.second}")
-                binding.hiddenView.visibility = if (binding.hiddenView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                onItemClicked(job.second)  // Callback für zusätzliche Aktionen.
+
+                // Wechselt die Sichtbarkeit der Detailansicht bei jedem Klick.
+                binding.hiddenView.visibility =
+                    if (binding.hiddenView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+                // Ruft den Callback onItemClicked auf und übergibt die Referenznummer des Jobs.
+                onItemClicked(job.second)
             }
         }
+
+
+        /**
+         * Übersetzt den Befristungscode eines Jobs in einen für den Benutzer lesbaren Text.
+         *
+         * @param befristungsCode Der Befristungscode, der von der API oder Datenquelle bereitgestellt wird.
+         * @return Der lesbare Text, der die Befristung des Jobs beschreibt.
+         */
         private fun getBefristung(befristungsCode: String?): String {
+            // Überprüft den Befristungscode und gibt den entsprechenden lesbaren Text zurück.
             return when (befristungsCode) {
-                "UNBEFRISTET" -> binding.root.context.getString(R.string.unlimited)
-                "BEFRISTET" -> binding.root.context.getString(R.string.limited)
-                else -> binding.root.context.getString(R.string.unknown)
+                "UNBEFRISTET" -> binding.root.context.getString(R.string.unlimited)// Unbefristet.
+                "BEFRISTET" -> binding.root.context.getString(R.string.limited)// Befristet.
+                else -> binding.root.context.getString(R.string.unknown)// Unbekannt, falls der Code nicht erkannt wird.
             }
         }
-
-
-
 
 
     }
 
+    /**
+     * Ein Callback für die Berechnung der Differenz zwischen zwei nicht-null Elementen in einer Liste.
+     *
+     * Diese Implementierung von DiffUtil.ItemCallback vergleicht Pairs von Strings,
+     * wobei jedes Pair aus einem Jobtitel und einer Referenznummer besteht.
+     */
     companion object JobDiffCallback : DiffUtil.ItemCallback<Pair<String, String>>() {
-        override fun areItemsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
+
+
+        /**
+         * Überprüft, ob zwei Objekte das gleiche Item repräsentieren.
+         *
+         * @param oldItem: Das Item in der alten Liste.
+         * @param newItem: Das Item in der neuen Liste.
+         * @return: True, wenn die beiden Items das gleiche Datenobjekt repräsentieren, sonst False.
+         */
+        override fun areItemsTheSame(
+            oldItem: Pair<String, String>,
+            newItem: Pair<String, String>
+        ): Boolean {
+            // Vergleicht die ersten Elemente des Paares (Jobtitel), um die Identität zu bestimmen.
             return oldItem.second == newItem.second
         }
 
-        override fun areContentsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>): Boolean {
+        /**
+         * Überprüft, ob zwei Items denselben Inhalt haben.
+         *
+         * @param oldItem: Das Item in der alten Liste.
+         * @param newItem: Das Item in der neuen Liste.
+         * @return: True, wenn die Inhalte der Items identisch sind, sonst False.
+         */
+        override fun areContentsTheSame(
+            oldItem: Pair<String, String>,
+            newItem: Pair<String, String>
+        ): Boolean {
+            // Vergleicht die gesamten Pairs, um festzustellen, ob sich der Inhalt geändert hat.
             return oldItem == newItem
         }
     }

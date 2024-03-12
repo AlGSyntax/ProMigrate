@@ -14,7 +14,12 @@ import com.example.promigrate.R
 import com.example.promigrate.adapter.JobOpportunitiesAdapter
 import com.example.promigrate.databinding.FragmentJobOportunitiesBinding
 
-
+/**
+ * JobOpportunitiesFragment stellt eine Benutzeroberfläche dar, die dem Benutzer eine Liste von Jobmöglichkeiten zeigt.
+ * Der Benutzer kann einzelne Jobangebote auswählen, um weitere Details zu diesen Jobs anzuzeigen.
+ * Die Klasse nutzt JobOpportunitiesAdapter, um die Jobliste anzuzeigen und interagiert mit dem [MainViewModel],
+ * um die benötigten Daten zu holen und Benutzerinteraktionen zu verarbeiten.
+ */
 class JobOpportunitiesFragment : Fragment() {
 
     private val TAG = "JobOpportunitiesFragment"
