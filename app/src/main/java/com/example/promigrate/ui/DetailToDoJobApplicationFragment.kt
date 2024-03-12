@@ -181,7 +181,7 @@ class DetailToDoJobApplicationFragment : Fragment() {
 
         // Beobachtet userProfileData für Änderungen. userProfileData enthält Informationen über die vom Benutzer ausgewählten Jobs.
         viewModel.userProfileData.observe(viewLifecycleOwner) { profile ->
-            // Extrahiere die Jobtitel aus den Benutzerprofilinformationen.
+            // Extrahiert die Jobtitel aus den Benutzerprofilinformationen.
             val jobTitles = profile?.selectedJobs?.keys?.toList() ?: emptyList()
 
             // Initialisiert eine Map, um die ToDoItems für jeden Job zu speichern
