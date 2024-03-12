@@ -15,30 +15,58 @@ import com.example.promigrate.databinding.FragmentLanguageCourseBinding
 
 class LanguageCourseFragment : Fragment() {
 
+    // Die Verwendung von activityViewModels() bietet Zugriff auf das ViewModel, das von der
+    // zugehörigen Activity genutzt wird.
     private val viewModel: MainViewModel by activityViewModels()
 
-    private  var binding: FragmentLanguageCourseBinding? = null
+    // Binding-Objekt, das Zugriff auf die im XML definierten Views ermöglicht.
+    // Wird nullable gehalten, da es zwischen onCreateView und onDestroyView null sein kann.
+    private var binding: FragmentLanguageCourseBinding? = null
 
     private lateinit var languageCourseAdapter: LanguageCourseAdapter
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    /**
+     * Initialisiert die Benutzeroberfläche des Fragments, indem das entsprechende Layout aufgeblasen wird.
+     *
+     * @param inflater: Das LayoutInflater-Objekt, das zum Aufblasen des Layouts des Fragments verwendet wird.
+     * @param container: Die übergeordnete ViewGroup, in den die neue Ansicht eingefügt wird.
+     * @param savedInstanceState: Ein Bundle, das den Zustand des Fragments gespeichert hat.
+     * @return :Die erstellte View für das Fragment.
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentLanguageCourseBinding.inflate(inflater, container, false)
         return binding!!.root
     }
 
+    /**
+     * Wird aufgerufen, nachdem die Ansicht des Fragments und seine hierarchische Struktur instanziiert wurden.
+     * In dieser Methode werden weitere UI-Initialisierungen vorgenommen und Listener für UI-Elemente eingerichtet.
+     *
+     * @param view: Die erstellte Ansicht des Fragments.
+     * @param savedInstanceState: Ein Bundle, das den Zustand des Fragments gespeichert hat.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Erstellt eine Instanz des LanguageCourseAdapter
         languageCourseAdapter = LanguageCourseAdapter()
         binding!!.rvLanguageCourses.apply {
+            // Setzt den Adapter für das RecyclerView
             adapter = languageCourseAdapter
+            // Setzt den LayoutManager für das RecyclerView
             layoutManager = LinearLayoutManager(context)
         }
 
+        // Beobachtet die userProfileData im ViewModel
         viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
+            // Konvertiert den gewünschten Standort und das Sprachniveau
             val location = userProfile?.desiredLocation?.let { convertLocation(it) }
             val sprachniveau = userProfile?.languageLevel?.let { convertLanguageLevel(it) }
+            // Wenn Standort und Sprachniveau nicht null sind, werden Bildungsangebote abgerufen
             if (location != null) {
                 if (sprachniveau != null) {
                     viewModel.fetchEducationalOffers("MC", location, sprachniveau, 0)
@@ -46,24 +74,34 @@ class LanguageCourseFragment : Fragment() {
             }
         }
 
+        // Beobachtet die educationaloffers im ViewModel
         viewModel.educationaloffers.observe(viewLifecycleOwner) { angebote ->
+            // Übersetzt die Bildungsangebote
             viewModel.translateEducationalOffers(angebote) { translatedAngebote ->
+                // Aktualisiert die Liste im Adapter mit den übersetzten Angeboten
                 languageCourseAdapter.submitList(translatedAngebote)
             }
         }
 
-
-
-
-
-
+        // Setzt einen OnClickListener auf den "backToDashboardButton"
         binding!!.backToDashboardButton.setOnClickListener {
-            val action = LanguageCourseFragmentDirections.actionLanguageCourseFragmentToVocabularyLearningFragment()
+            // Erstellt eine Navigationsaktion zum VocabularyLearningFragment
+            val action =
+                LanguageCourseFragmentDirections.actionLanguageCourseFragmentToVocabularyLearningFragment()
+            // Navigiert zum VocabularyLearningFragment
             findNavController().navigate(action)
         }
     }
 
-
+    /**
+     * Diese Funktion konvertiert den gewünschten Standort (eine Stadt in Deutschland oder Österreich) in eine spezielle Zeichenkette.
+     * Diese Zeichenkette enthält den Namen der Stadt, die Postleitzahl und die geographischen Koordinaten (Längen- und Breitengrad).
+     * Diese spezielle Zeichenkette wird dann von anderen Funktionen verwendet, um Bildungsangebote in der Nähe des gewünschten Standorts zu suchen.
+     *
+     * @param desiredLocation: Der gewünschte Standort, der konvertiert werden soll. Es sollte der Name einer Stadt in Deutschland oder Österreich sein.
+     * @return: Eine Zeichenkette, die den Namen der Stadt, die Postleitzahl und die geographischen Koordinaten enthält.
+     *         Wenn der gewünschte Standort nicht in der Liste der unterstützten Städte enthalten ist, wird eine leere Zeichenkette zurückgegeben.
+     */
     private fun convertLocation(desiredLocation: String): String {
         // Beispiel für eine einfache Konvertierung
         return when (desiredLocation) {
@@ -168,13 +206,21 @@ class LanguageCourseFragment : Fragment() {
             "Zwickau" -> "Zwickau_08056_12.4956443_50.7090527"
 
 
-            else -> ""
+            else -> ""// Wenn nichts übereinstimmt, wird ein leerer String übergeben
         }
     }
 
+    /**
+     * Diese Funktion konvertiert das Sprachniveau in eine spezielle Zeichenkette.
+     * Diese Zeichenkette wird dann von anderen Funktionen verwendet, um Bildungsangebote auf der Grundlage des Sprachniveaus zu suchen.
+     *
+     * @param languageLevel: Das Sprachniveau, das konvertiert werden soll. Es sollte einer der Werte sein, die in den Ressourcen-Strings definiert sind.
+     * @return: Eine Zeichenkette, die das Sprachniveau repräsentiert.
+     *          Wenn das Sprachniveau nicht in der Liste der unterstützten Niveaus enthalten ist, wird ein Standardwert zurückgegeben.
+     */
     private fun convertLanguageLevel(languageLevel: String): String {
         return when (languageLevel) {
-            getString(R.string.beginner) -> "MC01 2" // Angenommen, es gibt keine Kurse unter A2.
+            getString(R.string.beginner) -> "MC01 2" // Es gibt keine Kurse unter A2.
             getString(R.string.basic_knowledge) -> "MC01 2" // Konvertierung für A2.
             getString(R.string.intermediate) -> "MC01 3" // Konvertierung für B1.
             getString(R.string.independent) -> "MC01 4" // Konvertierung für B2.
@@ -184,15 +230,15 @@ class LanguageCourseFragment : Fragment() {
         }
     }
 
+    /**
+     * Wird aufgerufen, wenn die View-Hierarchie des Fragments zerstört wird.
+     * Hier wird das Binding-Objekt auf null gesetzt, um Memory Leaks zu vermeiden,
+     * da das Binding-Objekt eine Referenz auf die View hält, welche nicht länger existiert.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
-
-
-
-
-
 
 
 }
