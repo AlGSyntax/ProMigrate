@@ -32,11 +32,14 @@ import java.util.Locale
  * @param deepLApiService: Eine Instanz von DeepLApiService zur Interaktion mit der DeepL-API.
  * @param courseAPIService: Eine Instanz von ProMigrateCourseAPIService zur Interaktion mit der ProMigrateCourse-API.
  */
-class Repository (context: Context, val firebaseAuth: FirebaseAuth,
-                  private val firestore: FirebaseFirestore,private val apiService: ProMigrateAPIService,
-                  private val deepLApiService: DeepLApiService,private val courseAPIService: ProMigrateCourseAPIService
+class Repository(
+    context: Context,
+    val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
+    private val apiService: ProMigrateAPIService,
+    private val deepLApiService: DeepLApiService,
+    private val courseAPIService: ProMigrateCourseAPIService
 ) {
-
 
 
     // Eine Instanz von FirebaseStorage, die zum Hochladen und Herunterladen von Dateien von Firebase Cloud Storage verwendet wird.
@@ -65,10 +68,23 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
          * @param langLearnAPIService: Eine Instanz von ProMigrateCourseAPIService zur Interaktion mit der ProMigrateCourse-API.
          * @return: Eine Singleton-Instanz der Repository-Klasse.
          */
-        fun getInstance(context: Context, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore,
-                        apiService: ProMigrateAPIService,deepLApiService: DeepLApiService, langLearnAPIService: ProMigrateCourseAPIService):
+        fun getInstance(
+            context: Context,
+            firebaseAuth: FirebaseAuth,
+            firestore: FirebaseFirestore,
+            apiService: ProMigrateAPIService,
+            deepLApiService: DeepLApiService,
+            langLearnAPIService: ProMigrateCourseAPIService
+        ):
                 Repository {
-            return INSTANCE ?: Repository(context, firebaseAuth, firestore,apiService,deepLApiService, langLearnAPIService).also { INSTANCE = it }
+            return INSTANCE ?: Repository(
+                context,
+                firebaseAuth,
+                firestore,
+                apiService,
+                deepLApiService,
+                langLearnAPIService
+            ).also { INSTANCE = it }
         }
     }
 
@@ -80,8 +96,10 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
      */
     fun loadLanguageSetting(): String {
         return try {
-            val languageSetting = sharedPreferences.getString("SelectedLanguage",
-                Locale.getDefault().language) ?: Locale.getDefault().language
+            val languageSetting = sharedPreferences.getString(
+                "SelectedLanguage",
+                Locale.getDefault().language
+            ) ?: Locale.getDefault().language
 
             languageSetting
         } catch (e: Exception) {
@@ -118,7 +136,8 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
         return try {
             // Ruft den Übersetzungsdienst mit dem gegebenen Text und Zielsprachcode auf.
-            val response = deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
+            val response =
+                deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
             Log.d("translateText", "Übersetzung erfolgreich, Antwort = $response")
             // Gibt das erste Übersetzungsergebnis zurück, da hier immer nur ein Text übersetzt wird.
             response.translations.first() // Gibt das erste Übersetzungsergebnis zurück
@@ -127,7 +146,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             null
         }
     }
-
 
 
     /**
@@ -155,8 +173,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-
-
     /**
      * Erstellt ein neues Benutzerprofil in der Firestore-Datenbank.
      *
@@ -170,16 +186,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         val profileRef = firestore.collection("user").document(userId)
         profileRef.set(profile)
     }
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -198,7 +204,8 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             val uploadTask = imageRef.putFile(uri).await()
             if (uploadTask.task.isSuccessful) {
                 val imageUrl = imageRef.downloadUrl.await().toString()
-                firestore.collection("user").document(userId).update("profilePicture", imageUrl).await()
+                firestore.collection("user").document(userId).update("profilePicture", imageUrl)
+                    .await()
                 return imageUrl // Gibt die URL des hochgeladenen und aktualisierten Bildes zurück
             } else {
                 throw Exception("Upload fehlgeschlagen")
@@ -235,10 +242,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     fun updateUserProfileField(userId: String, field: String, value: Any) {
         firestore.collection("user").document(userId).update(field, value)
     }
-
-
-
-
 
 
     /**
@@ -353,7 +356,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     }
 
 
-
     /**
      * Ruft die Jobdetails von der ProMigrate-API ab, basierend auf der gegebenen codierten HashID.
      * Diese Funktion wird asynchron ausgeführt und gibt ein Result-Objekt zurück, das die Jobdetails enthält.
@@ -367,7 +369,8 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
     suspend fun getJobDetails(encodedHashID: String): Result<JobDetailsResponse> {
         return try {
             // Kodiert die RefNr in Base64
-            val base64EncodedHashID = Base64.encodeToString(encodedHashID.toByteArray(charset("UTF-8")), Base64.NO_WRAP)
+            val base64EncodedHashID =
+                Base64.encodeToString(encodedHashID.toByteArray(charset("UTF-8")), Base64.NO_WRAP)
 
             val response = apiService.getJobDetails(base64EncodedHashID)
 
@@ -375,7 +378,8 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
                 val jobDetail = response.body()
                 jobDetail?.let {
                     Result.success(it)
-                } ?: Result.failure(Exception("Jobdetails nicht gefunden für RefNr: $encodedHashID"))
+                }
+                    ?: Result.failure(Exception("Jobdetails nicht gefunden für RefNr: $encodedHashID"))
             } else {
 
                 Result.failure(Exception("Fehler beim Abrufen der Jobdetails für RefNr: $encodedHashID, Fehler: ${response.message()}"))
@@ -385,7 +389,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
-
 
 
     /**
@@ -408,7 +411,13 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
         beginntermine: Int
     ): Result<List<TerminResponse>> {
         return try {
-            val response = courseAPIService.getEducationalOffer(systematiken, orte, sprachniveau, beginntermine, "basc")
+            val response = courseAPIService.getEducationalOffer(
+                systematiken,
+                orte,
+                sprachniveau,
+                beginntermine,
+                "basc"
+            )
             if (response.isSuccessful) {
                 val termine = response.body()?._embedded?.termine ?: listOf()
                 Result.success(termine)
@@ -421,22 +430,6 @@ class Repository (context: Context, val firebaseAuth: FirebaseAuth,
             Result.failure(e)
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
