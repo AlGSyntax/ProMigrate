@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.promigrate.MainViewModel
 import com.example.promigrate.R
 import com.example.promigrate.adapter.VocabularyLearningAdapter
-import com.example.promigrate.data.model.IndexCard
+import com.example.promigrate.data.model.FlashCard
 import com.example.promigrate.databinding.DialogAddCardBinding
 import com.example.promigrate.databinding.DialogEditCardBinding
 import com.example.promigrate.databinding.FragmentVocabularyLearningBinding
@@ -164,22 +164,22 @@ class VocabularyLearningFragment : Fragment() {
      * Nachdem der Benutzer auf die Schaltfläche "Speichern" geklickt hat, ruft die Funktion die Eingabe aus dem Textfeld ab und ruft die updateFlashcard-Methode des ViewModels auf.
      * Wenn der Benutzer auf die Schaltfläche "Abbrechen" klickt, wird der Dialog abgebrochen.
      *
-     * @param indexCard: Die Indexkarte, die bearbeitet werden soll.
+     * @param flashCard: Die Indexkarte, die bearbeitet werden soll.
      */
-    private fun editIndexCard(indexCard: IndexCard) {
+    private fun editIndexCard(flashCard: FlashCard) {
         // Aufblasen des Dialoglayouts
         val binding = DialogEditCardBinding.inflate(LayoutInflater.from(context))
 
         // Entscheidet, welcher Text bearbeitet wird, basierend darauf, ob die Karte umgedreht ist oder nicht
-        val editText = if (indexCard.isFlipped) {
+        val editText = if (flashCard.isFlipped) {
             // Wenn die Karte umgedreht ist, wird der Rücktext bearbeitet
             binding.backEditText.apply {
-                setText(indexCard.backText)
+                setText(flashCard.backText)
             }
         } else {
             // Wenn die Karte nicht umgedreht ist, wird der Vordertext bearbeitet
             binding.frontEditText.apply {
-                setText(indexCard.frontText)
+                setText(flashCard.frontText)
             }
         }
 
@@ -193,12 +193,12 @@ class VocabularyLearningFragment : Fragment() {
                 // Abrufen der Eingabe aus dem EditText-Feld
                 val newText = editText.text.toString()
                 // Entscheidet, welcher Text aktualisiert wird, basierend darauf, ob die Karte umgedreht ist oder nicht
-                if (indexCard.isFlipped) {
+                if (flashCard.isFlipped) {
                     // Wenn die Karte umgedreht ist, wird der Rücktext aktualisiert
-                    viewModel.updateFlashcard(userId, indexCard.id!!, indexCard.frontText, newText)
+                    viewModel.updateFlashcard(userId, flashCard.id!!, flashCard.frontText, newText)
                 } else {
                     // Wenn die Karte nicht umgedreht ist, wird der Vordertext aktualisiert
-                    viewModel.updateFlashcard(userId, indexCard.id!!, newText, indexCard.backText)
+                    viewModel.updateFlashcard(userId, flashCard.id!!, newText, flashCard.backText)
                 }
                 // Dialog schließen
                 dialog.dismiss()

@@ -1,6 +1,6 @@
 package com.example.promigrate.data.model
 
-data class IndexCard(
+data class FlashCard(
     var id: String? = null,  // Entferne die UUID-Initialisierung
     var frontText: String = "",
     var backText: String = "",

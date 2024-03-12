@@ -9,7 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.promigrate.data.model.IndexCard
+import com.example.promigrate.data.model.FlashCard
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
 import com.example.promigrate.data.model.RegistrationStatus
@@ -36,6 +36,15 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
+/**
+ * MainViewModel ist eine Klasse, die AndroidViewModel erweitert und für die Vorbereitung und Verwaltung der Daten für eine Aktivität oder ein Fragment verantwortlich ist.
+ * Sie behandelt auch die Kommunikation der Aktivität / des Fragments mit dem Rest der Anwendung (z.B. Aufruf der Geschäftslogikklassen).
+ *
+ * @param application: Die Anwendung, die dieses ViewModel besitzt.
+ *
+ * @property repository: Die Repository-Instanz, die für Datenoperationen verantwortlich ist. Es handelt sich um eine Referenz auf das Repository-Singleton.
+ * Das Repository wird mit dem Anwendungskontext, der FirebaseAuth-Instanz, der FirebaseFirestore-Instanz, dem ProMigrateAPI-Service, dem DeepLApiService und dem ProMigrateCourseAPI-Service initialisiert.
+ */
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository = Repository.getInstance(
         application, FirebaseAuth.getInstance(),
@@ -44,12 +53,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     )
 
-    private val TAG = "MainViewModel"
 
+    /**
+     * _localeList ist eine private MutableLiveData, die eine LocaleListCompat enthält.
+     * LocaleListCompat ist eine Hilfsklasse, die eine Liste von Locales darstellt und mit älteren Versionen von Android kompatibel ist.
+     * Diese Variable wird verwendet, um Änderungen an der Spracheinstellung der App zu verfolgen und zu speichern.
+     */
     private val _localeList = MutableLiveData<LocaleListCompat>()
+
+    /**
+     * localeList ist eine öffentliche LiveData, die eine LocaleListCompat enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtbar ist. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an der Spracheinstellung der App zu informieren.
+     */
     val localeList: LiveData<LocaleListCompat> = _localeList
 
+
+    /**
+     * _selectedLanguageCode ist eine private MutableLiveData, die einen String enthält.
+     * Dieser String repräsentiert den ausgewählten Sprachcode in der Anwendung.
+     * Diese Variable wird verwendet, um Änderungen an der ausgewählten Spracheinstellung der App zu verfolgen und zu speichern.
+     */
     private val _selectedLanguageCode = MutableLiveData<String>()
+
+    /**
+     * selectedLanguageCode ist eine öffentliche LiveData, die einen String enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an der ausgewählten Spracheinstellung der App zu informieren.
+     */
     val selectedLanguageCode: LiveData<String> = _selectedLanguageCode
 
 
@@ -57,75 +90,209 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * Die MutableLiveData _loginStatus wird verwendet, um den Anmeldestatus intern im ViewModel zu halten.
      * Diese Variable ist privat, um die Datenkapselung zu gewährleisten.
      * Änderungen an _loginStatus sollen ausschließlich innerhalb des ViewModels erfolgen.
-     *
-     * Die LiveData loginStatus ist eine öffentlich zugängliche, unveränderliche Version von _loginStatus.
-     * Sie erlaubt es den UI-Komponenten, auf Änderungen des Anmeldestatus zu reagieren, ohne den Status direkt ändern zu können.
-     * Dies fördert eine klare Trennung von Zuständigkeiten zwischen dem ViewModel und der UI.
      */
     private val _loginStatus = MutableLiveData<Boolean>()
+
+    /**
+     * Die LiveData loginStatus wird verwendet, um den Anmeldestatus an die UI-Komponenten zu übermitteln.
+     * Diese Variable ist öffentlich und kann von UI-Komponenten beobachtet werden.
+     */
     val loginStatus: LiveData<Boolean> = _loginStatus
 
+    /**
+     * _emailExists ist eine private MutableLiveData, die einen Boolean enthält.
+     * Diese Variable wird verwendet, um zu verfolgen, ob eine E-Mail-Adresse bereits in der Firestore-Datenbank existiert.
+     */
     private val _emailExists = MutableLiveData<Boolean>()
+
+    /**
+     * emailExists ist eine öffentliche LiveData, die einen Boolean enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über die Existenz einer E-Mail-Adresse in der Firestore-Datenbank zu informieren.
+     */
     val emailExists: LiveData<Boolean> = _emailExists
 
+
+    /**
+     * `auth` ist eine private Variable, die eine Instanz von FirebaseAuth enthält.
+     * FirebaseAuth ist eine Firebase-Klasse, die für die Authentifizierung von Benutzern in Firebase verantwortlich ist.
+     * Diese Variable wird verwendet, um die Authentifizierungsfunktionen von Firebase in dieser Klasse zu nutzen.
+     */
     private val auth = Firebase.auth
 
 
+    /**
+     * _registrationStatus ist eine private MutableLiveData, die einen RegistrationStatus enthält.
+     * Diese Variable wird verwendet, um Änderungen am Registrierungsstatus der App zu verfolgen und zu speichern.
+     */
     private val _registrationStatus = MutableLiveData<RegistrationStatus>()
+
+    /**
+     * registrationStatus ist eine öffentliche LiveData, die einen RegistrationStatus enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen am Registrierungsstatus der App zu informieren.
+     */
     val registrationStatus: LiveData<RegistrationStatus> = _registrationStatus
 
 
+    /**
+     * _userProfileData ist eine private MutableLiveData, die ein optionales Profil-Objekt enthält.
+     * Diese Variable wird verwendet, um Änderungen am Benutzerprofil in der App zu verfolgen und zu speichern.
+     */
+    private var _userProfileData = MutableLiveData<Profile?>()
+
+    /**
+     * userProfileData ist eine öffentliche LiveData, die ein optionales Profil-Objekt enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen am Benutzerprofil zu informieren.
+     */
+    val userProfileData: LiveData<Profile?> = _userProfileData
+
+    /**
+     * _occupationalfields ist eine private MutableLiveData, die eine Liste von Strings enthält.
+     * Diese Liste von Strings repräsentiert die Berufsfelder, die in der Anwendung verwendet werden.
+     * Diese Variable wird verwendet, um Änderungen an den Berufsfeldern in der App zu verfolgen und zu speichern.
+     */
     private val _occupationalfields = MutableLiveData<List<String>>()
+
+    /**
+     * occupationalfields ist eine öffentliche LiveData, die eine Liste von Strings enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an den Berufsfeldern in der App zu informieren.
+     */
     val occupationalfields: LiveData<List<String>> = _occupationalfields
 
+    /**
+     * _worklocations ist eine private MutableLiveData, die eine Liste von Strings enthält.
+     * Diese Liste von Strings repräsentiert die Arbeitsorte, die in der Anwendung verwendet werden.
+     * Diese Variable wird verwendet, um Änderungen an den Arbeitsorten in der App zu verfolgen und zu speichern.
+     */
     private val _worklocations = MutableLiveData<List<String>>()
+
+    /**
+     * worklocations ist eine öffentliche LiveData, die eine Liste von Strings enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an den Arbeitsorten in der App zu informieren.
+     */
     val worklocations: LiveData<List<String>> = _worklocations
 
 
-    private var _userProfileData = MutableLiveData<Profile?>()
-    val userProfileData: LiveData<Profile?> = _userProfileData
-
-
+    /**
+     * _jobs ist eine private MutableLiveData, die eine Liste von Strings enthält.
+     * Diese Liste von Strings repräsentiert die Jobs, die in der Anwendung verwendet werden.
+     * Diese Variable wird verwendet, um Änderungen an den Jobs in der App zu verfolgen und zu speichern.
+     */
     private val _jobs = MutableLiveData<List<String>>()
+
+    /**
+     * jobs ist eine öffentliche LiveData, die eine Liste von Strings enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an den Jobs in der App zu informieren.
+     */
     val jobs: LiveData<List<String>> = _jobs
 
 
+    /**
+     * _jobOffers ist eine private MutableLiveData, die eine Liste von Paaren von Strings enthält.
+     * Jedes Paar repräsentiert ein Jobangebot, wobei der erste String den Jobtitel und der zweite String den Arbeitsort darstellt.
+     * Diese Variable wird verwendet, um Änderungen an den Jobangeboten in der App zu verfolgen und zu speichern.
+     */
     private val _jobOffers = MutableLiveData<List<Pair<String, String>>>()
+
+    /**
+     * jobOffers ist eine öffentliche LiveData, die eine Liste von Paaren von Strings enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an den Jobangeboten in der App zu informieren.
+     */
     val jobOffers: LiveData<List<Pair<String, String>>> = _jobOffers
 
 
+    /**
+     * _jobDetails ist eine private MutableLiveData, die ein Result von JobDetailsResponse enthält.
+     * Result ist eine generische Klasse, die entweder einen Erfolgswert mit dem angegebenen Typ oder einen Fehler enthält.
+     * JobDetailsResponse ist eine Datenklasse, die die Antwort des Jobdetails-API-Aufrufs repräsentiert.
+     * Diese Variable wird verwendet, um Änderungen an den Jobdetails in der App zu verfolgen und zu speichern.
+     */
     private val _jobDetails = MutableLiveData<Result<JobDetailsResponse>>()
+
+    /**
+     * jobDetails ist eine öffentliche LiveData, die ein Result von JobDetailsResponse enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an den Jobdetails in der App zu informieren.
+     */
     val jobDetails: LiveData<Result<JobDetailsResponse>> = _jobDetails
 
+
+    /**
+     * _educationaloffers ist eine private MutableLiveData, die eine Liste von TerminResponse enthält.
+     * TerminResponse ist eine Datenklasse, die die Antwort des Bildungsangebots-API-Aufrufs repräsentiert.
+     * Diese Variable wird verwendet, um Änderungen an den Bildungsangeboten in der App zu verfolgen und zu speichern.
+     */
     private val _educationaloffers = MutableLiveData<List<TerminResponse>>()
+
+    /**
+     * educationaloffers ist eine öffentliche LiveData, die eine Liste von TerminResponse enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über Änderungen an den Bildungsangeboten in der App zu informieren.
+     */
     val educationaloffers: LiveData<List<TerminResponse>> = _educationaloffers
 
+    /**
+     * _deleteAccountStatus ist eine private MutableLiveData, die einen optionalen Boolean enthält.
+     * Diese Variable wird verwendet, um den Status der Kontolöschung zu verfolgen und zu speichern.
+     */
     private val _deleteAccountStatus = MutableLiveData<Boolean?>()
+
+    /**
+     * deleteAccountStatus ist eine öffentliche LiveData, die einen optionalen Boolean enthält.
+     * LiveData ist eine Datenhalterklasse, die beobachtet werden kann. Im Gegensatz zu einer regulären Observable,
+     * ist LiveData Lifecycle-bewusst, was bedeutet, dass sie den Lifecycle-Status ihrer Beobachter respektiert.
+     * Diese Variable wird verwendet, um UI-Komponenten über den Status der Kontolöschung zu informieren.
+     */
     val deleteAccountStatus: LiveData<Boolean?> = _deleteAccountStatus
 
 
-    //TODO LiveData = UI-Aktualisierungen ,Berechnungen = lokale Variablen, slider Int lokal speichern
-
-
+    /**
+     * Initialisierungsbereich für die MainViewModel-Klasse.
+     * Hier wird die Methode loadUserLanguageSetting() aufgerufen, die die Benutzerspracheinstellung lädt.
+     * Diese Methode wird beim Erstellen einer Instanz dieser Klasse aufgerufen.
+     */
     init {
         loadUserLanguageSetting()
     }
 
 
+    /**
+     * Lädt die Benutzerspracheinstellung asynchron.
+     * Diese Methode versucht zuerst, die Benutzerspracheinstellung zu laden, wenn eine Benutzer-ID vorhanden ist.
+     * Falls keine Benutzerspracheinstellung vorhanden ist, wird die System- oder App-Einstellung verwendet.
+     * Nachdem die Spracheinstellung gefunden wurde, wird die App-Locale aktualisiert und die neue Locale in einer LiveData-Variable gespeichert.
+     *
+     * @param userId: Die Benutzer-ID, für die die Spracheinstellung geladen werden soll. Wenn null, wird die System- oder App-Einstellung verwendet.
+     */
     private fun loadUserLanguageSetting(userId: String? = null) {
         viewModelScope.launch {
             try {
-                // Versuche zuerst, die Benutzerspracheinstellung zu laden, wenn eine Benutzer-ID vorhanden ist
+                // Versucht zuerst, die Benutzerspracheinstellung zu laden, wenn eine Benutzer-ID vorhanden ist
                 val userLanguageCode = userId?.let { uid ->
                     repository.getUserProfile(uid).value?.languageCode
                 }
 
-                // Falls keine Benutzerspracheinstellung vorhanden ist, verwende die System- oder App-Einstellung
+                // Falls keine Benutzerspracheinstellung vorhanden ist, verwendet es die System- oder App-Einstellung
                 val languageCode = userLanguageCode ?: withContext(Dispatchers.IO) {
                     repository.loadLanguageSetting()
                 }
 
-                // Aktualisiere die App-Locale mit der gefundenen Spracheinstellung
+                // Aktualisiert die App-Locale mit der gefundenen Spracheinstellung
                 val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
                 AppCompatDelegate.setApplicationLocales(localeListCompat)
                 _localeList.postValue(localeListCompat)
@@ -137,7 +304,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+    /**
+     * Setzt den ausgewählten Sprachcode.
+     * Diese Methode wird asynchron ausgeführt und setzt den Wert der LiveData-Variable _selectedLanguageCode.
+     * Im Falle eines Fehlers wird die Ausnahme ignoriert und die Methode beendet.
+     *
+     * @param languageCode: Der Sprachcode, der als ausgewählter Sprachcode gesetzt werden soll.
+     */
     fun setSelectedLanguageCode(languageCode: String) {
         viewModelScope.launch {
             try {
@@ -147,18 +320,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * Ändert die Sprache der Anwendung.
+     * Diese Methode wird asynchron ausgeführt und speichert die neue Spracheinstellung in der Datenquelle (Repository).
+     * Anschließend wird die App-Locale aktualisiert und die neue Locale in einer LiveData-Variable gespeichert.
+     *
+     * @param languageCode: Der Sprachcode, der als neue Spracheinstellung gesetzt werden soll.
+     */
     fun changeLanguage(languageCode: String) {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    // Speichere die Spracheinstellung
+                    // Speichert die Spracheinstellung
                     repository.saveLanguageSetting(languageCode)
-
                 }
                 val localeListCompat = LocaleListCompat.forLanguageTags(languageCode)
                 AppCompatDelegate.setApplicationLocales(localeListCompat)
                 _localeList.postValue(localeListCompat)
-
             } catch (_: Exception) {
             }
         }
@@ -213,13 +391,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
             } catch (e: Exception) {
-                Log.e(TAG, "Error in doesEmailExist", e)
                 _emailExists.value = false
             }
         }
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um das Benutzerprofil asynchron abzurufen.
+     * Sie wird innerhalb einer Coroutine ausgeführt, um asynchrone Operationen zu ermöglichen.
+     * Zunächst wird die Benutzer-ID von der aktuellen Firebase-Authentifizierung abgerufen.
+     * Wenn eine Benutzer-ID vorhanden ist, wird ein Dokumentenverweis auf das Benutzerprofil in Firestore erstellt.
+     * Anschließend wird ein erfolgreicher Abruf des Dokuments versucht.
+     * Bei Erfolg wird das Dokument in ein Profil-Objekt umgewandelt und in der LiveData-Variable _userProfileData gespeichert.
+     * Bei einem Fehler oder wenn keine Benutzer-ID vorhanden ist, wird _userProfileData auf null gesetzt.
+     */
     private fun fetchUserProfile() {
         viewModelScope.launch {
             try {
@@ -236,7 +422,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     _userProfileData.value = null
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error in fetchUserProfile", e)
                 _userProfileData.value = null
             }
         }
@@ -268,11 +453,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
             } catch (e: Exception) {
-                Log.e(TAG, "Error in onGoogleLoginClicked", e)
+
                 _loginStatus.value = false
             }
         }
-    }// TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
+    }
 
 
     /**
@@ -322,7 +507,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             is FirebaseAuthUserCollisionException -> R.string.emailinuse
                             else -> R.string.unkownregistererror
                         }
-                        Log.e(TAG, message.toString(), task.exception)
                         _registrationStatus.value =
                             RegistrationStatus(success = false, message = message)
                     }
@@ -338,17 +522,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    // TODO:wie kriege Ich das hin das wenn der Benutzer sich der Benutzer einmal über Google angemeldet hat direkt für immer eingeloggt bleibt und direkt zu einem hypotethischen DashboardFragment springt ?
-
-
-    // In MainViewModel.kt
+    /**
+     * Diese Methode wird verwendet, um einen gegebenen Text von Englisch nach Deutsch zu übersetzen.
+     * Sie prüft zunächst, ob die aktuelle Sprache bereits Deutsch ist. Ist dies der Fall, wird der ursprüngliche Text zurückgegeben, ohne eine Übersetzung durchzuführen.
+     * Ansonsten wird eine Coroutine gestartet, um die Übersetzung asynchron durchzuführen.
+     * Die Methode versucht, den gegebenen Text mithilfe des Repositorys zu übersetzen und führt dann spezifische Korrekturen an der Übersetzung durch.
+     * Bei einem Fehler während der Übersetzung wird der ursprüngliche Text zurückgegeben.
+     *
+     * @param inputText: Der zu übersetzende Text.
+     * @param onComplete: Ein Callback, der aufgerufen wird, wenn die Übersetzung abgeschlossen ist. Der übersetzte Text wird als Parameter übergeben.
+     */
     fun translateToGerman(inputText: String, onComplete: (String) -> Unit) {
 
         val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
-        // Prüfe, ob die aktuelle Sprache bereits Deutsch ist
+        // Prüft, ob die aktuelle Sprache bereits Deutsch ist
         if (currentLanguageCode == "de") {
-            onComplete(inputText) // Gebe den ursprünglichen Text zurück, ohne Übersetzung
-            return // Beende die Methode vorzeitig
+            onComplete(inputText) // Gibt den ursprünglichen Text zurück, ohne Übersetzung
+            return // Beendet die Methode vorzeitig
         }
 
         viewModelScope.launch {
@@ -437,21 +627,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 // Versucht, die Berufsfelder vom Repository zu erhalten.
                 val response = repository.getOccupationalFields()
                 if (response.isSuccess) {
-                    Log.d(TAG, "Berufsfelder erfolgreich abgerufen.")
+
                     // Bei Erfolg werden die Berufsfelder in der LiveData-Variable gespeichert.
                     _occupationalfields.value = response.getOrNull()!!
-                } else {
-                    // Im Fehlerfall wird eine leere Liste gesetzt, um die Fehlerbehandlung in der UI zu ermöglichen.
-                    _occupationalfields.value = listOf()
-                    Log.e(
-                        TAG,
-                        "Fehler beim Abrufen der Berufsfelder: ${response.exceptionOrNull()?.message}"
-                    )
                 }
             } catch (e: Exception) {
                 // Fängt jegliche Ausnahmen beim Abrufen der Berufsfelder ab und setzt die LiveData-Variable auf eine leere Liste.
                 _occupationalfields.value = listOf()
-                Log.e(TAG, "Fehler beim Abrufen der Berufsfelder: ${e.message}")
+
             }
         }
     }
@@ -510,20 +693,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val response = repository.getWorkLocations()
                 if (response.isSuccess) {
                     // Bei Erfolg werden die erhaltenen Arbeitsorte in _arbeitsorte LiveData gesetzt.
-                    Log.d(TAG, "Arbeitsorte erfolgreich abgerufen.")
+
                     _worklocations.value = response.getOrNull()!!
-                } else {
-                    // Bei Misserfolg wird eine leere Liste gesetzt..
-                    _worklocations.value = listOf()
-                    Log.e(
-                        TAG,
-                        "Fehler beim Abrufen der Arbeitsorte: ${response.exceptionOrNull()?.message}"
-                    )
                 }
             } catch (e: Exception) {
                 // Bei einer Ausnahme wird ebenfalls eine leere Liste gesetzt
                 _worklocations.value = listOf()
-                Log.e(TAG, "Fehler beim Abrufen der Arbeitsorte: ${e.message}")
+
             }
         }
     }
@@ -628,7 +804,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    // Im ViewModel
+    /**
+     * Diese Methode wird verwendet, um asynchron Job-Nominierungen basierend auf dem gegebenen Berufsfeld und Arbeitsort abzurufen.
+     * Sie startet eine Coroutine und versucht, die Job-Nominierungen vom Repository zu erhalten.
+     * Wenn die Anfrage erfolgreich ist, wird der Wert der LiveData-Variable _jobs auf die erhaltenen Job-Nominierungen gesetzt.
+     * Wenn die Anfrage fehlschlägt oder eine Ausnahme auftritt, wird der Wert der LiveData-Variable _jobs auf eine leere Liste gesetzt.
+     *
+     * @param berufsfeld: Das Berufsfeld, für das Job-Nominierungen abgerufen werden sollen.
+     * @param arbeitsort: Der Arbeitsort, für den Job-Nominierungen abgerufen werden sollen.
+     */
     fun fetchJobNomination(berufsfeld: String, arbeitsort: String) {
         viewModelScope.launch {
             try {
@@ -648,16 +832,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    // translate german to english
+    /**
+     * Diese Methode wird verwendet, um eine Liste von Jobtiteln in die im ViewModel ausgewählte Sprache zu übersetzen.
+     * Zunächst wird überprüft, ob eine Übersetzung notwendig ist (d.h. der aktuelle Sprachcode ist nicht "de").
+     * Wenn eine Übersetzung erforderlich ist, wird jeder Jobtitel asynchron übersetzt.
+     * Nachdem alle Jobtitel übersetzt wurden, wird eine Callback-Funktion aufgerufen.
+     *
+     * @param jobTitles: Die Liste der Jobtitel, die übersetzt werden sollen.
+     * @param onComplete: Die Callback-Funktion, die aufgerufen wird, wenn die Übersetzung abgeschlossen ist. Die übersetzten Jobtitel werden als Parameter übergeben.
+     */
     fun translateJobTitles(jobTitles: List<String>, onComplete: (List<String>) -> Unit) {
-        // Erfasse den aktuellen Wert des Sprachcodes vor dem Start der Coroutine
+        // Erfasst den aktuellen Wert des Sprachcodes vor dem Start der Coroutine.
         val currentLanguageCode =
             _selectedLanguageCode.value ?: "EN" // Standardwert ist "EN", falls null
 
-        // Prüfe, ob der aktuelle Sprachcode "de" ist. Falls ja, führe die Methode nicht aus.
+        // Prüft, ob der aktuelle Sprachcode "de" ist. Falls ja, führt sich die Methode nicht aus.
         if (currentLanguageCode == "de") {
-            onComplete(jobTitles) // Gebe die ursprünglichen Jobtitel zurück, ohne Übersetzung
-            return // Beende die Methode vorzeitig
+            onComplete(jobTitles) // Gibt die ursprünglichen Jobtitel zurück, ohne Übersetzung
+            return // Beendet die Methode vorzeitig
         }
 
         viewModelScope.launch {
@@ -678,28 +870,39 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    // Überall wo ich toggeln kann , muss ich überprüfen ob sich die Live data wirklich verändert, anhand
-    //Logs beispielsweise , baue einen observer (todoListe)
 
+    /**
+     * Diese Methode wird verwendet, um asynchron Job-Angebote basierend auf dem gegebenen Berufsfeld und Arbeitsort abzurufen.
+     * Sie startet eine Coroutine und versucht, die Job-Angebote vom Repository zu erhalten.
+     * Wenn die Anfrage erfolgreich ist, wird der Wert der LiveData-Variable _jobOffers auf die erhaltenen Job-Angebote gesetzt.
+     * Wenn die Anfrage fehlschlägt oder eine Ausnahme auftritt, wird der Wert der LiveData-Variable _jobOffers auf eine leere Liste gesetzt.
+     *
+     * @param was: Das Berufsfeld, für das Job-Angebote abgerufen werden sollen.
+     * @param arbeitsort: Der Arbeitsort, für den Job-Angebote abgerufen werden sollen.
+     */
     fun fetchJobOffers(was: String, arbeitsort: String) {
         viewModelScope.launch {
             val response = repository.getJobOffers(was, arbeitsort)
             if (response.isSuccess) {
-                // Angenommen, die API gibt eine Liste von Job-Objekten zurück
                 val jobPairs = response.getOrNull()?.map { it }?.toList() ?: listOf()
                 _jobOffers.postValue(jobPairs)
             } else {
                 _jobOffers.postValue(listOf())
-                Log.e(
-                    TAG,
-                    "Fehler beim Abrufen der Jobangebote: ${response.exceptionOrNull()?.message}"
-                )
+
             }
         }
     }
 
 
-    // translate job offers to the selected language
+    /**
+     * Übersetzt eine Liste von Job-Angeboten in die im ViewModel ausgewählte Sprache.
+     * Die Methode prüft zuerst, ob eine Übersetzung notwendig ist (d.h. der aktuelle Sprachcode ist nicht "de").
+     * Wenn eine Übersetzung erforderlich ist, wird jedes Job-Angebot asynchron übersetzt.
+     * Nachdem alle Job-Angebote übersetzt wurden, wird eine Callback-Funktion aufgerufen.
+     *
+     * @param jobOffers: Die Liste der Job-Angebote, die übersetzt werden sollen.
+     * @param onComplete: Die Callback-Funktion, die aufgerufen wird, wenn die Übersetzung abgeschlossen ist. Die übersetzten Job-Angebote werden als Parameter übergeben.
+     */
     fun translateJobOffers(
         jobOffers: List<Pair<String, String>>,
         onComplete: (List<Pair<String, String>>) -> Unit
@@ -725,13 +928,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             jobTitle,
                             refNr
                         )
-                    ) // Füge den Originaltitel im Fehlerfall hinzu
+                    )
                 }
             }
             onComplete(translatedJobOffers)
         }
     }
 
+    /**
+     * Aktualisiert die Job-Angebote asynchron basierend auf dem gegebenen Berufsfeld und Arbeitsort.
+     * Diese Methode startet eine Coroutine und versucht, die Job-Angebote zu aktualisieren.
+     * Wenn die Anfrage erfolgreich ist, wird die Methode beendet.
+     * Wenn die Anfrage fehlschlägt oder eine Ausnahme auftritt, wird der Fehler protokolliert.
+     *
+     * @param was: Das Berufsfeld, für das Job-Angebote aktualisiert werden sollen.
+     * @param arbeitsort: Der Arbeitsort, für den Job-Angebote aktualisiert werden sollen.
+     */
     fun updateJobOffers(was: String, arbeitsort: String) {
         viewModelScope.launch {
             try {
@@ -744,6 +956,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um die ausgewählten Jobs zu aktualisieren und in Firebase zu speichern.
+     * Sie startet eine Coroutine und versucht, die ausgewählten Jobs zu aktualisieren.
+     * Zunächst wird das aktuelle Benutzerprofil abgerufen. Wenn kein Benutzerprofil vorhanden ist, wird ein neues Profil erstellt.
+     * Dann wird die Liste der ausgewählten Jobs mit den neuen ausgewählten Jobs aktualisiert.
+     * Das aktualisierte Benutzerprofil wird dann in der LiveData-Variable _userProfileData gespeichert.
+     * Schließlich werden die aktualisierten ausgewählten Jobs in Firebase gespeichert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param newSelectedJobs: Eine Map, die die neuen ausgewählten Jobs enthält. Der Schlüssel ist der Jobtitel und der Wert ist die Job-ID.
+     */
     fun updateSelectedJobsAndPersist(newSelectedJobs: Map<String, String>) {
         viewModelScope.launch {
             try {
@@ -759,26 +982,48 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _userProfileData.value = currentProfile
 
                 saveSelectedJobsToFirebase(updatedSelectedJobs.toMap())
-            } catch (e: Exception) {
-                Log.e(TAG, "Error in updateSelectedJobsAndPersist", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um die ausgewählten Jobs asynchron in Firebase zu speichern.
+     * Sie startet eine Coroutine und versucht, die ausgewählten Jobs zu speichern.
+     * Zunächst wird die Benutzer-ID von der aktuellen Firebase-Authentifizierung abgerufen.
+     * Wenn eine Benutzer-ID vorhanden ist, wird die Methode 'updateUserProfileField' des Repositorys aufgerufen, um die ausgewählten Jobs zu speichern.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param selectedJobs: Eine Map, die die ausgewählten Jobs enthält. Der Schlüssel ist der Jobtitel und der Wert ist die Job-ID.
+     */
     private fun saveSelectedJobsToFirebase(selectedJobs: Map<String, String>) {
         viewModelScope.launch {
             try {
                 val userId = auth.currentUser?.uid ?: return@launch
                 repository.updateUserProfileField(userId, "selectedJobs", selectedJobs)
-            } catch (e: Exception) {
-                // Hier können Sie den Fehler loggen oder behandeln
-                Log.e(TAG, "Fehler beim Speichern der ausgewählten Jobs in Firebase", e)
+            } catch (_: Exception) {
             }
         }
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um ein To-Do-Element für einen bestimmten Job zu aktualisieren.
+     * Sie startet eine Coroutine und versucht, das To-Do-Element zu aktualisieren.
+     * Zunächst wird die Job-ID bereinigt und Dokumentenverweise auf das Benutzerprofil und das To-Do-Dokument erstellt.
+     * Dann wird ein Map-Objekt mit den aktualisierten To-Do-Daten erstellt.
+     * Anschließend wird versucht, das To-Do-Dokument zu erhalten.
+     * Wenn das Dokument existiert, wird das spezifische To-Do-Element aktualisiert.
+     * Wenn das Dokument nicht existiert, wird ein neues Dokument mit dem To-Do-Element erstellt.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die das To-Do-Element aktualisiert werden soll.
+     * @param rawJobId: Die rohe Job-ID, für die das To-Do-Element aktualisiert werden soll.
+     * @param todoId: Die ID des zu aktualisierenden To-Do-Elements.
+     * @param isCompleted: Der aktualisierte Abschlussstatus des To-Do-Elements.
+     * @param text: Der aktualisierte Text des To-Do-Elements.
+     */
     fun updateToDoItemForJob(
         userId: String,
         rawJobId: String,
@@ -799,35 +1044,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 todoDocRef.get().addOnSuccessListener { document ->
                     if (document.exists()) {
-                        // Wenn das Dokument existiert, aktualisiere das spezifische To-Do-Item
+                        // Wenn das Dokument existiert, aktualisiert es das spezifische To-Do-Item
                         todoDocRef.update("todos.$todoId", toDoData)
-                            .addOnSuccessListener {
-                                Log.d(TAG, "ToDo item updated successfully")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e(TAG, "Error updating ToDo item", e)
-                            }
+
                     } else {
-                        // Wenn das Dokument nicht existiert, erstelle ein neues mit dem To-Do-Item
+                        // Wenn das Dokument nicht existiert, erstellt ein neues mit dem To-Do-Item
                         val newTodo = mapOf("todos" to mapOf(todoId to toDoData))
                         todoDocRef.set(newTodo)
-                            .addOnSuccessListener {
-                                Log.d(TAG, "New ToDo item created successfully")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e(TAG, "Error creating new ToDo item", e)
-                            }
+
                     }
-                }.addOnFailureListener { e ->
-                    Log.e(TAG, "Error checking if ToDo item exists", e)
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error in updateToDoItemForJob", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um To-Do-Elemente für einen bestimmten Job asynchron abzurufen.
+     * Sie startet eine Coroutine und versucht, die To-Do-Elemente abzurufen.
+     * Zunächst wird die Job-ID bereinigt und ein Dokumentenverweis auf die To-Do-Elemente für den Job erstellt.
+     * Anschließend wird ein SnapshotListener hinzugefügt, um Änderungen an den To-Do-Elementen zu verfolgen.
+     * Wenn ein Fehler auftritt oder das Snapshot null ist, wird die LiveData-Variable auf eine leere Liste gesetzt.
+     * Andernfalls wird die Liste der To-Do-Elemente aus dem Snapshot extrahiert und in der LiveData-Variable gespeichert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird die LiveData-Variable auf eine leere Liste gesetzt.
+     *
+     * @param userId: Die Benutzer-ID, für die die To-Do-Elemente abgerufen werden sollen.
+     * @param jobId: Die Job-ID, für die die To-Do-Elemente abgerufen werden sollen.
+     * @return: Eine LiveData-Liste von To-Do-Elementen für den gegebenen Job.
+     */
     fun getToDoItemsForJob(userId: String, jobId: String): LiveData<List<ToDoItem>> {
         val liveData = MutableLiveData<List<ToDoItem>>()
 
@@ -842,7 +1087,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 todoDocRef.addSnapshotListener { snapshot, e ->
                     if (e != null) {
-                        Log.e(TAG, "Error fetching todo items", e)
+
                         liveData.value = emptyList()
                     } else {
                         val todos =
@@ -858,7 +1103,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error fetching todo items", e)
+
                 liveData.value = emptyList()
             }
         }
@@ -875,6 +1120,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um den Text eines To-Do-Elements zu aktualisieren.
+     * Sie startet eine Coroutine und versucht, den Text des To-Do-Elements zu aktualisieren.
+     * Zunächst wird die Job-ID bereinigt und ein Dokumentenverweis auf das To-Do-Element erstellt.
+     * Anschließend wird der Pfad zum Text des To-Do-Elements erstellt und der Text des To-Do-Elements aktualisiert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die das To-Do-Element aktualisiert werden soll.
+     * @param jobId: Die Job-ID, für die das To-Do-Element aktualisiert werden soll.
+     * @param todoId: Die ID des zu aktualisierenden To-Do-Elements.
+     * @param newText: Der neue Text, der für das To-Do-Element gesetzt werden soll.
+     */
     fun updateToDoText(userId: String, jobId: String, todoId: String, newText: String) {
         viewModelScope.launch {
             try {
@@ -885,19 +1142,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     .collection("todos")
                     .document(sanitizedJobId)
 
-                // Hier aktualisierst du nicht das ganze Dokument, sondern nur das 'text'-Feld des spezifischen ToDo
+
                 val todoItemPath = "todos.$todoId.text"
                 todoDocRef.update(todoItemPath, newText)
-                    .addOnSuccessListener { Log.d(TAG, "ToDo text updated successfully") }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error updating ToDo text", e) }
-            } catch (e: Exception) {
-                // Hier können Sie den Fehler loggen oder behandeln
-                Log.e(TAG, "Fehler beim Aktualisieren des ToDo-Textes", e)
+
+            } catch (_: Exception) {
+
             }
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um eine ausgewählte Jobauswahl zu löschen.
+     * Sie startet eine Coroutine und versucht, die ausgewählte Jobauswahl zu löschen.
+     * Zunächst wird das aktuelle Benutzerprofil abgerufen. Wenn kein Benutzerprofil vorhanden ist, wird die Methode beendet.
+     * Dann wird die Map der ausgewählten Jobs in eine veränderbare Map umgewandelt oder eine leere veränderbare Map erstellt, falls keine ausgewählten Jobs vorhanden sind.
+     * Anschließend wird der Eintrag mit dem gegebenen Jobtitel aus der Map entfernt.
+     * Das aktualisierte Benutzerprofil wird dann in der LiveData-Variable _userProfileData gespeichert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param jobTitle: Der Titel des Jobs, der aus der Auswahl entfernt werden soll.
+     */
     fun deleteJobSelection(jobTitle: String) {
         viewModelScope.launch {
             try {
@@ -909,38 +1174,61 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 currentProfile.selectedJobs = updatedJobs // Aktualisiert die Map im Profil.
                 _userProfileData.value = currentProfile // Setzt das aktualisierte Profil.
-            } catch (e: Exception) {
-                // Hier können Sie den Fehler loggen oder behandeln
-                Log.e(TAG, "Fehler beim Löschen der Jobauswahl", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
+    /**
+     * Diese Methode wird verwendet, um den gewünschten Arbeitsort des Benutzers in Firebase zu speichern.
+     * Sie startet eine Coroutine und versucht, den gewünschten Arbeitsort zu speichern.
+     * Zunächst wird die Benutzer-ID von der aktuellen Firebase-Authentifizierung abgerufen.
+     * Wenn eine Benutzer-ID vorhanden ist, wird die Methode 'updateUserProfileField' des Repositorys aufgerufen, um den gewünschten Arbeitsort zu speichern.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param desiredLocation: Der gewünschte Arbeitsort, der in Firebase gespeichert werden soll.
+     */
     fun savedesiredLocationToFirebase(desiredLocation: String) {
         viewModelScope.launch {
             try {
                 val userId = auth.currentUser?.uid ?: return@launch
                 repository.updateUserProfileField(userId, "desiredLocation", desiredLocation)
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern des gewünschten Standorts in Firebase", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um Jobdetails basierend auf der bereitgestellten codierten Hash-ID asynchron abzurufen.
+     * Sie startet eine Coroutine und versucht, die Jobdetails aus dem Repository abzurufen.
+     * Wenn die Anforderung erfolgreich ist, wird die LiveData-Variable _jobDetails mit dem Ergebnis aktualisiert.
+     * Wenn die Anforderung fehlschlägt oder eine Ausnahme auftritt, wird _jobDetails mit dem Fehlerergebnis aktualisiert.
+     *
+     * @param encodedHashID: Die codierte Hash-ID, für die Jobdetails abgerufen werden sollen.
+     */
     fun fetchJobDetails(encodedHashID: String) {
         viewModelScope.launch {
             try {
                 val result = repository.getJobDetails(encodedHashID)
                 _jobDetails.value = result
             } catch (e: Exception) {
-                // Du könntest auch eine spezifischere Fehlerbehandlung hier einbauen
                 _jobDetails.value = Result.failure(e)
             }
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um Jobdetails in die im ViewModel ausgewählte Sprache zu übersetzen.
+     * Zunächst wird überprüft, ob eine Übersetzung notwendig ist (d.h. der aktuelle Sprachcode ist nicht "de").
+     * Wenn eine Übersetzung erforderlich ist, wird jedes Feld der Jobdetails asynchron übersetzt.
+     * Nachdem alle Felder übersetzt wurden, wird eine Callback-Funktion aufgerufen.
+     *
+     * @param jobDetails: Das JobDetailsResponse-Objekt, das übersetzt werden soll.
+     * @param onComplete: Die Callback-Funktion, die aufgerufen wird, wenn die Übersetzung abgeschlossen ist. Das übersetzte JobDetailsResponse-Objekt wird als Parameter übergeben.
+     */
     fun translateJobDetails(
         jobDetails: JobDetailsResponse,
         onComplete: (JobDetailsResponse) -> Unit
@@ -991,7 +1279,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
 
-                // Erstelle ein neues JobDetailsResponse-Objekt mit den übersetzten Werten
+                // Erstellt ein neues JobDetailsResponse-Objekt mit den übersetzten Werten
                 val translatedJobDetails = jobDetails.copy(
                     arbeitgeber = translatedEmployer,
                     stellenbeschreibung = translatedJobOfferDescription,
@@ -1007,12 +1295,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 onComplete(translatedJobDetails)
             } catch (e: Exception) {
 
-                onComplete(jobDetails) // Gebe die ursprünglichen Jobdetails zurück, falls ein Fehler auftritt
+                onComplete(jobDetails)
             }
         }
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um Bildungsangebote asynchron abzurufen.
+     * Sie startet eine Coroutine und versucht, die Bildungsangebote aus dem Repository abzurufen.
+     * Wenn die Anforderung erfolgreich ist, wird die LiveData-Variable _educationaloffers mit den erhaltenen Bildungsangeboten aktualisiert.
+     * Wenn die Anforderung fehlschlägt oder eine Ausnahme auftritt, wird _educationaloffers mit einer leeren Liste aktualisiert.
+     *
+     * @param systematiken: Die Systematiken, für die Bildungsangebote abgerufen werden sollen.
+     * @param orte: Die Orte, für die Bildungsangebote abgerufen werden sollen.
+     * @param sprachniveau: Das Sprachniveau, für das Bildungsangebote abgerufen werden sollen.
+     * @param beginntermine: Die Beginntermine, für die Bildungsangebote abgerufen werden sollen.
+     */
     fun fetchEducationalOffers(
         systematiken: String,
         orte: String,
@@ -1025,20 +1324,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     repository.getEducationalOffers(systematiken, orte, sprachniveau, beginntermine)
                 if (response.isSuccess) {
                     _educationaloffers.postValue(response.getOrNull() ?: listOf())
-                } else {
-                    _educationaloffers.postValue(listOf())
-                    Log.e(
-                        TAG,
-                        "Fehler beim Abrufen der Bildungsangebote: ${response.exceptionOrNull()?.message}"
-                    )
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Ausnahme beim Abrufen der Bildungsangebote", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um Bildungsangebote in die im ViewModel ausgewählte Sprache zu übersetzen.
+     * Zunächst wird überprüft, ob eine Übersetzung notwendig ist (d.h. der aktuelle Sprachcode ist nicht "de").
+     * Wenn eine Übersetzung erforderlich ist, wird jedes Bildungsangebot asynchron übersetzt.
+     * Nachdem alle Bildungsangebote übersetzt wurden, wird eine Callback-Funktion aufgerufen.
+     *
+     * @param bildungsangebote: Die Liste der Bildungsangebote, die übersetzt werden sollen.
+     * @param onComplete: Die Callback-Funktion, die aufgerufen wird, wenn die Übersetzung abgeschlossen ist. Die übersetzten Bildungsangebote werden als Parameter übergeben.
+     */
     fun translateEducationalOffers(
         bildungsangebote: List<TerminResponse>,
         onComplete: (List<TerminResponse>) -> Unit
@@ -1071,12 +1372,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 onComplete(translatedEducationalOffers)
             } catch (e: Exception) {
 
-                onComplete(bildungsangebote) // Gebe die ursprünglichen Bildungsangebote zurück, falls ein Fehler auftritt
+                onComplete(bildungsangebote) // Gibt die ursprünglichen Bildungsangebote zurück, falls ein Fehler auftritt
             }
         }
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um das Profilbild des Benutzers zu aktualisieren.
+     * Sie startet eine Coroutine und versucht, das Profilbild zu aktualisieren.
+     * Zunächst wird die Benutzer-ID von der aktuellen Firebase-Authentifizierung abgerufen. Wenn keine Benutzer-ID vorhanden ist, wird eine Ausnahme ausgelöst.
+     * Dann werden Referenzen auf Firebase Storage und Firestore erstellt.
+     * Anschließend wird eine Referenz auf das Profilbild im Storage erstellt und das neue Bild wird hochgeladen.
+     * Nach dem erfolgreichen Hochladen wird die URL des Bildes abgerufen und das Profilbild in Firestore aktualisiert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param uri: Die Uri des neuen Profilbildes.
+     */
     fun updateProfileImage(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -1098,10 +1410,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um eine neue Lernkarte hinzuzufügen.
+     * Sie startet eine Coroutine und versucht, die Lernkarte zu erstellen und in Firestore zu speichern.
+     * Zunächst wird eine neue Lernkarte mit dem gegebenen Vorder- und Rücktext erstellt.
+     * Dann wird eine Referenz auf das Firestore-Dokument für die neue Lernkarte erstellt.
+     * Die ID des Firestore-Dokuments wird als ID der Lernkarte gesetzt.
+     * Schließlich wird die Lernkarte im Firestore-Dokument gespeichert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die die Lernkarte hinzugefügt werden soll.
+     * @param frontText: Der Text, der auf der Vorderseite der Lernkarte angezeigt werden soll.
+     * @param backText: Der Text, der auf der Rückseite der Lernkarte angezeigt werden soll.
+     */
     fun addFlashcard(userId: String, frontText: String, backText: String) {
         viewModelScope.launch {
             try {
-                val newCard = IndexCard(frontText = frontText, backText = backText)
+                val newCard = FlashCard(frontText = frontText, backText = backText)
                 val docRef = FirebaseFirestore.getInstance().collection("user").document(userId)
                     .collection("flashcards").document()
                 newCard.id = docRef.id  // Setze die Firestore-ID als die ID der Karte
@@ -1112,7 +1437,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um eine Flashcard zu aktualisieren.
+     * Sie startet eine Coroutine und versucht, die Flashcard zu aktualisieren.
+     * Zunächst wird eine Referenz auf das Firestore-Dokument für die Flashcard erstellt.
+     * Dann wird eine Map erstellt, die die aktualisierten Werte enthält.
+     * Die Map wird dann verwendet, um das Firestore-Dokument zu aktualisieren.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die die Flashcard aktualisiert werden soll.
+     * @param cardId: Die ID der zu aktualisierenden Flashcard.
+     * @param frontText: Der neue Text, der auf der Vorderseite der Flashcard angezeigt werden soll. Wenn null, wird der Text nicht aktualisiert.
+     * @param backText: Der neue Text, der auf der Rückseite der Flashcard angezeigt werden soll. Wenn null, wird der Text nicht aktualisiert.
+     */
     fun updateFlashcard(userId: String, cardId: String, frontText: String?, backText: String?) {
         viewModelScope.launch {
             try {
@@ -1129,9 +1466,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
-    fun getFlashcards(userId: String): LiveData<List<IndexCard>> {
-        val liveData = MutableLiveData<List<IndexCard>>()
+    /**
+     * Diese Methode wird verwendet, um Flashcards für einen bestimmten Benutzer asynchron abzurufen.
+     * Sie startet eine Coroutine und versucht, die Flashcards aus Firestore abzurufen.
+     * Zunächst wird eine MutableLiveData für die Flashcards erstellt.
+     * Dann wird ein SnapshotListener hinzugefügt, um Änderungen an den Flashcards zu verfolgen.
+     * Wenn ein Fehler auftritt oder das Snapshot null ist, wird die LiveData-Variable auf eine leere Liste gesetzt.
+     * Andernfalls wird die Liste der Flashcards aus dem Snapshot extrahiert und in der LiveData-Variable gespeichert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird die LiveData-Variable auf eine leere Liste gesetzt.
+     *
+     * @param userId: Die Benutzer-ID, für die die Flashcards abgerufen werden sollen.
+     * @return: Eine LiveData-Liste von Flashcards für den gegebenen Benutzer.
+     */
+    fun getFlashcards(userId: String): LiveData<List<FlashCard>> {
+        val liveData = MutableLiveData<List<FlashCard>>()
         viewModelScope.launch {
             try {
                 FirebaseFirestore.getInstance().collection("user").document(userId)
@@ -1141,7 +1489,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             // Handle the error
                             liveData.postValue(emptyList())
                         } else {
-                            val flashcards = snapshot?.toObjects(IndexCard::class.java)
+                            val flashcards = snapshot?.toObjects(FlashCard::class.java)
                             liveData.postValue(flashcards ?: emptyList())
                         }
                     }
@@ -1151,7 +1499,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return liveData
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um ein To-Do-Element zu aktualisieren.
+     * Sie startet eine Coroutine und versucht, das To-Do-Element zu aktualisieren.
+     * Zunächst wird eine Referenz auf das Firestore-Dokument für das To-Do-Element erstellt.
+     * Dann wird eine Map erstellt, die die aktualisierten Werte enthält.
+     * Die Map wird dann verwendet, um das Firestore-Dokument zu aktualisieren.
+     * Wenn das Dokument existiert, wird das spezifische To-Do-Element aktualisiert.
+     * Wenn das Dokument nicht existiert, wird ein neues Dokument mit dem To-Do-Element erstellt.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die das To-Do-Element aktualisiert werden soll.
+     * @param todoId: Die ID des zu aktualisierenden To-Do-Elements.
+     * @param isCompleted: Der aktualisierte Abschlussstatus des To-Do-Elements.
+     * @param text: Der aktualisierte Text des To-Do-Elements.
+     */
     fun updateToDoItem(userId: String, todoId: String, isCompleted: Boolean, text: String) {
         viewModelScope.launch {
             try {
@@ -1171,46 +1533,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         val document = task.result
                         if (document.exists()) {
                             todoDocRef.update(toDoData)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        TAG,
-                                        "ToDo item updated successfully"
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(
-                                        TAG,
-                                        "Error updating ToDo item",
-                                        e
-                                    )
-                                }
+
                         } else {
                             todoDocRef.set(toDoData)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        TAG,
-                                        "ToDo item created successfully"
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(
-                                        TAG,
-                                        "Error creating ToDo item",
-                                        e
-                                    )
-                                }
+
                         }
-                    } else {
-                        Log.w(TAG, "Error getting document", task.exception)
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception in updateToDoItem", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um To-Do-Elemente für einen bestimmten Benutzer asynchron abzurufen.
+     * Sie startet eine Coroutine und versucht, die To-Do-Elemente aus Firestore abzurufen.
+     * Zunächst wird eine MutableLiveData für die To-Do-Elemente erstellt.
+     * Dann wird ein SnapshotListener hinzugefügt, um Änderungen an den To-Do-Elementen zu verfolgen.
+     * Wenn ein Fehler auftritt oder das Snapshot null ist, wird die LiveData-Variable auf eine leere Liste gesetzt.
+     * Andernfalls wird die Liste der To-Do-Elemente aus dem Snapshot extrahiert und in der LiveData-Variable gespeichert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird die LiveData-Variable auf eine leere Liste gesetzt.
+     *
+     * @param userId: Die Benutzer-ID, für die die To-Do-Elemente abgerufen werden sollen.
+     * @return: Eine LiveData-Liste von To-Do-Elementen für den gegebenen Benutzer.
+     */
     fun getToDoItems(userId: String): LiveData<List<ToDoItemRelocation>> {
         val liveData = MutableLiveData<List<ToDoItemRelocation>>()
 
@@ -1223,7 +1570,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 todoDocRef.addSnapshotListener { snapshot, e ->
                     if (e != null) {
-                        Log.e(TAG, "Error fetching todo items", e)
+
                         liveData.postValue(emptyList())
                     } else {
                         val toDoItems = snapshot?.documents?.mapNotNull { doc ->
@@ -1232,14 +1579,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         liveData.postValue(toDoItems)
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception in getToDoItems", e)
+            } catch (_: Exception) {
+
             }
         }
 
         return liveData
     }
 
+    /**
+     * Diese Methode wird verwendet, um den Text eines To-Do-Elements zu aktualisieren.
+     * Sie startet eine Coroutine und versucht, den Text des To-Do-Elements zu aktualisieren.
+     * Zunächst wird eine Referenz auf das Firestore-Dokument für das To-Do-Element erstellt.
+     * Anschließend wird der Text des To-Do-Elements aktualisiert.
+     * Wenn das Dokument existiert, wird der Text des spezifischen To-Do-Elements aktualisiert.
+     * Wenn das Dokument nicht existiert, wird ein neues Dokument mit dem To-Do-Element erstellt.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die das To-Do-Element aktualisiert werden soll.
+     * @param todoId: Die ID des zu aktualisierenden To-Do-Elements.
+     * @param newText: Der neue Text, der für das To-Do-Element gesetzt werden soll.
+     */
     fun updateToDoTextRelocation(userId: String, todoId: String, newText: String) {
         viewModelScope.launch {
             try {
@@ -1254,49 +1614,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         val document = task.result
                         if (document.exists()) {
                             todoDocRef.update("text", newText)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        TAG,
-                                        "ToDo text updated successfully"
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(
-                                        TAG,
-                                        "Error updating ToDo text",
-                                        e
-                                    )
-                                }
+
                         } else {
                             val toDoData = mapOf(
                                 "erledigt" to false,
                                 "text" to newText
                             )
                             todoDocRef.set(toDoData)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        TAG,
-                                        "ToDo item created successfully"
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(
-                                        TAG,
-                                        "Error creating ToDo item",
-                                        e
-                                    )
-                                }
+
                         }
-                    } else {
-                        Log.w(TAG, "Error getting document", task.exception)
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error in updateToDoTextRelocation", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
+    /**
+     * Diese Methode wird verwendet, um ein To-Do-Element zu löschen.
+     * Sie startet eine Coroutine und versucht, das To-Do-Element zu löschen.
+     * Zunächst wird eine Referenz auf das Firestore-Dokument für das To-Do-Element erstellt.
+     * Dann wird überprüft, ob das Dokument existiert. Wenn es existiert, wird das Dokument gelöscht.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die das To-Do-Element gelöscht werden soll.
+     * @param todoId: Die ID des zu löschenden To-Do-Elements.
+     */
     fun deleteToDoItem(userId: String, todoId: String) {
         viewModelScope.launch {
             try {
@@ -1309,20 +1653,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 todoDocRef.get().addOnSuccessListener { document ->
                     if (document.exists()) {
                         todoDocRef.delete()
-                            .addOnSuccessListener { Log.d(TAG, "ToDo item deleted successfully") }
-                            .addOnFailureListener { e -> Log.w(TAG, "Error deleting ToDo item", e) }
-                    } else {
-                        Log.w(TAG, "ToDo item does not exist")
+
                     }
                 }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error getting ToDo item", e) }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error in deleteToDoItem", e)
+
+            } catch (_: Exception) {
+
             }
         }
     }
 
-
+    /**
+     * Diese Methode wird verwendet, um Feedback zu speichern.
+     * Sie startet eine Coroutine und versucht, das Feedback in Firestore zu speichern.
+     * Zunächst wird eine Referenz auf das Firestore-Dokument für das Feedback erstellt.
+     * Dann wird eine Map erstellt, die die Feedback-Daten enthält.
+     * Die Map wird dann verwendet, um das Firestore-Dokument zu erstellen.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param userId: Die Benutzer-ID, für die das Feedback gespeichert werden soll.
+     * @param designRating: Die Bewertung des Designs.
+     * @param functionalityRating: Die Bewertung der Funktionalität.
+     * @param overallRating: Die Gesamtbewertung.
+     * @param generalFeedback: Allgemeines Feedback.
+     */
     fun saveFeedback(
         userId: String,
         designRating: Float,
@@ -1347,25 +1701,42 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 )
 
                 feedbackDocRef.set(feedbackData)
-                    .addOnSuccessListener { Log.d(TAG, "Feedback successfully saved") }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error saving feedback", e) }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error in saveFeedback", e)
+
+            } catch (_: Exception) {
+
             }
         }
     }
 
+
+    /**
+     * Diese Methode wird verwendet, um das Sprachniveau des Benutzers in Firebase zu speichern.
+     * Sie startet eine Coroutine und versucht, das Sprachniveau in Firestore zu speichern.
+     * Zunächst wird die Benutzer-ID von der aktuellen Firebase-Authentifizierung abgerufen. Wenn keine Benutzer-ID vorhanden ist, wird die Coroutine beendet.
+     * Dann wird die Methode 'updateUserProfileField' des Repositorys aufgerufen, um das Sprachniveau zu speichern.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     *
+     * @param languageLevel: Das Sprachniveau, das in Firebase gespeichert werden soll.
+     */
     fun saveLanguageLevelToFirebase(languageLevel: String) {
         viewModelScope.launch {
             try {
                 val userId = auth.currentUser?.uid ?: return@launch
                 repository.updateUserProfileField(userId, "languageLevel", languageLevel)
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Speichern des Sprachniveaus in Firebase", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
+    /**
+     * Diese Methode wird verwendet, um das Benutzerkonto zu löschen.
+     * Sie startet eine Coroutine und versucht, das Benutzerkonto zu löschen.
+     * Zunächst wird die aktuelle Benutzerinstanz von FirebaseAuth abgerufen.
+     * Wenn eine Benutzerinstanz vorhanden ist, wird die Methode 'delete' aufgerufen, um das Benutzerkonto zu löschen.
+     * Nachdem der Löschvorgang abgeschlossen ist, wird der Erfolgsstatus des Vorgangs in der LiveData-Variable _deleteAccountStatus gespeichert.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     */
     fun deleteAccount() {
         viewModelScope.launch {
             try {
@@ -1373,22 +1744,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 user?.delete()?.addOnCompleteListener { task ->
                     _deleteAccountStatus.value = task.isSuccessful
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Fehler beim Löschen des Kontos", e)
+            } catch (_: Exception) {
+
             }
         }
     }
 
 
+    /**
+     * Diese Methode wird verwendet, um den Benutzer auszuloggen.
+     * Sie startet eine Coroutine und versucht, den Benutzer auszuloggen.
+     * Zunächst wird die Methode 'signOut' aufgerufen, um den Benutzer auszuloggen.
+     * Dann wird der Wert der LiveData-Variable _userProfileData auf null gesetzt, um das Benutzerprofil zu löschen.
+     * Schließlich wird der Wert der LiveData-Variable _loginStatus auf false gesetzt, um den Anmeldestatus zu aktualisieren.
+     * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     */
     fun logout() {
         viewModelScope.launch {
             try {
                 auth.signOut()
                 _userProfileData.value = null
                 _loginStatus.value = false
-                Log.d("logout", "Benutzer erfolgreich ausgeloggt")
-            } catch (e: Exception) {
-                Log.e("logout", "Fehler in der LogOut-Methode", e)
+
+            } catch (_: Exception) {
+
             }
         }
     }
