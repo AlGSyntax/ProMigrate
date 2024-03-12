@@ -1,10 +1,10 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -31,7 +31,7 @@ class DetailToDoJobResearchFragment : Fragment() {
     // Wird nullable gehalten, da es zwischen onCreateView und onDestroyView null sein kann.
     private var binding: FragmentDetailToDoJobResearchBinding? = null
 
-
+    // 'args' wird verwendet, um die Argumente zu holen, die an das DetailToDoJobResearchFragment übergeben wurden.
     private val args: DetailToDoJobResearchFragmentArgs by navArgs()
 
 
@@ -103,7 +103,7 @@ class DetailToDoJobResearchFragment : Fragment() {
                     }
                 }
             }.onFailure { exception ->
-                Log.e(TAG, "Fehler beim Laden der Jobdetails", exception)
+                Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -114,9 +114,7 @@ class DetailToDoJobResearchFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val TAG = "DetailToDoJobResearchFragment"
-    }
+
 
     /**
      * Wird aufgerufen, wenn die View-Hierarchie des Fragments zerstört wird.

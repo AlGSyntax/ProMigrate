@@ -73,6 +73,7 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
      */
     override fun onBindViewHolder(holder: DetailToDoJobResearchViewHolder, position: Int) {
         val job = getItem(position)
+        // Bindet den Jobtitel und die Referenznummer an den ViewHolder.
         holder.bind(job, jobDetailsMap[job.second])
     }
 
