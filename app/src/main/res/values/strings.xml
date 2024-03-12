@@ -160,6 +160,7 @@
     <string name="notfoundjobs">No jobs found</string>
     <string name="notfoundoccu">Occupational field not set in profile</string>
     <string name="fillfields">Please fill in all fields</string>
+    <string name="nojobofffound">No Job Offer found</string>
 
 
 </resources>
