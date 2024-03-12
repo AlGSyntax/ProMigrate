@@ -42,6 +42,7 @@ class DashboardFragment : Fragment() {
         // Initialisiert das Binding für das Fragment, um auf die UI-Elemente zugreifen zu können.
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+        // Markiert den Onboarding-Prozess als abgeschlossen.
         markOnboardingComplete()
 
         // Beobachtet die userProfileData LiveData im ViewModel.
