@@ -162,6 +162,10 @@
     <string name="targetgroup">Zielgruppe: %s</string>
     <string name="cost">Kosten: %1$s</string>
     <string name="anmeldeschluss_format">Anmeldeschluss: %1$s</string>
+    <string name="error_image">Kein Bild verfügbar</string>
+    <string name="error_occupational_fields">Fehler beim Laden der Felder</string>
+
+
 
 
 
