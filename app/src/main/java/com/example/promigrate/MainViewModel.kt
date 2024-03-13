@@ -852,7 +852,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return // Beendet die Methode vorzeitig
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch {// Startet eine Coroutine, um asynchrone Operationen zu ermöglichen
             val translatedJobTitles = mutableListOf<String>()
             jobTitles.forEach { jobTitle ->
                 try {
