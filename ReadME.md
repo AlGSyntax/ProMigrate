@@ -2,6 +2,9 @@
 
 ProMigrate ist eine digitale Plattform zur Rekrutierung von Fachkräften aus dem Ausland.
 
+![MockUp der grundlegenden Screens
+](https://i.postimg.cc/6pYfRCpQ/Pro-Migrate-Mock-Up-Pixel.jpg)
+
 # About
 
 Das Projekt ist eine innovative digitale Plattform, die darauf abzielt, Fachkräfte aus dem Ausland zu rekrutieren. Sie wendet sich an Personen, die in ihren Heimatländern entweder unterbeschäftigt sind oder mit ihren aktuellen beruflichen und finanziellen Verhältnissen unzufrieden sind. Ein Schlüsselelement der Plattform ist eine integrierte To-do-Listen-Funktion, die es Benutzern ermöglicht, spezifische Aufgaben zu ihren ausgewählten Stellenangeboten während des Onboarding-Prozesses hinzuzufügen.
@@ -148,8 +151,7 @@ Android Studio & Kotlin sind die Hauptentwicklungsumgebung und -sprache für die
 # Architektur und Design
 
 
-![MockUp der grundlegenden Screens
-](https://i.postimg.cc/6pYfRCpQ/Pro-Migrate-Mock-Up-Pixel.jpg)
+
 
 - Die Architektur von ProMigrate zielt darauf ab, eine robuste und skalierbare Lösung für die Rekrutierung internationaler Fachkräfte zu bieten. Kernstück der Anwendung sind mehrere Schlüsselkomponenten: die Benutzeroberfläche, die eine intuitive Interaktion ermöglicht, das Netzwerkmodul, das die Kommunikation mit externen Diensten wie der DeepL-API und verschiedenen Firebase-Diensten handhabt, sowie die Datenspeicherungsschicht, die aktuell vollständig über Firebase realisiert wird, um eine zuverlässige Speicherung von Nutzerdaten, To-do-Listen und Vokabelkarten zu gewährleisten. Diese Komponenten arbeiten nahtlos zusammen, um vom ersten Login bis zum fortgeschrittenen Sprachtraining eine reibungslose Benutzererfahrung zu bieten. Der Einsatz des MVVM-Musters fördert eine klare Trennung von Präsentation und Geschäftslogik, was Wartung und Weiterentwicklung der App vereinfacht. Ein exemplarischer Benutzerprozess ist das Hinzufügen einer neuen Vokabelkarte, wobei die UI ein Event generiert, das durch die Geschäftslogik verarbeitet wird, um die Karte in Firebase zu speichern.
 
