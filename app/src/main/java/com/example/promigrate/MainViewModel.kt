@@ -1091,7 +1091,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                         liveData.value = emptyList()
                     } else {
-                        val todos =
+                        val todos =//JobID -> ToDoID -> ToDoData
                             snapshot?.get("todos") as? Map<String, Map<String, Any>> ?: emptyMap()
                         val toDoItems = todos.map { (id, data) ->
                             ToDoItem(
@@ -1127,6 +1127,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * Zunächst wird die Job-ID bereinigt und ein Dokumentenverweis auf das To-Do-Element erstellt.
      * Anschließend wird der Pfad zum Text des To-Do-Elements erstellt und der Text des To-Do-Elements aktualisiert.
      * Wenn während des Prozesses eine Ausnahme auftritt, wird diese ignoriert.
+     * Eine mögliche Verbesserung wäre den Dokumentenpfad über eine Helfer-Funktion aufzurufen.
      *
      * @param userId: Die Benutzer-ID, für die das To-Do-Element aktualisiert werden soll.
      * @param jobId: Die Job-ID, für die das To-Do-Element aktualisiert werden soll.
@@ -1208,7 +1209,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * Wenn die Anforderung erfolgreich ist, wird die LiveData-Variable _jobDetails mit dem Ergebnis aktualisiert.
      * Wenn die Anforderung fehlschlägt oder eine Ausnahme auftritt, wird _jobDetails mit dem Fehlerergebnis aktualisiert.
      *
-     * @param encodedHashID: Die codierte Hash-ID, für die Jobdetails abgerufen werden sollen.
+     * @param encodedHashID: Die codierte Referenznummer, für die Jobdetails abgerufen werden sollen.
      */
     fun fetchJobDetails(encodedHashID: String) {
         viewModelScope.launch {

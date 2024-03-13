@@ -106,8 +106,8 @@ class DetailToDoJobApplicationFragment : Fragment() {
             .setNegativeButton(
                 getString(R.string.cancel),
                 null
-            )// Wenn der Benutzer auf "Abbrechen" klickt, wird der Dialog geschlossen.
-            .show()// Zeigt den Dialog an.
+            )
+            .show()
     }
 
 
