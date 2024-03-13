@@ -919,7 +919,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     val result = repository.translateText(jobTitle, currentLanguageCode)
                     val translatedTitle =
-                        result?.text ?: jobTitle // Verwende den Originaltitel als Fallback
+                        result?.text ?: jobTitle // Verwendet den Originaltitel als Fallback
                     translatedJobOffers.add(Pair(translatedTitle, refNr))
                 } catch (e: Exception) {
                     Log.e("translateJobOffers", "Fehler bei der Übersetzung von $jobTitle", e)
