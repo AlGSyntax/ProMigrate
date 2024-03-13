@@ -67,10 +67,13 @@ dependencies {
     val retrofitVersion = "2.9.0"
     val roomVersion = "2.6.1"
 
+    // Grundlegende AndroidX- und UI-Bibliotheken
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // Firebase SDKs für verschiedene Dienste
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-analytics:21.5.1")
     implementation("com.google.firebase:firebase-auth:22.3.1")
@@ -78,46 +81,51 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.google.firebase:firebase-crashlytics:18.6.2")
     implementation("com.google.firebase:firebase-perf:20.5.2")
+
+    // Testbibliotheken für Unit- und UI-Tests
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // Navigation-Component-Bibliothek für vereinfachte Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    // Kotlin Coroutines für asynchrone Programmierung
     implementation( "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    //Retrofit,Gson und Moshi
+    // Retrofit und zugehörige Konverter für Netzwerkanfragen
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
     implementation ("com.squareup.retrofit2:converter-gson:$retrofitVersion")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
 
-    // Coil
+    // Coil für bildbezogene Aufgaben
     implementation("io.coil-kt:coil:2.5.0")
 
-    //Room
+    // Room für die Datenpersistenz auf lokaler Ebene für zukünftige Implementierungen
     implementation("androidx.room:room-runtime:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
 
-    //Okhttp3/HttpLoggingInterceptor
+    // OkHttp3 und Logging-Interceptor für erweiterte HTTP-Anfragen und Logging
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
 
 
-    //Glide
+    // Glide für Bildlade- und Caching-Aufgaben
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 
-    //Google Sign In
+    // Google Sign In für die Authentifizierung über Google-Konten
     implementation ("com.google.android.gms:play-services-auth:21.0.0")
 
-    //WorkManager
+    //WorkManager für Hintergrundaufgaben
     implementation ("androidx.work:work-runtime-ktx:2.9.0")
 
-    //DeepL
+    // DeepL API Client für Übersetzungen
     implementation ("com.deepl.api:deepl-java:1.4.0")
 
-    //Guava
+    // Guava für zusätzliche Hilfsklassen und Methoden
     implementation("com.google.guava:guava:33.0.0-android")
 
 

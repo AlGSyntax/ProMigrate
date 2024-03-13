@@ -87,7 +87,8 @@
         android:textColor="@color/textcolor"
         app:layout_constraintTop_toBottomOf="@+id/etStreet"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+         />
 
     <EditText
         android:id="@+id/etMaidenName"

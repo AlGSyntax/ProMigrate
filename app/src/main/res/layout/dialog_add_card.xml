@@ -9,20 +9,24 @@
         android:id="@+id/frontEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/fronttext"
-        android:textStyle="bold"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/quicksandvariablefontwght"
+        android:hint="@string/fronttext"
+        android:inputType="text"
+        android:minHeight="48dp"
         android:textColor="@color/textcolor"
-        android:layout_marginTop="16dp"/>
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/backEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/backtext"
-        android:textStyle="bold"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/quicksandvariablefontwght"
+        android:hint="@string/backtext"
+        android:inputType="text"
+        android:minHeight="48dp"
         android:textColor="@color/textcolor"
-        android:layout_marginTop="16dp"/>
+        android:textStyle="bold" />
 
 </LinearLayout>
