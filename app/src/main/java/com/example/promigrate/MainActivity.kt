@@ -24,7 +24,5 @@ class MainActivity : AppCompatActivity() {
         ProMigrateCourseAPI.init(this)
         // Setzt den Inhalt der Aktivität aus einer Layout-Ressource.
         setContentView(R.layout.activity_main)
-
-
     }
 }

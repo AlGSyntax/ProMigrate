@@ -1665,6 +1665,100 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    /**
+     * Ruft den Benutzernamen für die gegebene Benutzer-ID aus Firestore ab.
+     *
+     * Diese Funktion erstellt eine LiveData-Instanz, um den Benutzernamen zu speichern. Dann startet sie eine Coroutine,
+     * um den Benutzernamen aus Firestore abzurufen. Die Funktion fügt einen SnapshotListener zum Firestore-Dokument hinzu,
+     * das mit der Benutzer-ID verknüpft ist. Wenn beim Abrufen des Dokuments ein Fehler auftritt, postet die Funktion einen
+     * leeren String in die LiveData. Wenn das Dokument erfolgreich abgerufen wird, holt die Funktion den Benutzernamen aus
+     * dem Dokument und postet ihn in die LiveData.
+     *
+     * @param userId: Die ID des Benutzers, dessen Benutzername abgerufen werden soll.
+     * @return: Eine LiveData-Instanz, die den abgerufenen Benutzernamen enthält. Wenn beim Abrufen des Benutzernamens ein
+     * Fehler auftritt, enthält die LiveData einen leeren String.
+     */
+    fun getUserName(userId: String): LiveData<String> {
+        val liveData = MutableLiveData<String>()
+        viewModelScope.launch {
+            FirebaseFirestore.getInstance().collection("user").document(userId)
+                .addSnapshotListener { documentSnapshot, e ->
+                    if (e != null) {
+                        // Handle the error
+                        liveData.postValue("")
+                    } else {
+                        val userName = documentSnapshot?.getString("name")
+                        liveData.postValue(userName ?: "")
+                    }
+                }
+        }
+        return liveData
+    }
+
+
+    /**
+     * Ruft das Sprachniveau eines Benutzers basierend auf der bereitgestellten Benutzer-ID aus Firestore ab.
+     *
+     * Diese Funktion erstellt eine LiveData-Instanz, um das Sprachniveau zu speichern. Sie startet dann eine Coroutine,
+     * um das Sprachniveau aus Firestore abzurufen. Die Funktion fügt einen SnapshotListener zum Firestore-Dokument hinzu,
+     * das mit der Benutzer-ID verknüpft ist. Wenn beim Abrufen des Dokuments ein Fehler auftritt, postet die Funktion einen
+     * leeren String in die LiveData. Wenn das Dokument erfolgreich abgerufen wird, holt die Funktion das Sprachniveau aus
+     * dem Dokument und postet es in die LiveData.
+     *
+     * @param userId: Die ID des Benutzers, dessen Sprachniveau abgerufen werden soll.
+     * @return: Eine LiveData-Instanz, die das abgerufene Sprachniveau enthält. Wenn beim Abrufen des Sprachniveaus ein
+     * Fehler auftritt, enthält die LiveData einen leeren String.
+     */
+    fun getUserLanguageLevel(userId: String): LiveData<String> {
+        val liveData = MutableLiveData<String>()
+        viewModelScope.launch {
+            FirebaseFirestore.getInstance().collection("user").document(userId)
+                .addSnapshotListener { documentSnapshot, e ->
+                    if (e != null) {
+                        // Handle the error
+                        liveData.postValue("")
+                    } else {
+                        val languageLevel = documentSnapshot?.getString("languageLevel")
+                        liveData.postValue(languageLevel ?: "")
+                    }
+                }
+        }
+        return liveData
+    }
+
+
+    /**
+     * Ruft die Profilbild-URL eines Benutzers basierend auf der bereitgestellten Benutzer-ID aus Firestore ab.
+     *
+     * Diese Funktion erstellt eine LiveData-Instanz, um die Profilbild-URL zu speichern. Sie startet dann eine Coroutine,
+     * um die Profilbild-URL aus Firestore abzurufen. Die Funktion fügt einen SnapshotListener zum Firestore-Dokument hinzu,
+     * das mit der Benutzer-ID verknüpft ist. Wenn beim Abrufen des Dokuments ein Fehler auftritt, postet die Funktion einen
+     * leeren String in die LiveData. Wenn das Dokument erfolgreich abgerufen wird, holt die Funktion die Profilbild-URL aus
+     * dem Dokument und postet sie in die LiveData.
+     *
+     * @param userId: Die ID des Benutzers, dessen Profilbild-URL abgerufen werden soll.
+     * @return: Eine LiveData-Instanz, die die abgerufene Profilbild-URL enthält. Wenn beim Abrufen der Profilbild-URL ein
+     * Fehler auftritt, enthält die LiveData einen leeren String.
+     */
+    fun getUserProfileImageUrl(userId: String): LiveData<String> {
+        val liveData = MutableLiveData<String>()
+        viewModelScope.launch {
+            FirebaseFirestore.getInstance().collection("user").document(userId)
+                .addSnapshotListener { documentSnapshot, e ->
+                    if (e != null) {
+                        // Handle the error
+                        liveData.postValue("")
+                    } else {
+                        val imageUrl = documentSnapshot?.getString("profilePicture")
+                        liveData.postValue(imageUrl ?: "")
+                    }
+                }
+        }
+        return liveData
+    }
+
+
     /**
      * Diese Methode wird verwendet, um Feedback zu speichern.
      * Sie startet eine Coroutine und versucht, das Feedback in Firestore zu speichern.

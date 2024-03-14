@@ -17,7 +17,6 @@ import com.example.promigrate.databinding.FeedbackDialogLayoutBinding
 import com.example.promigrate.databinding.FragmentSettingsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 /**
  * SettingsFragment ist ein Fragment, das die Einstellungsseite der App darstellt.
@@ -63,8 +62,99 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Aufruf der Methode loadCurrentProfileImage()
-        loadCurrentProfileImage()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        // Holt die Benutzer-ID oder gibt einen leeren String zurück, wenn der Benutzer null ist
+        val userId = currentUser?.uid ?: ""
+
+
+        /**
+         * Dieser Codeblock ruft die getUserProfileImageUrl-Methode des ViewModels auf, um die URL des Profilbilds des Benutzers abzurufen.
+         * Die Methode gibt ein LiveData-Objekt zurück, das die URL des Profilbilds enthält.
+         * Ein Observer wird auf das LiveData-Objekt gesetzt, um Änderungen an der URL des Profilbilds zu beobachten.
+         *
+         * Wenn die URL nicht null oder leer ist, wird das Profilbild mit der Glide-Bibliothek in das ImageView profileImage geladen.
+         * Wenn die URL null oder leer ist, wird das Standardbild für das Profilbild verwendet.
+         */
+        viewModel.getUserProfileImageUrl(userId).observe(viewLifecycleOwner) { imageUrl ->
+            if (!imageUrl.isNullOrEmpty()) {
+                Glide.with(this).load(imageUrl).circleCrop().into(binding!!.profileImage)
+            } else {
+                binding!!.profileImage.setImageResource(R.drawable.elevationtodolistrelocation)
+            }
+        }
+
+
+        /**
+         * Dieser Codeblock ruft die getUserName-Methode des ViewModels auf, um den Benutzernamen des Benutzers abzurufen.
+         * Die Methode gibt ein LiveData-Objekt zurück, das den Benutzernamen enthält.
+         * Ein Observer wird auf das LiveData-Objekt gesetzt, um Änderungen am Benutzernamen zu beobachten.
+         *
+         * Wenn der Benutzername nicht null oder leer ist, wird der Benutzername in das TextView userGreeting geladen.
+         * Wenn der Benutzername null oder leer ist, wird ein Standardbenutzername verwendet.
+         */
+        viewModel.getUserName(userId).observe(viewLifecycleOwner) { userName ->
+            binding?.userGreeting?.text = getString(R.string.hellouser, userName)
+        }
+
+
+        // Flag zum Verfolgen, ob der Benutzer mit dem Schieberegler interagiert
+        var isUserInteractingWithSlider = false
+
+       /**
+         * Beobachtet das Sprachniveau des Benutzers anhand des MainViewModels.
+         * Wenn der Benutzer nicht mit dem Schieberegler interagiert, wird der Anfangswert des Schiebereglers festgelegt
+         * und der Text des Sprachniveaus TextView basierend auf dem beobachteten Sprachniveau.
+         */
+        viewModel.getUserLanguageLevel(userId).observe(viewLifecycleOwner) { languageLevel ->
+            if (!isUserInteractingWithSlider) {
+                // Bestimmt  den anfänglichen Schiebereglerwert basierend auf dem Sprachniveau
+                val initialSliderValue = when (languageLevel) {
+                    getString(R.string.beginner) -> 1f
+                    getString(R.string.basic_knowledge) -> 2f
+                    getString(R.string.intermediate) -> 3f
+                    getString(R.string.independent) -> 4f
+                    getString(R.string.proficient) -> 5f
+                    getString(R.string.near_native) -> 6f
+                    else -> 1f // Standard- oder Fehlerbehandlung, Anfangswert wird auf 1 gesetzt
+                }
+                // Setzt den Anfangswert des Schiebereglers
+                binding?.languageLevelSlider?.value = initialSliderValue
+
+            }
+        }
+
+     /**
+         * Setzt einen OnChangeListener auf dem Schieberegler für die Sprachebene.
+         * Wenn sich der Wert des Schiebereglers ändert, wird der Text der Sprachebene TextView basierend auf dem neuen Wert des Schiebereglers festgelegt.
+         * und speichert die neue Sprachebene in Firebase, wenn der Benutzer aktiv mit dem Schieberegler interagiert.
+         */
+        binding?.languageLevelSlider?.addOnChangeListener { _, value, _ ->
+            isUserInteractingWithSlider = true
+
+            // Legt  die Zeichenfolge direkt basierend auf der Schiebereglerposition fest, ohne sie in Float zu konvertieren.
+            val languageLevelText = when (value.toInt()) {
+                1 -> getString(R.string.beginner)
+                2 -> getString(R.string.basic_knowledge)
+                3 -> getString(R.string.intermediate)
+                4 -> getString(R.string.independent)
+                5 -> getString(R.string.proficient)
+                6 -> getString(R.string.near_native)
+                else -> getString(R.string.undefined) // Standard- oder Fehlerbehandlung
+            }
+
+            // TextView mit der ausgewählten Sprachstufe aktualisieren
+            binding?.languageLevelText?.text = languageLevelText
+           // Sprachniveau nur speichern, wenn der Benutzer aktiv mit dem Slider interagiert
+            if (isUserInteractingWithSlider) {
+                viewModel.saveLanguageLevelToFirebase(languageLevelText)
+            }
+        }
+
+
+
+
+
+
 
         /**
          * Dieser Codeblock registriert einen Callback für die Auswahl eines Bildes aus der Galerie.
@@ -97,45 +187,7 @@ class SettingsFragment : Fragment() {
         }
 
 
-        /**
-         * Dieser Codeblock beobachtet Änderungen im userProfileData LiveData-Objekt im ViewModel.
-         * Wenn sich die userProfileData ändert, wird die Benutzeroberfläche entsprechend aktualisiert.
-         *
-         * Wenn das userProfile-Objekt nicht null ist, wird das Profilbild mit Hilfe der Glide-Bibliothek in die profileImage ImageView geladen.
-         * Wenn die URL des Profilbildes null ist, lädt Glide kein Bild.
-         * Der Name des Benutzers wird ebenfalls aus dem userProfile-Objekt abgerufen und in der userGreeting TextView angezeigt.
-         * Wenn der Name des Benutzers null ist, wird eine Standardbegrüßung angezeigt.
-         *
-         * Die Eigenschaft languageLevel des userProfile-Objekts wird ebenfalls beachtet.
-         * Wenn languageLevel nicht null ist, wird der Wert des languageLevelSliders so gesetzt, dass er dem Sprachniveau des Benutzers entspricht.
-         * Das Sprachniveau wird auch in der languageLevelText TextView angezeigt.
-         * Wenn languageLevel null ist, wird der Wert des Sliders auf einen Standardwert gesetzt, und die TextView zeigt einen Standardtext an.
-         */
-        viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
-            userProfile?.let {
-                Glide.with(this)
-                    .load(it.profileImageUrl)
-                    .circleCrop()
-                    .into(binding!!.profileImage)
 
-                val userName = it.name ?: getString(R.string.unknownuser)
-                binding!!.userGreeting.text = getString(R.string.hellouser, userName)
-            }
-            userProfile?.languageLevel?.let { languageLevel ->
-                // Setze den Slider auf den Wert, der dem Sprachniveau des Benutzers entspricht
-                val sliderValue = when (languageLevel) {
-                    getString(R.string.beginner) -> 1f
-                    getString(R.string.basic_knowledge) -> 2f
-                    getString(R.string.intermediate) -> 3f
-                    getString(R.string.independent) -> 4f
-                    getString(R.string.proficient) -> 5f
-                    getString(R.string.near_native) -> 6f
-                    else -> 0f // oder ein anderer Default-Wert
-                }
-                binding!!.languageLevelSlider.value = sliderValue
-                binding!!.languageLevelText.text = languageLevel
-            }
-        }
 
         /**
          * Dieser Codeblock setzt einen OnClickListener auf den gotofaqbtn Button.
@@ -181,9 +233,6 @@ class SettingsFragment : Fragment() {
                     // Berechnung der Gesamtbewertung als Durchschnitt aus Design- und Funktionsbewertung
                     val overallRating = (designFeedback + functionalityFeedback) / 2
 
-                    // Die UserID sollte dynamisch aus dem Benutzerkontext abgerufen werden
-                    val currentUser = FirebaseAuth.getInstance().currentUser
-                    val userId = currentUser?.uid ?: ""
 
                     viewModel.saveFeedback(
                         userId = userId,
@@ -198,33 +247,7 @@ class SettingsFragment : Fragment() {
                 .show()
         }
 
-        /**
-         * Dieser Codeblock setzt einen OnChangeListener auf den languageLevelSlider Slider.
-         * Wenn sich der Wert des Sliders ändert, wird der neue Wert mit der saveLanguageLevelToFirebase-Methode des ViewModels in Firebase gespeichert.
-         *
-         * Der neue Wert wird auch zur Aktualisierung der TextView languageLevelText verwendet.
-         * Der Wert wird in eine ganze Zahl umgewandelt und in einem When-Ausdruck verwendet, um die entsprechende Sprachlevel-String-Ressource zu bestimmen.
-         * Die String-Ressource wird dann abgerufen und als Text des TextViews festgelegt.
-         *
-         * Entspricht der Wert keiner der vordefinierten Sprachstufen, wird die String-Ressource für 'undefined' verwendet.
-         */
-        binding!!.languageLevelSlider.addOnChangeListener { _, value, _ ->
 
-            viewModel.saveLanguageLevelToFirebase(value.toString())
-            // Aktualisiere die TextView mit dem ausgewählten Sprachniveau
-            // Angenommen, du hast eine TextView mit der ID tvLanguageLevel
-            val languageLevel = when (value.toInt()) {
-                1 -> R.string.beginner
-                2 -> R.string.basic_knowledge
-                3 -> R.string.intermediate
-                4 -> R.string.independent
-                5 -> R.string.proficient
-                6 -> R.string.near_native
-                else -> R.string.undefined
-            }
-            binding!!.languageLevelText.text = getString(languageLevel)
-
-        }
 
 
         /**
@@ -250,34 +273,6 @@ class SettingsFragment : Fragment() {
 
     }
 
-    /**
-     * Lädt das aktuelle Profilbild des Benutzers.
-     * Es holt die Benutzer-ID von FirebaseAuth und verwendet sie, um das Dokument des Benutzers in Firestore abzurufen.
-     * Wenn das Dokument existiert, wird das Profilbild-URL abgerufen und verwendet, um das Bild mit Glide zu laden und in der ImageView anzuzeigen.
-     * Wenn das Dokument nicht existiert oder das Profilbild-URL leer ist, wird ein Platzhalterbild angezeigt.
-     */
-    private fun loadCurrentProfileImage() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId != null) {
-            FirebaseFirestore.getInstance().collection("user").document(userId).get()
-                .addOnSuccessListener { document ->
-                    if (document != null && document.exists()) {
-                        val imageUrl = document.getString("profilePicture")
-                        if (!imageUrl.isNullOrEmpty()) {
-                            Glide.with(this)
-                                .load(imageUrl)
-                                .circleCrop()
-                                .into(binding!!.profileImage)
-                        } else {
-                            // passenden Platzhalter suchen
-                            binding!!.profileImage.setImageResource(R.drawable.elevationtodolistrelocation)
-                        }
-                    }
-                }.addOnFailureListener {
-                Toast.makeText(context, R.string.errorload, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     /**
      * Wird aufgerufen, wenn die View-Hierarchie des Fragments zerstört wird.
