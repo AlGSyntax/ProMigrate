@@ -187,7 +187,7 @@ Ich freue mich über jede Form von Beiträgen zur Verbesserung und Erweiterung v
 
 ### Zukünftige Erweiterungen
 
-Ich einige Ideen für zukünftige Erweiterungen und würden uns freuen, wenn die Community daran mitwirken würde:
+Ich habe einige Ideen für zukünftige Erweiterungen und würde mich freuen, wenn die Community daran mitwirken würde:
 
 -   **Erweiterte Sprachunterstützung**: Die Integration weiterer Sprachen, um ein breiteres Publikum zu erreichen.
 
