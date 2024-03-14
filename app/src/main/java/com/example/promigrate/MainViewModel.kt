@@ -603,14 +603,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Verwaltung der Humanressourcen und Dienstleistungen" -> "Personalwesen und -dienstleistung"
 
 
-                    // Füge hier weitere spezifische Korrekturen hinzu, falls notwendig
                     else -> translatedText
                 }
                 onComplete(correctedTranslation)
             } catch (e: Exception) {
-                Log.e("translateToGerman", "Fehler bei der Übersetzung von $inputText", e)
-                // Optional: Handle den Fehler angemessen
-                onComplete(inputText) // Gebe im Fehlerfall den Originaltext zurück
+                onComplete(inputText) // Gibt im Fehlerfall den Originaltext zurück
             }
         }
     }
@@ -671,10 +668,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val result = repository.translateText(berufsfeld, currentLanguageCode)
                     result?.text?.let {
                         translatedOccupationalFields.add(it)
-                        Log.d("translateBerufsfelder", "Übersetzt: $berufsfeld zu $it")
                     }
-                } catch (e: Exception) {
-                    Log.e("translateBerufsfelder", "Fehler bei der Übersetzung von $berufsfeld", e)
+                } catch (_: Exception) {
+
                 }
             }
             onComplete(translatedOccupationalFields)
@@ -732,10 +728,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val result = repository.translateText(arbeitsort, currentLanguageCode)
                     result?.text?.let {
                         translatedWorkLocations.add(it)
-                        Log.d("translateArbeitsorte", "Übersetzt: $arbeitsort zu $it")
                     }
-                } catch (e: Exception) {
-                    Log.e("translateArbeitsorte", "Fehler bei der Übersetzung von $arbeitsort", e)
+                } catch (_: Exception) {
                 }
             }
             onComplete(translatedWorkLocations)
@@ -948,9 +942,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 fetchJobOffers(was, arbeitsort)
-                Log.d("updateJobOffers", "Successfully updated job offers for $was in $arbeitsort")
-            } catch (e: Exception) {
-                Log.e("updateJobOffers", "Error updating job offers for $was in $arbeitsort", e)
+            } catch (_: Exception) {
             }
         }
     }
@@ -1431,7 +1423,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val newCard = FlashCard(frontText = frontText, backText = backText)
                 val docRef = FirebaseFirestore.getInstance().collection("user").document(userId)
                     .collection("flashcards").document()
-                newCard.id = docRef.id  // Setze die Firestore-ID als die ID der Karte
+                newCard.id = docRef.id  // Setzt die Firestore-ID als die ID der Karte
                 docRef.set(newCard)
             } catch (_: Exception) {
 
