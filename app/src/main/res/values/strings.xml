@@ -7,7 +7,7 @@
     <string name="password">Password</string>
     <string name="confirmpassword">Confirm password</string>
     <string name="languageselectionmessage">Start your adventure in Germany!</string>
-    <string name="registrationinvitation">Don\'t have an account? Click here to Sign Up!</string>
+    <string name="registrationinvitation">Don\'t have an account? Sign Up here !</string>
     <string name="login">LogIn</string>
     <string name="signup">SignUp</string>
     <string name="register">Register</string>
@@ -179,6 +179,9 @@
     <string name="byclickaddflashcard">By clicking on this you can create your personalized flashcard</string>
     <string name="edittodoclickable">By clicking on this you can edit your ToDo item</string>
     <string name="deletetodo">By clicking this you can delete your ToDo item</string>
+    <string name="provider">Education provider: %s</string>
+    <string name="address">Location: %s</string>
+    <string name="examining_authority">"Examining body: %s</string>
 
 
 </resources>

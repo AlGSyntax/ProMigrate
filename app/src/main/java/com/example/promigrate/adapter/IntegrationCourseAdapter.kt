@@ -76,6 +76,26 @@ class IntegrationCourseAdapter :
             // Setzt den Kurs-Titel. Wenn kein Titel vorhanden ist, wird "N/A" angezeigt.
             binding.intecourseTextView.text = kurs.angebot?.titel ?: "N/A"
 
+            kurs.angebot?.bildungsanbieter?.name?.let {
+                binding.bildungsanbieterTextView.text = binding.root.context.getString(R.string.provider, it)
+            } ?: run {
+                binding.bildungsanbieterTextView.text = binding.root.context.getString(R.string.provider, "N/A")
+            }
+
+            kurs.angebot?.bildungsanbieter?.adresse?.let {
+                val ortStrasseName =
+                    it.ortStrasse.name // Zugriff auf die `name` Eigenschaft von `ortStrasse`
+                binding.adresseTextView.text = binding.root.context.getString(R.string.address, ortStrasseName)
+            } ?: run {
+                binding.adresseTextView.text = binding.root.context.getString(R.string.address, "N/A")
+            }
+
+            kurs.pruefendeStelle?.let {
+                binding.pruefendeStelleTextView.text = binding.root.context.getString(R.string.examining_authority, it)
+            } ?: run {
+                binding.pruefendeStelleTextView.text = binding.root.context.getString(R.string.examining_authority, "N/A")
+            }
+
             kurs.beginn?.let {
 
                 binding.beginnTextView.text =

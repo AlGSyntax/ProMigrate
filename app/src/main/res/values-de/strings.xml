@@ -7,8 +7,7 @@
     <string name="confirmpassword">Passwort bestätigen</string>
     <string name="languageselectionmessage">Beginn Ihres Deutschland-Abenteuers!
     </string>
-    <string name="registrationinvitation">Haben Sie kein Konto? Klicken Sie hier, um sich anzumelden!
-    </string>
+    <string name="registrationinvitation">Kein Konto? Hier klicken zum registieren!</string>
     <string name="login">Einloggen</string>
     <string name="register">Registrieren</string>
     <string name="signup">Anmelden</string>

@@ -35,6 +35,36 @@
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/langcourseTextView">
 
+
+            <TextView
+                android:id="@+id/bildungsanbieterTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                />
+
+
+            <TextView
+                android:id="@+id/adresseTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                />
+
+            <TextView
+                android:id="@+id/pruefendeStelleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:fontFamily="@font/quicksandvariablefontwght"
+                android:textColor="@color/textcolor"
+                />
+
+
             <TextView
                 android:id="@+id/beginnTextView"
                 android:layout_width="match_parent"
@@ -106,6 +136,9 @@
                 android:fontFamily="@font/quicksandvariablefontwght"
                 android:textColor="@color/textcolor"
                 />
+
+
+
 
 
 
