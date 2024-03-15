@@ -26,6 +26,7 @@
         android:layout_height="87dp"
         android:layout_marginTop="24dp"
         android:src="@drawable/baseline_add_a_photo_24"
+        android:contentDescription="@string/chooseapicture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCreateProfile" />

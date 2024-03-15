@@ -163,6 +163,22 @@
     <string name="nojobofffound">No Job Offer found</string>
     <string name="errorload">Error loading the profile picture</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>
+    <string name="chooseapicture">Choose a Profile-Picture</string>
+    <string name="jobresearch">Click on this picture to go to the  Job Research screen</string>
+    <string name="langcourse">Click on this picture to go to the vocabulary learning screen</string>
+    <string name="gotojobapplication">Click on this picture to go to the To-Do: Job Application screen</string>
+    <string name="gotonrelocandinte"><![CDATA[By clicking on this picture you will get to the relocation & integration-screeen]]></string>
+    <string name="gotosettings">Clicking this button takes you to the settings screen</string>
+    <string name="backtosets">Clicking this button takes you to the settings screen</string>
+    <string name="topofthescreen">Clicking this button will take you to the top of the screen</string>
+    <string name="clicktoexit">By clicking this button you will exit the app</string>
+    <string name="addtodo">Clicking this button allows you to add a ToDo-item</string>
+    <string name="backtodash">Clicking this button takes you back to the dashboard screen</string>
+    <string name="profilepic">Here you can see youre profile picture</string>
+    <string name="herelogout">You can log out by clicking this button</string>
+    <string name="byclickaddflashcard">By clicking on this you can create your personalized flashcard</string>
+    <string name="edittodoclickable">By clicking on this you can edit your ToDo item</string>
+    <string name="deletetodo">By clicking this you can delete your ToDo item</string>
 
 
 </resources>

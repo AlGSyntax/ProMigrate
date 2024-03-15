@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/jobresearch"
             android:src="@drawable/todojobresearchbackground" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -62,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/langcourse"
             android:src="@drawable/todolanguagelearningbackground" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -83,6 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/gotojobapplication"
             android:src="@drawable/todojobapplicationbackground" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -104,7 +107,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/todointegrationandrelocationbackground" />
+            android:src="@drawable/todointegrationandrelocationbackground"
+            android:contentDescription="@string/gotonrelocandinte"/>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -116,6 +120,7 @@
         android:layout_marginTop="46dp"
         android:layout_marginEnd="52dp"
         android:layout_marginBottom="645dp"
+        android:contentDescription="@string/gotosettings"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/baseline_admin_panel_settings_24"
         app:layout_constraintBottom_toBottomOf="parent"

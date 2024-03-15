@@ -163,6 +163,23 @@
     <string name="nojobofffound">Не найдено ни одного предложения о работе</string>
     <string name="errorload">Ошибка при загрузке изображения профиля</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>
+    <string name="chooseapicture">Выберите фотографию профиля</string>.
+    <string name="jobresearch">Нажмите на это изображение, чтобы перейти на страницу поиска работы</string>.
+    <string name="langcourse">Нажмите на это изображение, чтобы перейти на страницу изучения лексики</string>.
+    <string name="gotojobapplication">Нажмите на это изображение, чтобы перейти на экран To-Do: Job Application</string>.
+    <string name="gotonrelocandinte"><![CDATA[Нажмите на это изображение, чтобы перейти на экран "Переезд и интеграция"]]></string>
+    <string name="gotosettings">Нажав на эту кнопку, вы перейдете к настройкам</string>.
+    <string name="backtosets">Нажмите эту кнопку, чтобы перейти к экрану настроек</string>.
+    <string name="topofthescreen">Нажмите на эту кнопку, чтобы перейти в верхнюю часть экрана</string>.
+    <string name="clicktoexit">Нажмите эту кнопку, чтобы выйти из приложения</string>.
+    <string name="addtodo">Нажмите эту кнопку, чтобы добавить пункт дел</string>.
+    <string name="backtodash">Нажмите эту кнопку, чтобы вернуться на экран приборной панели</string>.
+    <string name="profilepic">Здесь вы можете увидеть фотографию своего профиля</string>
+    <string name="herelogout">Нажмите на эту кнопку, чтобы выйти из системы</string>
+    <string name="byclickaddflashcard">Нажмите эту кнопку, чтобы создать свою персональную флеш-карту</string>.
+    <string name="edittodoclickable">Нажмите на эту кнопку, чтобы отредактировать свой пункт ToDo</string>
+    <string name="deletetodo">Нажмите эту кнопку, чтобы удалить свой пункт ToDo</string>.
+
 
 
 

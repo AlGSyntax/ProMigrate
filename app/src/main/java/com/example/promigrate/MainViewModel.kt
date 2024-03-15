@@ -1344,6 +1344,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    //TODO Mehrere Beginntermine laden können !
+
     /**
      * Diese Methode wird verwendet, um Bildungsangebote asynchron abzurufen.
      * Sie startet eine Coroutine und versucht, die Bildungsangebote aus dem Repository abzurufen.

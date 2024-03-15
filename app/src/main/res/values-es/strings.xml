@@ -163,6 +163,23 @@
     <string name="nojobofffound">No se ha encontrado ninguna oferta de trabajo</string>
     <string name="errorload">Error al cargar la foto del perfil</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>
+    <string name="chooseapicture">Elige una imagen de perfil</string>
+    <string name="jobresearch">Haz clic en esta imagen para ir a la pantalla de búsqueda de empleo</string>
+    <string name="langcourse">Haz clic en esta imagen para ir a la página de aprendizaje de vocabulario</string>
+    <string name="gotojobapplication">Haz clic en esta imagen para ir a la pantalla Tareas pendientes: solicitud de empleo</string>
+    <string name="gotonrelocandinte"><![CDATA[Haz clic en esta imagen para ir a la pantalla Reubicación e integración]]></string>
+    <string name="gotosettings">Pulsando en este botón accederás a los ajustes</string>
+    <string name="backtosets">Haga clic en este botón para ir a la pantalla de ajustes</string>
+    <string name="topofthescreen">Haz clic en este botón para ir a la parte superior de la pantalla</string>
+    <string name="clicktoexit">Haz clic en este botón para salir de la aplicación</string>
+    <string name="addtodo">Haz clic en este botón para añadir una tarea</string>
+    <string name="backtodash">Haz clic en este botón para volver a la pantalla del panel de control</string>
+    <string name="profilepic">Aquí puedes ver tu foto de perfil</string>
+    <string name="herelogout">Haz clic en este botón para cerrar sesión</string>
+    <string name="byclickaddflashcard">Haz clic en este botón para crear tu flashcard personalizada</string>
+    <string name="edittodoclickable">Haz clic en este botón para editar tu elemento ToDo</string>
+    <string name="deletetodo">Haga clic en este botón para eliminar su elemento ToDo</string>
+
 
 
 

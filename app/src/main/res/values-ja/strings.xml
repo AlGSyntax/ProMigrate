@@ -162,6 +162,22 @@
     <string name="nojobofffound">求人が見つかりません</string>。
     <string name="errorload">プロフィール画像の読み込みエラー</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>となります。
+    <string name="chooseapicture">プロフィール画像を選択してください</string>。
+    <string name="jobresearch">この画像をクリックすると仕事研究画面に移動します</string>。
+    <string name="langcourse">この画像をクリックすると単語学習画面に移動します</string>。
+    <string name="gotojobapplication">この画像をクリックすると、ToDo：求人応募画面へ移動します</string>。
+    <string name="gotonrelocandinte"><![CDATA[この画像をクリックすると、移転・統合の画面に移動します]]></string>
+    <string name="gotosettings">このボタンをクリックすると設定画面に移動します</string>
+    <string name="backtosets">このボタンをクリックすると設定画面に移動します</string>
+    <string name="topofthescreen">このボタンをクリックすると画面上部に移動します</string>
+    <string name="clicktoexit">このボタンをクリックするとアプリを終了します</string>
+    <string name="addtodo">ToDoを追加するにはこのボタンをクリックします</string>
+    <string name="backtodash">ダッシュボード画面に戻るにはこのボタンをクリックします</string>
+    <string name="profilepic">ここでプロフィール画像を見ることができます</string>
+    <string name="herelogout">このボタンをクリックするとログアウトします</string>
+    <string name="byclickaddflashcard">このボタンをクリックすると、あなた専用のフラッシュカードが作成されます</string>
+    <string name="edittodoclickable">このボタンをクリックすると、ToDo項目を編集できます</string>
+    <string name="deletetodo">ToDo項目を削除するには、このボタンをクリックします</string>
 
 
 
@@ -169,4 +185,4 @@
 
 
 
-</resources>
+    </resources>

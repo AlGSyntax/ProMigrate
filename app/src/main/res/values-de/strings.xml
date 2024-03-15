@@ -172,6 +172,23 @@
     <string name="nojobofffound">Kein Stellenangebot gefunden</string>
     <string name="errorload">Fehler beim Laden des Profilbilds</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>
+    <string name="chooseapicture">Wählen Sie ein Profilbild</string>
+    <string name="jobresearch">Klicken Sie auf dieses Bild, um zum Job-Recherche-Bildschirm zu gelangen</string>
+    <string name="langcourse">Klicken Sie auf dieses Bild, um zur Vokabellernseite zu gelangen</string>
+    <string name="gotojobapplication">Klicken Sie auf dieses Bild, um zum Bildschirm To-Do: Job Bewerbung</string>
+    <string name="gotonrelocandinte"><![CDATA[Mit einem Klick auf dieses Bild gelangen Sie zum Relocation & Integration-Bildschirm]]></string>
+    <string name="gotosettings">Mit einem Klick auf diese Schaltfläche gelangen Sie zu den Einstellungen</string>
+    <string name="backtosets">Klicken Sie auf diese Schaltfläche, um zum Einstellungsbildschirm zu gelangen</string>
+    <string name="topofthescreen">Klicken Sie auf diese Schaltfläche, um zum oberen Rand des Bildschirms zu gelangen</string>
+    <string name="clicktoexit">Mit einem Klick auf diese Schaltfläche verlassen Sie die App</string>
+    <string name="addtodo">Mit einem Klick auf diese Schaltfläche können Sie einen ToDo-Punkt hinzufügen</string>
+    <string name="backtodash">Klick auf diese Schaltfläche bringt Sie zurück zum Dashboard-Bildschirm</string>
+    <string name="profilepic">Hier können Sie Ihr Profilbild sehen</string>
+    <string name="herelogout">Durch Anklicken dieser Schaltfläche können Sie sich abmelden</string>
+    <string name="byclickaddflashcard">Mit einem Klick auf diesen Button können Sie Ihre persönliche Karteikarte erstellen</string>
+    <string name="edittodoclickable">Durch Anklicken dieser Schaltfläche können Sie Ihren ToDo-Punkt bearbeiten</string>
+    <string name="deletetodo">Durch Anklicken können Sie Ihren ToDo-Eintrag löschen</string>
+
 
 
 
