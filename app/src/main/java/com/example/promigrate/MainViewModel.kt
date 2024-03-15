@@ -524,38 +524,51 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+   /**
+     * Diese Funktion wird verwendet, um einen neuen Benutzer mithilfe der Google-Authentifizierung zu registrieren.
+     * Wird aufgerufen, wenn ein Nutzer versucht, sich mit seinem Google-Konto zu registrieren.
+     *
+     * @param authToken Das von Google während des Anmeldevorgangs erhaltene ID-Token.
+     * @param languageCode Die Sprachpräferenz des Benutzers.
+     */
     fun registerGoogleUser(authToken: String, languageCode: String) {
+       // Starten Sie eine neue Coroutine, um den Registrierungsprozess durchzuführen.
         viewModelScope.launch {
+            // Erstellt mit dem bereitgestellten ID-Token eine Google-Anmeldeinformation.
             val credential = GoogleAuthProvider.getCredential(authToken, null)
+            // Versucht, sich mit den erstellten Anmeldeinformationen anzumelden.
             auth.signInWithCredential(credential).addOnCompleteListener { task ->
+                // Überprüft, ob der Anmeldevorgang erfolgreich war.
                 if (task.isSuccessful) {
+                   // Überprüft, ob der Benutzer neu ist.
                     val isNewUser = task.result?.additionalUserInfo?.isNewUser == true
                     if (isNewUser) {
+                       // Wenn der Benutzer neu ist, wird ein neues Benutzerprofil erstellt und gespeichert.
                         val firebaseUser = auth.currentUser
                         firebaseUser?.let { user ->
-                            // Neuer Benutzer: Erstellt und speichert das Benutzerprofil.
                             val userId = user.uid
                             val userProfile = Profile(
                                 isPremium = false,
                                 username = user.email ?: "",
                                 languageCode = languageCode
                             )
+                           // Es wird das erstellte Benutzerprofil speichern.
                             repository.createUserProfile(userId, userProfile)
                         }
+                        // Der Registrierungsstatus wird aktualisiert, um den Erfolg anzuzeigen.
                         _registrationStatus.value = RegistrationStatus(success = true)
                     } else {
-                        // Bestehender Benutzer: Keine zusätzliche Profilerstellung nötig.
+                       // Wenn der Benutzer nicht neu ist, ist keine zusätzliche Profilerstellung erforderlich.
+                        // Aktualisiert den Registrierungsstatus, um den Erfolg anzuzeigen.
                         _registrationStatus.value = RegistrationStatus(success = true)
                     }
                 } else {
-                    // Fehlerbehandlung
+                    // Wenn der Anmeldevorgang nicht erfolgreich war, aktualisiert es den Registrierungsstatus, um einen Fehler anzuzeigen.
                     _registrationStatus.value = RegistrationStatus(success = false, message = R.string.authentication_failed)
                 }
             }
         }
     }
-
 
 
     /**
