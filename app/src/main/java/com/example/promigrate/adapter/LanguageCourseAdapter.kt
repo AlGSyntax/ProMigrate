@@ -2,6 +2,7 @@ package com.example.promigrate.adapter
 
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.text.Html
 import android.text.SpannableString
@@ -21,6 +22,8 @@ import com.example.promigrate.R
 import com.example.promigrate.adapter.LanguageCourseAdapter.DiffCallback
 import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.databinding.LanguageCourseItemBinding
+import java.util.Date
+import java.util.Locale
 
 /**
  * LanguageCourseAdapter ist eine Unterklasse von ListAdapter.
@@ -84,7 +87,7 @@ class LanguageCourseAdapter :
             // Setzt den Kurs-Titel. Wenn kein Titel vorhanden ist, wird "N/A" angezeigt.
             binding.langcourseTextView.text = kurs.angebot?.titel ?: "N/A"
 
-            // Formatierung und Anzeige des Beginndatums des Kurses.
+
             kurs.beginn?.let {
 
                 binding.beginnTextView.text =
@@ -93,7 +96,7 @@ class LanguageCourseAdapter :
                 binding.beginnTextView.text = binding.root.context.getString(R.string.begin, "N/A")
             }
 
-            // Formatierung und Anzeige des Enddatums des Kurses.
+
             kurs.ende?.let {
 
                 binding.endeTextView.text = binding.root.context.getString(R.string.end)
@@ -169,17 +172,29 @@ class LanguageCourseAdapter :
                 }
 
 
-                // Formatierung und Anzeige des Anmeldeschlusses des Kurses.
+
+
+
                 kurs.anmeldeschluss?.let {
+                    // Erstellen eines SimpleDateFormat-Objekts mit deutschem Datumsformat
+                    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
 
+                    // Umwandlung des Unix-Zeitstempels (in Millisekunden) in ein Date-Objekt
+                    val date = Date(it.toLong())
+
+                    // Formatieren des Datum-Objekts zu einem String
+                    val formattedDate = sdf.format(date)
+
+                    // Setzen des formatierten Datums in die TextView
                     binding.anmeldeSchlussTextView.text = binding.root.context.getString(
-                        R.string.anmeldeschluss_format
-
+                        R.string.anmeldeschluss_format, formattedDate
                     )
                 } ?: run {
+                    // Fallback, wenn kein Anmeldeschluss vorhanden ist
                     binding.anmeldeSchlussTextView.text =
                         binding.root.context.getString(R.string.anmeldeschluss_format, "N/A")
                 }
+
 
 
                 // Setzt einen OnClickListener auf den TextView, der den Kursnamen anzeigt

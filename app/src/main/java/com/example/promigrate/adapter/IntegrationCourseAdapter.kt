@@ -2,6 +2,7 @@ package com.example.promigrate.adapter
 
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.text.Html
 import android.text.SpannableString
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.R
 import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.databinding.IntegrationCourseItemBinding
+import java.util.Date
+import java.util.Locale
 
 /**
  * Wird aufgerufen, wenn die View-Hierarchie des Fragments zerstört wird.
@@ -157,16 +160,26 @@ class IntegrationCourseAdapter :
                 }
 
 
-                // Formatierung und Anzeige des Anmeldeschlusses des Kurses.
                 kurs.anmeldeschluss?.let {
-                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(
-                        R.string.anmeldeschluss_format
+                    // Erstellen eines SimpleDateFormat-Objekts mit deutschem Datumsformat
+                    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
 
+                    // Umwandlung des Unix-Zeitstempels (in Millisekunden) in ein Date-Objekt
+                    val date = Date(it.toLong())
+
+                    // Formatieren des Datum-Objekts zu einem String
+                    val formattedDate = sdf.format(date)
+
+                    // Setzen des formatierten Datums in die TextView
+                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(
+                        R.string.anmeldeschluss_format, formattedDate
                     )
                 } ?: run {
+                    // Fallback, wenn kein Anmeldeschluss vorhanden ist
                     binding.anmeldeSchlussTextView.text =
                         binding.root.context.getString(R.string.anmeldeschluss_format, "N/A")
                 }
+
 
 
                 // Setzt einen OnClickListener auf den TextView, der den Kursnamen anzeigt
