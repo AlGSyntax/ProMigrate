@@ -153,7 +153,18 @@
     <string name="typeofdegree">Тип степени: %s</string>
     <string name="targetgroup">Целевая группа: %s</string>
     <string name="cost">Затраты: %1$s</string>
-    <string name="anmeldeschluss_format">Срок подачи заявки: %1$s</string>
+    <string name="anmeldeschluss_format">Срок подачи заявки: %1$s</string><string name="error_image">Нет доступного изображения</string>.
+    <string name="error_occupational_fields">Ошибка при загрузке полей</string>.
+    <string name="error_work_locations">Ошибка при загрузке мест</string>
+    <string name="unkownjobserror">Ошибка неизвестной работы</string>
+    <string name="notfoundjobs">Не найдено ни одной профессии</string>
+    <string name="notfoundoccu">Поле "Профессия" не установлено в профиле</string>.
+    <string name="fillfields">Пожалуйста, заполните все поля</string>.
+    <string name="nojobofffound">Не найдено ни одного предложения о работе</string>
+    <string name="errorload">Ошибка при загрузке изображения профиля</string>
+    <string name="authentication_failed">MAINVIEWMODEL</string>
+
+
 
 
 

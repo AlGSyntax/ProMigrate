@@ -152,6 +152,16 @@
     <string name="targetgroup">Цільова група: %s</string>.
     <string name="cost">Вартість: %1$s</string>
     <string name="anmeldeschluss_format"> Кінцевий термін подання заявки: %1$s</string>
+    <string name="error_image">Зображення відсутнє</string>
+    <string name="error_occupational_fields">Помилка завантаження полів</string>
+    <string name="error_work_locations">Помилка завантаження локацій</string>
+    <string name="unkownjobserror">Невідома_помилка_роботи</string>
+    <string name="notfoundjobs">Не знайдено жодної професії</string>
+    <string name="notfoundoccu">Поле професії не встановлено в профілі</string>
+    <string name="fillfields">Заповніть, будь ласка, всі поля</string>
+    <string name="nojobofffound">Не знайдено жодної вакансії</string>
+    <string name="errorload">Виникла помилка при завантаженні зображення профілю</string>
+    <string name="authentication_failed">МОДЕЛЬ ГОЛОВНОГО ВИДАННЯ</string>
 
 
 </resources>

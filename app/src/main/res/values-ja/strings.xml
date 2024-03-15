@@ -152,6 +152,18 @@
     <string name="targetgroup">対象グループ: %s</string>
     <string name="cost">費用： %1$s</string>
     <string name="anmeldeschluss_format">申込締切日：%1$s</string>
+    <string name="error_image">利用可能な画像がありません</string>。
+    <string name="error_occupational_fields">フィールドの読み込みエラー</string>。
+    <string name="error_work_locations">勤務地の読み込みエラー</string>
+    <string name="unkownjobserror">Unknown job_error（不明なジョブエラー）</string>。
+    <string name="notfoundjobs">職業が見つかりません</string>。
+    <string name="notfoundoccu">職業フィールドがプロファイルに設定されていません</string>。
+    <string name="fillfields">すべての項目を入力してください</string>。
+    <string name="nojobofffound">求人が見つかりません</string>。
+    <string name="errorload">プロフィール画像の読み込みエラー</string>
+    <string name="authentication_failed">MAINVIEWMODEL</string>となります。
+
+
 
 
 

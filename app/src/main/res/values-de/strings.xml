@@ -164,6 +164,14 @@
     <string name="anmeldeschluss_format">Anmeldeschluss: %1$s</string>
     <string name="error_image">Kein Bild verfügbar</string>
     <string name="error_occupational_fields">Fehler beim Laden der Felder</string>
+    <string name="error_work_locations">Fehler beim Laden der Orte</string>
+    <string name="unkownjobserror">Unbekannter Job_fehler</string>
+    <string name="notfoundjobs">Keine Berufe gefunden</string>
+    <string name="notfoundoccu">Berufsfeld nicht im Profil gesetzt</string>
+    <string name="fillfields">Bitte fülle alle Felder aus</string>
+    <string name="nojobofffound">Kein Stellenangebot gefunden</string>
+    <string name="errorload">Fehler beim Laden des Profilbilds</string>
+    <string name="authentication_failed">MAINVIEWMODEL</string>
 
 
 

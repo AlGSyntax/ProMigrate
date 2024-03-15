@@ -153,6 +153,18 @@
     <string name="targetgroup">Grupo objetivo: %s</string>
     <string name="cost">Costes: %1$s</string>
     <string name="anmeldeschluss_format">Fecha límite de solicitud: %1$s</string>
+    <string name="error_image">No hay imagen disponible</string>
+    <string name="error_occupational_fields">Error al cargar los campos</string>
+    <string name="error_work_locations">Error al cargar las ubicaciones</string>
+    <string name="unkownjobserror">Error de trabajo desconocido</string>
+    <string name="notfoundjobs">No se han encontrado ocupaciones</string>
+    <string name="notfoundoccu">Campo de ocupación no establecido en el perfil</string>
+    <string name="fillfields">Por favor, rellene todos los campos</string>
+    <string name="nojobofffound">No se ha encontrado ninguna oferta de trabajo</string>
+    <string name="errorload">Error al cargar la foto del perfil</string>
+    <string name="authentication_failed">MAINVIEWMODEL</string>
+
+
 
 
 

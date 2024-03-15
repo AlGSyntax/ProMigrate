@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
+// TODO 1: Implementierung einer besseren validierungsmethode im LogInFragment
+
 /**
  * LogInFragment ist verantwortlich für die Darstellung und Handhabung des Login-Bereichs.
  * In diesem Fragment kann sich der Benutzer mit E-Mail und Passwort oder über Google anmelden.
