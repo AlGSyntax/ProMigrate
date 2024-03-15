@@ -291,31 +291,38 @@ class LogInFragment : Fragment() {
         googleSignInLauncher.launch(signInIntent)
     }
 
-    /**
-     * Verarbeitet das Ergebnis der Google-SignIn-Aktivität. Bei Erfolg wird die Methode
-     * im ViewModel aufgerufen, um den Benutzer mit dem Google-Konto anzumelden.
-     * Bei Misserfolg wird eine Fehlermeldung angezeigt.
+  /**
+     * Verarbeitet das Ergebnis des Google-Anmeldevorgangs.
+     * Wenn die Anmeldung erfolgreich war, wird geprüft, ob es sich um die erste Anmeldung des Benutzers handelt.
+     * Wenn dies der Fall ist, wird der Benutzer registriert und zum CreateYourProfileFragment navigiert.
+     * Wenn es sich nicht um die erste Anmeldung des Benutzers handelt, navigiert er zum DashboardFragment.
+     * Wenn die Anmeldung nicht erfolgreich war, wird ein Toast mit einer Fehlermeldung angezeigt.
      *
-     * @param completedTask: Die Aufgabe, die das Ergebnis des Google-SignIn-Vorgangs enthält.
+     * @param completedTask: Die Aufgabe, die das Ergebnis des Google-Anmeldevorgangs enthält.
      */
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
+            // Den GoogleSignInAccount aus der abgeschlossenen Aufgabe abrufen.
             val account = completedTask.getResult(ApiException::class.java)
+           // Übergibt das ID-Token an das ViewModel.
             viewModel.onGoogleLoginClicked(account.idToken!!)
 
-            // Prüfen, ob es der erste Login des Benutzers ist
+           // Überprüft, ob es sich um die erste Anmeldung des Benutzers handelt.
             val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
             val isFirstLogin = sharedPref?.getBoolean(account.id, true) ?: true
 
             if (isFirstLogin) {
-                val languageCode = viewModel.selectedLanguageCode.value ?: "de" // Verwenden Sie einen Standardwert, falls kein Wert gesetzt ist.
+                // Wenn es sich um die erste Anmeldung des Benutzers handelt, registrieren Sie den Benutzer und navigieren Sie zum CreateYourProfileFragment.
+                val languageCode = viewModel.selectedLanguageCode.value ?: "de" // Use a default value if no value is set.
                 viewModel.registerGoogleUser(account.idToken!!, languageCode)
                 findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
                 sharedPref?.edit()?.putBoolean(account.id, false)?.apply()
             } else {
+                // Wenn es sich nicht um die erste Anmeldung des Benutzers handelt, navigiert es zum DashboardFragment.
                 findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
             }
         } catch (e: ApiException) {
+            // Wenn die Anmeldung nicht erfolgreich war, zeigt es einen Toast mit einer Fehlermeldung.
             Toast.makeText(
                 context,
                 getString(R.string.googlesignupfailed, e.statusCode),
