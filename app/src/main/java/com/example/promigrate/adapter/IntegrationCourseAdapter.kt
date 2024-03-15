@@ -76,18 +76,18 @@ class IntegrationCourseAdapter :
             // Setzt den Kurs-Titel. Wenn kein Titel vorhanden ist, wird "N/A" angezeigt.
             binding.intecourseTextView.text = kurs.angebot?.titel ?: "N/A"
 
-            // Formatierung und Anzeige des Beginndatums des Kurses.
             kurs.beginn?.let {
 
                 binding.beginnTextView.text =
-                    binding.root.context.getString(R.string.begin)
+                    binding.root.context.getString(R.string.begin, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
             } ?: run {
                 binding.beginnTextView.text = binding.root.context.getString(R.string.begin, "N/A")
             }
 
-            // Formatierung und Anzeige des Enddatums des Kurses.
+
             kurs.ende?.let {
-                binding.endeTextView.text = binding.root.context.getString(R.string.end)
+
+                binding.endeTextView.text = binding.root.context.getString(R.string.end, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
             } ?: run {
                 binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
             }

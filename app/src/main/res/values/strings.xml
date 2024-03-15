@@ -162,6 +162,7 @@
     <string name="fillfields">Please fill in all fields</string>
     <string name="nojobofffound">No Job Offer found</string>
     <string name="errorload">Error loading the profile picture</string>
+    <string name="authentication_failed">MAINVIEWMODEL</string>
 
 
 </resources>

@@ -300,11 +300,22 @@ class LogInFragment : Fragment() {
      */
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            // Erfolgreicher SignIn mit Google, es wird mit Firebase authentifiziert.
             val account = completedTask.getResult(ApiException::class.java)
             viewModel.onGoogleLoginClicked(account.idToken!!)
+
+            // Prüfen, ob es der erste Login des Benutzers ist
+            val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+            val isFirstLogin = sharedPref?.getBoolean(account.id, true) ?: true
+
+            if (isFirstLogin) {
+                val languageCode = viewModel.selectedLanguageCode.value ?: "de" // Verwenden Sie einen Standardwert, falls kein Wert gesetzt ist.
+                viewModel.registerGoogleUser(account.idToken!!, languageCode)
+                findNavController().navigate(R.id.action_loginFragment_to_createYourProfileFragment)
+                sharedPref?.edit()?.putBoolean(account.id, false)?.apply()
+            } else {
+                findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+            }
         } catch (e: ApiException) {
-            // Der Google Sign-In ist fehlgeschlagen, handle den Fehler
             Toast.makeText(
                 context,
                 getString(R.string.googlesignupfailed, e.statusCode),
@@ -312,6 +323,7 @@ class LogInFragment : Fragment() {
             ).show()
         }
     }
+
 
     /**
      * Überprüft, ob der Onboarding-Prozess abgeschlossen wurde.

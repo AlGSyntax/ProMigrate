@@ -77,7 +77,7 @@ class IntegrationCourseFragment : Fragment() {
             // Wenn Standort und Sprachniveau nicht null sind, werden Bildungsangebote abgerufen
             if (location != null) {
                 if (sprachniveau != null) {
-                    viewModel.fetchEducationalOffers("MB", location, sprachniveau, 0)
+                    viewModel.fetchEducationalOffers("MB", location, sprachniveau, 1)
                 }
             }
         }

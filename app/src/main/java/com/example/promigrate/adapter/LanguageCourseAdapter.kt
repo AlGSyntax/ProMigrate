@@ -91,7 +91,7 @@ class LanguageCourseAdapter :
             kurs.beginn?.let {
 
                 binding.beginnTextView.text =
-                    binding.root.context.getString(R.string.begin)
+                    binding.root.context.getString(R.string.begin, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
             } ?: run {
                 binding.beginnTextView.text = binding.root.context.getString(R.string.begin, "N/A")
             }
@@ -99,7 +99,7 @@ class LanguageCourseAdapter :
 
             kurs.ende?.let {
 
-                binding.endeTextView.text = binding.root.context.getString(R.string.end)
+                binding.endeTextView.text = binding.root.context.getString(R.string.end, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
             } ?: run {
                 binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
             }

@@ -397,6 +397,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+
+
+
     /**
      * Diese Methode wird verwendet, um das Benutzerprofil asynchron abzurufen.
      * Sie wird innerhalb einer Coroutine ausgeführt, um asynchrone Operationen zu ermöglichen.
@@ -520,6 +523,39 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+
+    fun registerGoogleUser(authToken: String, languageCode: String) {
+        viewModelScope.launch {
+            val credential = GoogleAuthProvider.getCredential(authToken, null)
+            auth.signInWithCredential(credential).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val isNewUser = task.result?.additionalUserInfo?.isNewUser == true
+                    if (isNewUser) {
+                        val firebaseUser = auth.currentUser
+                        firebaseUser?.let { user ->
+                            // Neuer Benutzer: Erstellt und speichert das Benutzerprofil.
+                            val userId = user.uid
+                            val userProfile = Profile(
+                                isPremium = false,
+                                username = user.email ?: "",
+                                languageCode = languageCode
+                            )
+                            repository.createUserProfile(userId, userProfile)
+                        }
+                        _registrationStatus.value = RegistrationStatus(success = true)
+                    } else {
+                        // Bestehender Benutzer: Keine zusätzliche Profilerstellung nötig.
+                        _registrationStatus.value = RegistrationStatus(success = true)
+                    }
+                } else {
+                    // Fehlerbehandlung
+                    _registrationStatus.value = RegistrationStatus(success = false, message = R.string.authentication_failed)
+                }
+            }
+        }
+    }
+
 
 
     /**
