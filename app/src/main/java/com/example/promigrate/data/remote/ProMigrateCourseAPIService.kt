@@ -23,7 +23,7 @@ interface ProMigrateCourseAPIService {
         @Query("sprachniveau") sprachniveau: String?,  // Filtert nach Sprachniveau.
         @Query("beginntermine") beginntermine: Int,  // Filtert nach Beginnterminen.
         @Query("sort") sort: String = "basc",  // Sortierreihenfolge.
-        @Query("umkreis") umkreis: String = "50"  // Suchumkreis.
+        @Query("umkreis") umkreis: String = "25"  // Suchumkreis.
     ): Response<EducationalOfferResponse>
 }
 
