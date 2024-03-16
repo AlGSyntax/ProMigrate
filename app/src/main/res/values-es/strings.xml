@@ -179,6 +179,9 @@
     <string name="byclickaddflashcard">Haz clic en este botón para crear tu flashcard personalizada</string>
     <string name="edittodoclickable">Haz clic en este botón para editar tu elemento ToDo</string>
     <string name="deletetodo">Haga clic en este botón para eliminar su elemento ToDo</string>
+    <string name="provider">Proveedor de educación: %s</string>
+    <string name="address">Ubicación: %s</string>
+    <string name="examining_authority">"Organismo examinador: %s</string>
 
 
 

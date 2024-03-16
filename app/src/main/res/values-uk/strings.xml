@@ -138,7 +138,7 @@
     <string name="question6">6. чи підтримує додаток декілька мов?</string>
     <string name="answer6">6. Так, окрім німецької та англійської, програма підтримує іспанську, японську, українську та російську мови.</string>
     <string name="question7">7. Де я можу залишити відгук про додаток?</string>
-    <string name="answer7">7. Під кнопкою FAQ, яка привела вас сюди, ви знайдете кнопку, яку можна натиснути, щоб залишити відгук</string>.
+    <string name="answer7">7. Під кнопкою FAQ, яка привела вас сюди, ви знайдете кнопку, яку можна натиснути, щоб залишити відгук</string>
     <string name="adjustyourlanguagelevel">Відрегулюйте свій рівень мови тут</string>
     <string name="delete_account_question">Як я можу видалити свій акаунт?</string>
     <string name="delete_account">Видалити акаунт</string>
@@ -148,8 +148,8 @@
     <string name="account_deleted">Ваш акаунт успішно видалено</string>
     <string name="funded">Курс спонсорується.</string>
     <string name="not_funded">Курс не фінансується.</string>
-    <string name="typeofdegree">Тип ступеня: %s</string>.
-    <string name="targetgroup">Цільова група: %s</string>.
+    <string name="typeofdegree">Тип ступеня: %s</string>
+    <string name="targetgroup">Цільова група: %s</string>
     <string name="cost">Вартість: %1$s</string>
     <string name="anmeldeschluss_format"> Кінцевий термін подання заявки: %1$s</string>
     <string name="error_image">Зображення відсутнє</string>
@@ -163,21 +163,24 @@
     <string name="errorload">Виникла помилка при завантаженні зображення профілю</string>
     <string name="authentication_failed">МОДЕЛЬ ГОЛОВНОГО ВИДАННЯ</string>
     <string name="chooseapicture">Выберите фотографию профиля</string>.
-    <string name="jobresearch">Нажмите на это изображение, чтобы перейти на страницу поиска работы</string>.
-    <string name="langcourse">Нажмите на это изображение, чтобы перейти на страницу изучения лексики</string>.
-    <string name="gotojobapplication">Нажмите на это изображение, чтобы перейти на экран To-Do: Job Application</string>.
+    <string name="jobresearch">Нажмите на это изображение, чтобы перейти на страницу поиска работы</string>
+    <string name="langcourse">Нажмите на это изображение, чтобы перейти на страницу изучения лексики</string>
+    <string name="gotojobapplication">Нажмите на это изображение, чтобы перейти на экран To-Do: Job Application</string>
     <string name="gotonrelocandinte"><![CDATA[Нажмите на это изображение, чтобы перейти на экран "Переезд и интеграция"]]></string>
-    <string name="gotosettings">Нажав на эту кнопку, вы перейдете к настройкам</string>.
-    <string name="backtosets">Нажмите эту кнопку, чтобы перейти к экрану настроек</string>.
-    <string name="topofthescreen">Нажмите на эту кнопку, чтобы перейти в верхнюю часть экрана</string>.
-    <string name="clicktoexit">Нажмите эту кнопку, чтобы выйти из приложения</string>.
-    <string name="addtodo">Нажмите эту кнопку, чтобы добавить пункт дел</string>.
-    <string name="backtodash">Нажмите эту кнопку, чтобы вернуться на экран приборной панели</string>.
+    <string name="gotosettings">Нажав на эту кнопку, вы перейдете к настройкам</string>
+    <string name="backtosets">Нажмите эту кнопку, чтобы перейти к экрану настроек</string>
+    <string name="topofthescreen">Нажмите на эту кнопку, чтобы перейти в верхнюю часть экрана</string>
+    <string name="clicktoexit">Нажмите эту кнопку, чтобы выйти из приложения</string>
+    <string name="addtodo">Нажмите эту кнопку, чтобы добавить пункт дел</string>
+    <string name="backtodash">Нажмите эту кнопку, чтобы вернуться на экран приборной панели</string>
     <string name="profilepic">Здесь вы можете увидеть фотографию своего профиля</string>
     <string name="herelogout">Нажмите на эту кнопку, чтобы выйти из системы</string>
-    <string name="byclickaddflashcard">Нажмите эту кнопку, чтобы создать свою персональную флеш-карту</string>.
+    <string name="byclickaddflashcard">Нажмите эту кнопку, чтобы создать свою персональную флеш-карту</string>
     <string name="edittodoclickable">Нажмите на эту кнопку, чтобы отредактировать свой пункт ToDo</string>
-    <string name="deletetodo">Нажмите эту кнопку, чтобы удалить свой пункт ToDo</string>.
+    <string name="deletetodo">Нажмите эту кнопку, чтобы удалить свой пункт ToDo</string>
+    <string name="provider">Навчальний заклад: %s</string>
+    <string name="address">Місцезнаходження: %s</string>
+    <string name="examining_authority">"Орган, що проводить іспит: %s</string>
 
 
 

@@ -187,7 +187,9 @@
     <string name="byclickaddflashcard">Mit einem Klick auf diesen Button können Sie Ihre persönliche Karteikarte erstellen</string>
     <string name="edittodoclickable">Durch Anklicken dieser Schaltfläche können Sie Ihren ToDo-Punkt bearbeiten</string>
     <string name="deletetodo">Durch Anklicken können Sie Ihren ToDo-Eintrag löschen</string>
-
+    <string name="provider">Bildungsanbieter: %s</string>
+    <string name="address">Ort: %s</string>
+    <string name="examining_authority">"Prüfende Stelle: %s</string>
 
 
 

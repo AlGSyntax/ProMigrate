@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     app:cardElevation="4dp"
     app:cardCornerRadius="8dp"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    tools:ignore="UnusedResources">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"

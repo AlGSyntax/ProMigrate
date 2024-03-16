@@ -178,6 +178,9 @@
     <string name="byclickaddflashcard">このボタンをクリックすると、あなた専用のフラッシュカードが作成されます</string>
     <string name="edittodoclickable">このボタンをクリックすると、ToDo項目を編集できます</string>
     <string name="deletetodo">ToDo項目を削除するには、このボタンをクリックします</string>
+    <string name="provider">教育プロバイダー： s</string>
+    <string name="address">所在地： %s</string>
+    <string name="examining_authority">検査機関：%s</string>
 
 
 

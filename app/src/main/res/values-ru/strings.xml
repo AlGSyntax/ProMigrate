@@ -140,13 +140,13 @@
     <string name="question6">6.Поддерживает ли приложение несколько языков?</string>
     <string name="answer6">6.Да, в дополнение к немецкому и английскому, оно также поддерживает испанский, японский, украинский и русский языки.</string>
     <string name="question7">7.Где я могу оставить отзыв о приложении? </string>
-    <string name="answer7">7.Под кнопкой FAQ, которая привела вас сюда, вы найдете кнопку, которую можно нажать, чтобы оставить отзыв</string>.
-    <string name="adjustyourlanguagelevel">Настройте свой языковой уровень здесь</string>.
+    <string name="answer7">7.Под кнопкой FAQ, которая привела вас сюда, вы найдете кнопку, которую можно нажать, чтобы оставить отзыв</string>
+    <string name="adjustyourlanguagelevel">Настройте свой языковой уровень здесь</string>
     <string name="delete_account_question">Как я могу удалить свой аккаунт? </string>
     <string name="delete_account">Удалить аккаунт</string>
     <string name="account_deletion_failed">Удаление аккаунта не удалось</string>
-    <string name="delete_account_confirmation">Пожалуйста, подтвердите удаление аккаунта</string>.
-    <string name="delete_account_header">Прискорбно, что вы покидаете нас</string>.
+    <string name="delete_account_confirmation">Пожалуйста, подтвердите удаление аккаунта</string>
+    <string name="delete_account_header">Прискорбно, что вы покидаете нас</string>
     <string name="account_deleted">Ваш аккаунт был успешно удален</string>
     <string name="funded">Курс спонсируется.</string>
     <string name="not_funded">Курс не финансируется.</string>
@@ -154,31 +154,34 @@
     <string name="targetgroup">Целевая группа: %s</string>
     <string name="cost">Затраты: %1$s</string>
     <string name="anmeldeschluss_format">Срок подачи заявки: %1$s</string><string name="error_image">Нет доступного изображения</string>.
-    <string name="error_occupational_fields">Ошибка при загрузке полей</string>.
+    <string name="error_occupational_fields">Ошибка при загрузке полей</string>
     <string name="error_work_locations">Ошибка при загрузке мест</string>
     <string name="unkownjobserror">Ошибка неизвестной работы</string>
     <string name="notfoundjobs">Не найдено ни одной профессии</string>
-    <string name="notfoundoccu">Поле "Профессия" не установлено в профиле</string>.
-    <string name="fillfields">Пожалуйста, заполните все поля</string>.
+    <string name="notfoundoccu">Поле "Профессия" не установлено в профиле</string>
+    <string name="fillfields">Пожалуйста, заполните все поля</string>
     <string name="nojobofffound">Не найдено ни одного предложения о работе</string>
     <string name="errorload">Ошибка при загрузке изображения профиля</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>
-    <string name="chooseapicture">Выберите фотографию профиля</string>.
-    <string name="jobresearch">Нажмите на это изображение, чтобы перейти на страницу поиска работы</string>.
-    <string name="langcourse">Нажмите на это изображение, чтобы перейти на страницу изучения лексики</string>.
-    <string name="gotojobapplication">Нажмите на это изображение, чтобы перейти на экран To-Do: Job Application</string>.
+    <string name="chooseapicture">Выберите фотографию профиля</string>
+    <string name="jobresearch">Нажмите на это изображение, чтобы перейти на страницу поиска работы</string>
+    <string name="langcourse">Нажмите на это изображение, чтобы перейти на страницу изучения лексики</string>
+    <string name="gotojobapplication">Нажмите на это изображение, чтобы перейти на экран To-Do: Job Application</string>
     <string name="gotonrelocandinte"><![CDATA[Нажмите на это изображение, чтобы перейти на экран "Переезд и интеграция"]]></string>
-    <string name="gotosettings">Нажав на эту кнопку, вы перейдете к настройкам</string>.
-    <string name="backtosets">Нажмите эту кнопку, чтобы перейти к экрану настроек</string>.
-    <string name="topofthescreen">Нажмите на эту кнопку, чтобы перейти в верхнюю часть экрана</string>.
-    <string name="clicktoexit">Нажмите эту кнопку, чтобы выйти из приложения</string>.
-    <string name="addtodo">Нажмите эту кнопку, чтобы добавить пункт дел</string>.
-    <string name="backtodash">Нажмите эту кнопку, чтобы вернуться на экран приборной панели</string>.
+    <string name="gotosettings">Нажав на эту кнопку, вы перейдете к настройкам</string>
+    <string name="backtosets">Нажмите эту кнопку, чтобы перейти к экрану настроек</string>
+    <string name="topofthescreen">Нажмите на эту кнопку, чтобы перейти в верхнюю часть экрана</string>
+    <string name="clicktoexit">Нажмите эту кнопку, чтобы выйти из приложения</string>
+    <string name="addtodo">Нажмите эту кнопку, чтобы добавить пункт дел</string>
+    <string name="backtodash">Нажмите эту кнопку, чтобы вернуться на экран приборной панели</string>
     <string name="profilepic">Здесь вы можете увидеть фотографию своего профиля</string>
     <string name="herelogout">Нажмите на эту кнопку, чтобы выйти из системы</string>
-    <string name="byclickaddflashcard">Нажмите эту кнопку, чтобы создать свою персональную флеш-карту</string>.
+    <string name="byclickaddflashcard">Нажмите эту кнопку, чтобы создать свою персональную флеш-карту</string>
     <string name="edittodoclickable">Нажмите на эту кнопку, чтобы отредактировать свой пункт ToDo</string>
-    <string name="deletetodo">Нажмите эту кнопку, чтобы удалить свой пункт ToDo</string>.
+    <string name="deletetodo">Нажмите эту кнопку, чтобы удалить свой пункт ToDo</string>
+    <string name="provider">Образовательный центр: %s</string>.
+    <string name="address">Местонахождение: %s</string>
+    <string name="examining_authority">Экзаменационный орган: %s</string>
 
 
 
