@@ -47,6 +47,18 @@ class IntegrationCourseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentIntegrationCourseBinding.inflate(inflater, container, false)
+        // Beobachtet die userProfileData im ViewModel
+        viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
+            // Konvertiert den gewünschten Standort und das Sprachniveau
+            val location = userProfile?.desiredLocation?.let { convertLocation(it) }
+            val sprachniveau = userProfile?.languageLevel?.let { convertLanguageLevel(it) }
+            // Wenn Standort und Sprachniveau nicht null sind, werden Bildungsangebote abgerufen
+            if (location != null) {
+                if (sprachniveau != null) {
+                    viewModel.fetchEducationalOffers("MB", location, sprachniveau, 1)
+                }
+            }
+        }
         return binding!!.root
     }
 
@@ -69,18 +81,7 @@ class IntegrationCourseFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
         }
 
-        // Beobachtet die userProfileData im ViewModel
-        viewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
-            // Konvertiert den gewünschten Standort und das Sprachniveau
-            val location = userProfile?.desiredLocation?.let { convertLocation(it) }
-            val sprachniveau = userProfile?.languageLevel?.let { convertLanguageLevel(it) }
-            // Wenn Standort und Sprachniveau nicht null sind, werden Bildungsangebote abgerufen
-            if (location != null) {
-                if (sprachniveau != null) {
-                    viewModel.fetchEducationalOffers("MB", location, sprachniveau, 1)
-                }
-            }
-        }
+
 
         // Beobachtet die educationaloffers im ViewModel
         viewModel.educationaloffers.observe(viewLifecycleOwner) { angebote ->
