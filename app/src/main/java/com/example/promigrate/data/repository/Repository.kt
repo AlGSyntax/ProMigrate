@@ -17,7 +17,9 @@ import com.example.promigrate.data.remote.ProMigrateCourseAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 /**
@@ -94,8 +96,8 @@ class Repository(
      *
      * @return Die gespeicherte Spracheinstellung des Benutzers oder die Standardsprache des Systems.
      */
-    fun loadLanguageSetting(): String {
-        return try {
+    suspend fun loadLanguageSetting(): String = withContext(Dispatchers.IO) {
+        return@withContext try {
             val languageSetting = sharedPreferences.getString(
                 "SelectedLanguage",
                 Locale.getDefault().language
@@ -115,7 +117,7 @@ class Repository(
      *
      * @param languageCode: Der Sprachcode, der gespeichert werden soll.
      */
-    fun saveLanguageSetting(languageCode: String) {
+    suspend fun saveLanguageSetting(languageCode: String) = withContext(Dispatchers.IO) {
         try {
             sharedPreferences.edit().putString("SelectedLanguage", languageCode).apply()
         } catch (_: Exception) {
@@ -132,9 +134,10 @@ class Repository(
      * @param targetLanguage: Der Sprachcode der Zielsprache, in die der Text übersetzt werden soll.
      * @return: Ein Objekt vom Typ TranslationResult, das das Ergebnis der Übersetzung enthält, oder null bei einem Fehler.
      */
-    suspend fun translateText(text: String, targetLanguage: String): TranslationResult? {
+    suspend fun translateText(text: String, targetLanguage: String): TranslationResult? = withContext(
+        Dispatchers.IO) {
         Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
-        return try {
+        return@withContext try {
             // Ruft den Übersetzungsdienst mit dem gegebenen Text und Zielsprachcode auf.
             val response =
                 deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
@@ -156,7 +159,7 @@ class Repository(
      * @param userId: Die eindeutige Benutzer-ID, für die das Profil abgerufen werden soll.
      * @return Ein MutableLiveData-Objekt, das das abgerufene Benutzerprofil enthält.
      */
-    fun getUserProfile(userId: String): MutableLiveData<Profile?> {
+    suspend fun getUserProfile(userId: String): MutableLiveData<Profile?> = withContext(Dispatchers.IO) {
         val userProfileLiveData = MutableLiveData<Profile?>()
 
         firestore.collection("user").document(userId).get()
@@ -169,7 +172,7 @@ class Repository(
             }
 
 
-        return userProfileLiveData
+        return@withContext userProfileLiveData
     }
 
 
@@ -182,7 +185,7 @@ class Repository(
      * @param userId: Die eindeutige Benutzer-ID, unter der das Profil gespeichert wird.
      * @param profile: Das Profile-Objekt, das in der Datenbank gespeichert werden soll.
      */
-    fun createUserProfile(userId: String, profile: Profile) {
+    suspend fun createUserProfile(userId: String, profile: Profile) = withContext(Dispatchers.IO) {
         val profileRef = firestore.collection("user").document(userId)
         profileRef.set(profile)
     }
@@ -198,7 +201,7 @@ class Repository(
      * @return Die URL des hochgeladenen Bildes.
      * @throws Exception: Wenn der Upload fehlschlägt oder ein anderer Fehler auftritt.
      */
-    suspend fun uploadAndUpdateProfilePicture(uri: Uri, userId: String): String {
+    suspend fun uploadAndUpdateProfilePicture(uri: Uri, userId: String): String = withContext(Dispatchers.IO) {
         val imageRef = storage.reference.child("images/$userId/profilePicture")
         try {
             val uploadTask = imageRef.putFile(uri).await()
@@ -206,7 +209,7 @@ class Repository(
                 val imageUrl = imageRef.downloadUrl.await().toString()
                 firestore.collection("user").document(userId).update("profilePicture", imageUrl)
                     .await()
-                return imageUrl // Gibt die URL des hochgeladenen und aktualisierten Bildes zurück
+                return@withContext imageUrl // Gibt die URL des hochgeladenen und aktualisierten Bildes zurück
             } else {
                 throw Exception("Upload fehlgeschlagen")
             }
@@ -223,7 +226,7 @@ class Repository(
      * @param profileData: Eine Map von Schlüssel-Wert-Paaren, die die zu aktualisierenden Profildaten repräsentieren.
      * @throws Exception: Wenn ein Fehler beim Aktualisieren des Profils auftritt.
      */
-    suspend fun updateUserProfile(userId: String, profileData: Map<String, Any>) {
+    suspend fun updateUserProfile(userId: String, profileData: Map<String, Any>): Void = withContext(Dispatchers.IO) {
         try {
             firestore.collection("user").document(userId).update(profileData).await()
         } catch (e: Exception) {
@@ -239,7 +242,7 @@ class Repository(
      * @param field: Der Name des Feldes, das aktualisiert werden soll.
      * @param value: Der neue Wert, der in das Feld geschrieben werden soll.
      */
-    fun updateUserProfileField(userId: String, field: String, value: Any) {
+    suspend fun updateUserProfileField(userId: String, field: String, value: Any) = withContext(Dispatchers.IO) {
         firestore.collection("user").document(userId).update(field, value)
     }
 
@@ -253,8 +256,8 @@ class Repository(
      * @return Ein Result-Objekt, das entweder eine Liste von Berufsfeldern oder eine Ausnahme enthält.
      * @throws Exception: Wenn ein Fehler beim Abrufen der Berufsfelder auftritt.
      */
-    suspend fun getOccupationalFields(): Result<List<String>> {
-        return try {
+    suspend fun getOccupationalFields(): Result<List<String>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             val response = apiService.getOccupationalFields()
             if (response.isSuccessful && response.body() != null) {
                 val berufsfelderListe = response.body()!!.facetten.berufsfeld.counts.keys.toList()
@@ -277,8 +280,8 @@ class Repository(
      * @return Ein Result-Objekt, das entweder eine Liste von Arbeitsorten oder eine Ausnahme enthält.
      * @throws Exception: Wenn ein Fehler beim Abrufen der Arbeitsorte auftritt.
      */
-    suspend fun getWorkLocations(): Result<List<String>> {
-        return try {
+    suspend fun getWorkLocations(): Result<List<String>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             val response = apiService.getWorkLocations()
             if (response.isSuccessful && response.body() != null) {
                 val arbeitsorteListe = response.body()!!.facetten.arbeitsort.counts.keys.toList()
@@ -302,8 +305,8 @@ class Repository(
      * @return Ein Result-Objekt, das entweder eine Liste von Jobs oder eine Ausnahme enthält.
      * @throws Exception: Wenn ein Fehler beim Abrufen der Jobs auftritt.
      */
-    suspend fun getJobs(berufsfeld: String, arbeitsort: String): Result<List<String>> {
-        return try {
+    suspend fun getJobs(berufsfeld: String, arbeitsort: String): Result<List<String>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             val response = apiService.getJobs(berufsfeld = berufsfeld, wo = arbeitsort)
 
             if (response.isSuccessful && response.body() != null) {
@@ -335,8 +338,8 @@ class Repository(
      * @return Ein Result-Objekt, das entweder eine Liste von Paaren (Titel des Jobs, Referenznummer) oder eine Ausnahme enthält.
      * @throws Exception: Wenn ein Fehler beim Abrufen der Jobangebote auftritt.
      */
-    suspend fun getJobOffers(was: String, arbeitsort: String): Result<List<Pair<String, String>>> {
-        return try {
+    suspend fun getJobOffers(was: String, arbeitsort: String): Result<List<Pair<String, String>>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             val response = apiService.getJobOffers(was, wo = arbeitsort)
 
             if (response.isSuccessful && response.body() != null) {
@@ -366,8 +369,8 @@ class Repository(
      * @return Ein Result-Objekt, das entweder die Jobdetails oder eine Ausnahme enthält.
      * @throws Exception: Wenn ein Fehler beim Abrufen der Jobdetails auftritt.
      */
-    suspend fun getJobDetails(encodedHashID: String): Result<JobDetailsResponse> {
-        return try {
+    suspend fun getJobDetails(encodedHashID: String): Result<JobDetailsResponse> = withContext(Dispatchers.IO) {
+        return@withContext try {
             // Kodiert die RefNr in Base64
             val base64EncodedHashID =
                 Base64.encodeToString(encodedHashID.toByteArray(charset("UTF-8")), Base64.NO_WRAP)
@@ -409,8 +412,8 @@ class Repository(
         orte: String,
         sprachniveau: String,
         beginntermine: Int
-    ): Result<List<TerminResponse>> {
-        return try {
+    ): Result<List<TerminResponse>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             val response = courseAPIService.getEducationalOffer(
                 systematiken,
                 orte,

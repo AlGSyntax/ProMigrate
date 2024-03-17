@@ -498,10 +498,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                 username = email,
                                 languageCode = languageCode
                             )
-                            repository.createUserProfile(
-                                userId,
-                                userProfile
-                            ) // Rufe die Methode aus dem Repository auf
+                            viewModelScope.launch {
+                                repository.createUserProfile(userId, userProfile)
+                            }
                         }
                         _registrationStatus.value = RegistrationStatus(success = true)
                     } else {
@@ -552,8 +551,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                 username = user.email ?: "",
                                 languageCode = languageCode
                             )
-                           // Es wird das erstellte Benutzerprofil speichern.
-                            repository.createUserProfile(userId, userProfile)
+                            viewModelScope.launch {
+                                repository.createUserProfile(userId, userProfile)
+                            }
                         }
                         // Der Registrierungsstatus wird aktualisiert, um den Erfolg anzuzeigen.
                         _registrationStatus.value = RegistrationStatus(success = true)
