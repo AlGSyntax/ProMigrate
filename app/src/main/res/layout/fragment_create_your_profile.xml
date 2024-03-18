@@ -154,15 +154,13 @@
         android:fontFamily="@font/quicksandvariablefontwght"
         android:text="@string/datapolicy"
         android:textColor="@color/textcolor"
-        app:boxCornerRadiusBottomEnd="32dp"
-        app:boxCornerRadiusBottomStart="32dp"
-        app:boxCornerRadiusTopEnd="32dp"
-        app:boxCornerRadiusTopStart="32dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:buttonTint="@color/textcolor" />
+         />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"
