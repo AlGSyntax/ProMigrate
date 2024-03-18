@@ -145,7 +145,7 @@
         app:layout_constraintVertical_bias="0.1" />
 
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cbDataProtection"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
@@ -161,7 +161,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:buttonTint="@color/textcolor" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"
