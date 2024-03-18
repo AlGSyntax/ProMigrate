@@ -41,6 +41,8 @@
         android:background="@drawable/et_border"
         android:fontFamily="@font/quicksandvariablefontwght"
         android:hint="@string/name"
+        android:autofillHints="name"
+        android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="@color/textcolor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,6 +57,7 @@
         android:background="@drawable/et_border"
         android:fontFamily="@font/quicksandvariablefontwght"
         android:hint="@string/age"
+        android:autofillHints="age"
         android:minHeight="48dp"
         android:inputType="number"
         android:textColor="@color/textcolor"
@@ -98,7 +101,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddContact"
         style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
@@ -144,7 +147,7 @@
 
     <CheckBox
         android:id="@+id/cbDataProtection"
-        android:layout_width="347dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="597dp"
         android:layout_marginBottom="86dp"
@@ -162,7 +165,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="667dp"
