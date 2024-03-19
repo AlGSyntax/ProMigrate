@@ -13,6 +13,10 @@
         <item name="colorOnError">@color/colorError</item>
         <item name="colorSurface">@color/background</item>
         <item name="colorOnSurface">@color/titles</item>
+        <item name="colorOnBackground">@color/titles</item>
+
+
+
     </style>
 
     <style name="SpinnerTextStyle">

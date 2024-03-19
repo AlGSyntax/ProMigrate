@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.promigrate.MainViewModel
-import com.example.promigrate.R
+import com.example.promigrate.databinding.FragmentViewPagerBinding
 
 /**
  * ViewPagerFragment ist ein Fragment, das einen ViewPager2 enthält.
@@ -21,6 +21,10 @@ class ViewPagerFragment : Fragment() {
     // Die Verwendung von activityViewModels() bietet Zugriff auf das ViewModel, das von der
     // zugehörigen Activity genutzt wird.
     val viewModel: MainViewModel by activityViewModels()
+
+    // Binding-Objekt, das Zugriff auf die im XML definierten Views ermöglicht.
+    // Wird nullable gehalten, da es zwischen onCreateView und onDestroyView null sein kann.
+    private var binding: FragmentViewPagerBinding? = null
 
     // Der ViewPager2, der die verschiedenen Seiten anzeigt.
     private lateinit var viewPager: ViewPager2
@@ -35,7 +39,8 @@ class ViewPagerFragment : Fragment() {
      * @return :Die erstellte Ansicht des Fragments.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_view_pager, container, false)
+        binding = FragmentViewPagerBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     /**
@@ -47,7 +52,8 @@ class ViewPagerFragment : Fragment() {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewPager = view.findViewById(R.id.viewPager)
+
+        viewPager = binding!!.viewPager
         viewPager.adapter = MyViewPagerAdapter(this)
     }
 
@@ -86,5 +92,16 @@ class ViewPagerFragment : Fragment() {
                 else -> throw IllegalStateException("Unexpected position $position")
             }
         }
+    }
+
+
+    /**
+     * Wird aufgerufen, wenn die View-Hierarchie des Fragments zerstört wird.
+     * Hier wird das Binding-Objekt auf null gesetzt, um Memory Leaks zu vermeiden,
+     * da das Binding-Objekt eine Referenz auf die View hält, welche nicht länger existiert.
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }
