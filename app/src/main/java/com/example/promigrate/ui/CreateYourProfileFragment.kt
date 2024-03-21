@@ -108,15 +108,15 @@ class CreateYourProfileFragment : Fragment() {
          * werden sie durch die `translateArbeitsorte` Methode übersetzt. Ein ArrayAdapter wird dann mit den übersetzten
          * Arbeitsorten initialisiert und dem autoCompleteTextView zugewiesen.
          */
-        viewModel.occupationalfields.observe(viewLifecycleOwner) { berufsfelder ->
-            if (berufsfelder != null) {
+        viewModel.occupationalfields.observe(viewLifecycleOwner) { occupationalfields ->
+            if (occupationalfields != null) {
                 // Wenn Berufsfelder erfolgreich geladen wurden, übersetzt es sie und setzt sie im AutoCompleteTextView.
-                viewModel.translateOccupationalFields(berufsfelder) { translatedBerufsfelder ->
+                viewModel.translateOccupationalFields(occupationalfields) { translatedOccupationalFields ->
                     // Setzt den Adapter nach der Übersetzung
                     val adapter = ArrayAdapter(
                         requireContext(),
                         android.R.layout.simple_dropdown_item_1line,
-                        translatedBerufsfelder
+                        translatedOccupationalFields
                     )
                     binding!!.autoCompleteTextView.setAdapter(adapter)
                 }
@@ -133,15 +133,15 @@ class CreateYourProfileFragment : Fragment() {
          * werden sie durch die `translateArbeitsorte` Methode übersetzt. Ein ArrayAdapter wird dann mit den übersetzten
          * Arbeitsorten initialisiert und dem autoCompleteTextView2 zugewiesen.
          */
-        viewModel.worklocations.observe(viewLifecycleOwner) { arbeitsorte ->
-            if (arbeitsorte != null) {
+        viewModel.worklocations.observe(viewLifecycleOwner) { worklocations ->
+            if (worklocations != null) {
                 // Wenn Arbeitsorte erfolgreich geladen wurden, übersetzt es sie und setzt sie im AutoCompleteTextView2.
-                viewModel.translateWorkLocations(arbeitsorte) { translatedArbeitsorte ->
+                viewModel.translateWorkLocations(worklocations) { translatedWorkLocations ->
                     // Setzt den Adapter nach der Übersetzung
                     val adapter = ArrayAdapter(
                         requireContext(),
                         android.R.layout.simple_dropdown_item_1line,
-                        translatedArbeitsorte
+                        translatedWorkLocations
                     )
                     binding!!.autoCompleteTextView2.setAdapter(adapter)
                 }

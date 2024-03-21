@@ -84,11 +84,11 @@ class IntegrationCourseFragment : Fragment() {
 
 
         // Beobachtet die educationaloffers im ViewModel
-        viewModel.educationaloffers.observe(viewLifecycleOwner) { angebote ->
+        viewModel.educationaloffers.observe(viewLifecycleOwner) { offers ->
             // Übersetzt die Bildungsangebote
-            viewModel.translateEducationalOffers(angebote) { translatedAngebote ->
+            viewModel.translateEducationalOffers(offers) { translatedOffers ->
                 // Aktualisiert die Liste im Adapter mit den übersetzten Angeboten
-                integrationCourseAdapter.submitList(translatedAngebote)
+                integrationCourseAdapter.submitList(translatedOffers)
             }
         }
 

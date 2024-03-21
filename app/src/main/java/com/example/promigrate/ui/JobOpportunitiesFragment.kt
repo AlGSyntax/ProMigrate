@@ -116,7 +116,7 @@ class JobOpportunitiesFragment : Fragment() {
         val arbeitsort = args.arbeitsort // Der Arbeitsort, der als Argument übergeben wurde.
 
         // Übersetzt den Arbeitsort ins Deutsche, um die Abfrage an die API korrekt zu stellen.
-        viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
+        viewModel.translateToGerman(arbeitsort) { translatedWorkLocation ->
             // Iteriert über die Liste der ausgewählten Jobtitel.
             selectedJobs.forEach { selectedJob ->
                 // Übersetzt den ausgewählten Job ins Deutsche, um die Abfrage an die API korrekt zu stellen.
@@ -124,7 +124,7 @@ class JobOpportunitiesFragment : Fragment() {
                     // Ruft die Jobangebote ab, die zu den übersetzten Jobtiteln und dem übersetzten Arbeitsort passen.
                     viewModel.fetchJobOffers(
                         was = translatedJobs,
-                        arbeitsort = translatedArbeitsort
+                        arbeitsort = translatedWorkLocation
                     )
                 }
             }

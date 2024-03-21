@@ -113,13 +113,13 @@ class JobsForYouFragment : Fragment() {
         val arbeitsort = arguments?.getString("wo") ?: ""
 
         // Übersetzt das Berufsfeld aus den Argumenten ins Deutsche.
-        viewModel.translateToGerman(berufsfeld) { translatedBerufsfeld ->
+        viewModel.translateToGerman(berufsfeld) { translatedOccupationalField ->
             // Übersetzt den Arbeitsort aus den Argumenten ins Deutsche.
-            viewModel.translateToGerman(arbeitsort) { translatedArbeitsort ->
+            viewModel.translateToGerman(arbeitsort) { translatedWorkLocation ->
                 // Ruft Jobdaten ab, indem die übersetzten Werte von Berufsfeld und Arbeitsort verwendet werden.
                 viewModel.fetchJobNomination(
-                    berufsfeld = translatedBerufsfeld,
-                    arbeitsort = translatedArbeitsort
+                    berufsfeld = translatedOccupationalField,
+                    arbeitsort = translatedWorkLocation
                 )
             }
         }
