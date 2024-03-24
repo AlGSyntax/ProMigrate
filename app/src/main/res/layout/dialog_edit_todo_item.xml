@@ -8,12 +8,13 @@
     tools:ignore="UnusedResources">
 
     <EditText
-        android:id="@+id/editTextToDoEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/quicksandvariablefontwght"
         android:hint="@string/edit_todo_hint"
+        android:autofillHints="name"
         android:minHeight="48dp"
         android:textColor="@color/textcolor"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:inputType="text" />
 </LinearLayout>

@@ -11,15 +11,19 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:hint="@string/fronttext"
+        android:autofillHints="name"
         android:fontFamily="@font/quicksandvariablefontwght"
-        android:textColor="@color/textcolor"/>
+        android:textColor="@color/textcolor"
+        android:inputType="text" />
     <EditText
         android:id="@+id/backEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:hint="@string/backtext"
+        android:autofillHints="name"
         android:fontFamily="@font/quicksandvariablefontwght"
-        android:textColor="@color/textcolor" />
+        android:textColor="@color/textcolor"
+        android:inputType="text" />
 
 </LinearLayout>

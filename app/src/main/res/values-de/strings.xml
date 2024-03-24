@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">ProMigrate</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_text">Willkommen</string>
     <string name="email">E-Mail</string>
     <string name="password">Passwort</string>
@@ -14,7 +13,6 @@
     <string name="cypheader">Erstelle dein Profil</string>
     <string name="name">Benutzername</string>
     <string name="age">Alter</string>
-    <string name="currentoccupation">Ihre derzeitige Beschäftigung</string>
     <string name="addcontactinfo">Kontaktinformationen hinzufügen</string>
     <string name="datapolicy">Datenschutzrichtlinie</string>
     <string name="saveandgo">Speichern &amp; Weiter</string>
@@ -22,15 +20,10 @@
     <string name="invalid_password_error">Das Passwort muss mindestens 8 Zeichen lang sein</string>
     <string name="password_mismatch_error">Die Passwörter stimmen nicht überein</string>
     <string name="invalid_password_error_login">Passwort darf nicht leer sein</string>
-    <string name="password_criteria_error">Das Passwort muss mindestens 8 Zeichen lang sein und
-        eine Kombination aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen
-        (@#$%^&amp;+=!) enthalten.</string>
-    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Bestätigen</string>
     <string name="choose_your_language">Wähle deine Sprache</string>
     <string name="GoogleSignUp">GoogleSignUp</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
-    <string name="language_level_1">Sprachniveau: 1</string>
     <string name="desired_location_hint">gewünschter Standort</string>
     <string name="beginner">A1: Anfänger</string>
     <string name="basic_knowledge">A2: Grundlegende Kenntnisse</string>
@@ -59,7 +52,6 @@
     <string name="emptyfirstname">Vorname darf nicht leer sein</string>
     <string name="emptylastname">Nachname darf nicht leer sein</string>
     <string name="emptyphonenumber">Telefonnummer darf nicht leer sein</string>
-    <string name="allentavalid">Alle Einträge sind gültig.</string>
     <string name="save">Speichern</string>
     <string name="cancel">Abbrechen</string>
     <string name="close">Schließen</string>
@@ -85,7 +77,6 @@
     <string name="todojobresearch">Job-Recherche</string>
     <string name="logout">Ausloggen</string>
     <string name="hellouser">Hallo, %1$s!</string>
-    <string name="unknownuser">Unbekannter Benutzer</string>
     <string name="exit">Exit</string>
     <string name="employer">Arbeitgeber: %1$s</string>
     <string name="location">Ort: %1$s</string>
@@ -153,8 +144,6 @@
     <string name="delete_account">Account löschen</string>
     <string name="account_deletion_failed">Konto konnte nicht gelöscht werden</string>
     <string name="delete_account_confirmation">Bitte bestätigen Sie ihre Löschung</string>
-    <string name="delete_account_header">Es ist traurig das du uns verlässt</string>
-    <string name="account_deleted">Konto erfolgreich gelöscht</string>
     <string name="funded">Der Kurs wird gefördert.</string>
     <string name="not_funded">Der Kurs wird nicht gefördert.</string>
     <string name="typeofdegree">Art des Abschlusses: %s</string>
@@ -169,7 +158,6 @@
     <string name="notfoundoccu">Berufsfeld nicht im Profil gesetzt</string>
     <string name="fillfields">Bitte fülle alle Felder aus</string>
     <string name="nojobofffound">Kein Stellenangebot gefunden</string>
-    <string name="errorload">Fehler beim Laden des Profilbilds</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>
     <string name="chooseapicture">Wählen Sie ein Profilbild</string>
     <string name="jobresearch">Klicken Sie auf dieses Bild, um zum Job-Recherche-Bildschirm zu gelangen</string>

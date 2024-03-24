@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">ProMigrate</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_text">Ласкаво просимо</string>
     <string name="email">Електронна пошта</string>
     <string name="password">пароль</string>
@@ -14,7 +13,6 @@
     <string name="cypheader">Створіть свій профіль</string>
     <string name="name">Ім\'я користувача</string>
     <string name="age">Вік</string>
-    <string name="currentoccupation">Ваша поточна професія</string>
     <string name="addcontactinfo">Додати контактну інформацію</string>
     <string name="datapolicy">DПолітика захисту даних </string>
     <string name="saveandgo">Зберегти та продовжити</string>
@@ -22,14 +20,10 @@
     <string name="invalid_password_error">Пароль має бути не менше 8 символів</string>
     <string name="password_mismatch_error">Паролі не співпадають</string>
     <string name="invalid_password_error_login">Пароль не може бути порожнім</string>
-    <string name="password_criteria_error">Пароль має бути не менше 8 символів і включати комбінацію
-        великих і малих літер, цифр та спеціальних символів (@#$%^&amp;+=!).</string>
-    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="confirm">Підтвердити</string>
     <string name="choose_your_language">Оберіть свою мову</string>
     <string name="GoogleSignUp">Реєстрація через Google</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
-    <string name="language_level_1">Рівень мови: 1</string>
     <string name="beginner">A1: Початковий</string>
     <string name="basic_knowledge">A2: Основні знання</string>
     <string name="intermediate">B1: Середній рівень</string>
@@ -58,7 +52,6 @@
     <string name="emptyfirstname">Ім\'я не може бути порожнім</string>
     <string name="emptylastname">Прізвище не може бути порожнім</string>
     <string name="emptyphonenumber">Номер телефону не може бути порожнім</string>
-    <string name="allentavalid">Усі роботи є дійсними.</string>
     <string name="save">Зберегти</string>
     <string name="cancel">Скасувати</string>
     <string name="close">Закрити</string>
@@ -84,7 +77,6 @@
     <string name="todojobresearch">Пошук роботи</string>
     <string name="logout">Вийти</string>
     <string name="hellouser">Привіт, %1$s!</string>
-    <string name="unknownuser">Невідомий користувач</string>
     <string name="exit">Вихід</string>
     <string name="employer">Роботодавець: %1$s</string>
     <string name="location">Місце розташування: %1$s</string>
@@ -144,8 +136,6 @@
     <string name="delete_account">Видалити акаунт</string>
     <string name="account_deletion_failed">Видалення акаунта не вдалося</string>
     <string name="delete_account_confirmation">Підтвердьте, будь ласка, видалення акаунта</string>
-    <string name="delete_account_header">Сумно, що ви залишаєте нас</string>
-    <string name="account_deleted">Ваш акаунт успішно видалено</string>
     <string name="funded">Курс спонсорується.</string>
     <string name="not_funded">Курс не фінансується.</string>
     <string name="typeofdegree">Тип ступеня: %s</string>
@@ -160,7 +150,6 @@
     <string name="notfoundoccu">Поле професії не встановлено в профілі</string>
     <string name="fillfields">Заповніть, будь ласка, всі поля</string>
     <string name="nojobofffound">Не знайдено жодної вакансії</string>
-    <string name="errorload">Виникла помилка при завантаженні зображення профілю</string>
     <string name="authentication_failed">МОДЕЛЬ ГОЛОВНОГО ВИДАННЯ</string>
     <string name="chooseapicture">Выберите фотографию профиля</string>.
     <string name="jobresearch">Нажмите на это изображение, чтобы перейти на страницу поиска работы</string>

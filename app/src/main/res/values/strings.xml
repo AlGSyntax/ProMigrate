@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">ProMigrate</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_text">Welcome</string>
     <string name="email">E-Mail</string>
     <string name="password">Password</string>
@@ -14,7 +13,6 @@
     <string name="cypheader">Create your Profile</string>
     <string name="name">Username</string>
     <string name="age">Age</string>
-    <string name="currentoccupation">Your current Occupation</string>
     <string name="addcontactinfo">Add Contact Information</string>
     <string name="datapolicy">Data Protection Policy</string>
     <string name="saveandgo">Save &amp; Go</string>
@@ -22,15 +20,10 @@
     <string name="invalid_password_error">Password must be at least 8 characters long</string>
     <string name="password_mismatch_error">Passwords do not match</string>
     <string name="invalid_password_error_login">Password cannot be empty</string>
-    <string name="password_criteria_error">Password must be at least 8 characters long and
-        include a mix of upper and lower case letters, numbers, and special
-        characters (@#$%^&amp;+=!).</string>
     <string name="confirm">Confirm</string>
-    <string name="passwordpattern"><![CDATA[^(?=.*[0–9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$]]></string>
     <string name="choose_your_language">Choose Your Language</string>
     <string name="GoogleSignUp">GoogleSignup</string>
     <string name="default_web_client_id">33391475109-qrhsmk6lkmvb8jvemkq4jc8n2q1kgn9c.apps.googleusercontent.com</string>
-    <string name="language_level_1">Language level: 1</string>
     <string name="desired_location_hint">desired location</string>
     <string name="beginner">A1: Beginner</string>
     <string name="basic_knowledge">A2: Basic knowledge</string>
@@ -59,7 +52,6 @@
     <string name="emptyfirstname">First Name cannot be empty</string>
     <string name="emptylastname">Last Name cannot be empty</string>
     <string name="emptyphonenumber">Phone Number cannot be empty</string>
-    <string name="allentavalid">All entries are valid.</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
@@ -85,7 +77,6 @@
     <string name="todojobresearch">Job Research</string>
     <string name="logout">LogOut</string>
     <string name="hellouser">Hi, %1$s!</string>
-    <string name="unknownuser">Unknown User</string>
     <string name="exit">Exit</string>
     <string name="employer">Employer: %1$s</string>
     <string name="location">Location: %1$s</string>
@@ -145,8 +136,6 @@
     <string name="delete_account">Delete account</string>
     <string name="account_deletion_failed">Account deletion failed</string>
     <string name="delete_account_confirmation">Please affirm your Account deletion</string>
-    <string name="delete_account_header">It is sad that you are leaving us </string>
-    <string name="account_deleted">Your account has been successfully deleted</string>
     <string name="funded">The course is sponsored.</string>
     <string name="not_funded">The course is not funded.</string>
     <string name="typeofdegree">Type of degree: %s</string>
@@ -161,7 +150,6 @@
     <string name="notfoundoccu">Occupational field not set in profile</string>
     <string name="fillfields">Please fill in all fields</string>
     <string name="nojobofffound">No Job Offer found</string>
-    <string name="errorload">Error loading the profile picture</string>
     <string name="authentication_failed">MAINVIEWMODEL</string>
     <string name="chooseapicture">Choose a Profile-Picture</string>
     <string name="jobresearch">Click on this picture to go to the  Job Research screen</string>

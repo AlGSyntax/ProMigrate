@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/flashcard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="4dp"
@@ -9,14 +8,13 @@
     android:layout_margin="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/flashcard_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
         <!-- Vorderseite der Karteikarte -->
         <TextView
-            android:id="@+id/card_front"
+            android:id="@+id/cardFront"
             android:layout_width="222dp"
             android:layout_height="26dp"
             android:textAlignment="center"
@@ -32,7 +30,7 @@
 
         <!-- Rückseite der Karteikarte -->
         <TextView
-            android:id="@+id/card_back"
+            android:id="@+id/cardBack"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAlignment="center"

@@ -104,7 +104,7 @@ class LanguageSelectionFragment : Fragment() {
             }
 
         // Setzt einen OnClickListener auf den btnConfirmLanguage Button.
-        binding!!.btnConfirmLanguage.setOnClickListener {
+        binding!!.btnConfirmLanguageSelection.setOnClickListener {
             // Erstellt eine Aktion für die Navigation basierend auf den NavDirections.
             val action =
                 LanguageSelectionFragmentDirections.actionLanguageSelectionFragmentToLoginFragment()
