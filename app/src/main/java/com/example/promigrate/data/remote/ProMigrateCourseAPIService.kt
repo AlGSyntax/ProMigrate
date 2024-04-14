@@ -64,7 +64,7 @@ object ProMigrateCourseAPI {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-        // Erstellt eine Instanz des ProMigrateCourseAPIService.Test um was udududu
+        // Erstellt eine Instanz des ProMigrateCourseAPIService.
         retrofitService = retrofit.create(ProMigrateCourseAPIService::class.java)
     }
 }
