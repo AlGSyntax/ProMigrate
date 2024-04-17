@@ -202,9 +202,9 @@ Wenn Sie bei einem dieser Projekte mitwirken möchten oder eigene Vorschläge ha
 
 
 
-Dieses Projekt basiert auf verschiedenen Quellen und Ressourcen, die wesentliche Informationen und Daten bereitgestellt haben. Für ein tieferes Verständnis der konzeptionellen Grundlagen und der verwendeten Methoden und Technologien empfehlen wir folgende Literatur und Ressourcen:
+Dieses Projekt basiert auf verschiedenen Quellen und Ressourcen, die wesentliche Informationen und Daten bereitgestellt haben. Für ein tieferes Verständnis der konzeptionellen Grundlagen und der verwendeten Methoden und Technologien empfehle Ich folgende Literatur und Ressourcen:
 
--   **Artikel zur konzeptionellen Grundlage**: Für Einblicke in die Methoden und die Thematik der digitalen Rekrutierung und Integration von internationalen Fachkräften verweisen Ich auf:
+-   **Artikel zur konzeptionellen Grundlage**: Für Einblicke in die Methoden und die Thematik der digitalen Rekrutierung und Integration von internationalen Fachkräften verweise Ich auf:
 
     -   Fischer, A.; Dörpinghaus, J. Web Mining of Online Resources for German Labor Market Research and Education: Finding the Ground Truth? Knowledge 2024, 4, 51-67. [https://doi.org/10.3390/knowledge4010003](https://doi.org/10.3390/knowledge4010003)
 -   **Initiative bund.dev**: Das Projekt nutzt APIs, die durch die Initiative bund.dev dokumentiert und zur Verfügung gestellt werden. Diese Initiative hat zum Ziel, öffentliche Daten und Dienste zugänglicher zu machen und fördert die Entwicklung von Anwendungen, die auf diesen Daten aufbauen. Für weitere Informationen über bund.dev und die verfügbaren APIs besuchen Sie bitte [bund.dev](https://bund.dev/).
