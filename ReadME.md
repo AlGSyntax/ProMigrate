@@ -114,7 +114,7 @@ Android Studio & Kotlin sind die Hauptentwicklungsumgebung und -sprache für die
 
 - Um das Projekt zu starten, klonen Sie zunächst das Repository mit dem folgenden Befehl:
 
-> `git clone https://github.com/SI-Classroom-Batch-012/batch12-abschlussprojekt-android-AlGSyntax.git`
+> `git clone https://github.com/AlGSyntax/ProMigrate-AlGSyntax.git`
 
 ### Schritt 2 : Vorraussetzungen
 
@@ -122,7 +122,7 @@ Android Studio & Kotlin sind die Hauptentwicklungsumgebung und -sprache für die
 
 
 
-> `cd batch12-abschlussprojekt-android-AlGSyntax`
+> `cd ProMigrate-AlGSyntax`
 
 ### Schritt 3 : Einrichtung
 
@@ -146,7 +146,7 @@ Android Studio & Kotlin sind die Hauptentwicklungsumgebung und -sprache für die
 
 ### Schritt 7 : Hilfe und Support
 
-- Sollten Sie während der Installation oder Nutzung Fragen haben oder auf Probleme stoßen, wenden Sie sich bitte an den Kundensupport unter promigratecostumersupport@protonmail.com.
+- Sollten Sie während der Installation oder Nutzung Fragen haben oder auf Probleme stoßen, wenden Sie sich bitte an den Kundensupport unter adelcastifo@gmail.com.
 
 # Architektur und Design
 
