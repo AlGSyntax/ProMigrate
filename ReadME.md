@@ -5,6 +5,7 @@
 [🇬🇧 English Version](#english-version) | [🇩🇪 Deutsche Version](#deutsche-version)
 
 
+
 ## English Version
 
 
@@ -145,7 +146,7 @@ These additional features make the digital platform a comprehensive tool that su
 
 ### Step 7: Help and Support
 
-- If you have any questions or encounter issues during installation or usage, please contact customer support at adelcastifo@gmail.com.
+- If you have any questions or encounter any problems during installation or use, please contact me at.
 
 
 # Architecture and Design
@@ -354,7 +355,7 @@ Android Studio & Kotlin sind die Hauptentwicklungsumgebung und -sprache für die
 
 ### Schritt 7 : Hilfe und Support
 
-- Sollten Sie während der Installation oder Nutzung Fragen haben oder auf Probleme stoßen, wenden Sie sich bitte an den Kundensupport unter adelcastifo@gmail.com.
+- Sollten Sie während der Installation oder Nutzung Fragen haben oder auf Probleme stoßen, wenden Sie sich bitte einfach an mich unter adelcastifo@gmail.com.
 
 # Architektur und Design
 
