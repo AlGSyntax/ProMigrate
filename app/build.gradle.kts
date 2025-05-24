@@ -1,12 +1,13 @@
 import java.util.Properties
 
 plugins {
-    id("com.android.application") version "8.10.0"
-    id("org.jetbrains.kotlin.android") version "2.1.21"              // Kotlin Gradle Plugin [oai_citation:3‡kotlinlang.org](https://kotlinlang.org/docs/releases.html#:~:text=To%20upgrade%20your%20project%20to,file)
-    id("com.google.gms.google-services") version "4.4.2"             // Google Services Gradle Plugin [oai_citation:4‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Performance%20Monitoring%20plugin%20%20com.google.firebase%3Aperf,appcheck)
-    id("com.google.firebase.crashlytics") version "3.0.3"            // Firebase Crashlytics Gradle Plugin [oai_citation:5‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Crashlytics%20%20com.google.firebase%3Afirebase,dataconnect%2016.0.2)
-    id("com.google.firebase.firebase-perf") version "1.4.2"          // Firebase Performance Gradle Plugin [oai_citation:6‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=modeldownloader%2025,database%2021.0.0)
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1"             // Kotlin Symbol Processing (KSP) Plugin [oai_citation:7‡github.com](https://github.com/google/ksp#:~:text=google%2Fksp%3A%20Kotlin%20Symbol%20Processing%20API,No) [oai_citation:8‡mvnrepository.com](https://mvnrepository.com/artifact/com.google.devtools.ksp/com.google.devtools.ksp.gradle.plugin/2.1.21-2.0.1#:~:text=com.google.devtools.ksp.gradle.plugin%20%C2%BB%202.1.21,gle%2Fksp%20%C2%B7%20May%2014%2C%202025)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs.kotlin")// Kotlin Gradle Plugin [oai_citation:3‡kotlinlang.org](https://kotlinlang.org/docs/releases.html#:~:text=To%20upgrade%20your%20project%20to,file)
+    id("com.google.gms.google-services")             // Google Services Gradle Plugin [oai_citation:4‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Performance%20Monitoring%20plugin%20%20com.google.firebase%3Aperf,appcheck)
+    id("com.google.firebase.crashlytics")         // Firebase Crashlytics Gradle Plugin [oai_citation:5‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Crashlytics%20%20com.google.firebase%3Afirebase,dataconnect%2016.0.2)
+    id("com.google.firebase.firebase-perf")        // Firebase Performance Gradle Plugin [oai_citation:6‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=modeldownloader%2025,database%2021.0.0)
+    id("com.google.devtools.ksp")           // Kotlin Symbol Processing (KSP) Plugin [oai_citation:7‡github.com](https://github.com/google/ksp#:~:text=google%2Fksp%3A%20Kotlin%20Symbol%20Processing%20API,No) [oai_citation:8‡mvnrepository.com](https://mvnrepository.com/artifact/com.google.devtools.ksp/com.google.devtools.ksp.gradle.plugin/2.1.21-2.0.1#:~:text=com.google.devtools.ksp.gradle.plugin%20%C2%BB%202.1.21,gle%2Fksp%20%C2%B7%20May%2014%2C%202025)
 }
 
 android {
