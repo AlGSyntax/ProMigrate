@@ -3,7 +3,7 @@ package com.example.promigrate.data.remote
 import android.content.Context
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.JobResponse
-import com.google.android.datatransport.BuildConfig
+import com.example.promigrate.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
