@@ -44,7 +44,7 @@ interface ProMigrateAPIService {
     ): Response<JobResponse>
 
     // Abrufen von Details zu einem spezifischen Job.
-    @GET("jobboerse/jobsuche-service/pc/v2/jobdetails/{encodedHashID}")
+    @GET("jobboerse/jobsuche-service/pc/v4/jobdetails/{encodedHashID}")
     suspend fun getJobDetails(@Path("encodedHashID") encodedHashID: String?): Response<JobDetailsResponse>
 }
 

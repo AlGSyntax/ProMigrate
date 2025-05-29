@@ -89,7 +89,8 @@ dependencies {
 
     // --- JSON Parser ---
     implementation("com.squareup.moshi:moshi:1.15.2")                           // Moshi JSON-Bibliothek (Kotlin-freundlich) [oai_citation:41‡mvnrepository.com](https://mvnrepository.com/artifact/com.squareup.moshi/moshi-kotlin#:~:text=1) [oai_citation:42‡mvnrepository.com](https://mvnrepository.com/artifact/com.squareup.moshi/moshi-kotlin#:~:text=May%2012%2C%202023)
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.2")                    // Moshi Kotlin-Adapter (für Dataclasses)
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.2")
+    // Moshi Kotlin-Adapter (für Dataclasses)
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")                       // Moshi Codegen (Annotation Processing über KSP) [oai_citation:43‡github.com](https://github.com/square/moshi/blob/master/CHANGELOG.md#:~:text=moshi%2FCHANGELOG.md%20at%20master%20,faster%20and%20better%20supports) [oai_citation:44‡github.com](https://github.com/google/ksp#:~:text=google%2Fksp%3A%20Kotlin%20Symbol%20Processing%20API,No)
 
     // --- Image Loading Libraries ---
@@ -117,13 +118,11 @@ dependencies {
     // --- Guava (Google Core Libraries für Java) ---
     implementation("com.google.guava:guava:33.4.8-android")                     // Guava Android-Version (Core Libraries) [oai_citation:62‡github.com](https://github.com/google/guava#:~:text=google%2Fguava%3A%20Google%20core%20libraries%20for,com.google.guava%3Aguava) [oai_citation:63‡mvnrepository.com](https://mvnrepository.com/artifact/com.google.guava/guava#:~:text=match%20at%20L124%2033.4.8)
 
-    // --- DeepL Java Client (Übersetzungs-API) ---
-    implementation("com.deepl.api:deepl-java:1.10.0")                           // DeepL API Java Client Library [oai_citation:64‡mvnrepository.com](https://mvnrepository.com/artifact/com.deepl.api/deepl-java#:~:text=1) [oai_citation:65‡mvnrepository.com](https://mvnrepository.com/artifact/com.deepl.api/deepl-java#:~:text=1)
+    implementation("androidx.security:security-crypto:1.0.0")
 
-    // --- Test Dependencies ---
-    testImplementation("junit:junit:4.13.2")                                    // JUnit 4 für Unit-Tests [oai_citation:66‡junit.org](https://junit.org/junit4/dependency-info.html#:~:text=Apache%20Maven.%20,13) [oai_citation:67‡javadoc.io](https://javadoc.io/doc/junit/junit/latest/index.html#:~:text=JUnit%204.13.2%20API%20,1)
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")                  // AndroidX JUnit Erweiterung (Instrumented Tests) [oai_citation:68‡developer.android.com](https://developer.android.com/jetpack/androidx/releases/test#:~:text=junit%201,ext) [oai_citation:69‡mvnrepository.com](https://mvnrepository.com/artifact/androidx.test.ext#:~:text=androidx.test.ext%20,ext)
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")     // Espresso UI-Testing Framework [oai_citation:70‡developer.android.com](https://developer.android.com/training/testing/espresso/setup#:~:text=Android%20developer.android.com%20%20androidTestImplementation%20%27androidx.test.espresso%3Aespresso,com.android) [oai_citation:71‡github.com](https://github.com/cvs-health/android-view-accessibility-techniques/blob/main/doc/EspressoAutomatedAccessibilityTesting.md#:~:text=Espresso%20Automated%20Accessibility%20Testing%20,accessibility%3A3.6.1)
-    androidTestImplementation("androidx.test:runner:1.6.2")                     // AndroidX Test Runner (AndroidJUnitRunner) [oai_citation:72‡mvnrepository.com](https://mvnrepository.com/artifact/androidx.test/runner#:~:text=androidx.test%20%C2%BB%20runner%20,0) [oai_citation:73‡mvnrepository.com](https://mvnrepository.com/artifact/androidx.test/runner#:~:text=AndroidX%20Test%20Library%20%3B%201,0)
-    androidTestImplementation("androidx.test:rules:1.6.2")                      // AndroidX Test Rules (zusätzliche Testregeln, optional)
+
+
+
+
+
 }

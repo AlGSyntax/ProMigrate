@@ -151,6 +151,7 @@ class Repository(
     }
 
 
+
     /**
      * Holt das Benutzerprofil für die gegebene Benutzer-ID aus der Firestore-Datenbank.
      * Wenn das Dokument existiert, wird es in ein Profile-Objekt konvertiert und in einem MutableLiveData-Objekt gespeichert.

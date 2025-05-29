@@ -37,7 +37,7 @@ interface DeepLApiService {
                         // Den DeepL-API-Schlüssel zum Authorization-Header hinzufügen.
                         .addHeader("Authorization", "DeepL-Auth-Key ${BuildConfig.DEEP_L_API_KEY}")
                         // Den User-Agent-Header hinzufügen.
-                        .addHeader("User-Agent", "YourApp/1.2.3")
+                        .addHeader("User-Agent", "ProMigrate/1.0")
                         .build()
                     chain.proceed(newRequest)
                 })
