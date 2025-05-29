@@ -118,7 +118,8 @@ dependencies {
     // --- Guava (Google Core Libraries für Java) ---
     implementation("com.google.guava:guava:33.4.8-android")                     // Guava Android-Version (Core Libraries) [oai_citation:62‡github.com](https://github.com/google/guava#:~:text=google%2Fguava%3A%20Google%20core%20libraries%20for,com.google.guava%3Aguava) [oai_citation:63‡mvnrepository.com](https://mvnrepository.com/artifact/com.google.guava/guava#:~:text=match%20at%20L124%2033.4.8)
 
-    implementation("androidx.security:security-crypto:1.0.0")
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha07")
+// (zieht security-crypto transitiv mit)
 
 
 
