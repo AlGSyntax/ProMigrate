@@ -89,9 +89,6 @@ class LanguageSelectionFragment : Fragment() {
                         0 -> "en"
                         1 -> "de"
                         2 -> "es"
-                        3 -> "ja"
-                        4 -> "ru"
-                        5 -> "uk"
                         else -> "en"
                     }
                     // Speichert die ausgewählte Sprache.

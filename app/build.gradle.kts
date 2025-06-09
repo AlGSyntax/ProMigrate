@@ -66,7 +66,7 @@ android {
 dependencies {
     // --- AndroidX Core UI Libraries ---
     implementation("androidx.core:core-ktx:1.16.0")                     // AndroidX Core KTX [oai_citation:12‡developer.android.com](https://developer.android.com/jetpack/androidx/releases/core#:~:text=Core%20and%20Core)
-    implementation("androidx.appcompat:appcompat:1.7.0")                // AndroidX AppCompat [oai_citation:13‡developer.android.com](https://developer.android.com/jetpack/androidx/releases/appcompat#:~:text=Version%201)
+    implementation("androidx.appcompat:appcompat:1.7.1")                // AndroidX AppCompat [oai_citation:13‡developer.android.com](https://developer.android.com/jetpack/androidx/releases/appcompat#:~:text=Version%201)
     implementation("com.google.android.material:material:1.12.0")       // Material Components für Android [oai_citation:14‡mvnrepository.com](https://mvnrepository.com/artifact/com.google.android.material/material#:~:text=1)
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")  // ConstraintLayout (Views) [oai_citation:15‡developer.android.com](https://developer.android.com/jetpack/androidx/releases/constraintlayout#:~:text=Version%202) [oai_citation:16‡developer.android.com](https://developer.android.com/jetpack/androidx/releases/constraintlayout#:~:text=February%2026%2C%202025)
 
@@ -74,7 +74,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:22.4.0")     // Firebase Analytics [oai_citation:17‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=AdMob%20%20com.google.android.gms%3Aplay,playintegrity%2018.0.0) [oai_citation:18‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Analytics%20%20com.google.firebase%3Afirebase,api)
     implementation("com.google.firebase:firebase-auth:23.2.1")          // Firebase Authentication [oai_citation:19‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=App%20Distribution%20plugin%20%20com.google.firebase%3Afirebase,firestore%2025.1.4%20%20108%20com.google.firebase%3Afirebase) [oai_citation:20‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Authentication%20%20com.google.firebase%3Afirebase,gradle%203.0.3)
     implementation("com.google.firebase:firebase-firestore:25.1.4")     // Firebase Firestore (Cloud Firestore) [oai_citation:21‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=App%20Distribution%20plugin%20%20com.google.firebase%3Afirebase,firestore%2025.1.4%20%20108%20com.google.firebase%3Afirebase) [oai_citation:22‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Authentication%20%20com.google.firebase%3Afirebase,gradle%203.0.3)
-    implementation("com.google.firebase:firebase-crashlytics:19.4.3")   // Firebase Crashlytics SDK [oai_citation:23‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Cloud%20Messaging%20%20com.google.firebase%3Afirebase,beta03) [oai_citation:24‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Crashlytics%20%20com.google.firebase%3Afirebase,dataconnect%2016.0.2)
+    implementation("com.google.firebase:firebase-crashlytics:19.4.4")   // Firebase Crashlytics SDK [oai_citation:23‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Cloud%20Messaging%20%20com.google.firebase%3Afirebase,beta03) [oai_citation:24‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Crashlytics%20%20com.google.firebase%3Afirebase,dataconnect%2016.0.2)
     implementation("com.google.firebase:firebase-perf:21.0.5")          // Firebase Performance Monitoring SDK [oai_citation:25‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Firebase%20installations%20%20com.google.firebase%3Afirebase,config%2022.1.2) [oai_citation:26‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=modeldownloader%2025,database%2021.0.0)
     implementation("com.google.firebase:firebase-storage:21.0.2")       // Firebase Cloud Storage [oai_citation:27‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Cloud%20Functions%20for%20Firebase%20Client,crashlytics%2019.4.3) [oai_citation:28‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Cloud%20Messaging%20%20com.google.firebase%3Afirebase,beta03)
     implementation("com.google.firebase:firebase-database:21.0.0")      // Firebase Realtime Database [oai_citation:29‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=modeldownloader%2025,services%204.4.2) [oai_citation:30‡firebase.google.com](https://firebase.google.com/support/release-notes/android#:~:text=Performance%20Monitoring%20plugin%20%20com.google.firebase%3Aperf,appcheck)
@@ -118,12 +118,14 @@ dependencies {
     // --- Guava (Google Core Libraries für Java) ---
     implementation("com.google.guava:guava:33.4.8-android")                     // Guava Android-Version (Core Libraries) [oai_citation:62‡github.com](https://github.com/google/guava#:~:text=google%2Fguava%3A%20Google%20core%20libraries%20for,com.google.guava%3Aguava) [oai_citation:63‡mvnrepository.com](https://mvnrepository.com/artifact/com.google.guava/guava#:~:text=match%20at%20L124%2033.4.8)
 
-    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha07")
+    implementation("androidx.credentials:credentials:1.5.0")
+
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+
+    implementation("androidx.security:security-crypto-ktx:1.1.0-beta01")
 // (zieht security-crypto transitiv mit)
-
-
-
-
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
 }

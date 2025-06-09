@@ -173,6 +173,14 @@ class CreateYourProfileFragment : Fragment() {
             val lastNameEditText = dialogBinding.etLastName
             val phoneNumEditText = dialogBinding.etPhoneNumber
 
+            // Vorbelegen, falls der Benutzer den Dialog erneut öffnet
+            streetEditText.setText(additionalStreet)
+            birthPlaceEditText.setText(additionalBirthPlace)
+            maidenNameEditText.setText(additionalMaidenName)
+            firstNameEditText.setText(additionalFirstName)
+            lastNameEditText.setText(additionalLastName)
+            phoneNumEditText.setText(additionalPhoneNum)
+
             // Erstellt und zeigt den Dialog.
             MaterialAlertDialogBuilder(it.context, R.style.CustomAlertDialog)
                 .setView(dialogView)

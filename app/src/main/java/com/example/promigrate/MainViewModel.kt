@@ -650,6 +650,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Sach-, Personen- und Feuerschutz, Arbeitssicherheit" -> "Objekt-, Personen-, Brandschutz, Arbeitssicherheit"
                     "Beamte" -> "Offiziere"
                     "Verwaltung der Humanressourcen und Dienstleistungen" -> "Personalwesen und -dienstleistung"
+                    "Datenwissenschaftler" -> "Data Scientist"
+                    "Verkauf (keine Produktspezialisierung)" -> "Verkauf (ohne Produktspezialisierung)"
+                    "Kaufmann/-frau - Groß- und Außenhandelsmanagement (Großhandel)" -> "Kaufmann/-frau - Groß- und Außenhandelsmanagement (Großhandel)"
+                    "Wholesale & foreign trade clerk (wholesale)" -> "Kaufmann/-frau - Groß- und Außenhandelsmanagement (Großhandel)"
 
 
                     else -> translatedText

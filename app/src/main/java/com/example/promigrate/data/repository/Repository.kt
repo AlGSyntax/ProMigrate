@@ -17,6 +17,8 @@ import com.example.promigrate.data.remote.ProMigrateCourseAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -90,6 +92,8 @@ class Repository(
         }
     }
 
+
+
     /**
      * Lädt die Spracheinstellung des Benutzers aus den SharedPreferences.
      * Wenn keine Spracheinstellung gefunden wird, wird die Standardsprache des Systems zurückgegeben.
@@ -125,6 +129,30 @@ class Repository(
     }
 
 
+    // Repository.kt (z. B. im init-Block)
+    private val glossaryEn: Map<String, String> by lazy {
+        val json = context.assets.open("glossary_de_en.json")
+            .bufferedReader().use { it.readText() }
+        // Moshi oder Gson – hier Moshi:
+        val moshi = Moshi.Builder().build()
+        val type  = Types.newParameterizedType(Map::class.java,
+            String::class.java, String::class.java)
+        moshi.adapter<Map<String, String>>(type).fromJson(json) ?: emptyMap()
+    }
+
+    private val glossaryEs: Map<String, String> by lazy {
+        val json = context.assets.open("glossary_de_es.json")
+            .bufferedReader().use { it.readText() }
+        val moshi = Moshi.Builder().build()
+        val type  = Types.newParameterizedType(
+            Map::class.java,
+            String::class.java,
+            String::class.java
+        )
+        moshi.adapter<Map<String, String>>(type).fromJson(json) ?: emptyMap()
+    }
+
+
     /**
      * Übersetzt einen gegebenen Text in die angegebene Zielsprache mithilfe eines Übersetzungsdienstes (z. B. DeepL API).
      * Diese Funktion wird asynchron ausgeführt und liefert das Ergebnis der Übersetzung zurück.
@@ -134,18 +162,30 @@ class Repository(
      * @param targetLanguage: Der Sprachcode der Zielsprache, in die der Text übersetzt werden soll.
      * @return: Ein Objekt vom Typ TranslationResult, das das Ergebnis der Übersetzung enthält, oder null bei einem Fehler.
      */
-    suspend fun translateText(text: String, targetLanguage: String): TranslationResult? = withContext(
-        Dispatchers.IO) {
-        Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
-        return@withContext try {
-            // Ruft den Übersetzungsdienst mit dem gegebenen Text und Zielsprachcode auf.
-            val response =
-                deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
-            Log.d("translateText", "Übersetzung erfolgreich, Antwort = $response")
-            // Gibt das erste Übersetzungsergebnis zurück, da hier immer nur ein Text übersetzt wird.
-            response.translations.first() // Gibt das erste Übersetzungsergebnis zurück
+    suspend fun translateText(
+        text: String,
+        targetLanguage: String
+    ): TranslationResult? = withContext(Dispatchers.IO) {
+
+        // 1) Glossar-Look-up (de→en oder de→es)
+        val glossaryHit = when {
+            targetLanguage.equals("en", true) -> glossaryEn[text.trim()]
+            targetLanguage.equals("es", true) -> glossaryEs[text.trim()]
+            else -> null
+        }
+
+        if (glossaryHit != null) {
+            Log.d("translateText", "Glossar-Treffer ➜ $glossaryHit")
+            return@withContext TranslationResult(text = glossaryHit, detected_source_language = "de")   // eigenes Datenmodell
+        }
+
+        // 2) Fallback auf DeepL
+        try {
+            val response = deepLApiService
+                .translateText(TranslationRequest(listOf(text), targetLanguage))
+            response.translations.first()
         } catch (e: Exception) {
-            Log.e("translateText", "Fehler bei der Übersetzung", e)
+            Log.e("translateText", "DeepL-Fehler", e)
             null
         }
     }
