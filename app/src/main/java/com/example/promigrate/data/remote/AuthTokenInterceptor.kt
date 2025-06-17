@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.promigrate.data.remote
 
 import android.content.Context
@@ -12,6 +14,7 @@ import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+import androidx.core.content.edit
 
 /**
  * Interceptor für alle Arbeitsagentur-Aufrufe.
@@ -57,7 +60,7 @@ class AuthTokenInterceptor(
         val token = getToken()                                     // ggf. leer
         if (token.isNotBlank()) originalBuilder.addHeader("Authorization", "Bearer $token")
 
-        var request = originalBuilder.build()
+        val request = originalBuilder.build()
         var response = chain.proceed(request)
 
         // ---------- 2) Token erneuern, falls 401 oder Ablauf ----------
@@ -150,10 +153,10 @@ class AuthTokenInterceptor(
     }
 
     private fun saveToken(token: String, expiryMillis: Long) {
-        prefs.edit().apply {
+        prefs.edit {
             putString(KEY_TOKEN, token)
             putLong(KEY_EXPIRY, expiryMillis)
-        }.apply()
+        }
     }
 
     companion object {

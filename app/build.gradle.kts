@@ -127,5 +127,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 
+    implementation("io.noties.markwon:core:4.6.2")
+
 
 }

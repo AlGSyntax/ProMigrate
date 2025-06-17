@@ -1,5 +1,6 @@
 package com.example.promigrate.data.repository
 
+//import com.example.promigrate.data.remote.ProMigrateCourseAPIService
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
@@ -8,12 +9,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
-import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPIService
-import com.example.promigrate.data.remote.ProMigrateCourseAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -23,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import androidx.core.content.edit
 
 /**
  * Die Repository-Klasse dient als zentrale Anlaufstelle für die Datenverarbeitung in der Anwendung.
@@ -34,7 +34,6 @@ import java.util.Locale
  * @param firestore: Eine Instanz von FirebaseFirestore zur Interaktion mit der Firestore-Datenbank.
  * @param apiService: Eine Instanz von ProMigrateAPIService zur Interaktion mit der ProMigrate-API.
  * @param deepLApiService: Eine Instanz von DeepLApiService zur Interaktion mit der DeepL-API.
- * @param courseAPIService: Eine Instanz von ProMigrateCourseAPIService zur Interaktion mit der ProMigrateCourse-API.
  */
 class Repository(
     context: Context,
@@ -42,7 +41,7 @@ class Repository(
     private val firestore: FirebaseFirestore,
     private val apiService: ProMigrateAPIService,
     private val deepLApiService: DeepLApiService,
-    private val courseAPIService: ProMigrateCourseAPIService
+
 ) {
 
 
@@ -69,7 +68,6 @@ class Repository(
          * @param firestore: Eine Instanz von FirebaseFirestore zur Interaktion mit der Firestore-Datenbank.
          * @param apiService: Eine Instanz von ProMigrateAPIService zur Interaktion mit der ProMigrate-API.
          * @param deepLApiService: Eine Instanz von DeepLApiService zur Interaktion mit der DeepL-API.
-         * @param langLearnAPIService: Eine Instanz von ProMigrateCourseAPIService zur Interaktion mit der ProMigrateCourse-API.
          * @return: Eine Singleton-Instanz der Repository-Klasse.
          */
         fun getInstance(
@@ -77,8 +75,7 @@ class Repository(
             firebaseAuth: FirebaseAuth,
             firestore: FirebaseFirestore,
             apiService: ProMigrateAPIService,
-            deepLApiService: DeepLApiService,
-            langLearnAPIService: ProMigrateCourseAPIService
+            deepLApiService: DeepLApiService
         ):
                 Repository {
             return INSTANCE ?: Repository(
@@ -87,7 +84,7 @@ class Repository(
                 firestore,
                 apiService,
                 deepLApiService,
-                langLearnAPIService
+
             ).also { INSTANCE = it }
         }
     }
@@ -123,7 +120,7 @@ class Repository(
      */
     suspend fun saveLanguageSetting(languageCode: String) = withContext(Dispatchers.IO) {
         try {
-            sharedPreferences.edit().putString("SelectedLanguage", languageCode).apply()
+            sharedPreferences.edit { putString("SelectedLanguage", languageCode) }
         } catch (_: Exception) {
         }
     }
@@ -435,45 +432,6 @@ class Repository(
     }
 
 
-    /**
-     * Ruft die Bildungsangebote von der ProMigrateCourse-API ab, basierend auf den gegebenen Parametern.
-     * Diese Funktion wird asynchron ausgeführt und gibt ein Result-Objekt zurück, das eine Liste von TerminResponse-Objekten enthält.
-     * Im Erfolgsfall enthält das Result-Objekt eine Liste der abgerufenen Bildungsangebote.
-     * Im Fehlerfall enthält das Result-Objekt eine Ausnahme mit einer Fehlermeldung.
-     *
-     * @param systematiken: Die Systematiken, für die die Bildungsangebote abgerufen werden sollen.
-     * @param orte: Die Orte, für die die Bildungsangebote abgerufen werden sollen.
-     * @param sprachniveau: Das Sprachniveau, für das die Bildungsangebote abgerufen werden sollen.
-     * @param beginntermine: Die Beginntermine, für die die Bildungsangebote abgerufen werden sollen.
-     * @return Ein Result-Objekt, das entweder eine Liste von TerminResponse-Objekten oder eine Ausnahme enthält.
-     * @throws Exception: Wenn ein Fehler beim Abrufen der Bildungsangebote auftritt.
-     */
-    suspend fun getEducationalOffers(
-        systematiken: String?,
-        orte: String,
-        sprachniveau: String,
-        beginntermine: Int
-    ): Result<List<TerminResponse>> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            val response = courseAPIService.getEducationalOffer(
-                systematiken,
-                orte,
-                sprachniveau,
-                beginntermine,
-                "basc"
-            )
-            if (response.isSuccessful) {
-                val termine = response.body()?._embedded?.termine ?: listOf()
-                Result.success(termine)
-            } else {
-
-                Result.failure(Exception("Fehler beim Abrufen der Bildungsangebote: ${response.message()}"))
-            }
-        } catch (e: Exception) {
-
-            Result.failure(e)
-        }
-    }
 
 
 }

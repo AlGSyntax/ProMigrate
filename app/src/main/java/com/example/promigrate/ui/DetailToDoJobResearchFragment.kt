@@ -1,6 +1,7 @@
 package com.example.promigrate.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,11 +96,14 @@ class DetailToDoJobResearchFragment : Fragment() {
         // Bei erfolgreicher Abfrage werden die Jobdetails ggf. übersetzt und an den Adapter weitergeleitet, um sie anzuzeigen.
         viewModel.jobDetails.observe(viewLifecycleOwner) { result ->
             result.onSuccess { jobDetails ->
+                Log.d("DetailFrag", "RAW  refnr=${jobDetails.refnr}")
                 // Übersetzen der erhaltenen Jobdetails und Aktualisieren der Anzeige im Adapter.
                 viewModel.translateJobDetails(jobDetails) { translatedJobDetails ->
+                    Log.d("DetailFrag", "TRAN refnr=${translatedJobDetails.refnr}")
                     // Überprüfung, ob die Referenznummer vorhanden ist, und Weitergabe der Details an den Adapter.
                     translatedJobDetails.refnr?.let { refnr ->
                         adapter.setJobDetails(refnr, translatedJobDetails)
+                        Log.e("DetailFrag", "Jobdetails-Fehler")
                     }
                 }
             }.onFailure { exception ->

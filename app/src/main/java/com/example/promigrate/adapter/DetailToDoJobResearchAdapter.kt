@@ -1,6 +1,7 @@
 package com.example.promigrate.adapter
 
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.R
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.databinding.ToDoResearchItemBinding
+import androidx.core.view.isVisible
+import io.noties.markwon.Markwon
 
 
 /**
@@ -89,6 +92,7 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
         private val binding: ToDoResearchItemBinding,
         private val onItemClicked: (String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+        private val markwon: Markwon = Markwon.create(binding.root.context)
 
         /**
          * Bindet die Daten eines Jobs und die zugehörigen Details (falls vorhanden) an die Ansicht.
@@ -97,13 +101,35 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
          * @param details: Die Details des Jobs, wie z.B. Arbeitgeber, Ort, Arbeitszeitmodell usw.
          */
         fun bind(job: Pair<String, String>, details: JobDetailsResponse?) {
+            Log.d(
+                "Adapter",
+                "arbeitsorte=${details?.arbeitsorte?.size}  ort=${
+                    details?.arbeitsorte?.firstOrNull()?.adresse?.ort
+                }  str=${details?.arbeitsorte?.firstOrNull()?.adresse?.strasse}"
+            )
             binding.textViewTitle.text = job.first
+
+            binding.hiddenView.visibility = if (details != null) View.VISIBLE else View.GONE
             details?.let {
+                val firstOrt = it.arbeitsorte?.firstOrNull()
+
+                val streetCombined = when {
+                    firstOrt?.adresse?.strasse     != null &&
+                            firstOrt.adresse.strasseHausnummer    != null -> "${firstOrt.adresse.strasse} ${firstOrt.adresse.strasseHausnummer}"
+                    firstOrt?.adresse?.strasse     != null ->  firstOrt.adresse.strasse
+                    else -> null
+                }
+
+
                 binding.textViewEmployer.text =
                     binding.root.context.getString(R.string.employer, it.arbeitgeber ?: "N/A")
                 binding.textViewLocation.text = binding.root.context.getString(
                     R.string.location,
-                    it.arbeitgeberAdresse?.ort ?: "N/A"
+                    firstOrt?.adresse?.ort ?: "N/A"
+                )
+                binding.textViewEmployerAddress.text = binding.root.context.getString(
+                    R.string.employeraddress,
+                    streetCombined ?: "N/A"
                 )
                 binding.textViewWorkModel.text = binding.root.context.getString(
                     R.string.work_model,
@@ -115,36 +141,33 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
                 )
                 binding.textViewSalary.text =
                     binding.root.context.getString(R.string.salary, it.verguetung ?: "N/A")
-                binding.textViewDescription.apply {
-                    text = binding.root.context.getString(
-                        R.string.description,
-                        it.stellenbeschreibung ?: "N/A"
-                    )
-                    movementMethod = LinkMovementMethod.getInstance()
-                }
+                val markdownDesc = it.stellenbeschreibung ?: "N/A"
+                markwon.setMarkdown(binding.textViewDescription, markdownDesc)
+                binding.textViewDescription.movementMethod = LinkMovementMethod.getInstance()
                 binding.textViewBranch.text =
                     binding.root.context.getString(R.string.branch, it.branche ?: "N/A")
                 binding.textViewJob.text =
                     binding.root.context.getString(R.string.job, it.beruf ?: "N/A")
-                binding.textViewEmployerAddress.text = binding.root.context.getString(
-                    R.string.employeraddress,
-                    it.arbeitgeberAdresse?.strasse ?: "N/A"
-                )
-
             }
 
 
             /**
              * Setzt einen OnClickListener für das gesamte Item, um auf Klickereignisse zu reagieren.
-             * Wenn auf ein Item geklickt wird, wird die Sichtbarkeit des versteckten Views umgeschaltet,
-             * und der Callback onItemClicked wird mit der Referenznummer des Jobs aufgerufen.
+             * Neues Verhalten: Sichtbarkeit toggeln nur, wenn Details bereits geladen, sonst Placeholder anzeigen.
              */
             binding.root.setOnClickListener {
+                val hasDetails = jobDetailsMap.containsKey(job.second)
 
-                // Wechselt die Sichtbarkeit der Detailansicht bei jedem Klick.
-                binding.hiddenView.visibility =
-                    if (binding.hiddenView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                // Ruft den Callback onItemClicked auf und übergibt die Referenznummer des Jobs.
+                if (hasDetails) {
+                    // Daten bereits geladen - es wird die Ansicht toggeln und die Details anzeigen/verstecken
+                    binding.hiddenView.visibility =
+                        if (binding.hiddenView.isVisible) View.GONE else View.VISIBLE
+                } else {
+                    // Daten noch nicht geladen - es wird ein Placeholder angezeigt
+                    binding.textViewEmployer.text = binding.root.context.getString(R.string.welcome_text)
+                }
+
+                // In jedem Fall Details anfordern
                 onItemClicked(job.second)
             }
         }
@@ -208,5 +231,3 @@ class DetailToDoJobResearchAdapter(private val onItemClicked: (String) -> Unit) 
         }
     }
 }
-
-

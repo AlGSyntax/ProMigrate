@@ -34,6 +34,15 @@ class JobOpportunitiesFragment : Fragment() {
     // Definiert ein MutableMap für ausgewählte Jobreferenznummern, die den Jobtiteln zugeordnet sind.
     private var selectedJobRefNrs = mutableMapOf<String, String>()
 
+    // Zeigt bzw. versteckt Progress‑Bar und RecyclerView
+    private fun setLoading(isLoading: Boolean) {
+        binding?.apply {
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            rvJobs.visibility      = if (isLoading) View.GONE   else View.VISIBLE
+            finishbtn.isEnabled    = !isLoading
+        }
+    }
+
     // Initialisiert den JobOpportunitiesAdapter mit einem Lambda-Callback. Dieser Callback wird
     // aufgerufen, wenn der Zustand einer Checkbox in der Jobliste geändert wird.
     private val jobsAdapter = JobOpportunitiesAdapter { jobTitle, refNr, isChecked ->
@@ -75,6 +84,8 @@ class JobOpportunitiesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initial: Lade‑Spinne anzeigen, bis Daten eintreffen
+        setLoading(true)
 
         // Setzt den LayoutManager für das RecyclerView, der bestimmt, wie die Elemente angeordnet werden.
         // Hier wird ein LinearLayoutManager verwendet, der die Elemente in einer vertikalen Liste anordnet.
@@ -134,12 +145,14 @@ class JobOpportunitiesFragment : Fragment() {
         viewModel.jobOffers.observe(viewLifecycleOwner) { jobOffers ->
             // Überprüft, ob die Stellenangebotsdaten erfolgreich abgerufen wurden.
             if (jobOffers != null) {
+                setLoading(false)   // Daten sind da – Ladeanzeige aus
                 // Übersetzt die Jobtitel mithilfe der im ViewModel definierten Funktion translateJobTitles.
                 viewModel.translateJobOffers(jobOffers) { translatedJobOffers ->
                     // Aktualisiert die Liste im Adapter mit den ggf. übersetzten Jobtiteln.
                     jobsAdapter.submitList(translatedJobOffers)
                 }
             } else {
+                setLoading(false)
                 Toast.makeText(context, R.string.unkownjobserror, Toast.LENGTH_SHORT).show()
             }
         }

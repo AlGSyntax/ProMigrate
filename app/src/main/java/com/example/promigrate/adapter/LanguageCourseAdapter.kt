@@ -3,7 +3,6 @@ package com.example.promigrate.adapter
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
-import android.net.Uri
 import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
@@ -15,132 +14,139 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
+import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.promigrate.R
-import com.example.promigrate.adapter.LanguageCourseAdapter.DiffCallback
 import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.databinding.LanguageCourseItemBinding
 import java.util.Date
 import java.util.Locale
 
+
 /**
- * LanguageCourseAdapter ist eine Unterklasse von ListAdapter.
- * Dieser Adapter ist verantwortlich für die Darstellung und Interaktion mit der Liste der Sprachkurse in der Anwendung.
- * Er stellt eine Liste von TerminResponse-Objekten dar, die die Daten für jeden Sprachkurs enthalten.
- * Die Daten für die Sprachkurse werden von einem ViewModel bereitgestellt.
+ * LanguageCourseAdapter ist ein Adapter für die RecyclerView, der eine Liste von TerminResponse-Objekten verwaltet.
+ * Jedes Element stellt einen Sprachkurs dar und zeigt verschiedene relevante Informationen an,
+ * wie Titel, Anbieter, Adresse, Kosten, Abschlussart, Zielgruppe und Anmeldeschluss.
  *
- * @property DiffCallback: Ein DiffUtil.ItemCallback, der zwei TerminResponse-Objekte vergleicht, um effiziente Updates in der RecyclerView zu ermöglichen.
- * Dieser Callback optimiert die Aktualisierungen, indem er nur die geänderten Elemente neu rendert.
+ * Klickbare Links in der Kursbeschreibung werden automatisch erkannt und sind interaktiv.
+ * Durch einen Klick auf den Titel des Kurses kann der Benutzer die Detailansicht expandieren oder einklappen.
+ * Eine Animation sorgt für einen visuellen Effekt beim Einblenden der Kursdetails.
+ *
+ * Die Daten werden über DiffUtil effizient aktualisiert.
  */
 class LanguageCourseAdapter :
     ListAdapter<TerminResponse, LanguageCourseAdapter.LanguageCourseViewHolder>(DiffCallback) {
 
+
     /**
-     * Diese Methode ist Teil des RecyclerView.Adapter-Lebenszyklus und wird verwendet, um einen neuen ViewHolder zu erstellen.
-     * Sie bläht das Layout für jedes Element der RecyclerView auf und erstellt einen ViewHolder, um das aufgeblähte Layout zu halten.
-     * Der ViewHolder wird dann verwendet, um die Daten für jedes Element zu füllen.
+     * Erstellt einen neuen ViewHolder für ein Kurselement.
      *
-     * @param parent: Die ViewGroup, in die die neue Ansicht hinzugefügt wird, nachdem sie an eine Adapterposition gebunden wurde.
-     * @param viewType: Der Ansichtstyp der neuen Ansicht.
-     * @return LanguageCourseViewHolder: Gibt einen neuen ViewHolder zurück, der die Ansicht für jedes Element hält.
+     * @param parent Das übergeordnete ViewGroup-Element, in das der neue View eingefügt wird.
+     * @param viewType Der Typ des Views (wird hier nicht verwendet).
+     * @return Ein neuer LanguageCourseViewHolder mit dem zugehörigen Binding.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageCourseViewHolder {
-        val binding =
-            LanguageCourseItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = LanguageCourseItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LanguageCourseViewHolder(binding)
     }
 
-
     /**
-     * Diese Methode ist Teil des RecyclerView.Adapter-Lebenszyklus und wird verwendet, um die Daten eines Elements an einen ViewHolder zu binden.
-     * Sie wird aufgerufen, um die Daten für ein neues Element, das in der RecyclerView angezeigt wird, zu füllen.
+     * Bindet die Daten eines Kurs-Elements an den ViewHolder.
      *
-     * @param holder: Der ViewHolder, der die Daten für das Element hält.
-     * @param position: Die Position des Elements in der Datenliste.
+     * @param holder Der ViewHolder, der die Kursdaten hält.
+     * @param position Die Position des Elements in der Liste.
      */
     override fun onBindViewHolder(holder: LanguageCourseViewHolder, position: Int) {
         val kurs = getItem(position)
         holder.bind(kurs)
     }
 
+
     /**
-     * LanguageCourseViewHolder ist eine Unterklasse von RecyclerView.ViewHolder.
-     * Ein ViewHolder hält die Ansicht für ein RecyclerView-Element und ermöglicht es, die Daten für dieses Element zu füllen.
+     * ViewHolder zur Darstellung eines einzelnen Sprachkurs-Items.
+     * Bindet die jeweiligen Felder aus TerminResponse an die zugehörigen Views und sorgt für Interaktivität.
      *
-     * @property binding: Das Binding-Objekt, das Zugriff auf die Ansichten im Layout ermöglicht.
+     * @property binding Das Binding-Objekt für die Item-View.
      */
     inner class LanguageCourseViewHolder(
-        val binding: LanguageCourseItemBinding
+        private val binding: LanguageCourseItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
 
         /**
-         * Diese Methode wird verwendet, um die Daten eines Sprachkurses an einen ViewHolder zu binden.
-         * Sie füllt die Ansichten im ViewHolder mit den Daten aus dem Sprachkurs.
+         * Bindet die Daten eines TerminResponse-Objekts an die Views.
+         * - Zeigt Titel, Anbieter, Adresse, Kosten, Abschlussart, Zielgruppe, Prüfung, Beginn, Ende und Anmeldeschluss an.
+         * - Setzt klickbare Links in der Kursbeschreibung.
+         * - Handhabt das Expandieren/Einklappen der Detailansicht mit Bounce-Animation.
          *
-         * @param kurs: Der Sprachkurs, dessen Daten an den ViewHolder gebunden werden.
+         * @param kurs Das TerminResponse-Objekt mit den Kursdaten.
+         *//**
+         * Bindet die Daten eines TerminResponse-Objekts an die Views.
+         * - Zeigt Titel, Anbieter, Adresse, Kosten, Abschlussart, Zielgruppe, Prüfung, Beginn, Ende und Anmeldeschluss an.
+         * - Setzt klickbare Links in der Kursbeschreibung.
+         * - Handhabt das Expandieren/Einklappen der Detailansicht mit Bounce-Animation.
+         *
+         * @param kurs Das TerminResponse-Objekt mit den Kursdaten.
          */
         fun bind(kurs: TerminResponse) {
-
-            // Setzt den Kurs-Titel. Wenn kein Titel vorhanden ist, wird "N/A" angezeigt.
+            // Kurstitel
             binding.langcourseTextView.text = kurs.angebot?.titel ?: "N/A"
 
-            kurs.angebot?.bildungsanbieter?.name?.let {
-                binding.bildungsanbieterTextView.text = binding.root.context.getString(R.string.provider, it)
+            // Anbietername
+            kurs.angebot?.bildungsanbieter?.name?.let { name ->
+                binding.bildungsanbieterTextView.text = binding.root.context.getString(R.string.provider, name)
             } ?: run {
                 binding.bildungsanbieterTextView.text = binding.root.context.getString(R.string.provider, "N/A")
             }
 
-            kurs.angebot?.bildungsanbieter?.adresse?.let {
-                val ortStrasseName =
-                    it.ortStrasse.name // Zugriff auf die `name` Eigenschaft von `ortStrasse`
-                binding.adresseTextView.text = binding.root.context.getString(R.string.address, ortStrasseName)
+            // Addresse
+            kurs.angebot?.bildungsanbieter?.adresse?.let { addressObj ->
+                val streetName = addressObj.ortStrasse.name  // OrtStrasse name property
+                binding.adresseTextView.text = binding.root.context.getString(R.string.address, streetName)
             } ?: run {
                 binding.adresseTextView.text = binding.root.context.getString(R.string.address, "N/A")
             }
 
+            // Prüfende Stelle
             kurs.pruefendeStelle?.let {
                 binding.pruefendeStelleTextView.text = binding.root.context.getString(R.string.examining_authority, it)
             } ?: run {
                 binding.pruefendeStelleTextView.text = binding.root.context.getString(R.string.examining_authority, "N/A")
             }
 
+            // Kursbeginn
             kurs.beginn?.let {
-
-                binding.beginnTextView.text =
-                    binding.root.context.getString(R.string.begin, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
+                binding.beginnTextView.text = binding.root.context.getString(
+                    R.string.begin,
+                    SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it)
+                )
             } ?: run {
                 binding.beginnTextView.text = binding.root.context.getString(R.string.begin, "N/A")
             }
 
-
+            // Kursende
             kurs.ende?.let {
-
-                binding.endeTextView.text = binding.root.context.getString(R.string.end, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
+                binding.endeTextView.text = binding.root.context.getString(
+                    R.string.end,
+                    SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it)
+                )
             } ?: run {
                 binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
             }
 
-
-
-
-            // Anzeige der Kursbeschreibung. Links werden interaktiv gestaltet.
-            kurs.angebot?.inhalt?.let { bemerkung ->
-                val spannableContent =
-                    SpannableString(Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT))
+            // Kursbeschreibung mit klickbaren Links
+            kurs.angebot?.inhalt?.let { rawHtml ->
+                val spannableContent = SpannableString(Html.fromHtml(rawHtml, Html.FROM_HTML_MODE_COMPACT))
                 Patterns.WEB_URL.matcher(spannableContent).apply {
                     while (find()) {
                         val url = spannableContent.substring(start(), end())
                         spannableContent.setSpan(object : ClickableSpan() {
-                            override fun onClick(widget: View) = widget.context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(url)
-                                )
-                            )
-
+                            override fun onClick(widget: View) {
+                                widget.context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+                            }
                             override fun updateDrawState(ds: TextPaint) {
                                 super.updateDrawState(ds)
                                 ds.isUnderlineText = true
@@ -148,142 +154,88 @@ class LanguageCourseAdapter :
                         }, start(), end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
-                binding.contentTextView.apply {
-                    text = spannableContent
-                    movementMethod = LinkMovementMethod.getInstance()
-
-                }
-
-
-                // Setzt den Kostenwert des Kurses. Wenn kein Wert vorhanden ist, wird "N/A" angezeigt.
-                kurs.kostenWert?.let { kosten ->
-                    val kostenText = "${kosten}€"
-                    binding.kostenTextView.text =
-                        binding.root.context.getString(R.string.cost, kostenText)
-                } ?: run {
-                    binding.kostenTextView.text =
-                        binding.root.context.getString(R.string.cost, "N/A")
-                }
-
-
-                // Zeigt an, ob der Kurs gefördert wird oder nicht.
-                binding.foerderungTextView.text = if (kurs.foerderung == true) {
-                    binding.root.context.getString(R.string.funded)
-                } else {
-                    binding.root.context.getString(R.string.not_funded)
-                }
-
-
-                // Anzeige der Art des Abschlusses und der Zielgruppe, HTML-Format wird berücksichtigt.
-                kurs.angebot.abschlussart?.let { abschlussart ->
-                    val formattedHtml = Html.fromHtml(abschlussart, Html.FROM_HTML_MODE_COMPACT)
-                    binding.abschlussArtTextView.text =
-                        binding.root.context.getString(R.string.typeofdegree, formattedHtml)
-                } ?: run {
-                    binding.abschlussArtTextView.text =
-                        binding.root.context.getString(R.string.typeofdegree, "N/A")
-                }
-
-                kurs.angebot.zielgruppe?.let { zielgruppe ->
-                    val formattedHtml = Html.fromHtml(zielgruppe, Html.FROM_HTML_MODE_COMPACT)
-                    binding.zielGruppeTextView.text =
-                        binding.root.context.getString(R.string.targetgroup, formattedHtml)
-                } ?: run {
-                    binding.zielGruppeTextView.text =
-                        binding.root.context.getString(R.string.targetgroup, "N/A")
-                }
-
-
-
-
-
-                kurs.anmeldeschluss?.let {
-                    // Erstellen eines SimpleDateFormat-Objekts mit deutschem Datumsformat
-                    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
-
-                    // Umwandlung des Unix-Zeitstempels (in Millisekunden) in ein Date-Objekt
-                    val date = Date(it.toLong())
-
-                    // Formatieren des Datum-Objekts zu einem String
-                    val formattedDate = sdf.format(date)
-
-                    // Setzen des formatierten Datums in die TextView
-                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(
-                        R.string.anmeldeschluss_format, formattedDate
-                    )
-                } ?: run {
-                    // Fallback, wenn kein Anmeldeschluss vorhanden ist
-                    binding.anmeldeSchlussTextView.text =
-                        binding.root.context.getString(R.string.anmeldeschluss_format, "N/A")
-                }
-
-
-
-                // Setzt einen OnClickListener auf den TextView, der den Kursnamen anzeigt
-                binding.langcourseTextView.setOnClickListener {
-                    binding.expandableView.visibility =
-                        if (binding.expandableView.visibility == View.VISIBLE) {
-                            View.GONE
-                        } else {
-                            View.VISIBLE
-                        }
-                }
-
+                binding.contentTextView.text = spannableContent
+                binding.contentTextView.movementMethod = LinkMovementMethod.getInstance()
+            } ?: run {
+                binding.contentTextView.text = ""
             }
 
+            // Kosten
+            kurs.kostenWert?.let { kosten ->
+                val kostenText = "${kosten}€"
+                binding.kostenTextView.text = binding.root.context.getString(R.string.cost, kostenText)
+            } ?: run {
+                binding.kostenTextView.text = binding.root.context.getString(R.string.cost, "N/A")
+            }
 
-            // Aufruf der Methode 'animateBounce()'
+            // // Förderung
+            binding.foerderungTextView.text = if (kurs.foerderung == true) {
+                binding.root.context.getString(R.string.funded)
+            } else {
+                binding.root.context.getString(R.string.not_funded)
+            }
+
+            // Abschlussart
+            kurs.angebot?.abschlussart?.let { abschlussHtml ->
+                val formatted = Html.fromHtml(abschlussHtml, Html.FROM_HTML_MODE_COMPACT)
+                binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree, formatted)
+            } ?: run {
+                binding.abschlussArtTextView.text = binding.root.context.getString(R.string.typeofdegree, "N/A")
+            }
+
+            // Zielgruppe
+            kurs.angebot?.zielgruppe?.let { zielHtml ->
+                val formatted = Html.fromHtml(zielHtml, Html.FROM_HTML_MODE_COMPACT)
+                binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, formatted)
+            } ?: run {
+                binding.zielGruppeTextView.text = binding.root.context.getString(R.string.targetgroup, "N/A")
+            }
+
+            // Anmeldeschluss
+            kurs.anmeldeschluss?.let { timestamp ->
+                val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
+                val date = Date(timestamp)
+                val formattedDate = sdf.format(date)
+                binding.anmeldeSchlussTextView.text = binding.root.context.getString(
+                    R.string.anmeldeschluss_format, formattedDate
+                )
+            } ?: run {
+                binding.anmeldeSchlussTextView.text = binding.root.context.getString(R.string.anmeldeschluss_format, "N/A")
+            }
+
+            // Expand/Collapse Detailbereich bei Klick auf den Kurstitel
+            binding.langcourseTextView.setOnClickListener {
+                binding.expandableView.visibility = if (binding.expandableView.isVisible) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+            }
+
+            // Animation beim Erscheinen des Items
             animateBounce()
         }
 
         /**
-         * Diese Methode wird aufgerufen, um eine Bounce-Animation auf dem ViewHolder auszuführen.
-         * Die Animation verändert die Y-Position des ViewHolders, um einen Bounce-Effekt zu erzeugen.
+         * Führt eine Bounce-Animation für das Item aus.
          */
         private fun animateBounce() {
-            // Animiere die Y-Position des ViewHolders
             ObjectAnimator.ofFloat(itemView, "translationY", -100f, 0f).apply {
-                duration = 1000  // Dauer der Animation in Millisekunden
-                interpolator =
-                    BounceInterpolator()  // Verwendet den BounceInterpolator für den Bounce-Effekt
+                duration = 1000  // animation duration in ms
+                interpolator = BounceInterpolator()
                 start()
             }
         }
-
     }
 
-
     /**
-     * Dies ist ein Begleitobjekt namens DiffCallback, das DiffUtil.ItemCallback<TerminResponse> erweitert.
-     * DiffUtil ist eine Hilfsklasse, die den Unterschied zwischen zwei Listen berechnet und eine Liste von Update-Operationen ausgibt,
-     * die die erste Liste in die zweite umwandelt.
-     * Es kann verwendet werden, um Updates für einen RecyclerView Adapter zu berechnen.
-     * DiffUtil verwendet Eugene W. Myers's Differenzalgorithmus, um die minimale Anzahl von Updates zu berechnen, die benötigt werden, um eine Liste in eine andere umzuwandeln.
-     *
+     * DiffUtil Callback zur effizienten Aktualisierung der Liste.
+     * Vergleicht die Elemente anhand ihrer ID und ihres Inhalts.
      */
     companion object DiffCallback : DiffUtil.ItemCallback<TerminResponse>() {
-
-        /**
-         * Wird aufgerufen, um zu überprüfen, ob zwei Objekte das gleiche Element darstellen.
-         * Wenn Ihre Elemente beispielsweise eindeutige IDs haben, sollte diese Methode ihre ID-Gleichheit überprüfen.
-         *
-         * @param oldItem Das TerminResponse-Element aus der alten Liste.
-         * @param newItem Das TerminResponse-Element aus der neuen Liste.
-         * @return True, wenn die beiden Elemente das gleiche Objekt darstellen, oder false, wenn sie unterschiedlich sind.
-         */
         override fun areItemsTheSame(oldItem: TerminResponse, newItem: TerminResponse): Boolean {
             return oldItem.id == newItem.id
         }
-
-        /**
-         * Wird aufgerufen, um zu überprüfen, ob zwei Elemente die gleichen Daten haben.
-         * Diese Information wird verwendet, um zu erkennen, ob sich der Inhalt eines Elements geändert hat.
-         * Diese Methode wird nur aufgerufen, wenn areItemsTheSame(T, T) für diese Elemente true zurückgibt.
-         *
-         * @param oldItem Das TerminResponse-Element aus der alten Liste.
-         * @param newItem Das TerminResponse-Element aus der neuen Liste.
-         * @return True, wenn der Inhalt der Elemente gleich ist, oder false, wenn sie unterschiedlich sind.
-         */
         override fun areContentsTheSame(oldItem: TerminResponse, newItem: TerminResponse): Boolean {
             return oldItem == newItem
         }

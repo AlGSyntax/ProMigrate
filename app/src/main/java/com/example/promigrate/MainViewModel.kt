@@ -1,5 +1,6 @@
 package com.example.promigrate
 
+//import com.example.promigrate.data.remote.ProMigrateCourseAPI
 import android.app.Application
 import android.net.Uri
 import android.util.Log
@@ -18,7 +19,6 @@ import com.example.promigrate.data.model.ToDoItem
 import com.example.promigrate.data.model.ToDoItemRelocation
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPI
-import com.example.promigrate.data.remote.ProMigrateCourseAPI
 import com.example.promigrate.data.repository.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
 /**
@@ -48,8 +49,8 @@ import kotlinx.coroutines.withContext
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository = Repository.getInstance(
         application, FirebaseAuth.getInstance(),
-        FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService, DeepLApiService.create(),
-        ProMigrateCourseAPI.retrofitService
+        FirebaseFirestore.getInstance(), ProMigrateAPI.retrofitService, DeepLApiService.create()
+        //ProMigrateCourseAPI.retrofitService
 
     )
 
@@ -654,7 +655,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "Verkauf (keine Produktspezialisierung)" -> "Verkauf (ohne Produktspezialisierung)"
                     "Kaufmann/-frau - Groß- und Außenhandelsmanagement (Großhandel)" -> "Kaufmann/-frau - Groß- und Außenhandelsmanagement (Großhandel)"
                     "Wholesale & foreign trade clerk (wholesale)" -> "Kaufmann/-frau - Groß- und Außenhandelsmanagement (Großhandel)"
-
+                    "Wholesale & Foreign Trade Clerk (Wholesale)" -> "Kaufmann/-frau - Groß- und Außenhandelsmanagement (Großhandel)"
 
                     else -> translatedText
                 }
@@ -1281,6 +1282,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         onComplete: (JobDetailsResponse) -> Unit
     ) {
         val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
+
+        // ❶ Sofort durchreichen, wenn DE
         if (currentLanguageCode == "de") {
             onComplete(jobDetails)
             return
@@ -1288,60 +1291,52 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                val translatedEmployer = repository.translateText(
-                    jobDetails.arbeitgeber ?: "",
-                    currentLanguageCode
-                )?.text ?: jobDetails.arbeitgeber
-                val translatedJobOfferDescription = repository.translateText(
-                    jobDetails.stellenbeschreibung ?: "",
-                    currentLanguageCode
-                )?.text ?: jobDetails.stellenbeschreibung
-                val translatedBranch =
-                    repository.translateText(jobDetails.branche ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.branche
-                val translatedOfferType = repository.translateText(
-                    jobDetails.angebotsart ?: "",
-                    currentLanguageCode
-                )?.text ?: jobDetails.angebotsart
-                val translatedTitle =
-                    repository.translateText(jobDetails.titel ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.titel
-                val translatedProfession =
-                    repository.translateText(jobDetails.beruf ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.beruf
-                val translatedRemuneration =
-                    repository.translateText(jobDetails.verguetung ?: "", currentLanguageCode)?.text
-                        ?: jobDetails.verguetung
+                /* ---------- Einzel-Felder übersetzen ---------- */
+                val translatedEmployer       = repository.translateText(jobDetails.arbeitgeber ?: "",           currentLanguageCode)?.text ?: jobDetails.arbeitgeber
+                val translatedDescription    = repository.translateText(jobDetails.stellenbeschreibung ?: "",   currentLanguageCode)?.text ?: jobDetails.stellenbeschreibung
+                val translatedBranch         = repository.translateText(jobDetails.branche ?: "",               currentLanguageCode)?.text ?: jobDetails.branche
+                val translatedOfferType      = repository.translateText(jobDetails.angebotsart ?: "",           currentLanguageCode)?.text ?: jobDetails.angebotsart
+                val translatedTitle          = repository.translateText(jobDetails.titel ?: "",                 currentLanguageCode)?.text ?: jobDetails.titel
+                val translatedProfession     = repository.translateText(jobDetails.beruf ?: "",                 currentLanguageCode)?.text ?: jobDetails.beruf
+                val translatedRemuneration   = repository.translateText(jobDetails.verguetung ?: "",            currentLanguageCode)?.text ?: jobDetails.verguetung
+
+                /* ---------- Listen übersetzen ---------- */
+                val translatedWorkingModels = jobDetails.arbeitszeitmodelle
+                    ?.map { model -> repository.translateText(model, currentLanguageCode)?.text ?: model }
+                    ?: emptyList()
+
+                /* ---------- Arbeitsorte (Adresse) ---------- */
+                val translatedLocations = jobDetails.arbeitsorte?.map { loc ->
+                    val translatedOrt     = loc.adresse?.ort?.let  { repository.translateText(it, currentLanguageCode)?.text ?: it }
+                    val translatedStrasse = loc.adresse?.strasse?.let { repository.translateText(it, currentLanguageCode)?.text ?: it }
 
 
-                val translatedWorkingTimeModels = jobDetails.arbeitszeitmodelle?.map { model ->
-                    repository.translateText(model, currentLanguageCode)?.text ?: model
-                } ?: listOf()
-
-                // Übersetzung der Arbeitsorte, wenn nötig
-                val translatedWorkLocations = jobDetails.arbeitsorte?.map { ort ->
-                    ort.copy(
-                        ort = repository.translateText(ort.ort ?: "", currentLanguageCode)?.text
-                            ?: ort.ort
+                    loc.copy(
+                        adresse = loc.adresse?.copy(
+                            ort     = translatedOrt,
+                            strasse = translatedStrasse,
+                            strasseHausnummer = loc.adresse.strasseHausnummer
+                        )
                     )
                 }
 
-                // Erstellt ein neues JobDetailsResponse-Objekt mit den übersetzten Werten
+                /* ---------- Neues Objekt zusammenbauen ---------- */
                 val translatedJobDetails = jobDetails.copy(
-                    arbeitgeber = translatedEmployer,
-                    stellenbeschreibung = translatedJobOfferDescription,
-                    branche = translatedBranch,
-                    angebotsart = translatedOfferType,
-                    titel = translatedTitle,
-                    beruf = translatedProfession,
-                    arbeitszeitmodelle = translatedWorkingTimeModels,
-                    arbeitsorte = translatedWorkLocations,
-                    verguetung = translatedRemuneration,
+                    arbeitgeber         = translatedEmployer,
+                    stellenbeschreibung = translatedDescription,
+                    branche             = translatedBranch,
+                    angebotsart         = translatedOfferType,
+                    titel               = translatedTitle,
+                    beruf               = translatedProfession,
+                    arbeitszeitmodelle  = translatedWorkingModels,
+                    arbeitsorte         = translatedLocations,
+                    verguetung          = translatedRemuneration
                 )
 
                 onComplete(translatedJobDetails)
-            } catch (e: Exception) {
 
+            } catch (e: Exception) {
+                // Fallback – gib das Original zurück
                 onComplete(jobDetails)
             }
         }
@@ -1350,35 +1345,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //TODO Mehrere Beginntermine laden können !
 
-    /**
-     * Diese Methode wird verwendet, um Bildungsangebote asynchron abzurufen.
-     * Sie startet eine Coroutine und versucht, die Bildungsangebote aus dem Repository abzurufen.
-     * Wenn die Anforderung erfolgreich ist, wird die LiveData-Variable _educationaloffers mit den erhaltenen Bildungsangeboten aktualisiert.
-     * Wenn die Anforderung fehlschlägt oder eine Ausnahme auftritt, wird _educationaloffers mit einer leeren Liste aktualisiert.
-     *
-     * @param systematiken: Die Systematiken, für die Bildungsangebote abgerufen werden sollen.
-     * @param orte: Die Orte, für die Bildungsangebote abgerufen werden sollen.
-     * @param sprachniveau: Das Sprachniveau, für das Bildungsangebote abgerufen werden sollen.
-     * @param beginntermine: Die Beginntermine, für die Bildungsangebote abgerufen werden sollen.
-     */
-    fun fetchEducationalOffers(
-        systematiken: String,
-        orte: String,
-        sprachniveau: String,
-        beginntermine: Int
-    ) {
-        viewModelScope.launch {
-            try {
-                val response =
-                    repository.getEducationalOffers(systematiken, orte, sprachniveau, beginntermine)
-                if (response.isSuccess) {
-                    _educationaloffers.postValue(response.getOrNull() ?: listOf())
-                }
-            } catch (_: Exception) {
-
-            }
-        }
-    }
 
     /**
      * Diese Methode wird verwendet, um Bildungsangebote in die im ViewModel ausgewählte Sprache zu übersetzen.
@@ -1389,43 +1355,54 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param bildungsangebote: Die Liste der Bildungsangebote, die übersetzt werden sollen.
      * @param onComplete: Die Callback-Funktion, die aufgerufen wird, wenn die Übersetzung abgeschlossen ist. Die übersetzten Bildungsangebote werden als Parameter übergeben.
      */
+    // MainViewModel – nur die Übersetzungs-Methode ersetzen / einfügen
+//------------------------------------------------------------------
+    /**
+     * Übersetzt alle Textfelder eines oder mehrerer Kurs-Objekte,
+     * sofern das UI aktuell nicht auf Deutsch läuft.
+     *
+     * Wird „de“ als Sprachcode erkannt, wird sofort das Original
+     * zurückgegeben. Für jede andere Sprache (wir benötigen nur „en“)
+     * werden Titel, Beschreibung, Abschlussart und Zielgruppe über das
+     * Repository übersetzt.  Alle anderen Felder bleiben unangetastet.
+     *
+     * @param offers      Liste der Kurse, die ggf. übersetzt werden soll.
+     * @param onComplete  Callback mit der (möglicherweise) übersetzten Liste.
+     */
     fun translateEducationalOffers(
-        bildungsangebote: List<TerminResponse>,
+        offers: List<TerminResponse>,
         onComplete: (List<TerminResponse>) -> Unit
     ) {
-        val currentLanguageCode = _selectedLanguageCode.value ?: "EN"
-        if (currentLanguageCode == "de") {
-            onComplete(bildungsangebote)
+        val lang = _selectedLanguageCode.value?.lowercase(Locale.ROOT) ?: "de"
+        if (lang == "de") {                // Deutsch → keine Übersetzung nötig
+            onComplete(offers)
             return
         }
 
         viewModelScope.launch {
             try {
-                val translatedEducationalOffers = bildungsangebote.map { angebot ->
-                    val translatedTitel = repository.translateText(
-                        angebot.angebot?.titel ?: "",
-                        currentLanguageCode
-                    )?.text ?: angebot.angebot?.titel
-                    val translatedInhalt = repository.translateText(
-                        angebot.angebot?.inhalt ?: "",
-                        currentLanguageCode
-                    )?.text ?: angebot.angebot?.inhalt
+                val translated = offers.map { o ->
+                    // einzelne Felder übersetzen (leere Strings überspringen)
+                    val newTitle  = repository.translateText(o.angebot?.titel ?: "",  lang)?.text
+                    val newBody   = repository.translateText(o.angebot?.inhalt ?: "", lang)?.text
+                    val newDeg    = repository.translateText(o.angebot?.abschlussart ?: "", lang)?.text
+                    val newTarget = repository.translateText(o.angebot?.zielgruppe ?: "", lang)?.text
 
-                    angebot.copy(
-                        angebot = angebot.angebot?.copy(
-                            titel = translatedTitel,
-                            inhalt = translatedInhalt
+                    o.copy(
+                        angebot = o.angebot?.copy(
+                            titel        = newTitle  ?: o.angebot.titel,
+                            inhalt       = newBody   ?: o.angebot.inhalt,
+                            abschlussart = newDeg    ?: o.angebot.abschlussart,
+                            zielgruppe   = newTarget ?: o.angebot.zielgruppe
                         )
                     )
                 }
-                onComplete(translatedEducationalOffers)
-            } catch (e: Exception) {
-
-                onComplete(bildungsangebote) // Gibt die ursprünglichen Bildungsangebote zurück, falls ein Fehler auftritt
+                onComplete(translated)
+            } catch (_: Exception) {        // Fehler → Originaldaten zurückgeben
+                onComplete(offers)
             }
         }
     }
-
 
     /**
      * Diese Methode wird verwendet, um das Profilbild des Benutzers zu aktualisieren.
