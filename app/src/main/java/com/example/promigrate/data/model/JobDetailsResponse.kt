@@ -1,20 +1,24 @@
 package com.example.promigrate.data.model
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
 
 /**
  * Diese Klasse beinhaltet Datenklassen, die als Antwortmodelle für den ProMigrateAPI-Service
  * dienen. Die Struktur ermöglicht die Verarbeitung und Darstellung der Daten, die von der API geliefert werden.
  */
+@JsonClass(generateAdapter = true)
 data class JobDetailsResponse(
     val aktuelleVeroeffentlichungsdatum: String?,
     val angebotsart: String?,
-    val arbeitgeber: String?,
+    @Json(name = "firma") val arbeitgeber: String?,
     val branchengruppe: String?,
     val branche: String?,
     val arbeitgeberHashId: String?,
-    val arbeitsorte: List<JobDetailsArbeitsort>?,
+    @Json(name = "stellenlokationen") val arbeitsorte: List<JobDetailsArbeitsort>?,
     val arbeitszeitmodelle: List<String>?,
-    val befristung: String?,
+    @Json(name = "vertragsdauer") val befristung: String?,
     val uebernahme: Boolean?,
     val betriebsgroesse: String?,
     val eintrittsdatum: String?,
@@ -23,10 +27,10 @@ data class JobDetailsResponse(
     val allianzpartnerUrl: String?,
     val titel: String?,
     val hashId: String?,
-    val beruf: String?,
+    @Json(name = "hauptberuf") val beruf: String?,
     val modifikationsTimestamp: String?,
-    val stellenbeschreibung: String?,
-    val refnr: String?,
+    @Json(name = "stellenangebotsBeschreibung") val stellenbeschreibung: String?,
+    @Json(name = "referenznummer") val refnr: String?,
     val fuerFluechtlingeGeeignet: Boolean?,
     val nurFuerSchwerbehinderte: Boolean?,
     val anzahlOffeneStellen: Int?,
@@ -34,7 +38,7 @@ data class JobDetailsResponse(
     val fertigkeiten: List<Fertigkeiten>?,
     val mobilitaet: Mobilitaet?,
     val fuehrungskompetenzen: Fuehrungskompetenzen?,
-    val verguetung: String?,
+    @Json(name = "gehalt") val verguetung: String?,
     val arbeitgeberdarstellungUrl: String?,
     val arbeitgeberdarstellung: String?,
     val hauptDkz: String?,
@@ -43,20 +47,18 @@ data class JobDetailsResponse(
     val anzeigeAnonym: Boolean?
 )
 
+@JsonClass(generateAdapter = true)
 data class JobDetailsArbeitsort(
-    val land: String?,
-    val region: String?,
-    val plz: String?,
-    val ort: String?,
-    val strasse: String?,
-    val koordinaten: JobDetailsKoordinaten?
+    @Json(name = "adresse")
+    val adresse: ArbeitgeberAdresse?,
+    @Json(name = "breite")
+    val breite: Double?,
+    @Json(name = "laenge")
+    val laenge: Double?
 )
 
-data class JobDetailsKoordinaten(
-    val lat: Double?,
-    val lon: Double?
-)
 
+@JsonClass(generateAdapter = true)
 data class ArbeitgeberAdresse(
     val land: String?,
     val region: String?,
@@ -66,15 +68,18 @@ data class ArbeitgeberAdresse(
     val strasseHausnummer: String?
 )
 
+@JsonClass(generateAdapter = true)
 data class Fertigkeiten(
     val hierarchieName: String?,
     val auspraegungen: Map<String, Any>?
 )
 
+@JsonClass(generateAdapter = true)
 data class Mobilitaet(
     val reisebereitschaft: String?
 )
 
+@JsonClass(generateAdapter = true)
 data class Fuehrungskompetenzen(
     val hatVollmacht: Boolean?,
     val hatBudgetverantwortung: Boolean?

@@ -1,20 +1,14 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-
-    }
-    dependencies {
-        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.22-1.0.17")
-        classpath("com.google.gms:google-services:4.4.1")
-        classpath ("com.google.firebase:firebase-crashlytics-gradle:2.9.9")
-        classpath ("com.google.firebase:perf-plugin:1.4.2")
-        classpath ("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.7")
-    }
-}
-
+// == Root build.gradle.kts (nur einmal, im Projektverzeichnis) ==
 plugins {
-    id("com.android.application") version "8.3.1" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.22" apply false
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14" apply false
+    // Versions _einmal_ zentral deklarieren (+ "apply false"), dann
+    // in Modul-Skripten einfach nur noch `id("…")` schreiben.
+    id("com.android.application")         version "8.10.1" apply false
+    id("org.jetbrains.kotlin.android")    version "2.1.21" apply false
+    id("com.google.devtools.ksp")         version "2.1.21-2.0.1" apply false
+    id("androidx.navigation.safeargs.kotlin") version "2.9.0" apply false
+    id("com.google.gms.google-services")  version "4.4.2" apply false
+    id("com.google.firebase.crashlytics") version "3.0.3" apply false
+    id("com.google.firebase.firebase-perf") version "1.4.2" apply false
 }
+
+

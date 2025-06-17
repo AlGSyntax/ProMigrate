@@ -3,11 +3,11 @@ package com.example.promigrate
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.promigrate.data.remote.ProMigrateAPI
-import com.example.promigrate.data.remote.ProMigrateCourseAPI
+
 
 /**
  * Hauptaktivitätsklasse, die als Einstiegspunkt der Anwendung dient.
- * Diese Klasse initialisiert die ProMigrateAPI und ProMigrateCourseAPI.
+ * Diese Klasse initialisiert die ProMigrateAPI .
  */
 class MainActivity : AppCompatActivity() {
 
@@ -20,8 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // Initialisiert  die ProMigrateAPI mit dem Kontext dieser Aktivität.
         ProMigrateAPI.init(this)
-        // Initialisiert  die ProMigrateCourseAPI mit dem Kontext dieser Aktivität.
-        ProMigrateCourseAPI.init(this)
+
         // Setzt den Inhalt der Aktivität aus einer Layout-Ressource.
         setContentView(R.layout.activity_main)
     }

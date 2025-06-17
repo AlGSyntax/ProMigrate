@@ -3,7 +3,7 @@ package com.example.promigrate.data.remote
 import android.content.Context
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.JobResponse
-import com.google.android.datatransport.BuildConfig
+import com.example.promigrate.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -44,7 +44,7 @@ interface ProMigrateAPIService {
     ): Response<JobResponse>
 
     // Abrufen von Details zu einem spezifischen Job.
-    @GET("jobboerse/jobsuche-service/pc/v2/jobdetails/{encodedHashID}")
+    @GET("jobboerse/jobsuche-service/pc/v4/jobdetails/{encodedHashID}")
     suspend fun getJobDetails(@Path("encodedHashID") encodedHashID: String?): Response<JobDetailsResponse>
 }
 

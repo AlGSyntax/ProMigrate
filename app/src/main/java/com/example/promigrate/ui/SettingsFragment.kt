@@ -34,6 +34,11 @@ class SettingsFragment : Fragment() {
     // Wird nullable gehalten, da es zwischen onCreateView und onDestroyView null sein kann.
     private var binding: FragmentSettingsBinding? = null
 
+
+    // Neu oben in der Klasse:
+    private var isInitialLanguageLevelSet = false
+    private var isUserInteractingWithSlider = false
+
     /**
      * Wird aufgerufen, um die Ansicht des Fragments zu erstellen.
      * Es erstellt das Binding-Objekt und gibt die Wurzelansicht zurück.
@@ -98,38 +103,44 @@ class SettingsFragment : Fragment() {
 
 
         // Flag zum Verfolgen, ob der Benutzer mit dem Schieberegler interagiert
-        var isUserInteractingWithSlider = false
+
 
        /**
          * Beobachtet das Sprachniveau des Benutzers anhand des MainViewModels.
          * Wenn der Benutzer nicht mit dem Schieberegler interagiert, wird der Anfangswert des Schiebereglers festgelegt
          * und der Text des Sprachniveaus TextView basierend auf dem beobachteten Sprachniveau.
          */
-        viewModel.getUserLanguageLevel(userId).observe(viewLifecycleOwner) { languageLevel ->
-            if (!isUserInteractingWithSlider) {
-                // Bestimmt  den anfänglichen Schiebereglerwert basierend auf dem Sprachniveau
-                val initialSliderValue = when (languageLevel) {
-                    getString(R.string.beginner) -> 1f
-                    getString(R.string.basic_knowledge) -> 2f
-                    getString(R.string.intermediate) -> 3f
-                    getString(R.string.independent) -> 4f
-                    getString(R.string.proficient) -> 5f
-                    getString(R.string.near_native) -> 6f
-                    else -> 1f // Standard- oder Fehlerbehandlung, Anfangswert wird auf 1 gesetzt
-                }
-                // Setzt den Anfangswert des Schiebereglers
-                binding?.languageLevelSlider?.value = initialSliderValue
+        viewModel.getUserLanguageLevel(userId).observe(viewLifecycleOwner) { languageLevelRaw ->
+            if (!isUserInteractingWithSlider && !isInitialLanguageLevelSet) {
 
+                val numericLevel = languageLevelRaw.toFloatOrNull()?.toInt() ?: 1
+
+                val languageLevelText = when (numericLevel) {
+                    1 -> getString(R.string.beginner)
+                    2 -> getString(R.string.basic_knowledge)
+                    3 -> getString(R.string.intermediate)
+                    4 -> getString(R.string.independent)
+                    5 -> getString(R.string.proficient)
+                    6 -> getString(R.string.near_native)
+                    else -> getString(R.string.undefined)
+                }
+
+                binding?.languageLevelSlider?.value = numericLevel.toFloat()
+                binding?.languageLevelText?.text = languageLevelText
+
+                isInitialLanguageLevelSet = true
             }
         }
-
      /**
          * Setzt einen OnChangeListener auf dem Schieberegler für die Sprachebene.
          * Wenn sich der Wert des Schiebereglers ändert, wird der Text der Sprachebene TextView basierend auf dem neuen Wert des Schiebereglers festgelegt.
          * und speichert die neue Sprachebene in Firebase, wenn der Benutzer aktiv mit dem Schieberegler interagiert.
          */
         binding?.languageLevelSlider?.addOnChangeListener { _, value, _ ->
+            if (!isInitialLanguageLevelSet) return@addOnChangeListener // Warten, bis initial gesetzt wurde
+
             isUserInteractingWithSlider = true
+
 
             // Legt  die Zeichenfolge direkt basierend auf der Schiebereglerposition fest, ohne sie in Float zu konvertieren.
             val languageLevelText = when (value.toInt()) {

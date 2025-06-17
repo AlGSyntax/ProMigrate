@@ -1,9 +1,9 @@
+// IntegrationCourseAdapter.kt   »  vollständig ersetzen
 package com.example.promigrate.adapter
 
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
-import android.net.Uri
 import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,243 +24,146 @@ import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.databinding.IntegrationCourseItemBinding
 import java.util.Date
 import java.util.Locale
+import androidx.core.view.isVisible
+
 
 /**
- * Wird aufgerufen, wenn die View-Hierarchie des Fragments zerstört wird.
- * Hier wird das Binding-Objekt auf null gesetzt, um Memory Leaks zu vermeiden,
- * da das Binding-Objekt eine Referenz auf die View hält, welche nicht länger existiert.
+ * IntegrationCourseAdapter ist ein Adapter für die RecyclerView, der eine Liste von TerminResponse-Objekten verwaltet.
+ * Jedes Element stellt einen Integrationskurs dar und zeigt verschiedene relevante Informationen an,
+ * wie Titel, Anbieter, Adresse, Kosten, Abschlussart, Zielgruppe und Anmeldeschluss.
+ *
+ * Klickbare Links in der Kursbeschreibung werden automatisch erkannt und sind interaktiv.
+ * Durch einen Klick auf den Titel des Kurses kann der Benutzer die Detailansicht expandieren oder einklappen.
+ * Eine Animation sorgt für einen visuellen Effekt beim Einblenden der Kursdetails.
+ *
+ * Die Daten werden über DiffUtil effizient aktualisiert.
  */
 class IntegrationCourseAdapter :
-    ListAdapter<TerminResponse, IntegrationCourseAdapter.IntegrationCourseViewHolder>(DiffCallback) {
+    ListAdapter<TerminResponse, IntegrationCourseAdapter.ViewHolder>(Diff) {
+
+
 
     /**
-     * Erstellt einen neuen ViewHolder für die Integrationskursliste.
+     * Erstellt einen neuen ViewHolder für ein Kurselement.
      *
-     * @param parent: Die übergeordnete ViewGroup, in die der neue ViewHolder eingefügt wird.
-     * @param viewType: Der ViewTyp des neuen ViewHolders.
-     * @return :Der erstellte ViewHolder für die Integrationskursliste.
+     * @param parent Das übergeordnete ViewGroup-Element, in das der neue View eingefügt wird.
+     * @param viewType Der Typ des Views (wird hier nicht verwendet).
+     * @return Ein neuer ViewHolder mit dem zugehörigen Binding.
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntegrationCourseViewHolder {
-        val binding =
-            IntegrationCourseItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return IntegrationCourseViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = IntegrationCourseItemBinding
+            .inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    /**
-     * Bindet die Daten des Integrationskurses an den ViewHolder.
-     *
-     * @param holder: Der ViewHolder, an den die Daten gebunden werden.
-     * @param position: Die Position des Integrationskurses in der Liste.
-     */
-    override fun onBindViewHolder(holder: IntegrationCourseViewHolder, position: Int) {
-        val kurs = getItem(position)
-        holder.bind(kurs)
-    }
 
     /**
-     * Ein ViewHolder für die Integrationskursliste.
-     * Es hält die Referenz zu den UI-Elementen und bindet die Daten des Integrationskurses an diese Elemente.
+     * Bindet die Daten eines Kurs-Elements an den ViewHolder.
      *
-     * @param binding: Das Binding-Objekt, das Zugriff auf die UI-Elemente ermöglicht.
+     * @param holder Der ViewHolder, der die Kursdaten hält.
+     * @param position Die Position des Elements in der Liste.
      */
-    inner class IntegrationCourseViewHolder(
-        val binding: IntegrationCourseItemBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bind(getItem(position))
+
+
+    /**
+     * ViewHolder zur Darstellung eines einzelnen Integrationskurs-Items.
+     * Bindet die jeweiligen Felder aus TerminResponse an die zugehörigen Views und sorgt für Interaktivität.
+     *
+     * @property b Das Binding-Objekt für die Item-View.
+     */
+    inner class ViewHolder(private val b: IntegrationCourseItemBinding) :
+        RecyclerView.ViewHolder(b.root) {
+
 
         /**
-         * Bindet die Daten des Integrationskurses an die UI-Elemente des ViewHolders.
+         * Bindet die Daten eines TerminResponse-Objekts an die Views.
+         * - Zeigt Titel, Anbieter, Adresse, Kosten, Abschlussart, Zielgruppe, Prüfung, Beginn, Ende und Anmeldeschluss an.
+         * - Setzt klickbare Links in der Kursbeschreibung.
+         * - Handhabt das Expandieren/Einklappen der Detailansicht mit Bounce-Animation.
          *
-         * @param kurs: Der Integrationskurs, dessen Daten an die UI-Elemente gebunden werden.
+         * @param k Das TerminResponse-Objekt mit den Kursdaten.
          */
-        fun bind(kurs: TerminResponse) {
+        fun bind(k: TerminResponse) {
 
-            // Setzt den Kurs-Titel. Wenn kein Titel vorhanden ist, wird "N/A" angezeigt.
-            binding.intecourseTextView.text = kurs.angebot?.titel ?: "N/A"
+            // Titel und Anbieter
+            b.intecourseTextView.text = k.angebot?.titel ?: "N/A"
+            b.bildungsanbieterTextView.text = b.root.context
+                .getString(R.string.provider, k.angebot?.bildungsanbieter?.name ?: "N/A")
+            b.adresseTextView.text = b.root.context
+                .getString(R.string.address,
+                    k.angebot?.bildungsanbieter?.adresse?.ortStrasse?.name ?: "N/A")
+            b.pruefendeStelleTextView.text = b.root.context
+                .getString(R.string.examining_authority, k.pruefendeStelle ?: "N/A")
 
-            kurs.angebot?.bildungsanbieter?.name?.let {
-                binding.bildungsanbieterTextView.text = binding.root.context.getString(R.string.provider, it)
-            } ?: run {
-                binding.bildungsanbieterTextView.text = binding.root.context.getString(R.string.provider, "N/A")
-            }
+            // Datumsausgabe
+            val fmt = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
+            b.beginnTextView.text  = b.root.context.getString(
+                R.string.begin, k.beginn?.let { fmt.format(Date(it)) } ?: "N/A")
+            b.endeTextView.text    = b.root.context.getString(
+                R.string.end,   k.ende?.let   { fmt.format(Date(it)) } ?: "N/A")
 
-            kurs.angebot?.bildungsanbieter?.adresse?.let {
-                val ortStrasseName =
-                    it.ortStrasse.name // Zugriff auf die `name` Eigenschaft von `ortStrasse`
-                binding.adresseTextView.text = binding.root.context.getString(R.string.address, ortStrasseName)
-            } ?: run {
-                binding.adresseTextView.text = binding.root.context.getString(R.string.address, "N/A")
-            }
-
-            kurs.pruefendeStelle?.let {
-                binding.pruefendeStelleTextView.text = binding.root.context.getString(R.string.examining_authority, it)
-            } ?: run {
-                binding.pruefendeStelleTextView.text = binding.root.context.getString(R.string.examining_authority, "N/A")
-            }
-
-            kurs.beginn?.let {
-
-                binding.beginnTextView.text =
-                    binding.root.context.getString(R.string.begin, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
-            } ?: run {
-                binding.beginnTextView.text = binding.root.context.getString(R.string.begin, "N/A")
-            }
-
-
-            kurs.ende?.let {
-
-                binding.endeTextView.text = binding.root.context.getString(R.string.end, SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(it))
-            } ?: run {
-                binding.endeTextView.text = binding.root.context.getString(R.string.end, "N/A")
-            }
-
-            // Anzeige der Kursbeschreibung. Links werden interaktiv gestaltet.
-            kurs.angebot?.inhalt?.let { bemerkung ->
-                val spannableContent =
-                    SpannableString(Html.fromHtml(bemerkung, Html.FROM_HTML_MODE_COMPACT))
-                Patterns.WEB_URL.matcher(spannableContent).apply {
+            // Beschreibung mit klickbaren Links
+            k.angebot?.inhalt?.let { raw ->
+                val span = SpannableString(Html.fromHtml(raw, Html.FROM_HTML_MODE_COMPACT))
+                Patterns.WEB_URL.matcher(span).apply {
                     while (find()) {
-                        val url = spannableContent.substring(start(), end())
-                        spannableContent.setSpan(object : ClickableSpan() {
-                            override fun onClick(widget: View) = widget.context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(url)
-                                )
-                            )
-
-                            override fun updateDrawState(ds: TextPaint) {
-                                super.updateDrawState(ds)
-                                ds.isUnderlineText = true
-                            }
+                        val url = span.substring(start(), end())
+                        span.setSpan(object : ClickableSpan() {
+                            override fun onClick(w: View) =
+                                w.context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+                            override fun updateDrawState(tp: TextPaint) { tp.isUnderlineText = true }
                         }, start(), end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
-                binding.contentTextView.apply {
-                    text = spannableContent
-                    movementMethod = LinkMovementMethod.getInstance()
-
-                }
-
-
-                // Setzt den Kostenwert des Kurses. Wenn kein Wert vorhanden ist, wird "N/A" angezeigt.
-                kurs.kostenWert?.let { kosten ->
-                    val kostenText = "${kosten}€"
-                    binding.kostenTextView.text =
-                        binding.root.context.getString(R.string.cost, kostenText)
-                } ?: run {
-                    binding.kostenTextView.text =
-                        binding.root.context.getString(R.string.cost, "N/A")
-                }
-
-
-                // Zeigt an, ob der Kurs gefördert wird oder nicht.
-                binding.foerderungTextView.text = if (kurs.foerderung == true) {
-                    binding.root.context.getString(R.string.funded)
-                } else {
-                    binding.root.context.getString(R.string.not_funded)
-                }
-
-
-                // Anzeige der Art des Abschlusses und der Zielgruppe, HTML-Format wird berücksichtigt.
-                kurs.angebot.abschlussart?.let { abschlussart ->
-                    val formattedHtml = Html.fromHtml(abschlussart, Html.FROM_HTML_MODE_COMPACT)
-                    binding.abschlussArtTextView.text =
-                        binding.root.context.getString(R.string.typeofdegree, formattedHtml)
-                } ?: run {
-                    binding.abschlussArtTextView.text =
-                        binding.root.context.getString(R.string.typeofdegree, "N/A")
-                }
-
-                kurs.angebot.zielgruppe?.let { zielgruppe ->
-                    val formattedHtml = Html.fromHtml(zielgruppe, Html.FROM_HTML_MODE_COMPACT)
-                    binding.zielGruppeTextView.text =
-                        binding.root.context.getString(R.string.targetgroup, formattedHtml)
-                } ?: run {
-                    binding.zielGruppeTextView.text =
-                        binding.root.context.getString(R.string.targetgroup, "N/A")
-                }
-
-
-                kurs.anmeldeschluss?.let {
-                    // Erstellen eines SimpleDateFormat-Objekts mit deutschem Datumsformat
-                    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
-
-                    // Umwandlung des Unix-Zeitstempels (in Millisekunden) in ein Date-Objekt
-                    val date = Date(it.toLong())
-
-                    // Formatieren des Datum-Objekts zu einem String
-                    val formattedDate = sdf.format(date)
-
-                    // Setzen des formatierten Datums in die TextView
-                    binding.anmeldeSchlussTextView.text = binding.root.context.getString(
-                        R.string.anmeldeschluss_format, formattedDate
-                    )
-                } ?: run {
-                    // Fallback, wenn kein Anmeldeschluss vorhanden ist
-                    binding.anmeldeSchlussTextView.text =
-                        binding.root.context.getString(R.string.anmeldeschluss_format, "N/A")
-                }
-
-
-
-                // Setzt einen OnClickListener auf den TextView, der den Kursnamen anzeigt
-                binding.intecourseTextView.setOnClickListener {
-                    binding.expandableView.visibility =
-                        if (binding.expandableView.visibility == View.VISIBLE) {
-                            View.GONE
-                        } else {
-                            View.VISIBLE
-                        }
-                }
-
+                b.contentTextView.text = span
+                b.contentTextView.movementMethod = LinkMovementMethod.getInstance()
             }
 
+            // Kosten und Förderung
+            val costText = k.kostenWert?.let { "${it}€" } ?: "N/A"
+            b.kostenTextView.text = b.root.context.getString(R.string.cost, costText)
+            b.foerderungTextView.text = if (k.foerderung == true)
+                b.root.context.getString(R.string.funded)
+            else
+                b.root.context.getString(R.string.not_funded)
 
-            // Aufruf der Methode 'animateBounce()'
-            animateBounce()
-        }
+            // Abschlussart und Zielgruppe
+            b.abschlussArtTextView.text = b.root.context.getString(
+                R.string.typeofdegree,
+                Html.fromHtml(k.angebot?.abschlussart ?: "N/A", Html.FROM_HTML_MODE_COMPACT)
+            )
+            b.zielGruppeTextView.text = b.root.context.getString(
+                R.string.targetgroup,
+                Html.fromHtml(k.angebot?.zielgruppe ?: "N/A", Html.FROM_HTML_MODE_COMPACT)
+            )
 
-        /**
-         * Führt eine Bounce-Animation auf dem ViewHolder aus.
-         */
-        private fun animateBounce() {
-            // Animiere die Y-Position des ViewHolders
+            // Anmeldeschluss
+            b.anmeldeSchlussTextView.text = b.root.context.getString(
+                R.string.anmeldeschluss_format,
+                k.anmeldeschluss?.let { fmt.format(Date(it)) } ?: "N/A"
+            )
+
+            // Expand/Collapse Detailbereich bei Klick auf den Kurstitel
+            b.intecourseTextView.setOnClickListener {
+                b.expandableView.visibility =
+                    if (b.expandableView.isVisible) View.GONE else View.VISIBLE
+            }
+
+            // Animation beim Erscheinen des Items
             ObjectAnimator.ofFloat(itemView, "translationY", -100f, 0f).apply {
-                duration = 1000  // Dauer der Animation in Millisekunden
-                interpolator =
-                    BounceInterpolator()  // Verwendet den BounceInterpolator für den Bounce-Effekt
-                start()
+                duration = 1000; interpolator = BounceInterpolator(); start()
             }
         }
-
     }
 
     /**
-     * Ein Callback für die DiffUtil, der bestimmt, ob zwei Integrationskurse die gleichen sind.
-     * Es wird verwendet, um die Änderungen in der Integrationskursliste effizient zu berechnen.
+     * DiffUtil Callback zur effizienten Aktualisierung der Liste.
+     * Vergleicht die Elemente anhand ihrer ID und ihres Inhalts.
      */
-    companion object DiffCallback : DiffUtil.ItemCallback<TerminResponse>() {
-
-        /**
-         * Überprüft, ob zwei Integrationskurse die gleiche ID haben.
-         *
-         * @param oldItem: Der alte Integrationskurs.
-         * @param newItem: Der neue Integrationskurs.
-         * @return :True, wenn die beiden Integrationskurse die gleiche ID haben, sonst false.
-         */
-        override fun areItemsTheSame(oldItem: TerminResponse, newItem: TerminResponse): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        /**
-         * Überprüft, ob zwei Integrationskurse die gleichen Daten haben.
-         *
-         * @param oldItem: Der alte Integrationskurs.
-         * @param newItem: Der neue Integrationskurs.
-         * @return :True, wenn die beiden Integrationskurse die gleichen Daten haben, sonst false.
-         */
-        override fun areContentsTheSame(oldItem: TerminResponse, newItem: TerminResponse): Boolean {
-            return oldItem == newItem
-        }
+    private companion object Diff : DiffUtil.ItemCallback<TerminResponse>() {
+        override fun areItemsTheSame(o: TerminResponse, n: TerminResponse) = o.id == n.id
+        override fun areContentsTheSame(o: TerminResponse, n: TerminResponse) = o == n
     }
 }

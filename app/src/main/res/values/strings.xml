@@ -27,7 +27,7 @@
     <string name="desired_location_hint">desired location</string>
     <string name="beginner">A1: Beginner</string>
     <string name="basic_knowledge">A2: Basic knowledge</string>
-    <string name="intermediate">B1: Intermediate usage</string>
+    <string name="intermediate">B1: Intermediate usage</string> @
     <string name="independent">B2: Independent usage</string>
     <string name="proficient">C1: Proficient skills</string>
     <string name="near_native">C2: Near native level</string>

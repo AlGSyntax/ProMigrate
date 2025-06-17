@@ -1,5 +1,6 @@
 package com.example.promigrate.data.repository
 
+//import com.example.promigrate.data.remote.ProMigrateCourseAPIService
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
@@ -8,19 +9,20 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.promigrate.data.model.JobDetailsResponse
 import com.example.promigrate.data.model.Profile
-import com.example.promigrate.data.model.TerminResponse
 import com.example.promigrate.data.model.TranslationRequest
 import com.example.promigrate.data.model.TranslationResult
 import com.example.promigrate.data.remote.DeepLApiService
 import com.example.promigrate.data.remote.ProMigrateAPIService
-import com.example.promigrate.data.remote.ProMigrateCourseAPIService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import androidx.core.content.edit
 
 /**
  * Die Repository-Klasse dient als zentrale Anlaufstelle für die Datenverarbeitung in der Anwendung.
@@ -32,7 +34,6 @@ import java.util.Locale
  * @param firestore: Eine Instanz von FirebaseFirestore zur Interaktion mit der Firestore-Datenbank.
  * @param apiService: Eine Instanz von ProMigrateAPIService zur Interaktion mit der ProMigrate-API.
  * @param deepLApiService: Eine Instanz von DeepLApiService zur Interaktion mit der DeepL-API.
- * @param courseAPIService: Eine Instanz von ProMigrateCourseAPIService zur Interaktion mit der ProMigrateCourse-API.
  */
 class Repository(
     context: Context,
@@ -40,7 +41,7 @@ class Repository(
     private val firestore: FirebaseFirestore,
     private val apiService: ProMigrateAPIService,
     private val deepLApiService: DeepLApiService,
-    private val courseAPIService: ProMigrateCourseAPIService
+
 ) {
 
 
@@ -67,7 +68,6 @@ class Repository(
          * @param firestore: Eine Instanz von FirebaseFirestore zur Interaktion mit der Firestore-Datenbank.
          * @param apiService: Eine Instanz von ProMigrateAPIService zur Interaktion mit der ProMigrate-API.
          * @param deepLApiService: Eine Instanz von DeepLApiService zur Interaktion mit der DeepL-API.
-         * @param langLearnAPIService: Eine Instanz von ProMigrateCourseAPIService zur Interaktion mit der ProMigrateCourse-API.
          * @return: Eine Singleton-Instanz der Repository-Klasse.
          */
         fun getInstance(
@@ -75,8 +75,7 @@ class Repository(
             firebaseAuth: FirebaseAuth,
             firestore: FirebaseFirestore,
             apiService: ProMigrateAPIService,
-            deepLApiService: DeepLApiService,
-            langLearnAPIService: ProMigrateCourseAPIService
+            deepLApiService: DeepLApiService
         ):
                 Repository {
             return INSTANCE ?: Repository(
@@ -85,10 +84,12 @@ class Repository(
                 firestore,
                 apiService,
                 deepLApiService,
-                langLearnAPIService
+
             ).also { INSTANCE = it }
         }
     }
+
+
 
     /**
      * Lädt die Spracheinstellung des Benutzers aus den SharedPreferences.
@@ -119,9 +120,33 @@ class Repository(
      */
     suspend fun saveLanguageSetting(languageCode: String) = withContext(Dispatchers.IO) {
         try {
-            sharedPreferences.edit().putString("SelectedLanguage", languageCode).apply()
+            sharedPreferences.edit { putString("SelectedLanguage", languageCode) }
         } catch (_: Exception) {
         }
+    }
+
+
+    // Repository.kt (z. B. im init-Block)
+    private val glossaryEn: Map<String, String> by lazy {
+        val json = context.assets.open("glossary_de_en.json")
+            .bufferedReader().use { it.readText() }
+        // Moshi oder Gson – hier Moshi:
+        val moshi = Moshi.Builder().build()
+        val type  = Types.newParameterizedType(Map::class.java,
+            String::class.java, String::class.java)
+        moshi.adapter<Map<String, String>>(type).fromJson(json) ?: emptyMap()
+    }
+
+    private val glossaryEs: Map<String, String> by lazy {
+        val json = context.assets.open("glossary_de_es.json")
+            .bufferedReader().use { it.readText() }
+        val moshi = Moshi.Builder().build()
+        val type  = Types.newParameterizedType(
+            Map::class.java,
+            String::class.java,
+            String::class.java
+        )
+        moshi.adapter<Map<String, String>>(type).fromJson(json) ?: emptyMap()
     }
 
 
@@ -134,21 +159,34 @@ class Repository(
      * @param targetLanguage: Der Sprachcode der Zielsprache, in die der Text übersetzt werden soll.
      * @return: Ein Objekt vom Typ TranslationResult, das das Ergebnis der Übersetzung enthält, oder null bei einem Fehler.
      */
-    suspend fun translateText(text: String, targetLanguage: String): TranslationResult? = withContext(
-        Dispatchers.IO) {
-        Log.d("translateText", "Übersetzung startet: Text = $text, Zielsprache = $targetLanguage")
-        return@withContext try {
-            // Ruft den Übersetzungsdienst mit dem gegebenen Text und Zielsprachcode auf.
-            val response =
-                deepLApiService.translateText(TranslationRequest(listOf(text), targetLanguage))
-            Log.d("translateText", "Übersetzung erfolgreich, Antwort = $response")
-            // Gibt das erste Übersetzungsergebnis zurück, da hier immer nur ein Text übersetzt wird.
-            response.translations.first() // Gibt das erste Übersetzungsergebnis zurück
+    suspend fun translateText(
+        text: String,
+        targetLanguage: String
+    ): TranslationResult? = withContext(Dispatchers.IO) {
+
+        // 1) Glossar-Look-up (de→en oder de→es)
+        val glossaryHit = when {
+            targetLanguage.equals("en", true) -> glossaryEn[text.trim()]
+            targetLanguage.equals("es", true) -> glossaryEs[text.trim()]
+            else -> null
+        }
+
+        if (glossaryHit != null) {
+            Log.d("translateText", "Glossar-Treffer ➜ $glossaryHit")
+            return@withContext TranslationResult(text = glossaryHit, detected_source_language = "de")   // eigenes Datenmodell
+        }
+
+        // 2) Fallback auf DeepL
+        try {
+            val response = deepLApiService
+                .translateText(TranslationRequest(listOf(text), targetLanguage))
+            response.translations.first()
         } catch (e: Exception) {
-            Log.e("translateText", "Fehler bei der Übersetzung", e)
+            Log.e("translateText", "DeepL-Fehler", e)
             null
         }
     }
+
 
 
     /**
@@ -394,45 +432,6 @@ class Repository(
     }
 
 
-    /**
-     * Ruft die Bildungsangebote von der ProMigrateCourse-API ab, basierend auf den gegebenen Parametern.
-     * Diese Funktion wird asynchron ausgeführt und gibt ein Result-Objekt zurück, das eine Liste von TerminResponse-Objekten enthält.
-     * Im Erfolgsfall enthält das Result-Objekt eine Liste der abgerufenen Bildungsangebote.
-     * Im Fehlerfall enthält das Result-Objekt eine Ausnahme mit einer Fehlermeldung.
-     *
-     * @param systematiken: Die Systematiken, für die die Bildungsangebote abgerufen werden sollen.
-     * @param orte: Die Orte, für die die Bildungsangebote abgerufen werden sollen.
-     * @param sprachniveau: Das Sprachniveau, für das die Bildungsangebote abgerufen werden sollen.
-     * @param beginntermine: Die Beginntermine, für die die Bildungsangebote abgerufen werden sollen.
-     * @return Ein Result-Objekt, das entweder eine Liste von TerminResponse-Objekten oder eine Ausnahme enthält.
-     * @throws Exception: Wenn ein Fehler beim Abrufen der Bildungsangebote auftritt.
-     */
-    suspend fun getEducationalOffers(
-        systematiken: String?,
-        orte: String,
-        sprachniveau: String,
-        beginntermine: Int
-    ): Result<List<TerminResponse>> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            val response = courseAPIService.getEducationalOffer(
-                systematiken,
-                orte,
-                sprachniveau,
-                beginntermine,
-                "basc"
-            )
-            if (response.isSuccessful) {
-                val termine = response.body()?._embedded?.termine ?: listOf()
-                Result.success(termine)
-            } else {
-
-                Result.failure(Exception("Fehler beim Abrufen der Bildungsangebote: ${response.message()}"))
-            }
-        } catch (e: Exception) {
-
-            Result.failure(e)
-        }
-    }
 
 
 }
